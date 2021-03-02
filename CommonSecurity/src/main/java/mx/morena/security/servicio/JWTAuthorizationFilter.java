@@ -31,16 +31,13 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
 			throws ServletException, IOException {
 		try {
-			
+
 			if (existeJWTToken(request, response)) {
 				Claims claims = validateToken(request);
 				if (claims.get("authorities") != null) {
 					setUpSpringAuthentication(claims);
-
 					HttpSession session = request.getSession(true);
-
-					session.setAttribute("Perfil", "perfil prueba");
-
+					session.setAttribute("Perfil", claims.get("perfil"));
 				} else {
 					SecurityContextHolder.clearContext();
 				}

@@ -29,7 +29,7 @@ public class UsuarioApplication {
 			http.csrf().disable()
 					.addFilterAfter(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
 					.authorizeRequests()
-					.antMatchers(HttpMethod.POST, "/user")
+					.antMatchers(HttpMethod.POST, "/usuario/login")
 					.permitAll()
 					.anyRequest()
 					.authenticated();
