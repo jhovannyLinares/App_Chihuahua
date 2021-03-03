@@ -15,7 +15,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "c_municipio")
+@Table(name = "app_municipio")
 public class Municipio {
 	@Id
 	@Column(unique = true, name = "id_municipio")

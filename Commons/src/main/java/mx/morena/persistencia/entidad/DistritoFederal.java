@@ -18,7 +18,7 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 @Entity
-@Table(name = "c_distrito_federal")
+@Table(name = "app_distrito_federal")
 public class DistritoFederal {
 
 	@Id

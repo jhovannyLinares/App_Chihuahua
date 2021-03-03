@@ -15,7 +15,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "c_distritoLocal")
+@Table(name = "app_distritoLocal")
 public class DistritoLocal {
 
 	public DistritoLocal() {

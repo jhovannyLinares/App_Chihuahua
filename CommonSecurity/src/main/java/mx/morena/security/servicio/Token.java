@@ -12,7 +12,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 public class Token extends JWTAuthorizationFilter {
 
-	public static String create(String username,String perfil) {
+	public static String create(String username,Long perfil) {
 		
 		List<GrantedAuthority> grantedAuthorities = AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_USER");
 
@@ -21,7 +21,7 @@ public class Token extends JWTAuthorizationFilter {
 						grantedAuthorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
 				.claim("perfil", perfil)
 				.setIssuedAt(new Date(System.currentTimeMillis()))
-				.setExpiration(new Date(System.currentTimeMillis() + 600000))
+				.setExpiration(new Date(System.currentTimeMillis() + 6000000))
 				.signWith(SignatureAlgorithm.HS512, SECRET.getBytes()).compact();
 
 		return "Bearer " + token;

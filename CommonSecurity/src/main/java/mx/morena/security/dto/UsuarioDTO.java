@@ -2,11 +2,11 @@ package mx.morena.security.dto;
 
 import java.util.List;
 
-public class Usuario {
+public class UsuarioDTO {
 
 	private String usuario;
 	private String perfil;
-	private List<Modulo> modulos;
+	private List<ModuloDTO> modulos;
 	private String token;
 
 	public String getUsuario() {
@@ -17,11 +17,11 @@ public class Usuario {
 		this.usuario = usuario;
 	}
 
-	public List<Modulo> getModulos() {
+	public List<ModuloDTO> getModulos() {
 		return modulos;
 	}
 
-	public void setModulos(List<Modulo> modulos) {
+	public void setModulos(List<ModuloDTO> modulos) {
 		this.modulos = modulos;
 	}
 

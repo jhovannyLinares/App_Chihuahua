@@ -4,9 +4,9 @@ import javax.servlet.http.HttpServletRequest;
 
 public class MasterController {
 
-	protected String getPerfil(HttpServletRequest request) {
+	protected int getPerfil(HttpServletRequest request) {
 
-		return (String) request.getSession().getAttribute("Perfil");
+		return (int) request.getSession().getAttribute("Perfil");
 		
 	}
 

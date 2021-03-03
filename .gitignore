@@ -39,3 +39,12 @@ hs_err_pid*
 */target
 
 */mvnw.cmd
+
+*/*/*/*/application.properties
+
+*/*/*/application.properties
+
+*/*/application.properties
+
+*/application.properties
+

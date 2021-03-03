@@ -13,11 +13,14 @@ public class HolaController extends MasterController {
 	@GetMapping("/hola")
 	public String hola(HttpServletRequest request) {
 
-		String perfil = getPerfil(request);
+		int perfil = getPerfil(request);
 
 		return "hola " + perfil;
 
 	}
+	
+	
+	
 
 //	@PatchMapping("/usuario")
 //	public String updateDireccion(Usuario usuario) {
@@ -30,7 +33,6 @@ public class HolaController extends MasterController {
 //		if (usuario.getDireccion != usuarioBd.getdireccion) {}
 //		
 //	}
-//	
 //	
 //	@PutMapping("/usuario")
 //	public String updateUsuario(HttpServletResponse response, Usuario usuario) {
