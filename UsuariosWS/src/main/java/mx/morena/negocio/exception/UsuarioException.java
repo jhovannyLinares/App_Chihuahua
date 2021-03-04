@@ -21,8 +21,5 @@ public class UsuarioException extends Exception {
 		this.codeError = codeError;
 	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
 
 }
