@@ -1,13 +1,16 @@
 package mx.morena.persistencia.entidad;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -19,36 +22,26 @@ public class Convencidos {
 	@Id
 	@Column(unique = true, name = "id")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "convencidos_SEQ")
-	@SequenceGenerator(sequenceName = "convencidos_SEQ", allocationSize = 1, name = "convencidos_SEQ	")
+	@SequenceGenerator(sequenceName = "convencidos_SEQ", allocationSize = 1, name = "convencidos_SEQ")
 	private Long id;
 
 	@Column(name = "fecha_registro")
 	private Date fechaRegistro;
 
-	
-	//TODO: Corregir, no pueden ser variables, soon objetos correspondientes a la entidad
-	
-	@Column(name = "id_estado")
-	@Deprecated
-	private Long idEstado;
+	@OneToOne
+	@JoinColumn(name = "id_estado")
+	private Entidad estado;
 
 	@OneToOne
 	@JoinColumn(name = "id_distrito_federal")
-	@Column(name = "id_federal")
-	@Deprecated
-	private Long idFederal;
+	private DistritoFederal distritoFederal;
 
 	@OneToOne
 	@JoinColumn(name = "id_municipio")
-	@Column(name = "id_municipio")
-	@Deprecated
-	private Long idMunicipio;
+	private Municipio municipio;
 
-	@OneToOne
-	@JoinColumn(name = "id_seccion")
-	@Column(name = "id_seccion")
-	@Deprecated
-	private Long idSeccion;
+	@OneToMany(mappedBy = "cot",fetch = FetchType.LAZY)
+	private List<SeccionElectoral> seccionesElectorales;
 
 	@Column(name = "nombre")
 	private String nombre;
@@ -86,6 +79,24 @@ public class Convencidos {
 	@Column(name = "correo")
 	private String correo;
 	
+	@Column(unique = true, name = "curp")
+	private String curp;
+	
+	@Column(name = "fecha_baja")
+	private Date fechaBaja;
+	
+	@Column(name = "fecha_reactivación")
+	private Date fechaReactivacion;
+	
+	@Column(name = "banco")
+	private String banco;
+	
+	@Column(name = "clabe_interbancaria")
+	private String clabeInterbancaria;
+
+	@Column(name = "estatus")
+	private char estatus;
+
 	public Long getId() {
 		return id;
 	}
@@ -102,36 +113,28 @@ public class Convencidos {
 		this.fechaRegistro = fechaRegistro;
 	}
 
-	public Long getIdEstado() {
-		return idEstado;
+	public DistritoFederal getDistritoFederal() {
+		return distritoFederal;
 	}
 
-	public void setIdEstado(Long idEstado) {
-		this.idEstado = idEstado;
+	public void setDistritoFederal(DistritoFederal distritoFederal) {
+		this.distritoFederal = distritoFederal;
 	}
 
-	public Long getIdFederal() {
-		return idFederal;
+	public Municipio getMunicipio() {
+		return municipio;
 	}
 
-	public void setIdFederal(Long idFederal) {
-		this.idFederal = idFederal;
+	public void setMunicipio(Municipio municipio) {
+		this.municipio = municipio;
 	}
 
-	public Long getIdMunicipio() {
-		return idMunicipio;
+	public List<SeccionElectoral> getSeccionesElectorales() {
+		return seccionesElectorales;
 	}
 
-	public void setIdMunicipio(Long idMunicipio) {
-		this.idMunicipio = idMunicipio;
-	}
-
-	public Long getIdSeccion() {
-		return idSeccion;
-	}
-
-	public void setIdSeccion(Long idSeccion) {
-		this.idSeccion = idSeccion;
+	public void setSeccionesElectorales(List<SeccionElectoral> seccionesElectorales) {
+		this.seccionesElectorales = seccionesElectorales;
 	}
 
 	public String getNombre() {
@@ -229,8 +232,61 @@ public class Convencidos {
 	public void setCorreo(String correo) {
 		this.correo = correo;
 	}
-	
-	
 
+	public String getCurp() {
+		return curp;
+	}
+
+	public void setCurp(String curp) {
+		this.curp = curp;
+	}
+
+	public Date getFechaBaja() {
+		return fechaBaja;
+	}
+
+	public void setFechaBaja(Date fechaBaja) {
+		this.fechaBaja = fechaBaja;
+	}
+
+	public Date getFechaReactivacion() {
+		return fechaReactivacion;
+	}
+
+	public void setFechaReactivacion(Date fechaReactivacion) {
+		this.fechaReactivacion = fechaReactivacion;
+	}
+
+	public String getBanco() {
+		return banco;
+	}
+
+	public void setBanco(String banco) {
+		this.banco = banco;
+	}
+
+	public String getClabeInterbancaria() {
+		return clabeInterbancaria;
+	}
+
+	public void setClabeInterbancaria(String clabeInterbancaria) {
+		this.clabeInterbancaria = clabeInterbancaria;
+	}
+
+	public char getEstatus() {
+		return estatus;
+	}
+
+	public void setEstatus(char estatus) {
+		this.estatus = estatus;
+	}
+
+	public Entidad getEstado() {
+		return estado;
+	}
+
+	public void setEstado(Entidad estado) {
+		this.estado = estado;
+	}
+	
 }
-//

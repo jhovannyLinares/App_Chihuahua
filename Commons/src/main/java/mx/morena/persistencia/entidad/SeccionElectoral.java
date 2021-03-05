@@ -26,6 +26,10 @@ public class SeccionElectoral {
 	@ManyToOne
 	@JoinColumn(name = "id_localidad")
 	private Localidad localidad;
+	
+	@ManyToOne
+	@JoinColumn(name = "cot_id")
+	private Convencidos cot;
 
 	public SeccionElectoral() {
 	}
@@ -53,7 +57,19 @@ public class SeccionElectoral {
 	public void setLocalidad(Localidad localidad) {
 		this.localidad = localidad;
 	}
-	
-	
+
+	public Convencidos getCot() {
+		return cot;
+	}
+
+	public void setCot(Convencidos cot) {
+		this.cot = cot;
+	}
+
+	@Override
+	public String toString() {
+		return "SeccionElectoral [id=" + id + ", descripcion=" + descripcion + ", localidad=" + localidad + ", cot="
+				+ cot + "]";
+	}
 
 }
