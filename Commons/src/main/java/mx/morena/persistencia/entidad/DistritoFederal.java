@@ -38,9 +38,6 @@ public class DistritoFederal {
 
 	@OneToMany(mappedBy = "distritoFederal",fetch = FetchType.LAZY)
 	private List<DistritoLocal> distritosLocales;
-	
-//	@OneToMany(mappedBy = "federal",fetch = FetchType.LAZY)
-//	private List<Direccion> direccions;
 
 	public DistritoFederal() {
 		// TODO Auto-generated constructor stub

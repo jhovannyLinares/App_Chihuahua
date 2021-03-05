@@ -25,22 +25,29 @@ public class Convencidos {
 	@Column(name = "fecha_registro")
 	private Date fechaRegistro;
 
+	
+	//TODO: Corregir, no pueden ser variables, soon objetos correspondientes a la entidad
+	
 	@Column(name = "id_estado")
+	@Deprecated
 	private Long idEstado;
 
 	@OneToOne
 	@JoinColumn(name = "id_distrito_federal")
 	@Column(name = "id_federal")
+	@Deprecated
 	private Long idFederal;
 
 	@OneToOne
 	@JoinColumn(name = "id_municipio")
 	@Column(name = "id_municipio")
+	@Deprecated
 	private Long idMunicipio;
 
 	@OneToOne
 	@JoinColumn(name = "id_seccion")
 	@Column(name = "id_seccion")
+	@Deprecated
 	private Long idSeccion;
 
 	@Column(name = "nombre")

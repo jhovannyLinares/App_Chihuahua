@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -28,8 +29,8 @@ public class Perfil {
 	@Column(name = "nombre")
 	private String nombre;
 
-	@OneToOne(mappedBy = "perfil", fetch = FetchType.LAZY)
-	private Usuario usuario;
+	@OneToMany(mappedBy = "perfil", fetch = FetchType.LAZY)
+	private List<Usuario> usuarios;
 
 	@ManyToMany
 	@JoinTable(name = "app_perfil_modulo", joinColumns = @JoinColumn(name = "id_perfil"), inverseJoinColumns = @JoinColumn(name = "id_modulo"))
@@ -51,12 +52,12 @@ public class Perfil {
 		this.nombre = nombre;
 	}
 
-	public Usuario getUsuario() {
-		return usuario;
+	public List<Usuario> getUsuarios() {
+		return usuarios;
 	}
 
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
+	public void setUsuarios(List<Usuario> usuarios) {
+		this.usuarios = usuarios;
 	}
 
 	public List<Modulo> getModulos() {
