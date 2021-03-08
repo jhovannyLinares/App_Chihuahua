@@ -12,10 +12,12 @@ import mx.morena.negocio.servicios.ICotService;
 import mx.morena.negocio.util.MapperUtil;
 import mx.morena.persistencia.entidad.Convencidos;
 import mx.morena.persistencia.entidad.DistritoFederal;
+import mx.morena.persistencia.entidad.Entidad;
 import mx.morena.persistencia.entidad.Municipio;
 import mx.morena.persistencia.entidad.SeccionElectoral;
 import mx.morena.persistencia.repository.IConvencidosRepository;
 import mx.morena.persistencia.repository.IDistritoFederalRepository;
+import mx.morena.persistencia.repository.IEntidadRepository;
 import mx.morena.persistencia.repository.IMunicipioRepository;
 import mx.morena.persistencia.repository.ISeccionElectoralRepository;
 
@@ -29,6 +31,9 @@ public class CotServiceImpl implements ICotService {
 	private ISeccionElectoralRepository seccionRepository;
 	
 	@Autowired
+	private IEntidadRepository entidadRepository;
+	
+	@Autowired
 	private IDistritoFederalRepository distritoFederalRepository;
 	
 	@Autowired
@@ -37,10 +42,10 @@ public class CotServiceImpl implements ICotService {
 	private static final Integer PERFIL_ESTATAL = 1;
 	private static final Integer PERFIL_FEDERAL = 2;
 	private static final Integer PERFIL_MUNICIPAL = 4;
-	private static final char ESTATUS = 'A';
+	private static final char ESTATUS_ALTA = 'A';
 	
 	@Override
-	public String save(CotDTO cotDto, int perfil) throws CotException {
+	public String save(CotDTO cotDto, long perfil) throws CotException {
 		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL || perfil == PERFIL_MUNICIPAL) {
 			Convencidos existeCurp = cotRepository.getByCurp(cotDto.getCurp());
 			Convencidos existeClave = cotRepository.findByClaveElector(cotDto.getClaveElector());
@@ -56,16 +61,17 @@ public class CotServiceImpl implements ICotService {
 				// Solo se reciben id, por lo tanto se tiene que hacer la busqueda
 				DistritoFederal distritoF = distritoFederalRepository.findById(cotDto.getIdDistritoFederal()).get();
 				Municipio municipio = municipioRepository.findById(cotDto.getIdMunicipio()).get();
-
-				if (distritoF != null && municipio != null) {
+				Entidad entidad = entidadRepository.findById(cotDto.getIdEstado()).get();
+				
+				if (distritoF != null && municipio != null && entidad != null) {
 					cotDto.setFechaRegistro(new Date(System.currentTimeMillis()));
-					cotDto.setEstatus(ESTATUS);
+					cotDto.setEstatus(ESTATUS_ALTA);
 					MapperUtil.map(cotDto, personaCot);
 
-					personaCot.setEstado(distritoF.getEntidad());
+					personaCot.setEstado(entidad);
 					personaCot.setDistritoFederal(distritoF);
 					personaCot.setMunicipio(municipio);
-					;
+
 					System.out.println(personaCot);
 					cotRepository.save(personaCot);
 				} else {
@@ -83,10 +89,10 @@ public class CotServiceImpl implements ICotService {
 	}
 
 	@Override
-	public String asignarSecciones(List<Long> idSecciones, Long idCot, int perfil) throws CotException {
+	public String asignarSecciones(List<Long> idSecciones, Long idCot, long perfil) throws CotException {
 		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL || perfil == PERFIL_MUNICIPAL) {
 			List<SeccionElectoral> secciones = seccionRepository.findAllById(idSecciones);
-			Convencidos cot = cotRepository.getByIdAndEstatus(idCot, ESTATUS);
+			Convencidos cot = cotRepository.getByIdAndEstatus(idCot, ESTATUS_ALTA);
 
 			if (secciones != null && cot != null) {
 				for (SeccionElectoral sec : secciones) {

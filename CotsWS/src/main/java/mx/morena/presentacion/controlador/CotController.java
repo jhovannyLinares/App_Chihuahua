@@ -27,6 +27,7 @@ public class CotController extends MasterController{
 	public String guardarCots(HttpServletRequest request, @RequestBody CotDTO cot) {
 		int perfil = getPerfil(request);
 		System.out.println("Perfil: " + perfil);
+		
 		try {
 			return cotService.save(cot, perfil);
 		} catch (CotException e) {
