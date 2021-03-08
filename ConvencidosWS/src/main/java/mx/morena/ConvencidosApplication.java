@@ -12,10 +12,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import mx.morena.security.servicio.JWTAuthorizationFilter;
 
 @SpringBootApplication
-public class TestApplication {
+public class ConvencidosApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(TestApplication.class, args);
+		SpringApplication.run(ConvencidosApplication.class, args);
 	}
 
 	@EnableWebSecurity
@@ -25,9 +25,13 @@ public class TestApplication {
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
 			http.csrf().disable()
-					.addFilterAfter(new JWTAuthorizationFilter(),
-							UsernamePasswordAuthenticationFilter.class)
-					.authorizeRequests().antMatchers(HttpMethod.POST, "/user").permitAll().anyRequest().authenticated();
+			.addFilterAfter(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
+			.authorizeRequests()
+			.antMatchers(HttpMethod.GET, "/**").permitAll()
+			.antMatchers(HttpMethod.GET, "/convencidos/**").authenticated()
+			.anyRequest()
+			.authenticated();
+			
 		}
 	}
 
