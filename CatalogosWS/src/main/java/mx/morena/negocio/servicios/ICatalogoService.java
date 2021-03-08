@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
+import mx.morena.negocio.dto.DistritoFederalDTO;
 import mx.morena.negocio.dto.EntidadDTO;
 import mx.morena.persistencia.entidad.DistritoFederal;
 import mx.morena.persistencia.entidad.DistritoLocal;
@@ -24,5 +25,7 @@ public interface ICatalogoService {
 	List<SeccionElectoral> getSeccionByLocalidad(HttpServletResponse response, Long id);
 
 	List<EntidadDTO> getEntidades();
+
+	List<DistritoFederalDTO> getFederalByEntidad(long usuario, long perfil, Long idEntidad);
 
 }

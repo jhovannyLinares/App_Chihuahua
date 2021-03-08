@@ -2,12 +2,14 @@ package mx.morena.negocio.servicios.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import mx.morena.negocio.dto.DistritoFederalDTO;
 import mx.morena.negocio.dto.EntidadDTO;
 import mx.morena.negocio.servicios.ICatalogoService;
 import mx.morena.negocio.util.MapperUtil;
@@ -17,12 +19,14 @@ import mx.morena.persistencia.entidad.Entidad;
 import mx.morena.persistencia.entidad.Localidad;
 import mx.morena.persistencia.entidad.Municipio;
 import mx.morena.persistencia.entidad.SeccionElectoral;
+import mx.morena.persistencia.entidad.Usuario;
 import mx.morena.persistencia.repository.IDistritoFederalRepository;
 import mx.morena.persistencia.repository.IDistritoLocalRepository;
 import mx.morena.persistencia.repository.IEntidadRepository;
 import mx.morena.persistencia.repository.ILocalidadRepository;
 import mx.morena.persistencia.repository.IMunicipioRepository;
 import mx.morena.persistencia.repository.ISeccionElectoralRepository;
+import mx.morena.persistencia.repository.IUsuarioRepository;
 
 @Service
 public class CatalogoServiceImpl implements ICatalogoService {
@@ -44,6 +48,14 @@ public class CatalogoServiceImpl implements ICatalogoService {
 
 	@Autowired
 	private IEntidadRepository entidadRepository;
+
+	@Autowired
+	private IUsuarioRepository usuarioRepository;
+
+	private static final Integer PERFIL_ESTATAL = 1;
+	private static final Integer PERFIL_FEDERAL = 2;
+	private static final Integer PERFIL_LOCAL = 3;
+	private static final Integer PERFIL_MUNICIPAL = 4;
 
 	@Override
 	public List<DistritoFederal> getFederalByEntidad(HttpServletResponse response, Long id) { //
@@ -125,6 +137,44 @@ public class CatalogoServiceImpl implements ICatalogoService {
 
 		return dtos;
 
+	}
+
+	@Override
+	public List<DistritoFederalDTO> getFederalByEntidad(long idUsuario, long idPerfil, Long idEntidad) {
+
+		Optional<Usuario> usuarioOptional = usuarioRepository.findById(idUsuario);
+
+		List<DistritoFederalDTO> dtos = null;
+
+		if (idPerfil == PERFIL_ESTATAL) {
+
+			Optional<Entidad> entidad = entidadRepository.findById(idEntidad);
+			List<DistritoFederal> distritoFederals = entidad.get().getDistritosFederales();
+
+			dtos = new ArrayList<DistritoFederalDTO>();
+
+			dtos = MapperUtil.mapAll(distritoFederals, DistritoFederalDTO.class);
+
+		} else {
+
+			Optional<Entidad> entidad = entidadRepository.findById(idEntidad);
+			List<DistritoFederal> distritoFederals = entidad.get().getDistritosFederales();
+
+			dtos = new ArrayList<DistritoFederalDTO>();
+
+			for (DistritoFederal distritoFederal : distritoFederals) {
+				if (distritoFederal.getId() == usuarioOptional.get().getFederal().getId()) {
+
+					DistritoFederalDTO distritoFederalDTO = new DistritoFederalDTO();
+					MapperUtil.map(distritoFederal, distritoFederalDTO);
+
+					dtos.add(distritoFederalDTO);
+				}
+			}
+
+		}
+
+		return dtos;
 	}
 
 }
