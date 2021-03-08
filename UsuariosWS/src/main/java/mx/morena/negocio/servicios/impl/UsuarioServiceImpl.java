@@ -49,7 +49,7 @@ public class UsuarioServiceImpl implements IUsuarioService {
 			user.setUsuario(username);
 			user.setPerfil(usuario.getPerfil().getNombre());
 			user.setModulos(getModulos(usuario.getPerfil()));
-			user.setToken(Token.create(username, usuario.getPerfil().getId()));
+			user.setToken(Token.create(username, usuario.getPerfil().getId(), usuario.getId()));
 
 			return user;
 		}

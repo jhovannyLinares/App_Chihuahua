@@ -4,10 +4,16 @@ import javax.servlet.http.HttpServletRequest;
 
 public class MasterController {
 
-	protected int getPerfil(HttpServletRequest request) {
+	protected long getPerfil(HttpServletRequest request) {
 
-		return (int) request.getSession().getAttribute("Perfil");
-		
+		return (long) request.getSession().getAttribute("Perfil");
+
+	}
+
+	protected long getUsuario(HttpServletRequest request) {
+
+		return (long) request.getSession().getAttribute("usuario");
+
 	}
 
 }

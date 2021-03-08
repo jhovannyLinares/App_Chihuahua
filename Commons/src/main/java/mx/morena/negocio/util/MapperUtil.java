@@ -12,9 +12,6 @@ import org.modelmapper.PropertyMap;
 import org.modelmapper.convention.MatchingStrategies;
 import org.modelmapper.spi.MappingContext;
 
-
-@Deprecated
-//Ya existe Mapper dentro de commons
 public class MapperUtil {
 
 	private static ModelMapper modelMapper = new ModelMapper();
