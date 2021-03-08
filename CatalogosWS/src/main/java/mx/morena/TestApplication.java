@@ -19,17 +19,20 @@ public class TestApplication {
 	}
 
 	@EnableWebSecurity
-	@Configuration
+	@Configuration 
 	class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
 			http.csrf().disable()
-					.addFilterAfter(new JWTAuthorizationFilter(),
-							UsernamePasswordAuthenticationFilter.class)
-					.authorizeRequests().antMatchers(HttpMethod.POST, "/user").permitAll()
-					.anyRequest().authenticated();
-		}
+			.addFilterAfter(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
+			.authorizeRequests()
+			.antMatchers(HttpMethod.GET, "/**").permitAll()
+			.antMatchers(HttpMethod.GET, "/catalogos/**").authenticated()
+			.antMatchers(HttpMethod.GET, "/catalogo/**").authenticated()
+			.anyRequest()
+			.authenticated();
+			
 	}
 
 }
