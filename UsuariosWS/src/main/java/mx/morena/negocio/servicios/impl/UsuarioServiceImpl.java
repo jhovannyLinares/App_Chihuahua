@@ -2,11 +2,12 @@ package mx.morena.negocio.servicios.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import mx.morena.negocio.dto.UsuarioRequest;
 import mx.morena.negocio.exception.UsuarioException;
 import mx.morena.negocio.servicios.IUsuarioService;
 import mx.morena.persistencia.entidad.Modulo;
@@ -93,6 +94,28 @@ public class UsuarioServiceImpl implements IUsuarioService {
 		dto.setSubModulos(new ArrayList<ModuloDTO>());
 
 		return dto;
+	}
+
+	@Override
+	public Boolean updatePwd(UsuarioRequest usuarioUpdate) throws UsuarioException {
+
+		Optional<Usuario> usuarioOptional = usuarioRepository.findById(usuarioUpdate.getId());
+
+		if (usuarioOptional.isPresent()) {
+
+			Usuario usuario = usuarioOptional.get();
+
+			usuario.setEmail(usuarioUpdate.getEmail());
+			usuario.setPassword(usuarioUpdate.getPassword());
+
+			usuarioRepository.save(usuario);
+
+			return true;
+
+		} else {
+			throw new UsuarioException("Usuario no existe", 401);
+		}
+
 	}
 
 }

@@ -21,5 +21,6 @@ public interface IConvencidosRepository extends JpaRepository<Convencidos, Long>
 	 Convencidos findByClaveElector(String claveElector);
 
 	 public Convencidos getByCurp(String curp);
+	 
 	 public Convencidos getByIdAndEstatus(Long idCot, char estatus);
 }

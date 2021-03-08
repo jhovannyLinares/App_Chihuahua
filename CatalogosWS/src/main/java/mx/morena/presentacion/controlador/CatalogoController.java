@@ -17,11 +17,13 @@ import mx.morena.persistencia.entidad.Municipio;
 import mx.morena.persistencia.entidad.SeccionElectoral;
 
 @RestController
-@RequestMapping(value = "catalogo")
+@RequestMapping(value = "catalogos")
 public class CatalogoController {
 
 	@Autowired
 	ICatalogoService ICatService;
+	
+	//TODO: Falta el catalogo de entidades
 	
 	
 	@GetMapping("/entidades/{id}/distritosFederales")
@@ -30,13 +32,7 @@ public class CatalogoController {
 		List<DistritoFederal> federal = ICatService.getFederalByEntidad(response,id);
 		
 		return federal;
-//		return ICatService.getFederalByEntidad(response); //,id
-//		try {
-//			return federal;
-//		} catch (Exception e) {
-//			throw new ResponseStatusException(HttpStatus.resolve(e.getCodeError()), e.getLocalizedMessage());
-//		}
-//		
+		
 	}
 	
 	@GetMapping("/distritosFederales/{id}/distritosLocales")

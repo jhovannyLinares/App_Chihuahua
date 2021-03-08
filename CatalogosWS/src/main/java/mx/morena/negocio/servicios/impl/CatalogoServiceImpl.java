@@ -40,26 +40,35 @@ public class CatalogoServiceImpl implements ICatalogoService{
 	@Override
 	public List<DistritoFederal> getFederalByEntidad(HttpServletResponse response, Long id) { //
 
+//		TODO: Falta filtrar la entidad
+		//TODO: Falta la extrasccuion de nivel de Perfil
+		//Falta la aplicaicon de catalogos
+		//Falta la convercion de entiodades a DTO's
 		List<DistritoFederal> federal = federalRepocitory.findAll();
-		
-//		List<DistritoFederal> federal = federalRepocitory.findByEntidad(id);
 		
 		return federal;
 	}
 
 	@Override
 	public List<DistritoLocal> getLocalByFederal(HttpServletResponse response, Long id) {
-//		List<DistritoLocal> local = federalRepocitory.findById(id).get().getDistritosLocales();
+
+		//TODO: Falta la extrasccuion de nivel de Perfil
+		//Falta la aplicaicon de catalogos
+		//Falta la convercion de entiodades a DTO's
+		
+		
 		
 		List<DistritoLocal> local = localRepository.findAll();
-		
-//		List<DistritoLocal> local = localRepository.findByFederal(id);
+
 		
 		return local;
 	}
 
 	@Override
 	public List<Municipio> getMunicipioByLocal(HttpServletResponse response, Long id) {
+		//TODO: Falta la extrasccuion de nivel de Perfil
+		//Falta la aplicaicon de catalogos
+		//Falta la convercion de entiodades a DTO's
 		
 //		List<Municipio> muncipio = localRepository.findById(id).get().getMunicipios();
 		
@@ -72,6 +81,9 @@ public class CatalogoServiceImpl implements ICatalogoService{
 
 	@Override
 	public List<Localidad> getLocalidadByMunicipio(HttpServletResponse response, Long id) {
+		//TODO: Falta la extrasccuion de nivel de Perfil
+		//Falta la aplicaicon de catalogos
+		//Falta la convercion de entiodades a DTO's
 		
 //		List<Localidad> localidad = municipioRepository.findById(id).get().getLocalidades();
 		
@@ -84,6 +96,9 @@ public class CatalogoServiceImpl implements ICatalogoService{
 
 	@Override
 	public List<SeccionElectoral> getSeccionByLocalidad(HttpServletResponse response, Long id) {
+		//TODO: Falta la extrasccuion de nivel de Perfil
+		//Falta la aplicaicon de catalogos
+		//Falta la convercion de entiodades a DTO's
 		
 //		List<SeccionElectoral> seccion = localidadRepository.findById(id).get().getSeccionElectorales();
 		

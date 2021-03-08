@@ -29,8 +29,9 @@ public class UsuarioApplication {
 			http.csrf().disable()
 					.addFilterAfter(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
 					.authorizeRequests()
-					.antMatchers(HttpMethod.POST, "/usuario/login")
-					.permitAll()
+					.antMatchers(HttpMethod.POST, "/usuario").permitAll()
+					.antMatchers(HttpMethod.GET, "/**").permitAll()
+					.antMatchers(HttpMethod.PUT, "/configuracion").authenticated()
 					.anyRequest()
 					.authenticated();
 		}
