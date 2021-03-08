@@ -3,6 +3,7 @@ package mx.morena.persistencia.entidad;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -28,15 +29,15 @@ public class Convencidos {
 	@Column(name = "fecha_registro")
 	private Date fechaRegistro;
 
-	@OneToOne
+	@OneToOne(mappedBy = "convencidos", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_estado") // Falta el tipo de carga de relacion
 	private Entidad estado;
 
-	@OneToOne
+	@OneToOne(mappedBy = "convencidos", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_distrito_federal") // Falta el tipo de carga de relacion
 	private DistritoFederal distritoFederal;
 
-	@OneToOne
+	@OneToOne(mappedBy = "convencidos", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_municipio") // Falta el tipo de carga de relacion
 	private Municipio municipio;
 
@@ -288,5 +289,8 @@ public class Convencidos {
 	public void setEstatus(char estatus) {
 		this.estatus = estatus;
 	}
+
+	
+	
 
 }

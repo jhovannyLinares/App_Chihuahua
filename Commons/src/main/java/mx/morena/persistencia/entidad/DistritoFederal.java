@@ -2,6 +2,7 @@ package mx.morena.persistencia.entidad;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -22,7 +24,7 @@ import org.hibernate.annotations.LazyCollectionOption;
 public class DistritoFederal {
 
 	@Id
-	@Column(unique = true, name = "id")
+	@Column(unique = true, name = "id_distrito_federal")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "T_federal_SEQ")
 	@SequenceGenerator(sequenceName = "T_federal_SEQ", allocationSize = 1, name = "T_federal_SEQ")
 	private Long id;
@@ -38,6 +40,9 @@ public class DistritoFederal {
 
 	@OneToMany(mappedBy = "distritoFederal",fetch = FetchType.LAZY)
 	private List<DistritoLocal> distritosLocales;
+	
+	@OneToOne (cascade = CascadeType.ALL)
+	private Convencidos convencidos;
 
 	public DistritoFederal() {
 		// TODO Auto-generated constructor stub
@@ -73,6 +78,14 @@ public class DistritoFederal {
 
 	public void setDistritosLocales(List<DistritoLocal> distritosLocales) {
 		this.distritosLocales = distritosLocales;
+	}
+
+	public Convencidos getConvencidos() {
+		return convencidos;
+	}
+
+	public void setConvencidos(Convencidos convencidos) {
+		this.convencidos = convencidos;
 	}
 
 	@Override

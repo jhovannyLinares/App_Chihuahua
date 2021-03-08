@@ -2,6 +2,7 @@ package mx.morena.persistencia.entidad;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -32,6 +34,9 @@ public class Municipio {
 
 	@OneToMany(mappedBy = "municipio", fetch = FetchType.LAZY)
 	private List<Localidad> localidades;
+	
+	@OneToOne (cascade = CascadeType.ALL)
+	private Convencidos convencidos;
 
 	public Municipio() {
 	}
@@ -68,4 +73,12 @@ public class Municipio {
 		this.localidades = localidades;
 	}
 
+	public Convencidos getConvencidos() {
+		return convencidos;
+	}
+
+	public void setConvencidos(Convencidos convencidos) {
+		this.convencidos = convencidos;
+	}
+	
 }
