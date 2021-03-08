@@ -10,12 +10,14 @@ import mx.morena.persistencia.entidad.Convencidos;
 @Repository
 public interface IConvencidosRepository extends JpaRepository<Convencidos, Long>{
 	
-	 Convencidos findByClaveElector(String claveElector);
+	 List<Convencidos> getByClaveElector(String claveElector);
 	
-	 List<Convencidos> getByIdFederal(Long idFederal);
+	 List<Convencidos> getByDistritoFederal(Long idFederal);
 	 
-	 List<Convencidos> getByIdMunicipio(Long idMunicipio);
+	 List<Convencidos> getByMunicipio(Long idMunicipio);
 	 
-	 List<Convencidos> getByIdSeccion(Long idSeccion);
+	 List<Convencidos> getBySeccionesElectorales(Long idSeccion);
+	 
+	 Convencidos findByClaveElector(String claveElector);
 
 }
