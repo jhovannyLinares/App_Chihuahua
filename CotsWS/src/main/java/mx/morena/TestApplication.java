@@ -31,6 +31,7 @@ public class TestApplication {
 			.antMatchers(HttpMethod.GET, "/cots/**").authenticated()
 			.anyRequest()
 			.authenticated();
+		}
 	}
 
 }
