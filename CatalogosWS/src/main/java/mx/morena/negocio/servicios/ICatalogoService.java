@@ -2,30 +2,26 @@ package mx.morena.negocio.servicios;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletResponse;
-
 import mx.morena.negocio.dto.DistritoFederalDTO;
+import mx.morena.negocio.dto.DistritoLocalDTO;
 import mx.morena.negocio.dto.EntidadDTO;
-import mx.morena.persistencia.entidad.DistritoFederal;
-import mx.morena.persistencia.entidad.DistritoLocal;
-import mx.morena.persistencia.entidad.Localidad;
-import mx.morena.persistencia.entidad.Municipio;
-import mx.morena.persistencia.entidad.SeccionElectoral;
+import mx.morena.negocio.dto.LocalidadDTO;
+import mx.morena.negocio.dto.MunicipioDTO;
+import mx.morena.negocio.dto.SeccionDTO;
 
 public interface ICatalogoService {
 	
-	List<DistritoFederal> getFederalByEntidad(HttpServletResponse response, Long id);
-	
-	List<DistritoLocal> getLocalByFederal(HttpServletResponse response, Long id);
-	
-	List<Municipio> getMunicipioByLocal(HttpServletResponse response, Long id);
-	
-	List<Localidad> getLocalidadByMunicipio(HttpServletResponse response, Long id);
-	
-	List<SeccionElectoral> getSeccionByLocalidad(HttpServletResponse response, Long id);
-
 	List<EntidadDTO> getEntidades();
 
 	List<DistritoFederalDTO> getFederalByEntidad(long usuario, long perfil, Long idEntidad);
 
+	List<DistritoLocalDTO> getLocalByFederal(long usuario, long perfil, Long id);
+	
+	List<MunicipioDTO> getMunicipioByLocal(long usuario, long perfil, Long id);
+	
+	List<LocalidadDTO> getLocalidadByMunicipio(long usuario, long perfil, Long id);
+	
+	List<SeccionDTO> getSeccionByLocalidad(long usuario, long perfil, Long id);
+
+	
 }

@@ -1,7 +1,7 @@
 package mx.morena.presentacion.controlador;
 import java.util.List;
 
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,62 +9,83 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import mx.morena.negocio.dto.DistritoFederalDTO;
+import mx.morena.negocio.dto.DistritoLocalDTO;
+import mx.morena.negocio.dto.EntidadDTO;
+import mx.morena.negocio.dto.LocalidadDTO;
+import mx.morena.negocio.dto.MunicipioDTO;
+import mx.morena.negocio.dto.SeccionDTO;
 import mx.morena.negocio.servicios.ICatalogoService;
-import mx.morena.persistencia.entidad.DistritoFederal;
-import mx.morena.persistencia.entidad.DistritoLocal;
-import mx.morena.persistencia.entidad.Localidad;
-import mx.morena.persistencia.entidad.Municipio;
-import mx.morena.persistencia.entidad.SeccionElectoral;
+import mx.morena.security.controller.MasterController;
 
 @RestController
 @RequestMapping(value = "catalogos")
-public class CatalogoController {
+public class CatalogoController extends MasterController{
 
 	@Autowired
 	ICatalogoService ICatService;
 	
-	//TODO: Falta el catalogo de entidades
-	
-	
+	@GetMapping("/entidades")
+	private List<EntidadDTO> getEntidad() {
+
+		return ICatService.getEntidades();
+
+	}
+
 	@GetMapping("/entidades/{id}/distritosFederales")
-	private List<DistritoFederal> getFederalByEntidad(HttpServletResponse response, @PathVariable("id") Long id) { //
-	
-		List<DistritoFederal> federal = ICatService.getFederalByEntidad(response,id);
-		
+	private List<DistritoFederalDTO> getFederalByEntidad(HttpServletRequest request, @PathVariable("id") Long idEntidad) {
+
+		long usuario = getUsuario(request);
+		long perfil = getPerfil(request);
+
+		List<DistritoFederalDTO> federal = ICatService.getFederalByEntidad(usuario, perfil, idEntidad);
+
 		return federal;
-		
+
 	}
 	
 	@GetMapping("/distritosFederales/{id}/distritosLocales")
-	private List<DistritoLocal> getLocalByFederal(HttpServletResponse response, @PathVariable("id") Long id) {
+	private List<DistritoLocalDTO> getLocalByFederal(HttpServletRequest request, @PathVariable("id") Long idFederal) {
 		
-		List<DistritoLocal> local = ICatService.getLocalByFederal(response, id);
+		long usuario = getUsuario(request);
+		long idPerfil = getPerfil(request);
+		
+		List<DistritoLocalDTO> local = ICatService.getLocalByFederal(usuario, idPerfil, idFederal);
 		
 		return local;
 
 	}
 	
 	@GetMapping("/distritosLocales/{id}/municipios")
-	private List<Municipio> getMunicipioByLocal(HttpServletResponse response, @PathVariable("id") Long id) {
+	private List<MunicipioDTO> getMunicipioByLocal(HttpServletRequest request, @PathVariable("id") Long idLocal) {
 
-		List<Municipio> municipio = ICatService.getMunicipioByLocal(response, id);
+		long usuario = getUsuario(request);
+		long idPerfil = getPerfil(request);
+		
+		List<MunicipioDTO> municipio = ICatService.getMunicipioByLocal(usuario, idPerfil, idLocal);
 		
 		return municipio;
 
 	}
 	
 	@GetMapping("/municipios/{id}/localidades")
-	private List<Localidad> getLocalidadByMunicipio(HttpServletResponse response, @PathVariable("id") Long id) {
+	private List<LocalidadDTO> getLocalidadByMunicipio(HttpServletRequest request, @PathVariable("id") Long idMunicipio) {
 
-		List<Localidad> localidad = ICatService.getLocalidadByMunicipio(response, id);
+		long usuario = getUsuario(request);
+		long idPerfil = getPerfil(request);
+		
+		List<LocalidadDTO> localidad = ICatService.getLocalidadByMunicipio(usuario, idPerfil, idMunicipio);
 		
 		return localidad;
 	}
 	
 	@GetMapping("/localidades/{id}/seccionesElectorales")
-	private List<SeccionElectoral> getseccionByLocalidad(HttpServletResponse response, @PathVariable("id") Long id) {
+	private List<SeccionDTO> getseccionByLocalidad(HttpServletRequest request, @PathVariable("id") Long idLocalidad) {
 
-		List<SeccionElectoral> seccion = ICatService.getSeccionByLocalidad(response, id);
+		long usuario = getUsuario(request);
+		long idPerfil = getPerfil(request);
+		
+		List<SeccionDTO> seccion = ICatService.getSeccionByLocalidad(usuario, idPerfil, idLocalidad);
 		
 		return seccion;
 	}

@@ -4,13 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import mx.morena.negocio.dto.DistritoFederalDTO;
+import mx.morena.negocio.dto.DistritoLocalDTO;
 import mx.morena.negocio.dto.EntidadDTO;
+import mx.morena.negocio.dto.LocalidadDTO;
+import mx.morena.negocio.dto.MunicipioDTO;
+import mx.morena.negocio.dto.SeccionDTO;
 import mx.morena.negocio.servicios.ICatalogoService;
 import mx.morena.negocio.util.MapperUtil;
 import mx.morena.persistencia.entidad.DistritoFederal;
@@ -56,76 +58,7 @@ public class CatalogoServiceImpl implements ICatalogoService {
 	private static final Integer PERFIL_FEDERAL = 2;
 	private static final Integer PERFIL_LOCAL = 3;
 	private static final Integer PERFIL_MUNICIPAL = 4;
-
-	@Override
-	public List<DistritoFederal> getFederalByEntidad(HttpServletResponse response, Long id) { //
-
-//		TODO: Falta filtrar la entidad
-		// TODO: Falta la extrasccuion de nivel de Perfil
-		// Falta la aplicaicon de catalogos
-		// Falta la convercion de entiodades a DTO's
-		List<DistritoFederal> federal = federalRepocitory.findAll();
-
-		return federal;
-	}
-
-	@Override
-	public List<DistritoLocal> getLocalByFederal(HttpServletResponse response, Long id) {
-
-		// TODO: Falta la extrasccuion de nivel de Perfil
-		// Falta la aplicaicon de catalogos
-		// Falta la convercion de entiodades a DTO's
-
-		List<DistritoLocal> local = localRepository.findAll();
-
-		return local;
-	}
-
-	@Override
-	public List<Municipio> getMunicipioByLocal(HttpServletResponse response, Long id) {
-		// TODO: Falta la extrasccuion de nivel de Perfil
-		// Falta la aplicaicon de catalogos
-		// Falta la convercion de entiodades a DTO's
-
-//		List<Municipio> muncipio = localRepository.findById(id).get().getMunicipios();
-
-		List<Municipio> muncipio = municipioRepository.findAll();
-
-//		List<Municipio> muncipio = municipioRepository.findByLocal(id);
-
-		return muncipio;
-	}
-
-	@Override
-	public List<Localidad> getLocalidadByMunicipio(HttpServletResponse response, Long id) {
-		// TODO: Falta la extrasccuion de nivel de Perfil
-		// Falta la aplicaicon de catalogos
-		// Falta la convercion de entiodades a DTO's
-
-//		List<Localidad> localidad = municipioRepository.findById(id).get().getLocalidades();
-
-		List<Localidad> localidad = localidadRepository.findAll();
-
-//		List<Localidad> localidad = localidadRepository.findByMunicipio(id);
-
-		return localidad;
-	}
-
-	@Override
-	public List<SeccionElectoral> getSeccionByLocalidad(HttpServletResponse response, Long id) {
-		// TODO: Falta la extrasccuion de nivel de Perfil
-		// Falta la aplicaicon de catalogos
-		// Falta la convercion de entiodades a DTO's
-
-//		List<SeccionElectoral> seccion = localidadRepository.findById(id).get().getSeccionElectorales();
-
-		List<SeccionElectoral> seccion = seccionRepository.findAll();
-
-//		List<SeccionElectoral> seccion = seccionRepository.findByLocalidad(id);
-
-		return seccion;
-	}
-
+	
 	@Override
 	public List<EntidadDTO> getEntidades() {
 
@@ -177,4 +110,160 @@ public class CatalogoServiceImpl implements ICatalogoService {
 		return dtos;
 	}
 
+	@Override
+	public List<DistritoLocalDTO> getLocalByFederal(long idUsuario, long idPerfil, Long idFederal) {
+		
+		Optional<Usuario> usuarioOptional = usuarioRepository.findById(idUsuario);
+
+		List<DistritoLocalDTO> dtos = null;
+
+		if (idPerfil == PERFIL_ESTATAL || idPerfil == PERFIL_FEDERAL) {
+
+			Optional<DistritoFederal> federal = federalRepocitory.findById(idFederal);
+			List<DistritoLocal> distritoLocals = federal.get().getDistritosLocales();
+
+			dtos = new ArrayList<DistritoLocalDTO>();
+
+			dtos = MapperUtil.mapAll(distritoLocals, DistritoLocalDTO.class);
+
+		}else {
+			Optional<DistritoFederal> federal = federalRepocitory.findById(idFederal);
+			List<DistritoLocal> distritoLocals = federal.get().getDistritosLocales();
+
+			dtos = new ArrayList<DistritoLocalDTO>();
+
+			for (DistritoLocal distritoLocal : distritoLocals) {
+				if (distritoLocal.getId() == usuarioOptional.get().getLocal().getId()) {
+
+					DistritoLocalDTO distritoLocalDTO = new DistritoLocalDTO();
+					MapperUtil.map(distritoLocal, distritoLocalDTO);
+
+					dtos.add(distritoLocalDTO);
+				}
+			}
+		}
+
+		
+		return dtos;
+	}
+
+	@Override
+	public List<MunicipioDTO> getMunicipioByLocal(long idUsuario, long idPerfil, Long idLocal) {
+
+		Optional<Usuario> usuarioOptional = usuarioRepository.findById(idUsuario);
+
+		List<MunicipioDTO> dtos = null;
+
+		if (idPerfil == PERFIL_ESTATAL || idPerfil == PERFIL_FEDERAL ||idPerfil == PERFIL_LOCAL) {
+
+			Optional<DistritoLocal> local = localRepository.findById(idLocal);
+			List<Municipio> municipios = local.get().getMunicipios();
+
+			dtos = new ArrayList<MunicipioDTO>();
+
+			dtos = MapperUtil.mapAll(municipios, MunicipioDTO.class);
+		}else {
+			Optional<DistritoLocal> local = localRepository.findById(idLocal);
+			List<Municipio> municipios = local.get().getMunicipios();
+
+			dtos = new ArrayList<MunicipioDTO>();
+
+			dtos = MapperUtil.mapAll(municipios, MunicipioDTO.class);
+
+			for (Municipio municipio : municipios) {
+				if (municipio.getId() == usuarioOptional.get().getMunicipio().getId()) {
+
+					MunicipioDTO municipioDTO = new MunicipioDTO();
+					MapperUtil.map(municipio, municipioDTO);
+
+					dtos.add(municipioDTO);
+				}
+			}
+		}
+
+		
+		return dtos;
+
+		
+	}
+
+	@Override
+	public List<LocalidadDTO> getLocalidadByMunicipio(long idUsuario, long idPerfil, Long idMunicipio) {
+
+		Optional<Usuario> usuarioOptional = usuarioRepository.findById(idUsuario);
+
+		List<LocalidadDTO> dtos = null;
+
+		if (idPerfil == PERFIL_ESTATAL || idPerfil == PERFIL_FEDERAL || idPerfil == PERFIL_LOCAL || idPerfil == PERFIL_MUNICIPAL) {
+
+			Optional<Municipio> municipio  = municipioRepository.findById(idMunicipio);
+			List<Localidad> localidades = municipio.get().getLocalidades();
+
+			dtos = new ArrayList<LocalidadDTO>();
+
+			dtos = MapperUtil.mapAll(localidades, LocalidadDTO.class);
+
+		} else {
+			
+			Optional<Municipio> municipio  = municipioRepository.findById(idMunicipio);
+			List<Localidad> localidades = municipio.get().getLocalidades();
+
+			dtos = new ArrayList<LocalidadDTO>();
+
+			dtos = MapperUtil.mapAll(localidades, LocalidadDTO.class);
+
+			for (Localidad localidad : localidades) {
+				if (localidad.getId() == usuarioOptional.get().getLocalidad().getId()) {
+
+					LocalidadDTO localidadDTO = new LocalidadDTO();
+					MapperUtil.map(localidad, localidadDTO);
+
+					dtos.add(localidadDTO);
+				}
+			}
+		}
+
+		
+		return dtos;
+
+	}
+
+	@Override
+	public List<SeccionDTO> getSeccionByLocalidad(long idUsuario, long idPerfil, Long idLocalidad) {
+
+		Optional<Usuario> usuarioOptional = usuarioRepository.findById(idUsuario);
+
+		List<SeccionDTO> dtos = null;
+
+		if (idPerfil == PERFIL_ESTATAL || idPerfil == PERFIL_FEDERAL || idPerfil == PERFIL_LOCAL || idPerfil == PERFIL_MUNICIPAL) {
+
+			Optional<Localidad> localidad  = localidadRepository.findById(idLocalidad);
+			List<SeccionElectoral> secciones = localidad.get().getSeccionElectorales();
+
+			dtos = new ArrayList<SeccionDTO>();
+
+			dtos = MapperUtil.mapAll(secciones, SeccionDTO.class);
+
+		} else {
+			
+			Optional<Localidad> localidad  = localidadRepository.findById(idLocalidad);
+			List<SeccionElectoral> secciones = localidad.get().getSeccionElectorales();
+
+			dtos = new ArrayList<SeccionDTO>();
+
+			dtos = MapperUtil.mapAll(secciones, SeccionDTO.class);
+
+			for (SeccionElectoral seccion : secciones) {
+				if (seccion.getId() == usuarioOptional.get().getSeccionElectoral().getId()) {
+
+					SeccionDTO seccionDTO = new SeccionDTO();
+					MapperUtil.map(seccion, seccionDTO);
+
+					dtos.add(seccionDTO);
+				}
+			}
+		}
+		
+		return dtos;
+	}
 }
