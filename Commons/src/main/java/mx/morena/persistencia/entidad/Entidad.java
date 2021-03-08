@@ -19,7 +19,7 @@ import javax.persistence.Table;
 public class Entidad {
 
 	@Id
-	@Column(unique = true, name = "id_estado")
+	@Column(unique = true, name = "id")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "T_ENTIDAD_SEQ")
 	@SequenceGenerator(sequenceName = "T_ENTIDAD_SEQ", allocationSize = 1, name = "T_ENTIDAD_SEQ")
 	private long id;

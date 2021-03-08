@@ -24,7 +24,7 @@ import org.hibernate.annotations.LazyCollectionOption;
 public class DistritoFederal {
 
 	@Id
-	@Column(unique = true, name = "id_distrito_federal")
+	@Column(unique = true, name = "id")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "T_federal_SEQ")
 	@SequenceGenerator(sequenceName = "T_federal_SEQ", allocationSize = 1, name = "T_federal_SEQ")
 	private Long id;
