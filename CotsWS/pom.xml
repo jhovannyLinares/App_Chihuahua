@@ -50,6 +50,18 @@
 			<version>20160810</version>
 		</dependency>
 		<!-- API, java.xml.bind module -->
+		
+		<dependency>
+			<groupId>mx.morena</groupId>
+			<artifactId>CommonSecurity</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>mx.morena</groupId>
+			<artifactId>Commons</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 
 
 	</dependencies>

@@ -29,18 +29,18 @@ public class Convencidos {
 	private Date fechaRegistro;
 
 	@OneToOne
-	@JoinColumn(name = "id_estado")
+	@JoinColumn(name = "id_estado") // Falta el tipo de carga de relacion
 	private Entidad estado;
 
 	@OneToOne
-	@JoinColumn(name = "id_distrito_federal")
+	@JoinColumn(name = "id_distrito_federal") // Falta el tipo de carga de relacion
 	private DistritoFederal distritoFederal;
 
 	@OneToOne
-	@JoinColumn(name = "id_municipio")
+	@JoinColumn(name = "id_municipio") // Falta el tipo de carga de relacion
 	private Municipio municipio;
 
-	@OneToMany(mappedBy = "cot",fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "cot", fetch = FetchType.LAZY)
 	private List<SeccionElectoral> seccionesElectorales;
 
 	@Column(name = "nombre")
@@ -75,22 +75,22 @@ public class Convencidos {
 
 	@Column(name = "telefono_celular")
 	private String telCelular;
-	
+
 	@Column(name = "correo")
 	private String correo;
-	
+
 	@Column(unique = true, name = "curp")
 	private String curp;
-	
+
 	@Column(name = "fecha_baja")
 	private Date fechaBaja;
-	
+
 	@Column(name = "fecha_reactivación")
 	private Date fechaReactivacion;
-	
+
 	@Column(name = "banco")
 	private String banco;
-	
+
 	@Column(name = "clabe_interbancaria")
 	private String clabeInterbancaria;
 
@@ -111,6 +111,14 @@ public class Convencidos {
 
 	public void setFechaRegistro(Date fechaRegistro) {
 		this.fechaRegistro = fechaRegistro;
+	}
+
+	public Entidad getEstado() {
+		return estado;
+	}
+
+	public void setEstado(Entidad estado) {
+		this.estado = estado;
 	}
 
 	public DistritoFederal getDistritoFederal() {
@@ -281,12 +289,4 @@ public class Convencidos {
 		this.estatus = estatus;
 	}
 
-	public Entidad getEstado() {
-		return estado;
-	}
-
-	public void setEstado(Entidad estado) {
-		this.estado = estado;
-	}
-	
 }

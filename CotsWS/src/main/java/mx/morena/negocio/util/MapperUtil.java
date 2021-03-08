@@ -12,6 +12,9 @@ import org.modelmapper.PropertyMap;
 import org.modelmapper.convention.MatchingStrategies;
 import org.modelmapper.spi.MappingContext;
 
+
+@Deprecated
+//Mapper ya existente en Commons
 public class MapperUtil {
 
 	private static ModelMapper modelMapper = new ModelMapper();
@@ -57,6 +60,7 @@ public class MapperUtil {
 	 * @param outClass class of result object.
 	 * @return new object of <code>outClass</code> type.
 	 */
+	@Deprecated
 	public static <D, T> D map(final T entity, Class<D> outClass) {
 		return modelMapper.map(entity, outClass);
 	}
@@ -72,6 +76,7 @@ public class MapperUtil {
 	 * @param <T>        type of entity in <code>entityList</code>
 	 * @return list of mapped object with <code><D></code> type.
 	 */
+	@Deprecated
 	public static <D, T> List<D> mapAll(final Collection<T> entityList, Class<D> outCLass) {
 		List<D> result = new ArrayList<D>();
 		for (T entity : entityList) {
@@ -86,6 +91,7 @@ public class MapperUtil {
 	 * @param source      object to map from
 	 * @param destination object to map to
 	 */
+	@Deprecated
 	public static <S, D> D map(final S source, D destination) {
 		modelMapper.map(source, destination);
 		return destination;
