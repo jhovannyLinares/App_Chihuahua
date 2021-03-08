@@ -46,6 +46,7 @@ public class UsuarioServiceImpl implements IUsuarioService {
 		if (usuarioValido) {
 
 			UsuarioDTO user = new UsuarioDTO();
+			user.setId(usuario.getId());
 			user.setUsuario(username);
 			user.setPerfil(usuario.getPerfil().getNombre());
 			user.setModulos(getModulos(usuario.getPerfil()));
@@ -65,9 +66,7 @@ public class UsuarioServiceImpl implements IUsuarioService {
 
 		for (Modulo modulo : modulos) {
 			if (modulo.getModuloPadre() == null) {
-
 				modulosDTO.add(convert(modulo));
-
 			}
 
 		}
@@ -76,7 +75,10 @@ public class UsuarioServiceImpl implements IUsuarioService {
 			if (modulo.getModuloPadre() != null) {
 				for (ModuloDTO moduloDTO : modulosDTO) {
 					List<ModuloDTO> subModulos = moduloDTO.getSubModulos();
-					subModulos.add(convert(modulo));
+
+					ModuloDTO mod = convert(modulo);
+					mod.setModuloPadre(modulo.getModuloPadre().getId());
+					subModulos.add(mod);
 				}
 			}
 		}
@@ -97,9 +99,9 @@ public class UsuarioServiceImpl implements IUsuarioService {
 	}
 
 	@Override
-	public Boolean updatePwd(UsuarioRequest usuarioUpdate) throws UsuarioException {
+	public Boolean updatePwd(long idUsuario, UsuarioRequest usuarioUpdate) throws UsuarioException {
 
-		Optional<Usuario> usuarioOptional = usuarioRepository.findById(usuarioUpdate.getId());
+		Optional<Usuario> usuarioOptional = usuarioRepository.findById(idUsuario);
 
 		if (usuarioOptional.isPresent()) {
 

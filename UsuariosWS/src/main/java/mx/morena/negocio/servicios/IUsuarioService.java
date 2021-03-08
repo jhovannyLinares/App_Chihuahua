@@ -8,6 +8,6 @@ public interface IUsuarioService {
 
 	UsuarioDTO login(String username, String pwd) throws UsuarioException;
 
-	Boolean updatePwd(UsuarioRequest usuario) throws UsuarioException;
+	Boolean updatePwd(long idUsuario, UsuarioRequest usuario) throws UsuarioException;
 
 }

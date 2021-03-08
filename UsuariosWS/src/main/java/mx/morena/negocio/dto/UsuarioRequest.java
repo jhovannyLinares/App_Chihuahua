@@ -2,19 +2,9 @@ package mx.morena.negocio.dto;
 
 public class UsuarioRequest {
 
-	private long id;
-
 	private String password;
 
 	private String email;
-
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
 
 	public String getPassword() {
 		return password;
