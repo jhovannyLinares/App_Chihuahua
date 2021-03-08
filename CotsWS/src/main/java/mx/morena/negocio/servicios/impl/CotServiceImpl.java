@@ -37,44 +37,40 @@ public class CotServiceImpl implements ICotService {
 	private static final Integer PERFIL_ESTATAL = 1;
 	private static final Integer PERFIL_FEDERAL = 2;
 	private static final Integer PERFIL_MUNICIPAL = 4;
+	private static final char ESTATUS = 'A';
 	
 	@Override
 	public String save(CotDTO cotDto, int perfil) throws CotException {
 		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL || perfil == PERFIL_MUNICIPAL) {
-			boolean existeCurp = cotRepository.existsByCurp(cotDto.getCurp());
-			boolean existeClave = cotRepository.existsByClaveElector(cotDto.getClaveElector());
+			Convencidos existeCurp = cotRepository.getByCurp(cotDto.getCurp());
+			Convencidos existeClave = cotRepository.findByClaveElector(cotDto.getClaveElector());
 
-			if (existeClave) {
+			if (existeClave != null) {
 				throw new CotException("La clave de elector ya esta en uso, intente con otra", 400);
-			} else if (existeCurp) {
+			} else if (existeCurp != null) {
 				throw new CotException("La CURP ya esta en uso, intente con otra", 400);
 			}
-			
-			if (!existeCurp && !existeClave) {
+
+			if (existeCurp == null && existeClave == null) {
 				Convencidos personaCot = new Convencidos();
-				//Solo se reciben id, por lo tanto se tiene que hacer al busqueda
+				// Solo se reciben id, por lo tanto se tiene que hacer la busqueda
 				DistritoFederal distritoF = distritoFederalRepository.findById(cotDto.getIdDistritoFederal()).get();
 				Municipio municipio = municipioRepository.findById(cotDto.getIdMunicipio()).get();
-				
-				if(distritoF != null && municipio != null) {
+
+				if (distritoF != null && municipio != null) {
 					cotDto.setFechaRegistro(new Date(System.currentTimeMillis()));
-					cotDto.setEstatus('A');
+					cotDto.setEstatus(ESTATUS);
 					MapperUtil.map(cotDto, personaCot);
-					
+
 					personaCot.setEstado(distritoF.getEntidad());
 					personaCot.setDistritoFederal(distritoF);
-					personaCot.setMunicipio(municipio);;
+					personaCot.setMunicipio(municipio);
+					;
 					System.out.println(personaCot);
 					cotRepository.save(personaCot);
 				} else {
 					throw new CotException("No se encontraron datos.", 404);
 				}
-				
-				//ArrayList<Long> secciones = new ArrayList<Long>();
-				//secciones.add(1L);
-				//secciones.add(191L);
-				//secciones.add(192L);
-				// asignarSecciones(1L, secciones, personaCot.getId());// personaCot.getId());
 
 				return "Cot " + cotDto.getNombre() + " " + cotDto.getaPaterno() + " guardado.";
 			}
@@ -90,7 +86,7 @@ public class CotServiceImpl implements ICotService {
 	public String asignarSecciones(List<Long> idSecciones, Long idCot, int perfil) throws CotException {
 		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL || perfil == PERFIL_MUNICIPAL) {
 			List<SeccionElectoral> secciones = seccionRepository.findAllById(idSecciones);
-			Convencidos cot = cotRepository.findById(idCot).get();
+			Convencidos cot = cotRepository.getByIdAndEstatus(idCot, ESTATUS);
 
 			if (secciones != null && cot != null) {
 				for (SeccionElectoral sec : secciones) {
@@ -115,4 +111,5 @@ public class CotServiceImpl implements ICotService {
 			throw new CotException("No cuenta con suficientes permisos.", 401);
 		}
 	}
+	
 }

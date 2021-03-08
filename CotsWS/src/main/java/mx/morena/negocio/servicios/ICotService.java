@@ -8,5 +8,4 @@ import mx.morena.negocio.exception.CotException;
 public interface ICotService {
 	public String save(CotDTO cot, int perfil) throws CotException;
 	public String asignarSecciones(List<Long> idSecciones, Long idCot, int perfil) throws CotException;
-	//public List<SeccionElectoral> lista();
 }
