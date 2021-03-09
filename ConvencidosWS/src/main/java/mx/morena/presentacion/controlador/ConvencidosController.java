@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
@@ -20,6 +21,7 @@ import mx.morena.negocio.exception.ConvencidosException;
 import mx.morena.negocio.servicio.IConvencidosService;
 import mx.morena.negocio.util.MapperUtil;
 import mx.morena.persistencia.entidad.Convencidos;
+import mx.morena.persistencia.entidad.Entidad;
 import mx.morena.security.controller.MasterController;
 
 @RestController
@@ -56,7 +58,7 @@ public class ConvencidosController extends MasterController{
 	 * @return
 	 */
 	@PostMapping("/convencidos")
-	public Long saveConvencidos(HttpServletRequest request, @ModelAttribute ConvencidosDTO dto) {
+	public Long saveConvencidos(HttpServletRequest request, @RequestBody ConvencidosDTO dto) {
 		try {
 		System.out.println("XXXXXXXXXXXXXXXXXXX   save convencidos controller");
 		
@@ -70,7 +72,9 @@ public class ConvencidosController extends MasterController{
 		
 	}
 
-	
+
+
+
 
 
 }

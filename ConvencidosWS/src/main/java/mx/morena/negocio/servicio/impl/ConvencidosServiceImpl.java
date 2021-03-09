@@ -14,14 +14,38 @@ import mx.morena.negocio.exception.ConvencidosException;
 import mx.morena.negocio.servicio.IConvencidosService;
 import mx.morena.negocio.util.MapperUtil;
 import mx.morena.persistencia.entidad.Convencidos;
+import mx.morena.persistencia.entidad.DistritoFederal;
+import mx.morena.persistencia.entidad.Entidad;
+import mx.morena.persistencia.entidad.Municipio;
+import mx.morena.persistencia.entidad.SeccionElectoral;
 import mx.morena.persistencia.entidad.Usuario;
 import mx.morena.persistencia.repository.IConvencidosRepository;
+import mx.morena.persistencia.repository.IDistritoFederalRepository;
+import mx.morena.persistencia.repository.IEntidadRepository;
+import mx.morena.persistencia.repository.IMunicipioRepository;
+import mx.morena.persistencia.repository.ISeccionElectoralRepository;
+import mx.morena.persistencia.repository.IUsuarioRepository;
 
 @Service
 public class ConvencidosServiceImpl implements IConvencidosService {
 
 	@Autowired
 	private IConvencidosRepository convencidosRepository;
+	
+	@Autowired
+	private IDistritoFederalRepository dFederalRepository;
+	
+	@Autowired
+	private IEntidadRepository entidadRepository;
+	
+	@Autowired
+	private IMunicipioRepository municipioRepository;
+	
+	@Autowired
+	private ISeccionElectoralRepository seccionRepository;
+	
+	@Autowired
+	private IUsuarioRepository usuarioRepository;
 
 	@Override
 	public List<ConvencidosDTO> getConvencidos(Long distritoFederalId, Long idMunicipio, Long idSeccion, String claveElector)
@@ -53,13 +77,27 @@ public class ConvencidosServiceImpl implements IConvencidosService {
 	}
 
 	@Override
-	public Long save(long usuario, ConvencidosDTO dto) throws ConvencidosException {
+	public Long save(long idUsuario, ConvencidosDTO dto) throws ConvencidosException {
 		
 		Convencidos existeClave = convencidosRepository.findByClaveElector(dto.getClaveElector());
 
 		if (existeClave == null) {
 			Convencidos convencidos = new Convencidos();
+			
+			Entidad estado = entidadRepository.findById(dto.getIdEstado()).get();
+			DistritoFederal dFederal = dFederalRepository.findById(dto.getIdFederal()).get();
+			Municipio municipio = municipioRepository.findById(dto.getIdMunicipio()).get();
+			SeccionElectoral seccion = seccionRepository.findById(dto.getIdSeccion()).get();
+			Usuario usuario = usuarioRepository.findById(idUsuario).get();
+			
 			MapperUtil.map(dto, convencidos);
+			
+			convencidos.setEstado(estado);
+			convencidos.setDistritoFederal(dFederal);
+			convencidos.setMunicipio(municipio);
+			//convencidos.setSeccionesElectorales();
+			convencidos.setUsuario(usuario);
+			
 			convencidosRepository.save(convencidos);
 			
 			return convencidos.getId();
