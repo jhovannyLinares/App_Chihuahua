@@ -29,6 +29,8 @@ import mx.morena.persistencia.repository.ILocalidadRepository;
 import mx.morena.persistencia.repository.IMunicipioRepository;
 import mx.morena.persistencia.repository.ISeccionElectoralRepository;
 import mx.morena.persistencia.repository.IUsuarioRepository;
+import mx.morena.security.dto.UsuarioDTO;
+import mx.morena.security.servicio.Token;
 
 @Service
 public class CatalogoServiceImpl implements ICatalogoService {
@@ -87,6 +89,11 @@ public class CatalogoServiceImpl implements ICatalogoService {
 			dtos = new ArrayList<DistritoFederalDTO>();
 
 			dtos = MapperUtil.mapAll(distritoFederals, DistritoFederalDTO.class);
+			
+			for ( DistritoFederalDTO df : dtos ) {
+				
+				df.setEntidadId(idEntidad);
+			}
 
 		} else {
 
@@ -102,7 +109,12 @@ public class CatalogoServiceImpl implements ICatalogoService {
 					MapperUtil.map(distritoFederal, distritoFederalDTO);
 
 					dtos.add(distritoFederalDTO);
+					
 				}
+			}
+			for ( DistritoFederalDTO df : dtos ) {
+				
+				df.setEntidadId(idEntidad);
 			}
 
 		}
@@ -125,6 +137,11 @@ public class CatalogoServiceImpl implements ICatalogoService {
 			dtos = new ArrayList<DistritoLocalDTO>();
 
 			dtos = MapperUtil.mapAll(distritoLocals, DistritoLocalDTO.class);
+			
+			for ( DistritoLocalDTO dl : dtos ) {
+				
+				dl.setFederalId(idFederal);
+			}
 
 		}else {
 			Optional<DistritoFederal> federal = federalRepocitory.findById(idFederal);
@@ -140,6 +157,10 @@ public class CatalogoServiceImpl implements ICatalogoService {
 
 					dtos.add(distritoLocalDTO);
 				}
+			}
+			for ( DistritoLocalDTO dl : dtos ) {
+				
+				dl.setFederalId(idFederal);
 			}
 		}
 
@@ -162,6 +183,12 @@ public class CatalogoServiceImpl implements ICatalogoService {
 			dtos = new ArrayList<MunicipioDTO>();
 
 			dtos = MapperUtil.mapAll(municipios, MunicipioDTO.class);
+			
+			for ( MunicipioDTO mn : dtos ) {
+				
+				mn.setLocalId(idLocal);
+			}
+
 		}else {
 			Optional<DistritoLocal> local = localRepository.findById(idLocal);
 			List<Municipio> municipios = local.get().getMunicipios();
@@ -178,6 +205,10 @@ public class CatalogoServiceImpl implements ICatalogoService {
 
 					dtos.add(municipioDTO);
 				}
+			}
+			for ( MunicipioDTO mn : dtos ) {
+				
+				mn.setLocalId(idLocal);
 			}
 		}
 
@@ -202,6 +233,11 @@ public class CatalogoServiceImpl implements ICatalogoService {
 			dtos = new ArrayList<LocalidadDTO>();
 
 			dtos = MapperUtil.mapAll(localidades, LocalidadDTO.class);
+			
+			for ( LocalidadDTO lc : dtos ) {
+				
+				lc.setMunicipioId(idMunicipio);
+			}
 
 		} else {
 			
@@ -220,6 +256,11 @@ public class CatalogoServiceImpl implements ICatalogoService {
 
 					dtos.add(localidadDTO);
 				}
+			}
+			
+			for ( LocalidadDTO lc : dtos ) {
+				
+				lc.setMunicipioId(idMunicipio);
 			}
 		}
 
@@ -243,6 +284,11 @@ public class CatalogoServiceImpl implements ICatalogoService {
 			dtos = new ArrayList<SeccionDTO>();
 
 			dtos = MapperUtil.mapAll(secciones, SeccionDTO.class);
+			
+			for ( SeccionDTO sc : dtos ) {
+				
+				sc.setLocalidadId(idLocalidad);
+			}
 
 		} else {
 			
@@ -261,6 +307,10 @@ public class CatalogoServiceImpl implements ICatalogoService {
 
 					dtos.add(seccionDTO);
 				}
+			}
+			for ( SeccionDTO sc : dtos ) {
+				
+				sc.setLocalidadId(idLocalidad);
 			}
 		}
 		

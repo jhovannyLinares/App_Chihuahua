@@ -5,8 +5,8 @@ public class DistritoFederalDTO {
 	private Long id;
 
 	private String cabeceraFederal;
-
-	private Long entidadId;
+	
+	private long entidadId;
 
 	public Long getId() {
 		return id;
@@ -24,12 +24,17 @@ public class DistritoFederalDTO {
 		this.cabeceraFederal = cabeceraFederal;
 	}
 
+	public void setEntidadId(long entidadId) {
+		this.entidadId = entidadId;
+	}
 
-	public Long getEntidadId() {
+	public long getEntidadId() {
 		return entidadId;
 	}
 
-	public void setEntidadId(Long entidadId) {
-		this.entidadId = entidadId;
+	@Override
+	public String toString() {
+		return "DistritoFederalDTO [id=" + id + ", cabeceraFederal=" + cabeceraFederal + ", entidadId=" + entidadId
+				+ "]";
 	}
 }

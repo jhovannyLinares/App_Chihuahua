@@ -32,4 +32,9 @@ public class DistritoLocalDTO {
 		this.federalId = federalId;
 	}
 
+	@Override
+	public String toString() {
+		return "DistritoLocalDTO [id=" + id + ", cabecera=" + cabecera + ", federalId=" + federalId + "]";
+	}
+
 }
