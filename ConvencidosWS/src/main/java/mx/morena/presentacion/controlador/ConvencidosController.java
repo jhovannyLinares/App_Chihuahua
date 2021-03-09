@@ -73,6 +73,14 @@ public class ConvencidosController extends MasterController{
 	}
 
 
+	@GetMapping("claveElector/{claveElector}/convencidos")
+	private boolean getClaveElector(@PathVariable("claveElector") String claveElector) {
+		try {
+		return convencidosService.findByClaveElector(claveElector);
+		}catch(ConvencidosException e) {
+			throw new ResponseStatusException(HttpStatus.resolve(e.getCodeError()), e.getLocalizedMessage());
+		}
+	}
 
 
 

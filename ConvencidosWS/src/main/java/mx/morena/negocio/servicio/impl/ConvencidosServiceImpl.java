@@ -107,6 +107,16 @@ public class ConvencidosServiceImpl implements IConvencidosService {
 		
 	}
 
+	@Override
+	public boolean findByClaveElector(String claveElector) throws ConvencidosException {
+		Convencidos convencidos = convencidosRepository.findByClaveElector(claveElector);
+		if(convencidos==null) {
+		return false;
+		}else {
+			return true;
+		}
+	}
+
 
 
 }

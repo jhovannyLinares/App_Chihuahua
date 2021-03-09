@@ -12,5 +12,6 @@ public interface IConvencidosService {
 
 	Long save(long usuario, ConvencidosDTO dto) throws ConvencidosException;
 
+	boolean findByClaveElector(String claveElector) throws ConvencidosException;
 
 }
