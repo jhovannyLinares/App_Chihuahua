@@ -190,6 +190,10 @@ public class ConvencidosDTO implements Serializable {
 		this.correo = correo;
 	}
 
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
 	@Override
 	public String toString() {
 		return "ConvencidosDTO [id=" + id + ", fechaRegistro=" + fechaRegistro + ", idEstado=" + idEstado
@@ -199,6 +203,7 @@ public class ConvencidosDTO implements Serializable {
 				+ colonia + ", cp=" + cp + ", telCasa=" + telCasa + ", telCelular=" + telCelular + ", correo=" + correo
 				+ "]";
 	}
+
 	
 	
 

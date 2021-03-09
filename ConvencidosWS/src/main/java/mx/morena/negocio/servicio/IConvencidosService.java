@@ -7,11 +7,10 @@ import mx.morena.negocio.exception.ConvencidosException;
 
 public interface IConvencidosService {
 
-	List<ConvencidosDTO> getConvencidos(Long idFederal, Long idMunicipio, Long idSeccion, String claveElector)
+	List<ConvencidosDTO> getConvencidos(Long distritoFederalId, Long idMunicipio, Long idSeccion, String claveElector)
 			throws ConvencidosException;
 
-	String save(ConvencidosDTO dto) throws ConvencidosException;
+	Long save(long usuario, ConvencidosDTO dto) throws ConvencidosException;
 
-	//ConvencidosDTO getByClaveElector(String claveElector);
 
 }

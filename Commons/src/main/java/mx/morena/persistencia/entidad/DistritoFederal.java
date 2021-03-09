@@ -40,9 +40,6 @@ public class DistritoFederal {
 
 	@OneToMany(mappedBy = "distritoFederal",fetch = FetchType.LAZY)
 	private List<DistritoLocal> distritosLocales;
-	
-	@OneToOne (cascade = CascadeType.ALL)
-	private Convencidos convencidos;
 
 	public DistritoFederal() {
 		// TODO Auto-generated constructor stub
@@ -78,14 +75,6 @@ public class DistritoFederal {
 
 	public void setDistritosLocales(List<DistritoLocal> distritosLocales) {
 		this.distritosLocales = distritosLocales;
-	}
-
-	public Convencidos getConvencidos() {
-		return convencidos;
-	}
-
-	public void setConvencidos(Convencidos convencidos) {
-		this.convencidos = convencidos;
 	}
 
 	@Override

@@ -9,6 +9,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import mx.morena.security.servicio.JWTAuthorizationFilter;
 
 @SpringBootApplication
@@ -20,6 +24,13 @@ public class ConvencidosApplication {
 
 	@EnableWebSecurity
 	@Configuration
+	@OpenAPIDefinition(info = @Info(title = "My API", version = "v1"))
+	@SecurityScheme(
+	    name = "bearerAuth",
+	    type = SecuritySchemeType.HTTP,
+	    bearerFormat = "JWT",
+	    scheme = "bearer"
+	)
 	class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 		@Override
@@ -28,7 +39,7 @@ public class ConvencidosApplication {
 			.addFilterAfter(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
 			.authorizeRequests()
 			.antMatchers(HttpMethod.GET, "/**").permitAll()
-			.antMatchers(HttpMethod.GET, "/convencidos/**").authenticated()
+			.antMatchers("/convencidos/**").authenticated()
 			.anyRequest()
 			.authenticated();
 			

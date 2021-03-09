@@ -29,9 +29,6 @@ public class Entidad {
 
 	@OneToMany(mappedBy = "entidad", fetch = FetchType.LAZY)
 	private List<DistritoFederal> distritosFederales;
-	
-	@OneToOne (cascade = CascadeType.ALL)
-	private Convencidos convencidos;
 
 	public long getId() {
 		return id;
@@ -56,15 +53,6 @@ public class Entidad {
 	public void setDistritosFederales(List<DistritoFederal> distritosFederales) {
 		this.distritosFederales = distritosFederales;
 	}
-
-	public Convencidos getConvencidos() {
-		return convencidos;
-	}
-
-	public void setConvencidos(Convencidos convencidos) {
-		this.convencidos = convencidos;
-	}
-	
 	
 
 }

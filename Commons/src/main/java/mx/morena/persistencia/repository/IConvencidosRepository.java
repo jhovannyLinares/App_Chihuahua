@@ -12,7 +12,7 @@ public interface IConvencidosRepository extends JpaRepository<Convencidos, Long>
 	
 	 List<Convencidos> getByClaveElector(String claveElector);
 	
-	 List<Convencidos> getByDistritoFederal(Long idFederal);
+	 List<Convencidos> getByDistritoFederal(Long distritoFederalId);
 	 
 	 List<Convencidos> getByMunicipio(Long idMunicipio);
 	 

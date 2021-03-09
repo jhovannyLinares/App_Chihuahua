@@ -32,11 +32,11 @@ public class MapperUtil {
 			}
 		});
 
-		modelMapper.addConverter(new AbstractConverter<String, String>() {
-			protected String convert(String source) {
-				return source == null ? null : source.trim().toUpperCase();
-			}
-		});
+//		modelMapper.addConverter(new AbstractConverter<String, String>() {
+//			protected String convert(String source) {
+//				return source == null ? null : source.trim().toUpperCase();
+//			}
+//		});
 
 	}
 

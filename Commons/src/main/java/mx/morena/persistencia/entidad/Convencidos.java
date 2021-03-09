@@ -29,20 +29,20 @@ public class Convencidos {
 	@Column(name = "fecha_registro")
 	private Date fechaRegistro;
 
-	@OneToOne(mappedBy = "convencidos", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_estado") // Falta el tipo de carga de relacion
+	@OneToOne
 	private Entidad estado;
 
-	@OneToOne(mappedBy = "convencidos", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_distrito_federal") // Falta el tipo de carga de relacion
+	@OneToOne
 	private DistritoFederal distritoFederal;
 
-	@OneToOne(mappedBy = "convencidos", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_municipio") // Falta el tipo de carga de relacion
+	@OneToOne
 	private Municipio municipio;
 
 	@OneToMany(mappedBy = "cot", fetch = FetchType.LAZY)
 	private List<SeccionElectoral> seccionesElectorales;
+	
+	@OneToOne
+	private Usuario usuario;
 
 	@Column(name = "nombre")
 	private String nombre;
@@ -86,7 +86,7 @@ public class Convencidos {
 	@Column(name = "fecha_baja")
 	private Date fechaBaja;
 
-	@Column(name = "fecha_reactivación")
+	@Column(name = "fecha_reactivacion")
 	private Date fechaReactivacion;
 
 	@Column(name = "banco")
@@ -290,7 +290,13 @@ public class Convencidos {
 		this.estatus = estatus;
 	}
 
-	
-	
+	public Usuario getUsuario() {
+		return usuario;
+	}
 
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
+
+	
 }

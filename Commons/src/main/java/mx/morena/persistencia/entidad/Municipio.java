@@ -20,7 +20,7 @@ import javax.persistence.Table;
 @Table(name = "app_municipio")
 public class Municipio {
 	@Id
-	@Column(unique = true, name = "id_municipio")
+	@Column(unique = true, name = "id")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "T_municipio_SEQ")
 	@SequenceGenerator(sequenceName = "T_municipio_SEQ", allocationSize = 1, name = "T_municipio_SEQ")
 	private long id;
@@ -34,9 +34,6 @@ public class Municipio {
 
 	@OneToMany(mappedBy = "municipio", fetch = FetchType.LAZY)
 	private List<Localidad> localidades;
-	
-	@OneToOne (cascade = CascadeType.ALL)
-	private Convencidos convencidos;
 
 	public Municipio() {
 	}
@@ -73,12 +70,4 @@ public class Municipio {
 		this.localidades = localidades;
 	}
 
-	public Convencidos getConvencidos() {
-		return convencidos;
-	}
-
-	public void setConvencidos(Convencidos convencidos) {
-		this.convencidos = convencidos;
-	}
-	
 }

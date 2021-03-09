@@ -3,6 +3,9 @@ package mx.morena.negocio.servicio.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +14,7 @@ import mx.morena.negocio.exception.ConvencidosException;
 import mx.morena.negocio.servicio.IConvencidosService;
 import mx.morena.negocio.util.MapperUtil;
 import mx.morena.persistencia.entidad.Convencidos;
+import mx.morena.persistencia.entidad.Usuario;
 import mx.morena.persistencia.repository.IConvencidosRepository;
 
 @Service
@@ -20,12 +24,13 @@ public class ConvencidosServiceImpl implements IConvencidosService {
 	private IConvencidosRepository convencidosRepository;
 
 	@Override
-	public List<ConvencidosDTO> getConvencidos(Long idFederal, Long idMunicipio, Long idSeccion, String claveElector)
+	public List<ConvencidosDTO> getConvencidos(Long distritoFederalId, Long idMunicipio, Long idSeccion, String claveElector)
 			throws ConvencidosException {
 		List<Convencidos> lstConv = null;
 		List<ConvencidosDTO> lstDto = new ArrayList<ConvencidosDTO>();
-		if (idFederal != null) {
-			lstConv = convencidosRepository.getByDistritoFederal(idFederal);
+		if (distritoFederalId != null) {
+			System.out.println("id federal " + distritoFederalId);
+			lstConv = convencidosRepository.getByDistritoFederal(distritoFederalId);
 		}
 		if (idMunicipio != null) {
 			lstConv = convencidosRepository.getByMunicipio(idMunicipio);
@@ -34,6 +39,7 @@ public class ConvencidosServiceImpl implements IConvencidosService {
 			lstConv = convencidosRepository.getBySeccionesElectorales(idSeccion);
 		}
 		if (claveElector != null) {
+			System.out.println("clave elector "+ claveElector);
 			lstConv = convencidosRepository.getByClaveElector(claveElector);
 		}
 
@@ -47,26 +53,22 @@ public class ConvencidosServiceImpl implements IConvencidosService {
 	}
 
 	@Override
-	public String save(ConvencidosDTO dto) throws ConvencidosException {
-		Convencidos convencidos = new Convencidos();
+	public Long save(long usuario, ConvencidosDTO dto) throws ConvencidosException {
+		
 		Convencidos existeClave = convencidosRepository.findByClaveElector(dto.getClaveElector());
 
 		if (existeClave == null) {
+			Convencidos convencidos = new Convencidos();
 			MapperUtil.map(dto, convencidos);
 			convencidosRepository.save(convencidos);
+			
+			return convencidos.getId();
 		}else {
-			throw new ConvencidosException("La cale de elector ya se encuentra registrada", 200);
+			throw new ConvencidosException("La clave de elector ya se encuentra registrada", 204);
 		}
-		return "" + dto.toString();
+		
 	}
 
-//	@Override
-//	public ConvencidosDTO getClaveElector(String claveElector) {
-//		ConvencidosDTO dto = new ConvencidosDTO();
-//		Convencidos conv = convencidosRepository.findByClaveElector(claveElector);
-//		MapperUtil.map(conv, dto);
-//		
-//		return dto;
-//	}
+
 
 }
