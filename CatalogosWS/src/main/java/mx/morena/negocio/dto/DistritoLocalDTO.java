@@ -1,12 +1,12 @@
 package mx.morena.negocio.dto;
 
 public class DistritoLocalDTO {
-	
+
 	private Long id;
-	
+
 	private String cabecera;
-	
-	private long federal;
+
+	private long federalId;
 
 	public Long getId() {
 		return id;
@@ -24,12 +24,12 @@ public class DistritoLocalDTO {
 		this.cabecera = cabecera;
 	}
 
-	public long getFederal() {
-		return federal;
+	public long getFederalId() {
+		return federalId;
 	}
 
-	public void setFederal(long federal) {
-		this.federal = federal;
+	public void setFederalId(long federalId) {
+		this.federalId = federalId;
 	}
 
 }

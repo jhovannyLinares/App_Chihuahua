@@ -1,12 +1,12 @@
 package mx.morena.negocio.dto;
 
 public class LocalidadDTO {
-	
+
 	private Long id;
-	
+
 	private String descripcion;
-	
-	private long municipio;
+
+	private long municipioId;
 
 	public Long getId() {
 		return id;
@@ -24,12 +24,12 @@ public class LocalidadDTO {
 		this.descripcion = descripcion;
 	}
 
-	public long getMunicipio() {
-		return municipio;
+	public long getMunicipioId() {
+		return municipioId;
 	}
 
-	public void setMunicipio(long municipio) {
-		this.municipio = municipio;
+	public void setMunicipioId(long municipioId) {
+		this.municipioId = municipioId;
 	}
 
 }
