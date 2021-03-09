@@ -1,15 +1,12 @@
 package mx.morena.negocio.dto;
 
-import javax.persistence.Entity;
-
-@Entity
 public class DistritoFederalDTO {
 
 	private Long id;
 
 	private String cabeceraFederal;
 
-	private long entidad;
+	private Long entidadId;
 
 	public Long getId() {
 		return id;
@@ -27,13 +24,12 @@ public class DistritoFederalDTO {
 		this.cabeceraFederal = cabeceraFederal;
 	}
 
-	public long getEntidad() {
-		return entidad;
+
+	public Long getEntidadId() {
+		return entidadId;
 	}
 
-	public void setEntidad(long entidad) {
-		this.entidad = entidad;
+	public void setEntidadId(Long entidadId) {
+		this.entidadId = entidadId;
 	}
-	
-	
 }

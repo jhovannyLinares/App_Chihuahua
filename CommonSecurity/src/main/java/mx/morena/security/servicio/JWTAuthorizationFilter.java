@@ -38,6 +38,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
 					setUpSpringAuthentication(claims);
 					HttpSession session = request.getSession(true);
 					session.setAttribute("Perfil", claims.get("perfil"));
+					session.setAttribute("Usuario", claims.get("usuario"));
 				} else {
 					SecurityContextHolder.clearContext();
 				}

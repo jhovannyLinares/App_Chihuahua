@@ -6,14 +6,24 @@ public class MasterController {
 
 	protected long getPerfil(HttpServletRequest request) {
 
-		return (long) request.getSession().getAttribute("Perfil");
+		return toLong(request.getSession().getAttribute("Perfil"));
 
 	}
 
 	protected long getUsuario(HttpServletRequest request) {
 
-		return (long) request.getSession().getAttribute("usuario");
+		return toLong(request.getSession().getAttribute("Usuario"));
 
 	}
+	
+	private long toLong(Object o) {
+		
+		String stringToConvert = String.valueOf(o);
+	    long convertedLong = Long.parseLong(stringToConvert);
+	    
+	    return convertedLong;
+
+	}
+	
 
 }
