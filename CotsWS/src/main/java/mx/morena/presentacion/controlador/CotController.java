@@ -25,11 +25,11 @@ public class CotController extends MasterController{
 	
 	@PostMapping("/cots")
 	public String guardarCots(HttpServletRequest request, @RequestBody CotDTO cot) {
-		int perfil = getPerfil(request);
-		System.out.println("Perfil: " + perfil);
+		long perfil = getPerfil(request);
+		long usuario = getUsuario(request);
 		
 		try {
-			return cotService.save(cot, perfil);
+			return cotService.save(cot, perfil, usuario);
 		} catch (CotException e) {
 			throw new ResponseStatusException(HttpStatus.resolve(e.getCodeError()), e.getLocalizedMessage());
 		}
@@ -37,7 +37,7 @@ public class CotController extends MasterController{
 	
 	@PostMapping("/cots/secciones")
 	public String asignarSeccionesCots(HttpServletRequest request, @RequestBody AsignarSeccionesDTO secciones) {
-		int perfil = getPerfil(request);
+		long perfil = getPerfil(request);
 		
 		try {
 			return cotService.asignarSecciones(secciones.getIdSecciones(), secciones.getIdCot(), perfil);
@@ -45,5 +45,5 @@ public class CotController extends MasterController{
 			throw new ResponseStatusException(HttpStatus.resolve(e.getCodeError()), e.getLocalizedMessage());
 		}
 	}
-
+	
 }

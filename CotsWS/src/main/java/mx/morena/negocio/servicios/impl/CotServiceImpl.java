@@ -15,11 +15,13 @@ import mx.morena.persistencia.entidad.DistritoFederal;
 import mx.morena.persistencia.entidad.Entidad;
 import mx.morena.persistencia.entidad.Municipio;
 import mx.morena.persistencia.entidad.SeccionElectoral;
+import mx.morena.persistencia.entidad.Usuario;
 import mx.morena.persistencia.repository.IConvencidosRepository;
 import mx.morena.persistencia.repository.IDistritoFederalRepository;
 import mx.morena.persistencia.repository.IEntidadRepository;
 import mx.morena.persistencia.repository.IMunicipioRepository;
 import mx.morena.persistencia.repository.ISeccionElectoralRepository;
+import mx.morena.persistencia.repository.IUsuarioRepository;
 
 @Service
 public class CotServiceImpl implements ICotService {
@@ -39,13 +41,16 @@ public class CotServiceImpl implements ICotService {
 	@Autowired
 	private IMunicipioRepository municipioRepository;
 	
+	@Autowired
+	private IUsuarioRepository usuarioRepository;
+	
 	private static final Integer PERFIL_ESTATAL = 1;
 	private static final Integer PERFIL_FEDERAL = 2;
 	private static final Integer PERFIL_MUNICIPAL = 4;
 	private static final char ESTATUS_ALTA = 'A';
 	
 	@Override
-	public String save(CotDTO cotDto, long perfil) throws CotException {
+	public String save(CotDTO cotDto, long perfil, long idUsuario) throws CotException {
 		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL || perfil == PERFIL_MUNICIPAL) {
 			Convencidos existeCurp = cotRepository.getByCurp(cotDto.getCurp());
 			Convencidos existeClave = cotRepository.findByClaveElector(cotDto.getClaveElector());
@@ -62,6 +67,7 @@ public class CotServiceImpl implements ICotService {
 				DistritoFederal distritoF = distritoFederalRepository.findById(cotDto.getIdDistritoFederal()).get();
 				Municipio municipio = municipioRepository.findById(cotDto.getIdMunicipio()).get();
 				Entidad entidad = entidadRepository.findById(cotDto.getIdEstado()).get();
+				Usuario usuario =  usuarioRepository.findById(idUsuario).get();
 				
 				if (distritoF != null && municipio != null && entidad != null) {
 					cotDto.setFechaRegistro(new Date(System.currentTimeMillis()));
@@ -71,6 +77,7 @@ public class CotServiceImpl implements ICotService {
 					personaCot.setEstado(entidad);
 					personaCot.setDistritoFederal(distritoF);
 					personaCot.setMunicipio(municipio);
+					personaCot.setUsuario(usuario);
 
 					System.out.println(personaCot);
 					cotRepository.save(personaCot);
