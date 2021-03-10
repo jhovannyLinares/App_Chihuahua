@@ -1,10 +1,9 @@
 package mx.morena.negocio.servicio.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,6 +45,8 @@ public class ConvencidosServiceImpl implements IConvencidosService {
 	
 	@Autowired
 	private IUsuarioRepository usuarioRepository;
+	
+	private static final char ESTATUS_ALTA = 'A';
 
 	@Override
 	public List<ConvencidosDTO> getConvencidos(Long distritoFederalId, Long idMunicipio, Long idSeccion, String claveElector)
@@ -84,20 +85,23 @@ public class ConvencidosServiceImpl implements IConvencidosService {
 		if (existeClave == null) {
 			Convencidos convencidos = new Convencidos();
 			
+			System.out.println("entidad "+ dto.getIdEstado());
 			Entidad estado = entidadRepository.findById(dto.getIdEstado()).get();
 			DistritoFederal dFederal = dFederalRepository.findById(dto.getIdFederal()).get();
 			Municipio municipio = municipioRepository.findById(dto.getIdMunicipio()).get();
-			SeccionElectoral seccion = seccionRepository.findById(dto.getIdSeccion()).get();
 			Usuario usuario = usuarioRepository.findById(idUsuario).get();
+			
+			dto.setEstatus(ESTATUS_ALTA);
+			dto.setFechaRegistro(new Date());
 			
 			MapperUtil.map(dto, convencidos);
 			
 			convencidos.setEstado(estado);
 			convencidos.setDistritoFederal(dFederal);
 			convencidos.setMunicipio(municipio);
-			//convencidos.setSeccionesElectorales();
 			convencidos.setUsuario(usuario);
 			
+			System.out.println("convecido "+ dto.toString());
 			convencidosRepository.save(convencidos);
 			
 			return convencidos.getId();

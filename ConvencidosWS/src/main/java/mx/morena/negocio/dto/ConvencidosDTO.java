@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class ConvencidosDTO implements Serializable {
-	
+
 	/**
 	 * 
 	 */
@@ -45,6 +45,8 @@ public class ConvencidosDTO implements Serializable {
 	private String telCelular;
 
 	private String correo;
+	
+	private char estatus;
 
 	public Long getId() {
 		return id;
@@ -194,17 +196,13 @@ public class ConvencidosDTO implements Serializable {
 		return serialVersionUID;
 	}
 
-	@Override
-	public String toString() {
-		return "ConvencidosDTO [id=" + id + ", fechaRegistro=" + fechaRegistro + ", idEstado=" + idEstado
-				+ ", idFederal=" + idFederal + ", idMunicipio=" + idMunicipio + ", idSeccion=" + idSeccion + ", nombre="
-				+ nombre + ", aPaterno=" + aPaterno + ", aMaterno=" + aMaterno + ", claveElector=" + claveElector
-				+ ", calle=" + calle + ", numInterior=" + numInterior + ", numExterior=" + numExterior + ", colonia="
-				+ colonia + ", cp=" + cp + ", telCasa=" + telCasa + ", telCelular=" + telCelular + ", correo=" + correo
-				+ "]";
+	public char getEstatus() {
+		return estatus;
 	}
 
-	
-	
+	public void setEstatus(char estatus) {
+		this.estatus = estatus;
+	}
+
 
 }
