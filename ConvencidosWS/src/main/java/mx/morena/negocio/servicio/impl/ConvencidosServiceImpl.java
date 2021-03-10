@@ -53,12 +53,14 @@ public class ConvencidosServiceImpl implements IConvencidosService {
 			throws ConvencidosException {
 		List<Convencidos> lstConv = null;
 		List<ConvencidosDTO> lstDto = new ArrayList<ConvencidosDTO>();
+		
 		if (distritoFederalId != null) {
-			System.out.println("id federal " + distritoFederalId);
-			lstConv = convencidosRepository.getByDistritoFederal(distritoFederalId);
+			Optional<DistritoFederal> dFederal = dFederalRepository.findById(distritoFederalId);
+			lstConv = convencidosRepository.getByDistritoFederal(dFederal);
 		}
 		if (idMunicipio != null) {
-			lstConv = convencidosRepository.getByMunicipio(idMunicipio);
+			Optional<Municipio> municipio = municipioRepository.findById(idMunicipio);
+			lstConv = convencidosRepository.getByMunicipio(municipio);
 		}
 		if (idSeccion != null) {
 			lstConv = convencidosRepository.getBySeccionesElectorales(idSeccion);
