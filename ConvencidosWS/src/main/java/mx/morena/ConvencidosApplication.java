@@ -38,7 +38,7 @@ public class ConvencidosApplication {
 			http.csrf().disable()
 			.addFilterAfter(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
 			.authorizeRequests()
-			.antMatchers(HttpMethod.GET, "/**").permitAll()
+			.antMatchers("/**").permitAll()
 			.antMatchers("/convencidos/**").authenticated()
 			.anyRequest()
 			.authenticated();
