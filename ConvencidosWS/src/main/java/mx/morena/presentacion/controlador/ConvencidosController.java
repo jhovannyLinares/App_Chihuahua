@@ -41,7 +41,6 @@ public class ConvencidosController extends MasterController {
 			@RequestParam(value = "idSeccion", required = false) Long idSeccion,
 			@RequestParam(value = "claveElector", required = false) String claveElector) {
 		try {
-			System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXxx    convencidos controller");
 			List<ConvencidosDTO> convencidos = convencidosService.getConvencidos(distritoFederalId, idMunicipio,
 					idSeccion, claveElector);
 			return convencidos;
@@ -61,10 +60,6 @@ public class ConvencidosController extends MasterController {
 	@CrossOrigin
 	public Long saveConvencidos(HttpServletRequest request, @RequestBody ConvencidosDTO dto) {
 		try {
-			
-			//Nota quitar los syso y cambiar por logger
-			System.out.println("XXXXXXXXXXXXXXXXXXX   save convencidos controller");
-
 			long usuario = getUsuario(request);
 
 			return convencidosService.save(usuario, dto);
@@ -75,14 +70,12 @@ public class ConvencidosController extends MasterController {
 
 	}
 
-	
-
 	@GetMapping("claveElector/{claveElector}/convencidos")
 	@CrossOrigin
 	private boolean getClaveElector(@PathVariable("claveElector") String claveElector) {
 		try {
-		return convencidosService.findByClaveElector(claveElector);
-		}catch(ConvencidosException e) {
+			return convencidosService.findByClaveElector(claveElector);
+		} catch (ConvencidosException e) {
 			throw new ResponseStatusException(HttpStatus.resolve(e.getCodeError()), e.getLocalizedMessage());
 		}
 	}

@@ -1,9 +1,10 @@
 package mx.morena.negocio.servicio.impl;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -66,7 +67,6 @@ public class ConvencidosServiceImpl implements IConvencidosService {
 			lstConv = convencidosRepository.getBySeccionesElectorales(idSeccion);
 		}
 		if (claveElector != null) {
-			System.out.println("clave elector "+ claveElector);
 			lstConv = convencidosRepository.getByClaveElector(claveElector);
 		}
 
@@ -102,6 +102,7 @@ public class ConvencidosServiceImpl implements IConvencidosService {
 			convencidos.setDistritoFederal(dFederal);
 			convencidos.setMunicipio(municipio);
 			convencidos.setUsuario(usuario);
+			convencidos.setFechaSistema(Calendar.getInstance());
 			
 			System.out.println("convecido "+ dto.toString());
 			convencidosRepository.save(convencidos);

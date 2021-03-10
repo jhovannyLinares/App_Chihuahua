@@ -1,8 +1,10 @@
 package mx.morena.persistencia.entidad;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,6 +17,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "app_convencidos")
@@ -97,7 +101,11 @@ public class Convencidos {
 
 	@Column(name = "estatus")
 	private char estatus;
-
+	
+	@Column(name = "fecha_sistema", nullable = false)
+	@Temporal(TemporalType.DATE)
+    private Calendar fechaSistema;
+	
 	public Long getId() {
 		return id;
 	}
@@ -297,6 +305,15 @@ public class Convencidos {
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
 	}
+
+	public Calendar getFechaSistema() {
+		return fechaSistema;
+	}
+
+	public void setFechaSistema(Calendar fechaSistema) {
+		this.fechaSistema = fechaSistema;
+	}
+
 
 	
 }
