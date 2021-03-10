@@ -21,27 +21,4 @@ public class CatalogosApplication {
 		SpringApplication.run(CatalogosApplication.class, args);
 	}
 
-	@EnableWebSecurity
-	@Configuration
-	@OpenAPIDefinition(info = @Info(title = "My API", version = "v1"))
-	@SecurityScheme(
-	    name = "bearerAuth",
-	    type = SecuritySchemeType.HTTP,
-	    bearerFormat = "JWT",
-	    scheme = "bearer"
-	)
-	class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
-		@Override
-		protected void configure(HttpSecurity http) throws Exception {
-			http.csrf().disable()
-					.addFilterAfter(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
-					.authorizeRequests().antMatchers("/**").permitAll()
-					.antMatchers("/catalogos/**").authenticated()
-					.anyRequest().authenticated();
-
-		}
-
-	}
-
 }

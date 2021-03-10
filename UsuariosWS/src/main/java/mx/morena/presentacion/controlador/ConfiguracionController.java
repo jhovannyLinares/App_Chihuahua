@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,12 +17,14 @@ import mx.morena.security.controller.MasterController;
 
 @RestController
 @RequestMapping("configuracion")
+@CrossOrigin
 public class ConfiguracionController extends MasterController {
 
 	@Autowired
 	private IUsuarioService usuarioService;
 
 	@PutMapping("usuario")
+	@CrossOrigin
 	public Boolean UpdateUsuario(HttpServletRequest request, UsuarioRequest usuario) {
 
 		try {
@@ -29,7 +32,7 @@ public class ConfiguracionController extends MasterController {
 			long idUsuario = getUsuario(request);
 
 			return usuarioService.updatePwd(idUsuario, usuario);
-			
+
 		} catch (UsuarioException ex) {
 			throw new ResponseStatusException(HttpStatus.resolve(ex.getCodeError()), ex.getLocalizedMessage());
 

@@ -5,6 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,13 +24,14 @@ import mx.morena.security.controller.MasterController;
 
 @RestController
 @RequestMapping(value = "catalogos")
-
+@CrossOrigin
 public class CatalogoController extends MasterController {
 
 	@Autowired
 	ICatalogoService ICatService;
 
 	@GetMapping("/entidades")
+	@CrossOrigin
 	private List<EntidadDTO> getEntidad() {
 		System.out.println("hola");
 
@@ -38,7 +40,7 @@ public class CatalogoController extends MasterController {
 	}
 
 	@GetMapping("/entidades/{id}/distritosFederales")
-	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	@CrossOrigin
 	private List<DistritoFederalDTO> getFederalByEntidad(HttpServletRequest request,
 			@PathVariable("id") Long idEntidad) {
 
@@ -52,6 +54,7 @@ public class CatalogoController extends MasterController {
 	}
 
 	@GetMapping("/distritosFederales/{id}/distritosLocales")
+	@CrossOrigin
 	private List<DistritoLocalDTO> getLocalByFederal(HttpServletRequest request, @PathVariable("id") Long idFederal) {
 
 		long usuario = getUsuario(request);
@@ -64,6 +67,7 @@ public class CatalogoController extends MasterController {
 	}
 
 	@GetMapping("/distritosLocales/{id}/municipios")
+	@CrossOrigin
 	private List<MunicipioDTO> getMunicipioByLocal(HttpServletRequest request, @PathVariable("id") Long idLocal) {
 
 		long usuario = getUsuario(request);
@@ -76,6 +80,7 @@ public class CatalogoController extends MasterController {
 	}
 
 	@GetMapping("/municipios/{id}/localidades")
+	@CrossOrigin
 	private List<LocalidadDTO> getLocalidadByMunicipio(HttpServletRequest request,
 			@PathVariable("id") Long idMunicipio) {
 
@@ -88,6 +93,7 @@ public class CatalogoController extends MasterController {
 	}
 
 	@GetMapping("/localidades/{id}/seccionesElectorales")
+	@CrossOrigin
 	private List<SeccionDTO> getseccionByLocalidad(HttpServletRequest request, @PathVariable("id") Long idLocalidad) {
 
 		long usuario = getUsuario(request);
