@@ -69,7 +69,7 @@ public class CotServiceImpl implements ICotService {
 				Entidad entidad = entidadRepository.findById(cotDto.getIdEstado()).get();
 				Usuario usuario =  usuarioRepository.findById(idUsuario).get();
 				
-				if (distritoF != null && municipio != null && entidad != null) {
+				if (distritoF != null && municipio != null && entidad != null && usuario != null) {
 					cotDto.setFechaRegistro(new Date(System.currentTimeMillis()));
 					cotDto.setEstatus(ESTATUS_ALTA);
 					MapperUtil.map(cotDto, personaCot);

@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,12 +19,14 @@ import mx.morena.security.controller.MasterController;
 
 @RestController
 @RequestMapping(value = "/")
+@CrossOrigin
 public class CotController extends MasterController{
 	
 	@Autowired
 	private ICotService cotService;
 	
 	@PostMapping("/cots")
+	@CrossOrigin
 	public String guardarCots(HttpServletRequest request, @RequestBody CotDTO cot) {
 		long perfil = getPerfil(request);
 		long usuario = getUsuario(request);
@@ -36,6 +39,7 @@ public class CotController extends MasterController{
 	}
 	
 	@PostMapping("/cots/secciones")
+	@CrossOrigin
 	public String asignarSeccionesCots(HttpServletRequest request, @RequestBody AsignarSeccionesDTO secciones) {
 		long perfil = getPerfil(request);
 		
