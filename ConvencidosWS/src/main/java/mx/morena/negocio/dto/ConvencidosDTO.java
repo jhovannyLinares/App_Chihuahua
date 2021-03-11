@@ -3,6 +3,7 @@ package mx.morena.negocio.dto;
 import java.io.Serializable;
 import java.util.Date;
 
+
 public class ConvencidosDTO implements Serializable {
 
 	/**
@@ -47,6 +48,10 @@ public class ConvencidosDTO implements Serializable {
 	private String correo;
 	
 	private char estatus;
+	
+	private boolean dv;
+	
+	private boolean mov;
 
 	public Long getId() {
 		return id;
@@ -202,6 +207,22 @@ public class ConvencidosDTO implements Serializable {
 
 	public void setEstatus(char estatus) {
 		this.estatus = estatus;
+	}
+
+	public boolean isDv() {
+		return dv;
+	}
+
+	public void setDv(boolean dv) {
+		this.dv = dv;
+	}
+
+	public boolean isMov() {
+		return mov;
+	}
+
+	public void setMov(boolean mov) {
+		this.mov = mov;
 	}
 
 

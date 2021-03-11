@@ -102,6 +102,12 @@ public class Convencidos {
 	@Column(name = "estatus")
 	private char estatus;
 	
+	@Column(name = "dv")
+	private boolean dv;
+	
+	@Column(name = "mov")
+	private boolean mov;
+	
 	@Column(name = "fecha_sistema", nullable = false)
 	@Temporal(TemporalType.DATE)
     private Calendar fechaSistema;
@@ -312,6 +318,22 @@ public class Convencidos {
 
 	public void setFechaSistema(Calendar fechaSistema) {
 		this.fechaSistema = fechaSistema;
+	}
+
+	public boolean isDv() {
+		return dv;
+	}
+
+	public void setDv(boolean dv) {
+		this.dv = dv;
+	}
+
+	public boolean isMov() {
+		return mov;
+	}
+
+	public void setMov(boolean mov) {
+		this.mov = mov;
 	}
 
 
