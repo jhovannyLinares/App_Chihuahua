@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import mx.morena.persistencia.entidad.Convencidos;
 import mx.morena.persistencia.entidad.DistritoFederal;
 import mx.morena.persistencia.entidad.Municipio;
+import mx.morena.persistencia.entidad.SeccionElectoral;
 
 @Repository
 public interface IConvencidosRepository extends JpaRepository<Convencidos, Long>{
@@ -19,7 +20,7 @@ public interface IConvencidosRepository extends JpaRepository<Convencidos, Long>
 	 
 	 List<Convencidos> getByMunicipio(Optional<Municipio> municipio);
 	 
-	 List<Convencidos> getBySeccionesElectorales(Long idSeccion);
+	 List<Convencidos> getBySeccionesElectoralesIn(List<SeccionElectoral> seccion);
 	 
 	 Convencidos findByClaveElector(String claveElector);
 

@@ -64,7 +64,8 @@ public class ConvencidosServiceImpl implements IConvencidosService {
 			lstConv = convencidosRepository.getByMunicipio(municipio);
 		}
 		if (idSeccion != null) {
-			lstConv = convencidosRepository.getBySeccionesElectorales(idSeccion);
+			List<SeccionElectoral> seccion = seccionRepository.findByCotId(idSeccion);
+			lstConv = convencidosRepository.getBySeccionesElectoralesIn(seccion);
 		}
 		if (claveElector != null) {
 			lstConv = convencidosRepository.getByClaveElector(claveElector);
@@ -104,7 +105,6 @@ public class ConvencidosServiceImpl implements IConvencidosService {
 			convencidos.setUsuario(usuario);
 			convencidos.setFechaSistema(Calendar.getInstance());
 			
-			System.out.println("convecido "+ dto.toString());
 			convencidosRepository.save(convencidos);
 			
 			return convencidos.getId();

@@ -27,9 +27,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.cors()
 				.and().csrf().disable()
 				.authorizeRequests()
-				.antMatchers("/convencidos/**")
-				.authenticated().anyRequest().authenticated()
+				.antMatchers("/**").permitAll()
+				.antMatchers("/convencidos/**").authenticated()
+				.anyRequest()
+				.authenticated()
 				.and().addFilterAfter(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
-
 	}
 }
