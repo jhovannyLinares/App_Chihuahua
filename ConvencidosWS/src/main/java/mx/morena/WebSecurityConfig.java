@@ -2,7 +2,6 @@ package mx.morena;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpRequest;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -27,10 +26,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.cors()
 				.and().csrf().disable()
 				.authorizeRequests()
-				.antMatchers("/**").permitAll()
-				.antMatchers("/convencidos/**").authenticated()
-				.anyRequest()
-				.authenticated()
+				.antMatchers(HttpMethod.GET, "/**").permitAll()
+				.antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+				.antMatchers("/convencidos/**")
+				.authenticated().anyRequest().authenticated()
 				.and().addFilterAfter(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
 	}
 }

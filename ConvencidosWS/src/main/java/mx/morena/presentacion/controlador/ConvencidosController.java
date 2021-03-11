@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,13 +14,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import mx.morena.negocio.dto.ConvencidosDTO;
 import mx.morena.negocio.exception.ConvencidosException;
 import mx.morena.negocio.servicio.IConvencidosService;
 import mx.morena.security.controller.MasterController;
 
 @RestController
-@CrossOrigin
 public class ConvencidosController extends MasterController {
 
 	@Autowired
@@ -34,7 +34,7 @@ public class ConvencidosController extends MasterController {
 	 * @return
 	 */
 	@GetMapping("/convencidos")
-	@CrossOrigin
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
 	public List<ConvencidosDTO> getConvencidos(
 			@RequestParam(value = "idFederal", required = false) Long distritoFederalId,
 			@RequestParam(value = "idMunicipio", required = false) Long idMunicipio,
@@ -57,7 +57,7 @@ public class ConvencidosController extends MasterController {
 	 * @return
 	 */
 	@PostMapping("/convencidos")
-	@CrossOrigin
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
 	public Long saveConvencidos(HttpServletRequest request, @RequestBody ConvencidosDTO dto) {
 		try {
 			long usuario = getUsuario(request);
@@ -71,7 +71,7 @@ public class ConvencidosController extends MasterController {
 	}
 
 	@GetMapping("claveElector/{claveElector}/convencidos")
-	@CrossOrigin
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
 	private boolean getClaveElector(@PathVariable("claveElector") String claveElector) {
 		try {
 			return convencidosService.findByClaveElector(claveElector);

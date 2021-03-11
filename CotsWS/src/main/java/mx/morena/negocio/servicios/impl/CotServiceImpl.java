@@ -50,7 +50,8 @@ public class CotServiceImpl implements ICotService {
 	private static final char ESTATUS_ALTA = 'A';
 	
 	@Override
-	public String save(CotDTO cotDto, long perfil, long idUsuario) throws CotException {
+	public Long save(CotDTO cotDto, long perfil, long idUsuario) throws CotException {
+		
 		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL || perfil == PERFIL_MUNICIPAL) {
 			Convencidos existeCurp = cotRepository.getByCurp(cotDto.getCurp());
 			Convencidos existeClave = cotRepository.findByClaveElector(cotDto.getClaveElector());
@@ -59,9 +60,7 @@ public class CotServiceImpl implements ICotService {
 				throw new CotException("La clave de elector ya esta en uso, intente con otra", 400);
 			} else if (existeCurp != null) {
 				throw new CotException("La CURP ya esta en uso, intente con otra", 400);
-			}
-
-			if (existeCurp == null && existeClave == null) {
+			} else {
 				Convencidos personaCot = new Convencidos();
 				// Solo se reciben id, por lo tanto se tiene que hacer la busqueda
 				DistritoFederal distritoF = distritoFederalRepository.findById(cotDto.getIdDistritoFederal()).get();
@@ -85,14 +84,13 @@ public class CotServiceImpl implements ICotService {
 					throw new CotException("No se encontraron datos.", 404);
 				}
 
-				return "Cot " + cotDto.getNombre() + " " + cotDto.getaPaterno() + " guardado.";
+				return personaCot.getId();
 			}
 
 		} else {
 			throw new CotException("No cuenta con suficientes permisos", 401);
 		}
 
-		return null;
 	}
 
 	@Override
