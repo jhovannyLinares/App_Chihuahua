@@ -28,7 +28,6 @@ import mx.morena.persistencia.repository.IDistritoLocalRepository;
 import mx.morena.persistencia.repository.IEntidadRepository;
 import mx.morena.persistencia.repository.ILocalidadRepository;
 import mx.morena.persistencia.repository.IMunicipioRepository;
-import mx.morena.persistencia.repository.ISeccionElectoralRepository;
 import mx.morena.persistencia.repository.IUsuarioRepository;
 
 @Service
@@ -59,7 +58,7 @@ public class CatalogoServiceImpl implements ICatalogoService {
 	private static final Integer PERFIL_FEDERAL = 2;
 	private static final Integer PERFIL_LOCAL = 3;
 	private static final Integer PERFIL_MUNICIPAL = 4;
-	
+
 	@Override
 	public List<EntidadDTO> getEntidades() {
 
@@ -88,7 +87,7 @@ public class CatalogoServiceImpl implements ICatalogoService {
 			dtos = new ArrayList<DistritoFederalDTO>();
 
 			dtos = MapperUtil.mapAll(distritoFederals, DistritoFederalDTO.class);
-			
+
 //			for ( DistritoFederalDTO df : dtos ) {
 //				
 //				df.setEntidadId(idEntidad);
@@ -108,7 +107,7 @@ public class CatalogoServiceImpl implements ICatalogoService {
 					MapperUtil.map(distritoFederal, distritoFederalDTO);
 
 					dtos.add(distritoFederalDTO);
-					
+
 				}
 			}
 //			for ( DistritoFederalDTO df : dtos ) {
@@ -123,7 +122,7 @@ public class CatalogoServiceImpl implements ICatalogoService {
 
 	@Override
 	public List<DistritoLocalDTO> getLocalByFederal(long idUsuario, long idPerfil, Long idFederal) {
-		
+
 		Optional<Usuario> usuarioOptional = usuarioRepository.findById(idUsuario);
 
 		List<DistritoLocalDTO> dtos = null;
@@ -136,13 +135,13 @@ public class CatalogoServiceImpl implements ICatalogoService {
 			dtos = new ArrayList<DistritoLocalDTO>();
 
 			dtos = MapperUtil.mapAll(distritoLocals, DistritoLocalDTO.class);
-			
+
 //			for ( DistritoLocalDTO dl : dtos ) {
 //				
 //				dl.setFederalId(idFederal);
 //			}
 
-		}else {
+		} else {
 			Optional<DistritoFederal> federal = federalRepocitory.findById(idFederal);
 			List<DistritoLocal> distritoLocals = federal.get().getDistritosLocales();
 
@@ -163,7 +162,6 @@ public class CatalogoServiceImpl implements ICatalogoService {
 //			}
 		}
 
-		
 		return dtos;
 	}
 
@@ -174,7 +172,7 @@ public class CatalogoServiceImpl implements ICatalogoService {
 
 		List<MunicipioDTO> dtos = null;
 
-		if (idPerfil == PERFIL_ESTATAL || idPerfil == PERFIL_FEDERAL ||idPerfil == PERFIL_LOCAL) {
+		if (idPerfil == PERFIL_ESTATAL || idPerfil == PERFIL_FEDERAL || idPerfil == PERFIL_LOCAL) {
 
 			Optional<DistritoLocal> local = localRepository.findById(idLocal);
 			List<Municipio> municipios = local.get().getMunicipios();
@@ -182,13 +180,13 @@ public class CatalogoServiceImpl implements ICatalogoService {
 			dtos = new ArrayList<MunicipioDTO>();
 
 			dtos = MapperUtil.mapAll(municipios, MunicipioDTO.class);
-			
+
 //			for ( MunicipioDTO mn : dtos ) {
 //				
 //				mn.setLocalId(idLocal);
 //			}
 
-		}else {
+		} else {
 			Optional<DistritoLocal> local = localRepository.findById(idLocal);
 			List<Municipio> municipios = local.get().getMunicipios();
 
@@ -211,10 +209,8 @@ public class CatalogoServiceImpl implements ICatalogoService {
 //			}
 		}
 
-		
 		return dtos;
 
-		
 	}
 
 	@Override
@@ -224,23 +220,24 @@ public class CatalogoServiceImpl implements ICatalogoService {
 
 		List<LocalidadDTO> dtos = null;
 
-		if (idPerfil == PERFIL_ESTATAL || idPerfil == PERFIL_FEDERAL || idPerfil == PERFIL_LOCAL || idPerfil == PERFIL_MUNICIPAL) {
+		if (idPerfil == PERFIL_ESTATAL || idPerfil == PERFIL_FEDERAL || idPerfil == PERFIL_LOCAL
+				|| idPerfil == PERFIL_MUNICIPAL) {
 
-			Optional<Municipio> municipio  = municipioRepository.findById(idMunicipio);
+			Optional<Municipio> municipio = municipioRepository.findById(idMunicipio);
 			List<Localidad> localidades = municipio.get().getLocalidades();
 
 			dtos = new ArrayList<LocalidadDTO>();
 
 			dtos = MapperUtil.mapAll(localidades, LocalidadDTO.class);
-			
+
 //			for ( LocalidadDTO lc : dtos ) {
 //				
 //				lc.setMunicipioId(idMunicipio);
 //			}
 
 		} else {
-			
-			Optional<Municipio> municipio  = municipioRepository.findById(idMunicipio);
+
+			Optional<Municipio> municipio = municipioRepository.findById(idMunicipio);
 			List<Localidad> localidades = municipio.get().getLocalidades();
 
 			dtos = new ArrayList<LocalidadDTO>();
@@ -256,14 +253,13 @@ public class CatalogoServiceImpl implements ICatalogoService {
 					dtos.add(localidadDTO);
 				}
 			}
-			
+
 //			for ( LocalidadDTO lc : dtos ) {
 //				
 //				lc.setMunicipioId(idMunicipio);
 //			}
 		}
 
-		
 		return dtos;
 
 	}
@@ -275,23 +271,24 @@ public class CatalogoServiceImpl implements ICatalogoService {
 
 		List<SeccionDTO> dtos = null;
 
-		if (idPerfil == PERFIL_ESTATAL || idPerfil == PERFIL_FEDERAL || idPerfil == PERFIL_LOCAL || idPerfil == PERFIL_MUNICIPAL) {
+		if (idPerfil == PERFIL_ESTATAL || idPerfil == PERFIL_FEDERAL || idPerfil == PERFIL_LOCAL
+				|| idPerfil == PERFIL_MUNICIPAL) {
 
-			Optional<Localidad> localidad  = localidadRepository.findById(idLocalidad);
+			Optional<Localidad> localidad = localidadRepository.findById(idLocalidad);
 			List<SeccionElectoral> secciones = localidad.get().getSeccionElectorales();
 
 			dtos = new ArrayList<SeccionDTO>();
 
 			dtos = MapperUtil.mapAll(secciones, SeccionDTO.class);
-			
-			for ( SeccionDTO sc : dtos ) {
-				
+
+			for (SeccionDTO sc : dtos) {
+
 				sc.setLocalidadId(idLocalidad);
 			}
 
 		} else {
-			
-			Optional<Localidad> localidad  = localidadRepository.findById(idLocalidad);
+
+			Optional<Localidad> localidad = localidadRepository.findById(idLocalidad);
 			List<SeccionElectoral> secciones = localidad.get().getSeccionElectorales();
 
 			dtos = new ArrayList<SeccionDTO>();
@@ -307,12 +304,12 @@ public class CatalogoServiceImpl implements ICatalogoService {
 					dtos.add(seccionDTO);
 				}
 			}
-			for ( SeccionDTO sc : dtos ) {
-				
+			for (SeccionDTO sc : dtos) {
+
 				sc.setLocalidadId(idLocalidad);
 			}
 		}
-		
+
 		return dtos;
 	}
 
@@ -328,23 +325,27 @@ public class CatalogoServiceImpl implements ICatalogoService {
 		MapperUtil.map(entidad, dto);
 
 		List<DistritoFederal> distritoFederals = entidad.getDistritosFederales();
+		distritoFederals = limpiarDistritosFederales(distritoFederals, usuario, idPerfil);
 		List<DistritoFederalDTO> distritoFederalDTOs = MapperUtil.mapAll(distritoFederals, DistritoFederalDTO.class);
 
 		for (int i = 0; i < distritoFederals.size(); i++) {
 
 			DistritoFederal distritoFederal = distritoFederals.get(i);
 			List<DistritoLocal> distritoLocals = distritoFederal.getDistritosLocales();
+			distritoLocals = limpiarDistritosLocales(distritoLocals, usuario, idPerfil);
 			List<DistritoLocalDTO> distritoLocalDTOs = MapperUtil.mapAll(distritoLocals, DistritoLocalDTO.class);
 
 			for (int i2 = 0; i2 < distritoLocals.size(); i2++) {
 
 				DistritoLocal distritoLocal = distritoLocals.get(i2);
 				List<Municipio> municipios = distritoLocal.getMunicipios();
+				municipios = limpiarMunicipios(municipios, usuario, idPerfil);
 				List<MunicipioDTO> municipioDTOs = MapperUtil.mapAll(municipios, MunicipioDTO.class);
 
 				for (int i3 = 0; i3 < municipios.size(); i3++) {
 					Municipio municipio = municipios.get(i3);
 					List<Localidad> localidades = municipio.getLocalidades();
+					localidades = limpiarLocalidades(localidades, usuario, idPerfil);
 					List<LocalidadDTO> localidadesDtos = MapperUtil.mapAll(localidades, LocalidadDTO.class);
 					municipioDTOs.get(i3).setLocalidades(localidadesDtos);
 				}
@@ -359,4 +360,74 @@ public class CatalogoServiceImpl implements ICatalogoService {
 
 		return catalogo;
 	}
+
+	private List<DistritoFederal> limpiarDistritosFederales(List<DistritoFederal> distritoFederals, Usuario usuario,
+			long idPerfil) {
+
+		List<DistritoFederal> distritoFederalNew = new ArrayList<DistritoFederal>();
+		if (idPerfil > PERFIL_ESTATAL) {
+			for (DistritoFederal distritoFederal : distritoFederals) {
+				if (distritoFederal.getId().equals(usuario.getFederal().getId())) {
+					distritoFederalNew.add(distritoFederal);
+				}
+			}
+		} else {
+			distritoFederalNew = distritoFederals;
+		}
+
+		return distritoFederalNew;
+
+	}
+
+	private List<DistritoLocal> limpiarDistritosLocales(List<DistritoLocal> distritoLocals, Usuario usuario,
+			long idPerfil) {
+
+		List<DistritoLocal> distritoLocalsNew = new ArrayList<DistritoLocal>();
+		if (idPerfil > PERFIL_FEDERAL) {
+			for (DistritoLocal distritoLocal : distritoLocals) {
+				if (distritoLocal.getId() == usuario.getLocal().getId()) {
+					distritoLocalsNew.add(distritoLocal);
+				}
+			}
+		} else {
+			distritoLocalsNew = distritoLocals;
+		}
+
+		return distritoLocalsNew;
+	}
+
+	private List<Municipio> limpiarMunicipios(List<Municipio> municipios, Usuario usuario, long idPerfil) {
+
+		List<Municipio> municipiosNew = new ArrayList<Municipio>();
+		if (idPerfil > PERFIL_LOCAL) {
+			for (Municipio municipio : municipios) {
+				if (municipio.getId() == usuario.getMunicipio().getId()) {
+					municipiosNew.add(municipio);
+				}
+			}
+		} else {
+			municipiosNew = municipios;
+		}
+
+		return municipiosNew;
+
+	}
+
+	private List<Localidad> limpiarLocalidades(List<Localidad> localidades, Usuario usuario, long idPerfil) {
+
+		List<Localidad> localidadNew = new ArrayList<Localidad>();
+
+		if (idPerfil > PERFIL_MUNICIPAL) {
+			for (Localidad localidad : localidades) {
+				if (localidad.getId() == usuario.getLocalidad().getId()) {
+					localidadNew.add(localidad);
+				}
+			}
+		} else {
+			localidadNew = localidades;
+		}
+
+		return localidadNew;
+	}
+
 }
