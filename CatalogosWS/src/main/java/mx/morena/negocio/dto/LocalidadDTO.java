@@ -6,8 +6,6 @@ public class LocalidadDTO {
 
 	private String descripcion;
 
-	private long municipioId;
-
 	public Long getId() {
 		return id;
 	}
@@ -24,12 +22,9 @@ public class LocalidadDTO {
 		this.descripcion = descripcion;
 	}
 
-	public long getMunicipioId() {
-		return municipioId;
-	}
-
-	public void setMunicipioId(long municipioId) {
-		this.municipioId = municipioId;
+	@Override
+	public String toString() {
+		return "LocalidadDTO [id=" + id + ", descripcion=" + descripcion + "]";
 	}
 
 }

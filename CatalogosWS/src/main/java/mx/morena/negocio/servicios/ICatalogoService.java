@@ -2,6 +2,7 @@ package mx.morena.negocio.servicios;
 
 import java.util.List;
 
+import mx.morena.negocio.dto.CatalogoDTO;
 import mx.morena.negocio.dto.DistritoFederalDTO;
 import mx.morena.negocio.dto.DistritoLocalDTO;
 import mx.morena.negocio.dto.EntidadDTO;
@@ -22,6 +23,8 @@ public interface ICatalogoService {
 	List<LocalidadDTO> getLocalidadByMunicipio(long usuario, long perfil, Long id);
 	
 	List<SeccionDTO> getSeccionByLocalidad(long usuario, long perfil, Long id);
+
+	CatalogoDTO getCatalogos(long usuario, long perfil);
 
 	
 }

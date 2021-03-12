@@ -1,12 +1,14 @@
 package mx.morena.negocio.dto;
 
+import java.util.List;
+
 public class DistritoFederalDTO {
 
 	private Long id;
 
 	private String cabeceraFederal;
-	
-	private long entidadId;
+
+	private List<DistritoLocalDTO> distritosLocales;
 
 	public Long getId() {
 		return id;
@@ -24,17 +26,18 @@ public class DistritoFederalDTO {
 		this.cabeceraFederal = cabeceraFederal;
 	}
 
-	public void setEntidadId(long entidadId) {
-		this.entidadId = entidadId;
+	public List<DistritoLocalDTO> getDistritosLocales() {
+		return distritosLocales;
 	}
 
-	public long getEntidadId() {
-		return entidadId;
+	public void setDistritosLocales(List<DistritoLocalDTO> distritosLocales) {
+		this.distritosLocales = distritosLocales;
 	}
 
 	@Override
 	public String toString() {
-		return "DistritoFederalDTO [id=" + id + ", cabeceraFederal=" + cabeceraFederal + ", entidadId=" + entidadId
-				+ "]";
+		return "DistritoFederalDTO [id=" + id + ", cabeceraFederal=" + cabeceraFederal + ", distritosLocales="
+				+ distritosLocales + "]";
 	}
+
 }

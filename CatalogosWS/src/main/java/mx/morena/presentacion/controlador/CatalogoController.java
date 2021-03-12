@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import mx.morena.negocio.dto.CatalogoDTO;
 import mx.morena.negocio.dto.DistritoFederalDTO;
 import mx.morena.negocio.dto.DistritoLocalDTO;
 import mx.morena.negocio.dto.EntidadDTO;
@@ -27,9 +28,19 @@ public class CatalogoController extends MasterController {
 
 	@Autowired
 	ICatalogoService ICatService;
+	
+	@GetMapping()
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	private CatalogoDTO getCatalogos(HttpServletRequest request) {
+
+		return ICatService.getCatalogos(getUsuario(request), getPerfil(request));
+
+	}
+	
 
 	@GetMapping("/entidades")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	@Deprecated
 	private List<EntidadDTO> getEntidad() {
 
 		return ICatService.getEntidades();
@@ -38,6 +49,7 @@ public class CatalogoController extends MasterController {
 
 	@GetMapping("/entidades/{id}/distritosFederales")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	@Deprecated
 	private List<DistritoFederalDTO> getFederalByEntidad(HttpServletRequest request,
 			@PathVariable("id") Long idEntidad) {
 
@@ -52,6 +64,7 @@ public class CatalogoController extends MasterController {
 
 	@GetMapping("/distritosFederales/{id}/distritosLocales")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	@Deprecated
 	private List<DistritoLocalDTO> getLocalByFederal(HttpServletRequest request, @PathVariable("id") Long idFederal) {
 
 		long usuario = getUsuario(request);
@@ -65,6 +78,7 @@ public class CatalogoController extends MasterController {
 
 	@GetMapping("/distritosLocales/{id}/municipios")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	@Deprecated
 	private List<MunicipioDTO> getMunicipioByLocal(HttpServletRequest request, @PathVariable("id") Long idLocal) {
 
 		long usuario = getUsuario(request);
@@ -78,6 +92,7 @@ public class CatalogoController extends MasterController {
 
 	@GetMapping("/municipios/{id}/localidades")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	@Deprecated
 	private List<LocalidadDTO> getLocalidadByMunicipio(HttpServletRequest request,
 			@PathVariable("id") Long idMunicipio) {
 
@@ -91,6 +106,7 @@ public class CatalogoController extends MasterController {
 
 	@GetMapping("/localidades/{id}/seccionesElectorales")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	@Deprecated
 	private List<SeccionDTO> getseccionByLocalidad(HttpServletRequest request, @PathVariable("id") Long idLocalidad) {
 
 		long usuario = getUsuario(request);
