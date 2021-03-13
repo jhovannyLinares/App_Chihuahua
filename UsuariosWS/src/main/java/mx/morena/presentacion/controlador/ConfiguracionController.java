@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
@@ -25,7 +26,7 @@ public class ConfiguracionController extends MasterController {
 
 	@PutMapping("usuario")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	public Boolean UpdateUsuario(HttpServletRequest request, UsuarioRequest usuario) {
+	public Boolean UpdateUsuario(HttpServletRequest request,@RequestBody UsuarioRequest usuario) {
 
 		try {
 

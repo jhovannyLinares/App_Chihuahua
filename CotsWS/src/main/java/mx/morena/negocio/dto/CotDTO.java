@@ -8,9 +8,9 @@ public class CotDTO {
 	//private Entidad estado;
 	//private DistritoFederal distritoFederal;
 	//private Municipio municipio;
-	private Long idEstado;
-	private Long idDistritoFederal;
-	private Long idMunicipio;
+	private String idEstado;
+	private String idDistritoFederal;
+	private String idMunicipio;
 	private String nombre;
 	private String aPaterno;
 	private String aMaterno;
@@ -214,27 +214,27 @@ public class CotDTO {
 		this.municipio = municipio;
 	}*/
 
-	public Long getIdDistritoFederal() {
+	public String getIdDistritoFederal() {
 		return idDistritoFederal;
 	}
 
-	public void setIdDistritoFederal(Long idDistritoFederal) {
+	public void setIdDistritoFederal(String idDistritoFederal) {
 		this.idDistritoFederal = idDistritoFederal;
 	}
 
-	public Long getIdMunicipio() {
+	public String getIdMunicipio() {
 		return idMunicipio;
 	}
 
-	public void setIdMunicipio(Long idMunicipio) {
+	public void setIdMunicipio(String idMunicipio) {
 		this.idMunicipio = idMunicipio;
 	}
 
-	public Long getIdEstado() {
+	public String getIdEstado() {
 		return idEstado;
 	}
 
-	public void setIdEstado(Long idEstado) {
+	public void setIdEstado(String idEstado) {
 		this.idEstado = idEstado;
 	}
 	

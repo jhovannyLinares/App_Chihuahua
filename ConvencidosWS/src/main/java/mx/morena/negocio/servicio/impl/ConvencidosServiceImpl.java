@@ -51,23 +51,25 @@ public class ConvencidosServiceImpl implements IConvencidosService {
 	private static String sinClave = "No Cuenta con ClaveElector";
 
 	@Override
-	public List<ConvencidosDTO> getConvencidos(Long distritoFederalId, Long idMunicipio, Long idSeccion, String claveElector)
+	public List<ConvencidosDTO> getConvencidos(String distritoFederalId, String idMunicipio, String idSeccion, String claveElector)
 			throws ConvencidosException {
 		List<Convencidos> lstConv = null;
 		List<ConvencidosDTO> lstDto = new ArrayList<ConvencidosDTO>();
 		
 		if (distritoFederalId != null) {
-			Optional<DistritoFederal> dFederal = dFederalRepository.findById(distritoFederalId);
+			DistritoFederal dFederal = dFederalRepository.getById(distritoFederalId);
 			lstConv = convencidosRepository.getByDistritoFederal(dFederal);
 		}
 		if (idMunicipio != null) {
-			Optional<Municipio> municipio = municipioRepository.findById(idMunicipio);
+			Municipio municipio = municipioRepository.getById(idMunicipio);
 			lstConv = convencidosRepository.getByMunicipio(municipio);
 		}
-		if (idSeccion != null) {
-			List<SeccionElectoral> seccion = seccionRepository.findByCotId(idSeccion);
-			lstConv = convencidosRepository.getBySeccionesElectoralesIn(seccion);
-		}
+		
+//		if (idSeccion != null) {
+//			List<SeccionElectoral> seccion = seccionRepository.findByCotId(idSeccion);
+//			lstConv = convencidosRepository.getBySeccionesElectoralesIn(seccion);
+//		}
+		
 		if (claveElector != null) {
 			lstConv = convencidosRepository.getByClaveElector(claveElector);
 		}
@@ -90,10 +92,10 @@ public class ConvencidosServiceImpl implements IConvencidosService {
 			Convencidos convencidos = new Convencidos();
 			
 			System.out.println("entidad "+ dto.getIdEstado());
-			Entidad estado = entidadRepository.findById(dto.getIdEstado()).get();
-			DistritoFederal dFederal = dFederalRepository.findById(dto.getIdFederal()).get();
-			Municipio municipio = municipioRepository.findById(dto.getIdMunicipio()).get();
-			Usuario usuario = usuarioRepository.findById(idUsuario).get();
+			Entidad estado = entidadRepository.findById(dto.getIdEstado());
+			DistritoFederal dFederal = dFederalRepository.getById(dto.getIdFederal());
+			Municipio municipio = municipioRepository.getById(dto.getIdMunicipio());
+			Usuario usuario = usuarioRepository.findById(idUsuario);
 			
 			dto.setEstatus(ESTATUS_ALTA);
 			dto.setFechaRegistro(new Date());

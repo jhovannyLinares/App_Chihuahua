@@ -12,13 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import mx.morena.negocio.dto.CatalogoDTO;
 import mx.morena.negocio.dto.DistritoFederalDTO;
-import mx.morena.negocio.dto.DistritoLocalDTO;
 import mx.morena.negocio.dto.EntidadDTO;
 import mx.morena.negocio.dto.LocalidadDTO;
 import mx.morena.negocio.dto.MunicipioDTO;
-import mx.morena.negocio.dto.SeccionDTO;
 import mx.morena.negocio.servicios.ICatalogoService;
 import mx.morena.security.controller.MasterController;
 
@@ -28,30 +25,31 @@ public class CatalogoController extends MasterController {
 
 	@Autowired
 	ICatalogoService ICatService;
-	
-	@GetMapping()
-	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	private CatalogoDTO getCatalogos(HttpServletRequest request) {
 
-		return ICatService.getCatalogos(getUsuario(request), getPerfil(request));
-
-	}
-	
+//	@GetMapping()
+//	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+//	private CatalogoDTOOffline getCatalogos(HttpServletRequest request) {
+//
+//		return ICatService.getCatalogos(getUsuario(request), getPerfil(request));
+//
+//	}
 
 	@GetMapping("/entidades")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	@Deprecated
 	private List<EntidadDTO> getEntidad() {
 
 		return ICatService.getEntidades();
 
 	}
 
+//	
+//	
+//	
+//
 	@GetMapping("/entidades/{id}/distritosFederales")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	@Deprecated
 	private List<DistritoFederalDTO> getFederalByEntidad(HttpServletRequest request,
-			@PathVariable("id") Long idEntidad) {
+			@PathVariable("id") String idEntidad) {
 
 		long usuario = getUsuario(request);
 		long perfil = getPerfil(request);
@@ -62,39 +60,24 @@ public class CatalogoController extends MasterController {
 
 	}
 
-	@GetMapping("/distritosFederales/{id}/distritosLocales")
+//
+	@GetMapping("/distritosFederales/{id}/municipios")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	@Deprecated
-	private List<DistritoLocalDTO> getLocalByFederal(HttpServletRequest request, @PathVariable("id") Long idFederal) {
+	private List<MunicipioDTO> getLocalByFederal(HttpServletRequest request, @PathVariable("id") String idFederal) {
 
 		long usuario = getUsuario(request);
 		long idPerfil = getPerfil(request);
 
-		List<DistritoLocalDTO> local = ICatService.getLocalByFederal(usuario, idPerfil, idFederal);
+		List<MunicipioDTO> local = ICatService.getMunicipioByFederal(usuario, idPerfil, idFederal);
 
 		return local;
 
 	}
 
-	@GetMapping("/distritosLocales/{id}/municipios")
-	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	@Deprecated
-	private List<MunicipioDTO> getMunicipioByLocal(HttpServletRequest request, @PathVariable("id") Long idLocal) {
-
-		long usuario = getUsuario(request);
-		long idPerfil = getPerfil(request);
-
-		List<MunicipioDTO> municipio = ICatService.getMunicipioByLocal(usuario, idPerfil, idLocal);
-
-		return municipio;
-
-	}
-
 	@GetMapping("/municipios/{id}/localidades")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	@Deprecated
 	private List<LocalidadDTO> getLocalidadByMunicipio(HttpServletRequest request,
-			@PathVariable("id") Long idMunicipio) {
+			@PathVariable("id") String idMunicipio) {
 
 		long usuario = getUsuario(request);
 		long idPerfil = getPerfil(request);
@@ -103,17 +86,16 @@ public class CatalogoController extends MasterController {
 
 		return localidad;
 	}
-
-	@GetMapping("/localidades/{id}/seccionesElectorales")
-	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	@Deprecated
-	private List<SeccionDTO> getseccionByLocalidad(HttpServletRequest request, @PathVariable("id") Long idLocalidad) {
-
-		long usuario = getUsuario(request);
-		long idPerfil = getPerfil(request);
-
-		List<SeccionDTO> seccion = ICatService.getSeccionByLocalidad(usuario, idPerfil, idLocalidad);
-
-		return seccion;
-	}
+//
+//	@GetMapping("/localidades/{id}/seccionesElectorales")
+//	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+//	private List<SeccionDTO> getseccionByLocalidad(HttpServletRequest request, @PathVariable("id") String idLocalidad) {
+//
+//		long usuario = getUsuario(request);
+//		long idPerfil = getPerfil(request);
+//
+//		List<SeccionDTO> seccion = ICatService.getSeccionByLocalidad(usuario, idPerfil, idLocalidad);
+//
+//		return seccion;
+//	}
 }

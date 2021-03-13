@@ -1,20 +1,16 @@
 package mx.morena.negocio.dto;
 
-import java.util.List;
-
 public class MunicipioDTO {
 
-	private Long id;
+	private String id;
 
 	private String descripcion;
 
-	private List<LocalidadDTO> localidades;
-
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -24,19 +20,6 @@ public class MunicipioDTO {
 
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
-	}
-
-	public List<LocalidadDTO> getLocalidades() {
-		return localidades;
-	}
-
-	public void setLocalidades(List<LocalidadDTO> localidades) {
-		this.localidades = localidades;
-	}
-
-	@Override
-	public String toString() {
-		return "MunicipioDTO [id=" + id + ", descripcion=" + descripcion + ", localidades=" + localidades + "]";
 	}
 
 }

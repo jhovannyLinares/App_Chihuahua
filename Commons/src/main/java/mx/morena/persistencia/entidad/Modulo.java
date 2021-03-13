@@ -2,41 +2,18 @@ package mx.morena.persistencia.entidad;
 
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-
-@Entity
-@Table(name = "app_modulo")
 public class Modulo {
 
-	@Id
-	@Column(unique = true, name = "id_modulo")
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "T_MODULO_SEQ")
-	@SequenceGenerator(sequenceName = "T_MODULO_SEQ", allocationSize = 1, name = "v")
 	private long id;
 
-	@Column(name = "descripcion")
 	private String descripcion;
 
-	@Column(name = "url")
 	private String url;
 	
-	@ManyToMany(mappedBy = "modulos")
 	private List<Perfil> perfiles;
 
-	@ManyToOne
-	private Modulo moduloPadre;
+	private Long moduloPadre;
 	
-	@OneToMany(mappedBy = "moduloPadre", fetch = FetchType.LAZY)
 	private List<Modulo> subModulo;
 
 	public long getId() {
@@ -63,11 +40,11 @@ public class Modulo {
 		this.url = url;
 	}
 
-	public Modulo getModuloPadre() {
+	public Long getModuloPadre() {
 		return moduloPadre;
 	}
 
-	public void setModuloPadre(Modulo moduloPadre) {
+	public void setModuloPadre(Long moduloPadre) {
 		this.moduloPadre = moduloPadre;
 	}
 

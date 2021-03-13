@@ -36,9 +36,9 @@ public class ConvencidosController extends MasterController {
 	@GetMapping("/convencidos")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
 	public List<ConvencidosDTO> getConvencidos(
-			@RequestParam(value = "idFederal", required = false) Long distritoFederalId,
-			@RequestParam(value = "idMunicipio", required = false) Long idMunicipio,
-			@RequestParam(value = "idSeccion", required = false) Long idSeccion,
+			@RequestParam(value = "idFederal", required = false) String distritoFederalId,
+			@RequestParam(value = "idMunicipio", required = false) String idMunicipio,
+			@RequestParam(value = "idSeccion", required = false) String idSeccion,
 			@RequestParam(value = "claveElector", required = false) String claveElector) {
 		try {
 			List<ConvencidosDTO> convencidos = convencidosService.getConvencidos(distritoFederalId, idMunicipio,

@@ -1,10 +1,13 @@
 package mx.morena.persistencia.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import java.util.List;
 
 import mx.morena.persistencia.entidad.Localidad;
-@Repository
-public interface ILocalidadRepository extends JpaRepository<Localidad, Long>{
+
+public interface ILocalidadRepository {
+
+	Localidad getById(String localidad);
+
+	List<Localidad> getByMunicipio(String municipio);
 
 }

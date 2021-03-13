@@ -1,44 +1,27 @@
 package mx.morena.persistencia.entidad;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-
-@Entity
-@Table(name = "app_seccionElectoral")
+//@Entity
+//@Table(name = "app_seccionElectoral")
 public class SeccionElectoral {
 
-	@Id
-	@Column(unique = true, name = "id_seccion")
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "T_SECCION_SEQ")
-	@SequenceGenerator(sequenceName = "T_SECCION_SEQ", allocationSize = 1, name = "T_SECCION_SEQ")
-	private long id;
+	//@Id
+	//@Column(unique = true, name = "id")
+	private String id;
 
-	@Column(name = "descripcion_seccion")
+	//@Column(name = "descripcion")
 	private String descripcion;
 
-	@ManyToOne
-	@JoinColumn(name = "id_localidad")
+	//@ManyToOne
 	private Localidad localidad;
-	
-	@ManyToOne
-	@JoinColumn(name = "cot_id")
+
+	//@ManyToOne
 	private Convencidos cot;
 
-	public SeccionElectoral() {
-	}
-
-	public long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -64,12 +47,6 @@ public class SeccionElectoral {
 
 	public void setCot(Convencidos cot) {
 		this.cot = cot;
-	}
-
-	@Override
-	public String toString() {
-		return "SeccionElectoral [id=" + id + ", descripcion=" + descripcion + ", localidad=" + localidad + ", cot="
-				+ cot + "]";
 	}
 
 }

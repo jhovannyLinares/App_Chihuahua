@@ -2,7 +2,6 @@ package mx.morena.negocio.servicios.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,46 +38,51 @@ public class UsuarioServiceImpl implements IUsuarioService {
 				throw new UsuarioException("Contraseña no valida", 401);
 			}
 
-		} else {
-			throw new UsuarioException("Usuario no existe", 401);
+			if (usuarioValido) {
+
+				UsuarioDTO user = new UsuarioDTO();
+				user.setId(usuario.getId());
+				user.setUsuario(username);
+
+				Perfil perfil = usuarioRepository.findPerfilById(usuario.getPerfil());
+
+				user.setPerfil(perfil.getNombre());
+				user.setToken(Token.create(username, usuario.getPerfil(), usuario.getId()));
+				user.setExpiration(Token.segundos);
+
+				user.setModulos(getModulos(usuario.getPerfil()));
+
+				return user;
+			}
+
 		}
 
-		if (usuarioValido) {
+		throw new UsuarioException("Usuario no existe", 401);
 
-			UsuarioDTO user = new UsuarioDTO();
-			user.setId(usuario.getId());
-			user.setUsuario(username);
-			user.setPerfil(usuario.getPerfil().getNombre());
-			user.setModulos(getModulos(usuario.getPerfil()));
-			user.setToken(Token.create(username, usuario.getPerfil().getId(), usuario.getId()));
-
-			return user;
-		}
-
-		return null;
 	}
 
-	private List<ModuloDTO> getModulos(Perfil perfil) {
+	private List<ModuloDTO> getModulos(Long perfil) {
 
 		List<ModuloDTO> modulosDTO = new ArrayList<ModuloDTO>();
 
-		List<Modulo> modulos = perfil.getModulos();
+		List<Modulo> modulos = usuarioRepository.findModulosByPerfil(perfil);
 
 		for (Modulo modulo : modulos) {
-			if (modulo.getModuloPadre() == null) {
+			if (modulo.getModuloPadre() == 0) {
 				modulosDTO.add(convert(modulo));
 			}
 
 		}
 
 		for (Modulo modulo : modulos) {
-			if (modulo.getModuloPadre() != null) {
+			if (modulo.getModuloPadre() != 0) {
 				for (ModuloDTO moduloDTO : modulosDTO) {
-					List<ModuloDTO> subModulos = moduloDTO.getSubModulos();
-
-					ModuloDTO mod = convert(modulo);
-					mod.setModuloPadre(modulo.getModuloPadre().getId());
-					subModulos.add(mod);
+					if (modulo.getModuloPadre().equals(moduloDTO.getModuloId())) {
+						List<ModuloDTO> subModulos = moduloDTO.getSubModulos();
+						ModuloDTO mod = convert(modulo);
+						mod.setModuloPadre(modulo.getModuloPadre());
+						subModulos.add(mod);
+					}
 				}
 			}
 		}
@@ -101,22 +105,14 @@ public class UsuarioServiceImpl implements IUsuarioService {
 	@Override
 	public Boolean updatePwd(long idUsuario, UsuarioRequest usuarioUpdate) throws UsuarioException {
 
-		Optional<Usuario> usuarioOptional = usuarioRepository.findById(idUsuario);
+		Usuario usuario = usuarioRepository.findById(idUsuario);
 
-		if (usuarioOptional.isPresent()) {
+		usuario.setEmail(usuarioUpdate.getEmail());
+		usuario.setPassword(usuarioUpdate.getPassword());
 
-			Usuario usuario = usuarioOptional.get();
+		usuarioRepository.update(usuario);
 
-			usuario.setEmail(usuarioUpdate.getEmail());
-			usuario.setPassword(usuarioUpdate.getPassword());
-
-			usuarioRepository.save(usuario);
-
-			return true;
-
-		} else {
-			throw new UsuarioException("Usuario no existe", 401);
-		}
+		return true;
 
 	}
 

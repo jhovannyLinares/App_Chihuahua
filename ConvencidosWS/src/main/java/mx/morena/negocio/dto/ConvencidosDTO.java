@@ -15,13 +15,13 @@ public class ConvencidosDTO implements Serializable {
 
 	private Date fechaRegistro;
 
-	private Long idEstado;
+	private String idEstado;
 
-	private Long idFederal;
+	private String idFederal;
 
-	private Long idMunicipio;
+	private String idMunicipio;
 
-	private Long idSeccion;
+	private String idSeccion;
 
 	private String nombre;
 
@@ -71,35 +71,35 @@ public class ConvencidosDTO implements Serializable {
 		this.fechaRegistro = fechaRegistro;
 	}
 
-	public Long getIdEstado() {
+	public String getIdEstado() {
 		return idEstado;
 	}
 
-	public void setIdEstado(Long idEstado) {
+	public void setIdEstado(String idEstado) {
 		this.idEstado = idEstado;
 	}
 
-	public Long getIdFederal() {
+	public String getIdFederal() {
 		return idFederal;
 	}
 
-	public void setIdFederal(Long idFederal) {
+	public void setIdFederal(String idFederal) {
 		this.idFederal = idFederal;
 	}
 
-	public Long getIdMunicipio() {
+	public String getIdMunicipio() {
 		return idMunicipio;
 	}
 
-	public void setIdMunicipio(Long idMunicipio) {
+	public void setIdMunicipio(String idMunicipio) {
 		this.idMunicipio = idMunicipio;
 	}
 
-	public Long getIdSeccion() {
+	public String getIdSeccion() {
 		return idSeccion;
 	}
 
-	public void setIdSeccion(Long idSeccion) {
+	public void setIdSeccion(String idSeccion) {
 		this.idSeccion = idSeccion;
 	}
 

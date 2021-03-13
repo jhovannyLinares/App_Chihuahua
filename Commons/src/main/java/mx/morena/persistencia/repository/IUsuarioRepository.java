@@ -1,13 +1,21 @@
 package mx.morena.persistencia.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import java.util.List;
 
+import mx.morena.persistencia.entidad.Modulo;
+import mx.morena.persistencia.entidad.Perfil;
 import mx.morena.persistencia.entidad.Usuario;
 
-@Repository
-public interface IUsuarioRepository extends JpaRepository<Usuario, Long> {
-	
+public interface IUsuarioRepository {
+
 	Usuario findByUsuario(String usuario);
+
+	Usuario findById(long idUsuario);
+
+	boolean update(Usuario usuario);
+
+	Perfil findPerfilById(long perfil);
+
+	List<Modulo> findModulosByPerfil(Long perfil);
 
 }

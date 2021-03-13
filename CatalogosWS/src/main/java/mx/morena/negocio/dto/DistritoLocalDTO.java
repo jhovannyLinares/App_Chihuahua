@@ -4,17 +4,17 @@ import java.util.List;
 
 public class DistritoLocalDTO {
 
-	private Long id;
+	private String id;
 
 	private String cabecera;
 
 	private List<MunicipioDTO> municipios;
 
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -33,12 +33,5 @@ public class DistritoLocalDTO {
 	public void setMunicipios(List<MunicipioDTO> municipios) {
 		this.municipios = municipios;
 	}
-
-	@Override
-	public String toString() {
-		return "DistritoLocalDTO [id=" + id + ", cabecera=" + cabecera + ", municipios=" + municipios + "]";
-	}
-
-
 
 }

@@ -3,14 +3,16 @@ package mx.morena.negocio.dto;
 import java.util.List;
 
 public class AsignarSeccionesDTO {
-	private List<Long> idSecciones;
+	
+	private List<String> idSecciones;
+	
 	private Long idCot;
 	
-	public List<Long> getIdSecciones() {
+	public List<String> getIdSecciones() {
 		return idSecciones;
 	}
 	
-	public void setIdSecciones(List<Long> idSecciones) {
+	public void setIdSecciones(List<String> idSecciones) {
 		this.idSecciones = idSecciones;
 	}
 	

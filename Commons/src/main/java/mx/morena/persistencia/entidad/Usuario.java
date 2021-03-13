@@ -1,63 +1,32 @@
 package mx.morena.persistencia.entidad;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-
-@Entity
-@Table(name = "app_usuario")
 public class Usuario {
 
-	@Id
-	@Column(unique = true, name = "id_usuario")
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "T_USUARIO_SEQ")
-	@SequenceGenerator(sequenceName = "T_USUARIO_SEQ", allocationSize = 1, name = "T_USUARIO_SEQ")
 	private long id;
 
-	@Column(name = "nombre")
 	private String nombre;
 
-	@Column(name = "usuario")
 	private String usuario;
 
-	@Column(name = "aPaterno")
 	private String aPaterno;
 
-	@Column(name = "aMaterno")
 	private String aMaterno;
 
-	@Column(name = "password")
 	private String password;
 
-	@Column(name = "email")
 	private String email;
 
-	@OneToOne
-	private Entidad entidad;
+	private String entidad;
 
-	@OneToOne
-	private DistritoFederal federal;
+	private String federal;
 
-	@OneToOne
-	private DistritoLocal local;
+	private String municipio;
 
-	@OneToOne
-	private Municipio municipio;
+	private String localidad;
 
-	@OneToOne
-	private Localidad localidad;
+	private String seccionElectoral;
 
-	@OneToOne
-	private SeccionElectoral seccionElectoral;
-
-	@ManyToOne
-	private Perfil perfil;
+	private Long perfil;
 
 	public long getId() {
 		return id;
@@ -115,59 +84,51 @@ public class Usuario {
 		this.email = email;
 	}
 
-	public Entidad getEntidad() {
+	public String getEntidad() {
 		return entidad;
 	}
 
-	public void setEntidad(Entidad entidad) {
+	public void setEntidad(String entidad) {
 		this.entidad = entidad;
 	}
 
-	public DistritoFederal getFederal() {
+	public String getFederal() {
 		return federal;
 	}
 
-	public void setFederal(DistritoFederal federal) {
+	public void setFederal(String federal) {
 		this.federal = federal;
 	}
 
-	public DistritoLocal getLocal() {
-		return local;
-	}
-
-	public void setLocal(DistritoLocal local) {
-		this.local = local;
-	}
-
-	public Municipio getMunicipio() {
+	public String getMunicipio() {
 		return municipio;
 	}
 
-	public void setMunicipio(Municipio municipio) {
+	public void setMunicipio(String municipio) {
 		this.municipio = municipio;
 	}
 
-	public Localidad getLocalidad() {
+	public String getLocalidad() {
 		return localidad;
 	}
 
-	public void setLocalidad(Localidad localidad) {
+	public void setLocalidad(String localidad) {
 		this.localidad = localidad;
 	}
 
-	public SeccionElectoral getSeccionElectoral() {
+	public String getSeccionElectoral() {
 		return seccionElectoral;
 	}
 
-	public void setSeccionElectoral(SeccionElectoral seccionElectoral) {
+	public void setSeccionElectoral(String seccionElectoral) {
 		this.seccionElectoral = seccionElectoral;
 	}
 
-	public Perfil getPerfil() {
+	public Long getPerfil() {
 		return perfil;
 	}
 
-	public void setPerfil(Perfil perfil) {
+	public void setPerfil(Long perfil) {
 		this.perfil = perfil;
 	}
 

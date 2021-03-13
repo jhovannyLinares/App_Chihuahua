@@ -4,13 +4,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.hibernate.collection.spi.PersistentCollection;
-import org.modelmapper.AbstractConverter;
-import org.modelmapper.Condition;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
 import org.modelmapper.convention.MatchingStrategies;
-import org.modelmapper.spi.MappingContext;
 
 public class MapperUtil {
 
@@ -26,11 +22,11 @@ public class MapperUtil {
 
 		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
-		modelMapper.getConfiguration().setPropertyCondition(new Condition<Object, Object>() {
-			public boolean applies(MappingContext<Object, Object> context) {
-				return !(context.getSource() instanceof PersistentCollection);
-			}
-		});
+//		modelMapper.getConfiguration().setPropertyCondition(new Condition<Object, Object>() {
+//			public boolean applies(MappingContext<Object, Object> context) {
+//				return !(context.getSource() instanceof PersistentCollection);
+//			}
+//		});
 
 //		modelMapper.addConverter(new AbstractConverter<String, String>() {
 //			protected String convert(String source) {

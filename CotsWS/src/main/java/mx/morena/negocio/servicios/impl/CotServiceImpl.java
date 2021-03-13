@@ -94,7 +94,7 @@ public class CotServiceImpl implements ICotService {
 	}
 
 	@Override
-	public String asignarSecciones(List<Long> idSecciones, Long idCot, long perfil) throws CotException {
+	public String asignarSecciones(List<String> idSecciones, Long idCot, long perfil) throws CotException {
 		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL || perfil == PERFIL_MUNICIPAL) {
 			List<SeccionElectoral> secciones = seccionRepository.findAllById(idSecciones);
 			Convencidos cot = cotRepository.getByIdAndEstatus(idCot, ESTATUS_ALTA);

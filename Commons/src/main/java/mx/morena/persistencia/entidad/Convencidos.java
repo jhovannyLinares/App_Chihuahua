@@ -4,112 +4,96 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
-@Entity
-@Table(name = "app_convencidos")
+//@Entity
+//@Table(name = "app_convencidos")
 public class Convencidos {
 
-	@Id
-	@Column(unique = true, name = "id")
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "convencidos_SEQ")
-	@SequenceGenerator(sequenceName = "convencidos_SEQ", allocationSize = 1, name = "convencidos_SEQ")
+	//@Id
+	//@Column(unique = true, name = "id")
+	//@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "convencidos_SEQ")
+	//@SequenceGenerator(sequenceName = "convencidos_SEQ", allocationSize = 1, name = "convencidos_SEQ")
 	private Long id;
 
-	@Column(name = "fecha_registro")
+	//@Column(name = "fecha_registro")
 	private Date fechaRegistro;
 
-	@OneToOne
+	//@OneToOne
 	private Entidad estado;
 
-	@OneToOne
+	//@OneToOne
 	private DistritoFederal distritoFederal;
 
-	@OneToOne
+	//@OneToOne
 	private Municipio municipio;
 
-	@OneToMany(mappedBy = "cot", fetch = FetchType.LAZY)
+	//@OneToMany(mappedBy = "cot", fetch = FetchType.LAZY)
 	private List<SeccionElectoral> seccionesElectorales;
 	
-	@OneToOne
+	//@OneToOne
 	private Usuario usuario;
 
-	@Column(name = "nombre")
+	//@Column(name = "nombre")
 	private String nombre;
 
-	@Column(name = "apellido_paterno")
+	//@Column(name = "apellido_paterno")
 	private String aPaterno;
 
-	@Column(name = "apellido_materno")
+	//@Column(name = "apellido_materno")
 	private String aMaterno;
 
-	@Column(name = "clave_elector")
+	//@Column(name = "clave_elector")
 	private String claveElector;
 
-	@Column(name = "calle")
+	//@Column(name = "calle")
 	private String calle;
 
-	@Column(name = "numero_interior")
+	//@Column(name = "numero_interior")
 	private String numInterior;
 
-	@Column(name = "numero_exterior")
+	//@Column(name = "numero_exterior")
 	private String numExterior;
 
-	@Column(name = "colonia")
+	//@Column(name = "colonia")
 	private String colonia;
 
-	@Column(name = "codigo_postal")
+	//@Column(name = "codigo_postal")
 	private String cp;
 
-	@Column(name = "telefono_casa")
+	//@Column(name = "telefono_casa")
 	private String telCasa;
 
-	@Column(name = "telefono_celular")
+	//@Column(name = "telefono_celular")
 	private String telCelular;
 
-	@Column(name = "correo")
+	//@Column(name = "correo")
 	private String correo;
 
-	@Column(unique = true, name = "curp")
+	//@Column(unique = true, name = "curp")
 	private String curp;
 
-	@Column(name = "fecha_baja")
+	//@Column(name = "fecha_baja")
 	private Date fechaBaja;
 
-	@Column(name = "fecha_reactivacion")
+	//@Column(name = "fecha_reactivacion")
 	private Date fechaReactivacion;
 
-	@Column(name = "banco")
+	//@Column(name = "banco")
 	private String banco;
 
-	@Column(name = "clabe_interbancaria")
+	//@Column(name = "clabe_interbancaria")
 	private String clabeInterbancaria;
 
-	@Column(name = "estatus")
+	//@Column(name = "estatus")
 	private char estatus;
 	
-	@Column(name = "dv")
+	//@Column(name = "dv")
 	private boolean dv;
 	
-	@Column(name = "mov")
+	//@Column(name = "mov")
 	private boolean mov;
 	
-	@Column(name = "fecha_sistema", nullable = false)
-	@Temporal(TemporalType.DATE)
+	//@Column(name = "fecha_sistema", nullable = false)
+	//@Temporal(TemporalType.DATE)
     private Calendar fechaSistema;
 	
 	public Long getId() {

@@ -9,6 +9,7 @@ public class UsuarioDTO {
 	private String perfil;
 	private List<ModuloDTO> modulos;
 	private String token;
+	private Integer expiration;
 
 	public Long getId() {
 		return id;
@@ -49,5 +50,15 @@ public class UsuarioDTO {
 	public void setPerfil(String perfil) {
 		this.perfil = perfil;
 	}
+
+	public Integer getExpiration() {
+		return expiration;
+	}
+
+	public void setExpiration(Integer segundos) {
+		this.expiration = segundos;
+	}
+	
+	
 
 }
