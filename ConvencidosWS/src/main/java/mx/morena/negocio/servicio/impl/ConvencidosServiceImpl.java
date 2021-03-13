@@ -48,6 +48,7 @@ public class ConvencidosServiceImpl implements IConvencidosService {
 	private IUsuarioRepository usuarioRepository;
 	
 	private static final char ESTATUS_ALTA = 'A';
+	private static String sinClave = "No Cuenta con ClaveElector";
 
 	@Override
 	public List<ConvencidosDTO> getConvencidos(Long distritoFederalId, Long idMunicipio, Long idSeccion, String claveElector)
@@ -85,7 +86,7 @@ public class ConvencidosServiceImpl implements IConvencidosService {
 		
 		Convencidos existeClave = convencidosRepository.findByClaveElector(dto.getClaveElector());
 
-		if (existeClave == null) {
+		if (existeClave == null || existeClave.getClaveElector()==sinClave.toUpperCase()) {
 			Convencidos convencidos = new Convencidos();
 			
 			System.out.println("entidad "+ dto.getIdEstado());
@@ -98,7 +99,9 @@ public class ConvencidosServiceImpl implements IConvencidosService {
 			dto.setFechaRegistro(new Date());
 			
 			MapperUtil.map(dto, convencidos);
-			
+			if(!dto.getIsClaveElector()) {
+			convencidos.setClaveElector(sinClave);
+			}
 			convencidos.setEstado(estado);
 			convencidos.setDistritoFederal(dFederal);
 			convencidos.setMunicipio(municipio);

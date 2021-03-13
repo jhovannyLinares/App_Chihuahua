@@ -52,6 +52,8 @@ public class ConvencidosDTO implements Serializable {
 	private boolean dv;
 	
 	private boolean mov;
+	
+	private Boolean isClaveElector;
 
 	public Long getId() {
 		return id;
@@ -225,5 +227,12 @@ public class ConvencidosDTO implements Serializable {
 		this.mov = mov;
 	}
 
+	public Boolean getIsClaveElector() {
+		return isClaveElector;
+	}
+
+	public void setIsClaveElector(Boolean isClaveElector) {
+		this.isClaveElector = isClaveElector;
+	}
 
 }
