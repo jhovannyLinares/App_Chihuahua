@@ -1,7 +1,6 @@
 package mx.morena.persistencia.repository;
 
 import java.util.List;
-import java.util.Optional;
 
 import mx.morena.persistencia.entidad.Convencidos;
 import mx.morena.persistencia.entidad.DistritoFederal;

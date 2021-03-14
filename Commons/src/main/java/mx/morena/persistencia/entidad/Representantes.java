@@ -2,88 +2,58 @@ package mx.morena.persistencia.entidad;
 
 import java.util.Date;
 
-import javax.persistence.*;
-
-@Entity
-@Table(name = "app_representantes")
+//@Entity
+//@Table(name = "app_representantes")
 public class Representantes {
 
-	@Id
-	@Column(unique = true, name = "id")
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "representantes_SEQ")
-	@SequenceGenerator(sequenceName = "representantes_SEQ", allocationSize = 1, name = "representantes_SEQ")
 	private Long id;
 
-	@OneToOne
 	private Entidad estado;
 
-	@OneToOne
 	private DistritoFederal distritoFederal;
 
-	@OneToOne
 	private Municipio municipio;
 
-	@OneToOne
 	private SeccionElectoral seccionElectoral;
 
-	@OneToOne
 	private Usuario usuario;
 
-	@Column(name = "fecha_registro")
 	private Date fechaRegistro;
 
-	@Column(name = "nombre")
 	private String nombre;
 
-	@Column(name = "apellido_paterno")
 	private String aPaterno;
 
-	@Column(name = "apellido_materno")
 	private String aMaterno;
 
-	@Column(name = "clave_elector")
 	private String claveElector;
 
-	@Column(name = "calle")
 	private String calle;
 
-	@Column(name = "numero_interior")
 	private String numInterior;
 
-	@Column(name = "numero_exterior")
 	private String numExterior;
 
-	@Column(name = "colonia")
 	private String colonia;
 
-	@Column(name = "codigo_postal")
 	private String cp;
 
-	@Column(name = "telefono_casa")
 	private String telCasa;
 
-	@Column(name = "telefono_celular")
 	private String telCelular;
 
-	@Column(name = "correo")
 	private String correo;
 
-	@Column(name = "propuesto")
 	private String propuesto;
 
-	@Column(name = "ine_img_lado1")
 	private String ineLado1;
 
-	@Column(name = "ine_img_lado2")
 	private String ineLado2;
 
-	@Column(name = "ine_pdf")
 	private String inePdf;
-	
-	@Column(name = "ruta")
+
 	private String ruta;
 
-	@Column(name = "tipo_representante")
 	private byte tipo;
 
 	public Long getId() {

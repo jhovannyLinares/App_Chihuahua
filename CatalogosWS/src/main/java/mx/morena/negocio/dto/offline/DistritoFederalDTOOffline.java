@@ -4,17 +4,17 @@ import java.util.List;
 
 public class DistritoFederalDTOOffline {
 
-	private Long id;
+	private String id;
 
 	private String cabeceraFederal;
 
-	private List<DistritoLocalDTOOffline> distritosLocales;
+	private List<MunicipioDTOOffline> municipios;
 
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -26,18 +26,13 @@ public class DistritoFederalDTOOffline {
 		this.cabeceraFederal = cabeceraFederal;
 	}
 
-	public List<DistritoLocalDTOOffline> getDistritosLocales() {
-		return distritosLocales;
+	public List<MunicipioDTOOffline> getMunicipios() {
+		return municipios;
 	}
 
-	public void setDistritosLocales(List<DistritoLocalDTOOffline> distritosLocales) {
-		this.distritosLocales = distritosLocales;
+	public void setMunicipios(List<MunicipioDTOOffline> municipios) {
+		this.municipios = municipios;
 	}
 
-	@Override
-	public String toString() {
-		return "DistritoFederalDTO [id=" + id + ", cabeceraFederal=" + cabeceraFederal + ", distritosLocales="
-				+ distritosLocales + "]";
-	}
-
+	
 }

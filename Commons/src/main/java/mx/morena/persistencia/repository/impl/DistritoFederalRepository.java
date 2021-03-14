@@ -18,7 +18,7 @@ public class DistritoFederalRepository implements IDistritoFederalRepository {
 	private JdbcTemplate template;
 
 	@Override
-	public DistritoFederal getById(String federalId) {
+	public DistritoFederal findById(String federalId) {
 
 		String sql = "SELECT * FROM app_distrito_federal WHERE id = ?";
 

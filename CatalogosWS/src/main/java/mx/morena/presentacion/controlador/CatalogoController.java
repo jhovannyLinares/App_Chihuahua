@@ -16,6 +16,7 @@ import mx.morena.negocio.dto.DistritoFederalDTO;
 import mx.morena.negocio.dto.EntidadDTO;
 import mx.morena.negocio.dto.LocalidadDTO;
 import mx.morena.negocio.dto.MunicipioDTO;
+import mx.morena.negocio.dto.offline.CatalogoDTOOffline;
 import mx.morena.negocio.servicios.ICatalogoService;
 import mx.morena.security.controller.MasterController;
 
@@ -26,13 +27,13 @@ public class CatalogoController extends MasterController {
 	@Autowired
 	ICatalogoService ICatService;
 
-//	@GetMapping()
-//	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-//	private CatalogoDTOOffline getCatalogos(HttpServletRequest request) {
-//
-//		return ICatService.getCatalogos(getUsuario(request), getPerfil(request));
-//
-//	}
+	@GetMapping()
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	private CatalogoDTOOffline getCatalogos(HttpServletRequest request) {
+
+		return ICatService.getCatalogos(getUsuario(request), getPerfil(request));
+
+	}
 
 	@GetMapping("/entidades")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
@@ -42,10 +43,6 @@ public class CatalogoController extends MasterController {
 
 	}
 
-//	
-//	
-//	
-//
 	@GetMapping("/entidades/{id}/distritosFederales")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
 	private List<DistritoFederalDTO> getFederalByEntidad(HttpServletRequest request,
@@ -60,7 +57,6 @@ public class CatalogoController extends MasterController {
 
 	}
 
-//
 	@GetMapping("/distritosFederales/{id}/municipios")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
 	private List<MunicipioDTO> getLocalByFederal(HttpServletRequest request, @PathVariable("id") String idFederal) {
@@ -86,16 +82,5 @@ public class CatalogoController extends MasterController {
 
 		return localidad;
 	}
-//
-//	@GetMapping("/localidades/{id}/seccionesElectorales")
-//	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-//	private List<SeccionDTO> getseccionByLocalidad(HttpServletRequest request, @PathVariable("id") String idLocalidad) {
-//
-//		long usuario = getUsuario(request);
-//		long idPerfil = getPerfil(request);
-//
-//		List<SeccionDTO> seccion = ICatService.getSeccionByLocalidad(usuario, idPerfil, idLocalidad);
-//
-//		return seccion;
-//	}
+
 }

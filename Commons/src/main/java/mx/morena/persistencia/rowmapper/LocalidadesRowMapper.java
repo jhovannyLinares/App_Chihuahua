@@ -22,7 +22,7 @@ public class LocalidadesRowMapper implements RowMapper<List<Localidad>> {
 			localidad = new Localidad();
 
 			localidad.setId(rs.getString("id"));
-			localidad.setDescripcion(rs.getString("nombre"));
+			localidad.setDescripcion(rs.getString("nombre") +" - "+ rs.getString("tipo"));
 			localidad.setTipo(rs.getString("tipo"));
 
 			localidades.add(localidad);

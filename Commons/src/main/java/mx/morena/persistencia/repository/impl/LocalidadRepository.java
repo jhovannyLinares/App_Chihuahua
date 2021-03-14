@@ -19,14 +19,14 @@ public class LocalidadRepository implements ILocalidadRepository {
 
 	@Override
 	public Localidad getById(String localidad) {
-		String sql = "SELECT * FROM app_localidad";
+		String sql = "select id,nombre ,tipo  from app_localidad group by id,nombre ,tipo order by id";
 
 		return template.queryForObject(sql, new LocalidadRowMapper());
 	}
 
 	@Override
 	public List<Localidad> getByMunicipio(String localidad) {
-		String sql = "SELECT * FROM app_localidad where municipio_id = ?";
+		String sql = "select id,nombre ,tipo  from app_localidad al where municipio_id = ? group by id,nombre ,tipo order by id";
 
 		return template.queryForObject(sql, new Object[] { localidad }, new int[] { 1 }, new LocalidadesRowMapper());
 	}

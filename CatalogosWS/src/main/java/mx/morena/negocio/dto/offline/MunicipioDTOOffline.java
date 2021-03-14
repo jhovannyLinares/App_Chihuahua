@@ -4,17 +4,17 @@ import java.util.List;
 
 public class MunicipioDTOOffline {
 
-	private Long id;
+	private String id;
 
 	private String descripcion;
 
 	private List<LocalidadDTOOffline> localidades;
 
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

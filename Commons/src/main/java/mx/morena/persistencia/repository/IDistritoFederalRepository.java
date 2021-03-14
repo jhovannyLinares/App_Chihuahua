@@ -6,7 +6,7 @@ import mx.morena.persistencia.entidad.DistritoFederal;
 
 public interface IDistritoFederalRepository {
 
-	DistritoFederal getById(String federal);
+	DistritoFederal findById(String federal);
 
 	List<DistritoFederal> findAll();
 

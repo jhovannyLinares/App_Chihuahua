@@ -1,6 +1,10 @@
 package mx.morena.security.servicio;
 
+import org.apache.log4j.Logger;
+
 public class MasterService {
+	
+	protected final Logger logger = Logger.getLogger(this.getClass());
 
 	protected static final Integer PERFIL_ESTATAL = 1;
 	protected static final Integer PERFIL_FEDERAL = 2;

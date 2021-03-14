@@ -1,7 +1,5 @@
 package mx.morena.persistencia.entidad;
 
-import java.util.List;
-
 public class Modulo {
 
 	private long id;
@@ -10,11 +8,7 @@ public class Modulo {
 
 	private String url;
 	
-	private List<Perfil> perfiles;
-
 	private Long moduloPadre;
-	
-	private List<Modulo> subModulo;
 
 	public long getId() {
 		return id;

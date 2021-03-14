@@ -6,6 +6,7 @@ import mx.morena.negocio.dto.DistritoFederalDTO;
 import mx.morena.negocio.dto.EntidadDTO;
 import mx.morena.negocio.dto.LocalidadDTO;
 import mx.morena.negocio.dto.MunicipioDTO;
+import mx.morena.negocio.dto.offline.CatalogoDTOOffline;
 
 public interface ICatalogoService {
 
@@ -13,16 +14,10 @@ public interface ICatalogoService {
 
 	List<DistritoFederalDTO> getFederalByEntidad(long usuario, long perfil, String idEntidad);
 
-//	List<DistritoFederalDTO> getFederalByEntidad(long usuario, long perfil, String idEntidad);
-//
-////	List<DistritoLocalDTO> getLocalByFederal(long usuario, long perfil, String id);
-//
 	List<MunicipioDTO> getMunicipioByFederal(long usuario, long perfil, String id);
-//
+
 	List<LocalidadDTO> getLocalidadByMunicipio(long usuario, long perfil, String id);
-//
-//	List<SeccionDTO> getSeccionByLocalidad(long usuario, long perfil, String id);
-//
-////	CatalogoDTOOffline getCatalogos(long usuario, long perfil);
+
+	CatalogoDTOOffline getCatalogos(long usuario, long perfil);
 
 }
