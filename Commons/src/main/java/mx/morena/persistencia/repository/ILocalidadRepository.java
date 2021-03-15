@@ -6,8 +6,8 @@ import mx.morena.persistencia.entidad.Localidad;
 
 public interface ILocalidadRepository {
 
-	Localidad getById(String localidad);
+	Localidad getById(Long localidad);
 
-	List<Localidad> getByMunicipio(String municipio);
+	List<Localidad> getByMunicipio(Long municipio);
 
 }

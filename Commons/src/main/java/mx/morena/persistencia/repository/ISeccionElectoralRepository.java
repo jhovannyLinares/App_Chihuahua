@@ -8,4 +8,8 @@ public interface ISeccionElectoralRepository {
 
 	List<SeccionElectoral> findByCotId(Long cotId);
 
+	List<SeccionElectoral> findAllById(List<String> idSecciones);
+
+	void save(SeccionElectoral sec);
+
 }

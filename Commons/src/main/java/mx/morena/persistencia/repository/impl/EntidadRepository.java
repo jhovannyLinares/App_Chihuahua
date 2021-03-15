@@ -1,7 +1,7 @@
 package mx.morena.persistencia.repository.impl;
 
 import java.util.List;
-
+import java.sql.Types;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -26,11 +26,11 @@ public class EntidadRepository implements IEntidadRepository {
 	}
 
 	@Override
-	public Entidad findById(String idEntidad) {
+	public Entidad findById(Long idEntidad) {
 		
 		String sql = "SELECT * FROM app_entidad where id = ?";
 
-		return template.queryForObject(sql, new Object[] { idEntidad }, new int[] { 1 }, new EntidadRowMapper());
+		return template.queryForObject(sql, new Object[] { idEntidad }, new int[] { Types.NUMERIC }, new EntidadRowMapper());
 	}
 
 

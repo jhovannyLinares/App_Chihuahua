@@ -6,10 +6,10 @@ import mx.morena.persistencia.entidad.Municipio;
 
 public interface IMunicipioRepository {
 
-	Municipio getById(String municipio);
+	Municipio findById(Long municipio);
 
 	List<Municipio> findAll();
 
-	List<Municipio> getByFederal(String idFederal);
+	List<Municipio> getByFederal(Long idFederal);
 
 }

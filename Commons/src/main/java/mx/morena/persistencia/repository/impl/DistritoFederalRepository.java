@@ -1,6 +1,6 @@
 package mx.morena.persistencia.repository.impl;
 
-import java.util.List;
+import java.util.List;import java.sql.Types;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -18,11 +18,11 @@ public class DistritoFederalRepository implements IDistritoFederalRepository {
 	private JdbcTemplate template;
 
 	@Override
-	public DistritoFederal findById(String federalId) {
+	public DistritoFederal findById(Long federalId) {
 
 		String sql = "SELECT * FROM app_distrito_federal WHERE id = ?";
 
-		return template.queryForObject(sql, new Object[] { federalId }, new int[] { 1 },
+		return template.queryForObject(sql, new Object[] { federalId }, new int[] { Types.NUMERIC },
 				new DistritoFederalRowMapper());
 
 	}
@@ -36,10 +36,10 @@ public class DistritoFederalRepository implements IDistritoFederalRepository {
 	}
 
 	@Override
-	public List<DistritoFederal> findByEntidad(String idEntidad) {
+	public List<DistritoFederal> findByEntidad(Long idEntidad) {
 		String sql = "SELECT * FROM app_distrito_federal where entidad_id = ?";
 
-		return template.queryForObject(sql, new Object[] { idEntidad }, new int[] { 1 }, new DistritosFederalesRowMapper());
+		return template.queryForObject(sql, new Object[] { idEntidad }, new int[] { Types.NUMERIC }, new DistritosFederalesRowMapper());
 	}
 
 }

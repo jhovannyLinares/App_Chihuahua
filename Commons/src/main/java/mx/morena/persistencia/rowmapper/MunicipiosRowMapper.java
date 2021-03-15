@@ -22,7 +22,7 @@ public class MunicipiosRowMapper implements RowMapper<List<Municipio>> {
 			
 			municipio = new Municipio();
 
-			municipio.setId(rs.getString("id"));
+			municipio.setId(rs.getLong("id"));
 			municipio.setDescripcion(rs.getString("nombre"));
 
 			municipios.add(municipio);

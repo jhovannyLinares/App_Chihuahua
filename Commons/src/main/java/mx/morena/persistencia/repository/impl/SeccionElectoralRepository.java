@@ -16,6 +16,17 @@ public class SeccionElectoralRepository implements ISeccionElectoralRepository {
 		return null;
 	}
 
-//	List<SeccionElectoral> findByCotId(Long cotId);
+	@Override
+	public List<SeccionElectoral> findAllById(List<String> idSecciones) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void save(SeccionElectoral sec) {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 }

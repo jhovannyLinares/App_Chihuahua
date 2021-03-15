@@ -14,7 +14,7 @@ public class EntidadRowMapper implements RowMapper<Entidad> {
 
 		Entidad entidad = new Entidad();
 
-		entidad.setId(rs.getString("id"));
+		entidad.setId(rs.getLong("id"));
 		entidad.setNombre(rs.getString("nombre"));
 
 		return entidad;

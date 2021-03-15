@@ -2,17 +2,17 @@ package mx.morena.negocio.dto;
 
 public class SeccionDTO {
 
-	private String id;
+	private Long id;
 
 	private String descripcion;
 
 	private String localidadId;
 
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import mx.morena.negocio.dto.CasillaDTO;
 import mx.morena.negocio.dto.DistritoFederalDTO;
 import mx.morena.negocio.dto.EntidadDTO;
 import mx.morena.negocio.dto.LocalidadDTO;
@@ -17,11 +18,13 @@ import mx.morena.negocio.dto.offline.LocalidadDTOOffline;
 import mx.morena.negocio.dto.offline.MunicipioDTOOffline;
 import mx.morena.negocio.servicios.ICatalogoService;
 import mx.morena.negocio.util.MapperUtil;
+import mx.morena.persistencia.entidad.Casilla;
 import mx.morena.persistencia.entidad.DistritoFederal;
 import mx.morena.persistencia.entidad.Entidad;
 import mx.morena.persistencia.entidad.Localidad;
 import mx.morena.persistencia.entidad.Municipio;
 import mx.morena.persistencia.entidad.Usuario;
+import mx.morena.persistencia.repository.ICasillaRepository;
 import mx.morena.persistencia.repository.IDistritoFederalRepository;
 import mx.morena.persistencia.repository.IEntidadRepository;
 import mx.morena.persistencia.repository.ILocalidadRepository;
@@ -50,6 +53,9 @@ public class CatalogoServiceImpl extends MasterService implements ICatalogoServi
 	@Autowired
 	private IUsuarioRepository usuarioRepository;
 
+	@Autowired
+	private ICasillaRepository casillaRepository;
+
 	@Override
 	public List<EntidadDTO> getEntidades() {
 
@@ -64,7 +70,7 @@ public class CatalogoServiceImpl extends MasterService implements ICatalogoServi
 	}
 
 	@Override
-	public List<DistritoFederalDTO> getFederalByEntidad(long idUsuario, long idPerfil, String idEntidad) {
+	public List<DistritoFederalDTO> getFederalByEntidad(long idUsuario, long idPerfil, Long idEntidad) {
 
 		Usuario usuario = usuarioRepository.findById(idUsuario);
 
@@ -91,7 +97,7 @@ public class CatalogoServiceImpl extends MasterService implements ICatalogoServi
 	}
 
 	@Override
-	public List<MunicipioDTO> getMunicipioByFederal(long idUsuario, long idPerfil, String idFederal) {
+	public List<MunicipioDTO> getMunicipioByFederal(long idUsuario, long idPerfil, Long idFederal) {
 
 		Usuario usuario = usuarioRepository.findById(idUsuario);
 
@@ -99,7 +105,7 @@ public class CatalogoServiceImpl extends MasterService implements ICatalogoServi
 
 		if (usuario.getPerfil() > PERFIL_FEDERAL) {
 
-			Municipio municipio = municipioRepository.getById(usuario.getMunicipio());
+			Municipio municipio = municipioRepository.findById(usuario.getMunicipio());
 			MunicipioDTO dto = new MunicipioDTO();
 			MapperUtil.map(municipio, dto);
 
@@ -118,7 +124,7 @@ public class CatalogoServiceImpl extends MasterService implements ICatalogoServi
 	}
 
 	@Override
-	public List<LocalidadDTO> getLocalidadByMunicipio(long idUsuario, long idPerfil, String municipio) {
+	public List<LocalidadDTO> getLocalidadByMunicipio(long idUsuario, long idPerfil, Long municipio) {
 
 		Usuario usuario = usuarioRepository.findById(idUsuario);
 
@@ -146,13 +152,13 @@ public class CatalogoServiceImpl extends MasterService implements ICatalogoServi
 
 	@Override
 	public CatalogoDTOOffline getCatalogos(long usuarioId, long perfilId) {
-		
+
 		logger.debug("getCatalogos");
 
 		Usuario usuario = usuarioRepository.findById(usuarioId);
 
 		Entidad entidad = entidadRepository.findById(usuario.getEntidad());
-		logger.debug("entidad "+entidad.getNombre());
+		logger.debug("entidad " + entidad.getNombre());
 
 		EntidadDTOOffline entidadOffline = new EntidadDTOOffline();
 
@@ -163,11 +169,10 @@ public class CatalogoServiceImpl extends MasterService implements ICatalogoServi
 		List<DistritoFederalDTOOffline> dtoOfflines = new ArrayList<DistritoFederalDTOOffline>();
 
 		dtoOfflines = MapperUtil.mapAll(distritoFederals, DistritoFederalDTOOffline.class);
-		
 
 		for (DistritoFederalDTOOffline distritoFederalDTO : dtoOfflines) {
-			
-			logger.debug("distritoFederalDTO "+distritoFederalDTO.getId());
+
+			logger.debug("distritoFederalDTO " + distritoFederalDTO.getId());
 
 			List<MunicipioDTO> municipioDTOs = getMunicipioByFederal(usuarioId, perfilId, distritoFederalDTO.getId());
 
@@ -176,8 +181,8 @@ public class CatalogoServiceImpl extends MasterService implements ICatalogoServi
 			municipioDTOsOfflines = MapperUtil.mapAll(municipioDTOs, MunicipioDTOOffline.class);
 
 			for (MunicipioDTOOffline municipioDTO : municipioDTOsOfflines) {
-				
-				logger.debug("municipioDTO "+municipioDTO.getId());
+
+				logger.debug("municipioDTO " + municipioDTO.getId());
 
 				List<LocalidadDTO> localidadDTOs = getLocalidadByMunicipio(usuarioId, perfilId, municipioDTO.getId());
 
@@ -198,6 +203,36 @@ public class CatalogoServiceImpl extends MasterService implements ICatalogoServi
 
 		return offline;
 
+	}
+
+	@Override
+	public List<CasillaDTO> getCasillas(long idUsuario, long perfil) {
+
+		Usuario usuario = usuarioRepository.findById(idUsuario);
+
+		List<Casilla> casillas = null;
+		List<CasillaDTO> dtos = new ArrayList<CasillaDTO>();
+
+		if (usuario.getPerfil().equals(PERFIL_ESTATAL)) {
+			casillas = casillaRepository.getCasillas(usuario.getEntidad());
+		}
+		if (usuario.getPerfil().equals(PERFIL_FEDERAL)) {
+			casillas = casillaRepository.getCasillas(usuario.getEntidad(), usuario.getFederal());
+		}
+//		if (usuario.getPerfil().equals(PERFIL_LOCAL)) {
+//			getCasillas(usuario.getEntidad(),usuario.getFederal(),usuario.get);
+//		}
+		if (usuario.getPerfil().equals(PERFIL_MUNICIPAL)) {
+			casillas = casillaRepository.getCasillas(usuario.getEntidad(), usuario.getFederal(),
+					usuario.getMunicipio());
+		}
+//		if (usuario.getPerfil().equals(PERFIL_COTS)) {
+//			getCasillas(usuario.getEntidad(),usuario.getFederal(),usuario.getMunicipio());
+//		}
+		
+		dtos = MapperUtil.mapAll(casillas, CasillaDTO.class);
+
+		return dtos;
 	}
 
 }

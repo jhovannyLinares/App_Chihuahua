@@ -1,101 +1,67 @@
 package mx.morena.persistencia.entidad;
 
-import java.util.Calendar;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
-//@Entity
-//@Table(name = "app_convencidos")
 public class Convencidos {
 
-	//@Id
-	//@Column(unique = true, name = "id")
-	//@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "convencidos_SEQ")
-	//@SequenceGenerator(sequenceName = "convencidos_SEQ", allocationSize = 1, name = "convencidos_SEQ")
 	private Long id;
 
-	//@Column(name = "fecha_registro")
 	private Date fechaRegistro;
 
-	//@OneToOne
-	private Entidad estado;
+	private Long estado;
 
-	//@OneToOne
-	private DistritoFederal distritoFederal;
+	private Long distritoFederal;
 
-	//@OneToOne
-	private Municipio municipio;
+	private Long municipio;
 
-	//@OneToMany(mappedBy = "cot", fetch = FetchType.LAZY)
 	private List<SeccionElectoral> seccionesElectorales;
-	
-	//@OneToOne
-	private Usuario usuario;
 
-	//@Column(name = "nombre")
+	private Long usuario;
+
 	private String nombre;
 
-	//@Column(name = "apellido_paterno")
 	private String aPaterno;
 
-	//@Column(name = "apellido_materno")
 	private String aMaterno;
 
-	//@Column(name = "clave_elector")
 	private String claveElector;
 
-	//@Column(name = "calle")
 	private String calle;
 
-	//@Column(name = "numero_interior")
 	private String numInterior;
 
-	//@Column(name = "numero_exterior")
 	private String numExterior;
 
-	//@Column(name = "colonia")
 	private String colonia;
 
-	//@Column(name = "codigo_postal")
 	private String cp;
 
-	//@Column(name = "telefono_casa")
 	private String telCasa;
 
-	//@Column(name = "telefono_celular")
 	private String telCelular;
 
-	//@Column(name = "correo")
 	private String correo;
 
-	//@Column(unique = true, name = "curp")
 	private String curp;
 
-	//@Column(name = "fecha_baja")
 	private Date fechaBaja;
 
-	//@Column(name = "fecha_reactivacion")
 	private Date fechaReactivacion;
-
-	//@Column(name = "banco")
+	
 	private String banco;
 
-	//@Column(name = "clabe_interbancaria")
 	private String clabeInterbancaria;
 
-	//@Column(name = "estatus")
 	private char estatus;
-	
-	//@Column(name = "dv")
+
 	private boolean dv;
-	
-	//@Column(name = "mov")
+
 	private boolean mov;
-	
-	//@Column(name = "fecha_sistema", nullable = false)
-	//@Temporal(TemporalType.DATE)
-    private Calendar fechaSistema;
-	
+
+	private Timestamp fechaSistema;
+
 	public Long getId() {
 		return id;
 	}
@@ -112,27 +78,27 @@ public class Convencidos {
 		this.fechaRegistro = fechaRegistro;
 	}
 
-	public Entidad getEstado() {
+	public Long getEstado() {
 		return estado;
 	}
 
-	public void setEstado(Entidad estado) {
+	public void setEstado(Long estado) {
 		this.estado = estado;
 	}
 
-	public DistritoFederal getDistritoFederal() {
+	public Long getDistritoFederal() {
 		return distritoFederal;
 	}
 
-	public void setDistritoFederal(DistritoFederal distritoFederal) {
+	public void setDistritoFederal(Long distritoFederal) {
 		this.distritoFederal = distritoFederal;
 	}
 
-	public Municipio getMunicipio() {
+	public Long getMunicipio() {
 		return municipio;
 	}
 
-	public void setMunicipio(Municipio municipio) {
+	public void setMunicipio(Long municipio) {
 		this.municipio = municipio;
 	}
 
@@ -142,6 +108,14 @@ public class Convencidos {
 
 	public void setSeccionesElectorales(List<SeccionElectoral> seccionesElectorales) {
 		this.seccionesElectorales = seccionesElectorales;
+	}
+
+	public Long getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Long usuario) {
+		this.usuario = usuario;
 	}
 
 	public String getNombre() {
@@ -288,22 +262,6 @@ public class Convencidos {
 		this.estatus = estatus;
 	}
 
-	public Usuario getUsuario() {
-		return usuario;
-	}
-
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
-	}
-
-	public Calendar getFechaSistema() {
-		return fechaSistema;
-	}
-
-	public void setFechaSistema(Calendar fechaSistema) {
-		this.fechaSistema = fechaSistema;
-	}
-
 	public boolean isDv() {
 		return dv;
 	}
@@ -320,6 +278,12 @@ public class Convencidos {
 		this.mov = mov;
 	}
 
+	public Timestamp getFechaSistema() {
+		return fechaSistema;
+	}
 
-	
+	public void setFechaSistema(Timestamp fechaSistema) {
+		this.fechaSistema = fechaSistema;
+	}
+
 }

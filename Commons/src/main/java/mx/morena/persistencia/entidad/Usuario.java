@@ -16,15 +16,15 @@ public class Usuario {
 
 	private String email;
 
-	private String entidad;
+	private Long entidad;
 
-	private String federal;
+	private Long federal;
 
-	private String municipio;
+	private Long municipio;
 
-	private String localidad;
+	private Long localidad;
 
-	private String seccionElectoral;
+	private Long seccionElectoral;
 
 	private Long perfil;
 
@@ -84,43 +84,43 @@ public class Usuario {
 		this.email = email;
 	}
 
-	public String getEntidad() {
+	public Long getEntidad() {
 		return entidad;
 	}
 
-	public void setEntidad(String entidad) {
+	public void setEntidad(Long entidad) {
 		this.entidad = entidad;
 	}
 
-	public String getFederal() {
+	public Long getFederal() {
 		return federal;
 	}
 
-	public void setFederal(String federal) {
+	public void setFederal(Long federal) {
 		this.federal = federal;
 	}
 
-	public String getMunicipio() {
+	public Long getMunicipio() {
 		return municipio;
 	}
 
-	public void setMunicipio(String municipio) {
+	public void setMunicipio(Long municipio) {
 		this.municipio = municipio;
 	}
 
-	public String getLocalidad() {
+	public Long getLocalidad() {
 		return localidad;
 	}
 
-	public void setLocalidad(String localidad) {
+	public void setLocalidad(Long localidad) {
 		this.localidad = localidad;
 	}
 
-	public String getSeccionElectoral() {
+	public Long getSeccionElectoral() {
 		return seccionElectoral;
 	}
 
-	public void setSeccionElectoral(String seccionElectoral) {
+	public void setSeccionElectoral(Long seccionElectoral) {
 		this.seccionElectoral = seccionElectoral;
 	}
 

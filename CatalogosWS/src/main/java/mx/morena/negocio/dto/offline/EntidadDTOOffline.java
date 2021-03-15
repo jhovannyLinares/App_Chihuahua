@@ -4,17 +4,17 @@ import java.util.List;
 
 public class EntidadDTOOffline {
 
-	private long id;
+	private Long id;
 
 	private String nombre;
 
 	private List<DistritoFederalDTOOffline> distritosFederales;
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

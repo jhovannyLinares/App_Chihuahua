@@ -1,8 +1,10 @@
 package mx.morena.persistencia.repository.impl;
 
+import java.sql.Types;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -17,11 +19,15 @@ public class MunicipioRepository implements IMunicipioRepository {
 	private JdbcTemplate template;
 
 	@Override
-	public Municipio getById(String municipio) {
+	public Municipio findById(Long municipio) {
 
 		String sql = "SELECT * FROM app_municipio WHERE id = ?";
-
-		return template.queryForObject(sql, new Object[] { municipio }, new int[] { 1 }, new MunicipioRowMapper());
+		try {
+			return template.queryForObject(sql, new Object[] { municipio }, new int[] { Types.NUMERIC },
+					new MunicipioRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
 	}
 
 	@Override
@@ -33,10 +39,11 @@ public class MunicipioRepository implements IMunicipioRepository {
 	}
 
 	@Override
-	public List<Municipio> getByFederal(String idFederal) {
+	public List<Municipio> getByFederal(Long idFederal) {
 		String sql = "SELECT * FROM app_municipio where federal_id = ? ";
 
-		return template.queryForObject(sql, new Object[] { idFederal }, new int[] { 1 }, new MunicipiosRowMapper());
+		return template.queryForObject(sql, new Object[] { idFederal }, new int[] { Types.NUMERIC },
+				new MunicipiosRowMapper());
 	}
 
 }

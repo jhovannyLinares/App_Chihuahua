@@ -6,10 +6,10 @@ import mx.morena.persistencia.entidad.DistritoFederal;
 
 public interface IDistritoFederalRepository {
 
-	DistritoFederal findById(String federal);
+	DistritoFederal findById(Long federal);
 
 	List<DistritoFederal> findAll();
 
-	List<DistritoFederal> findByEntidad(String idEntidad);
+	List<DistritoFederal> findByEntidad(Long idEntidad);
 
 }

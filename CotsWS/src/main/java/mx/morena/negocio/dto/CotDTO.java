@@ -5,12 +5,9 @@ import java.util.Date;
 public class CotDTO {
 	private Long id;
 	private Date fechaRegistro;
-	//private Entidad estado;
-	//private DistritoFederal distritoFederal;
-	//private Municipio municipio;
-	private String idEstado;
-	private String idDistritoFederal;
-	private String idMunicipio;
+	private Long idEstado;
+	private Long idDistritoFederal;
+	private Long idMunicipio;
 	private String nombre;
 	private String aPaterno;
 	private String aMaterno;
@@ -214,27 +211,27 @@ public class CotDTO {
 		this.municipio = municipio;
 	}*/
 
-	public String getIdDistritoFederal() {
+	public Long getIdDistritoFederal() {
 		return idDistritoFederal;
 	}
 
-	public void setIdDistritoFederal(String idDistritoFederal) {
+	public void setIdDistritoFederal(Long idDistritoFederal) {
 		this.idDistritoFederal = idDistritoFederal;
 	}
 
-	public String getIdMunicipio() {
+	public Long getIdMunicipio() {
 		return idMunicipio;
 	}
 
-	public void setIdMunicipio(String idMunicipio) {
+	public void setIdMunicipio(Long idMunicipio) {
 		this.idMunicipio = idMunicipio;
 	}
 
-	public String getIdEstado() {
+	public Long getIdEstado() {
 		return idEstado;
 	}
 
-	public void setIdEstado(String idEstado) {
+	public void setIdEstado(Long idEstado) {
 		this.idEstado = idEstado;
 	}
 	

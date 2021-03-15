@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import mx.morena.negocio.dto.CasillaDTO;
 import mx.morena.negocio.dto.DistritoFederalDTO;
 import mx.morena.negocio.dto.EntidadDTO;
 import mx.morena.negocio.dto.LocalidadDTO;
@@ -34,6 +35,14 @@ public class CatalogoController extends MasterController {
 		return ICatService.getCatalogos(getUsuario(request), getPerfil(request));
 
 	}
+	
+	@GetMapping("/casillas")
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	private List<CasillaDTO> getCasillas(HttpServletRequest request) {
+
+		return ICatService.getCasillas(getUsuario(request), getPerfil(request));
+
+	}
 
 	@GetMapping("/entidades")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
@@ -46,7 +55,7 @@ public class CatalogoController extends MasterController {
 	@GetMapping("/entidades/{id}/distritosFederales")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
 	private List<DistritoFederalDTO> getFederalByEntidad(HttpServletRequest request,
-			@PathVariable("id") String idEntidad) {
+			@PathVariable("id") Long idEntidad) {
 
 		long usuario = getUsuario(request);
 		long perfil = getPerfil(request);
@@ -59,7 +68,7 @@ public class CatalogoController extends MasterController {
 
 	@GetMapping("/distritosFederales/{id}/municipios")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	private List<MunicipioDTO> getLocalByFederal(HttpServletRequest request, @PathVariable("id") String idFederal) {
+	private List<MunicipioDTO> getLocalByFederal(HttpServletRequest request, @PathVariable("id") Long idFederal) {
 
 		long usuario = getUsuario(request);
 		long idPerfil = getPerfil(request);
@@ -73,7 +82,7 @@ public class CatalogoController extends MasterController {
 	@GetMapping("/municipios/{id}/localidades")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
 	private List<LocalidadDTO> getLocalidadByMunicipio(HttpServletRequest request,
-			@PathVariable("id") String idMunicipio) {
+			@PathVariable("id") Long idMunicipio) {
 
 		long usuario = getUsuario(request);
 		long idPerfil = getPerfil(request);

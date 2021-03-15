@@ -2,16 +2,16 @@ package mx.morena.negocio.dto;
 
 public class DistritoFederalDTO {
 
-	private String id;
+	private Long id;
 
 	private String cabeceraFederal;
 
 
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

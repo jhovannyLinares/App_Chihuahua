@@ -20,7 +20,7 @@ public class EntidadesRowMapper implements RowMapper<List<Entidad>> {
 		do {
 			entidad = new Entidad();
 
-			entidad.setId(rs.getString("id"));
+			entidad.setId(rs.getLong("id"));
 			entidad.setNombre(rs.getString("nombre"));
 
 			entidades.add(entidad);

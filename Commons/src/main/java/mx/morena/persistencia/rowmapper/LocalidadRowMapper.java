@@ -15,8 +15,8 @@ public class LocalidadRowMapper implements RowMapper<Localidad> {
 		
 		Localidad localidad = new Localidad();
 
-		localidad.setId(rs.getString("id"));
-		localidad.setDescripcion(rs.getString("nombre"));
+		localidad.setId(rs.getLong("seccion_id"));
+		localidad.setDescripcion(rs.getLong("seccion_id") +" - "+ rs.getString("nombre") +" - "+ rs.getString("tipo"));
 		localidad.setTipo(rs.getString("tipo"));
 
 		return localidad;

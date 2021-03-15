@@ -8,6 +8,6 @@ public interface IEntidadRepository {
 
 	List<Entidad> findAll();
 
-	Entidad findById(String idEntidad);
+	Entidad findById(Long idEntidad);
 
 }

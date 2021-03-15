@@ -41,15 +41,15 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
 					session.setAttribute("Usuario", claims.get("usuario"));
 				} else {
 					SecurityContextHolder.clearContext();
-					response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-					((HttpServletResponse) response).sendError(HttpServletResponse.SC_FORBIDDEN);
-					return;
+//					response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+//					((HttpServletResponse) response).sendError(HttpServletResponse.SC_FORBIDDEN);
+//					return;
 				}
 			} else {
 				SecurityContextHolder.clearContext();
-				response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-				((HttpServletResponse) response).sendError(HttpServletResponse.SC_FORBIDDEN);
-				return;
+//				response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+//				((HttpServletResponse) response).sendError(HttpServletResponse.SC_FORBIDDEN);
+//				return;
 			}
 			chain.doFilter(request, response);
 		} catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException e) {
