@@ -11,8 +11,6 @@ public class ConvencidosDTO implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private Long id;
-
 	private Date fechaRegistro;
 
 	private Long idEstado;
@@ -47,21 +45,13 @@ public class ConvencidosDTO implements Serializable {
 
 	private String correo;
 	
-	private char estatus;
-	
 	private boolean dv;
 	
 	private boolean mov;
 	
 	private Boolean isClaveElector;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
+	
+	private Boolean isCalle;
 
 	public Date getFechaRegistro() {
 		return fechaRegistro;
@@ -203,14 +193,6 @@ public class ConvencidosDTO implements Serializable {
 		return serialVersionUID;
 	}
 
-	public char getEstatus() {
-		return estatus;
-	}
-
-	public void setEstatus(char estatus) {
-		this.estatus = estatus;
-	}
-
 	public boolean isDv() {
 		return dv;
 	}
@@ -234,5 +216,14 @@ public class ConvencidosDTO implements Serializable {
 	public void setIsClaveElector(Boolean isClaveElector) {
 		this.isClaveElector = isClaveElector;
 	}
+
+	public Boolean getIsCalle() {
+		return isCalle;
+	}
+
+	public void setIsCalle(Boolean isCalle) {
+		this.isCalle = isCalle;
+	}
+	
 
 }

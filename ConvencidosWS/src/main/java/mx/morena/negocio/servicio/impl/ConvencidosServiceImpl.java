@@ -75,50 +75,61 @@ public class ConvencidosServiceImpl implements IConvencidosService {
 			lstDto = MapperUtil.mapAll(lstConv, ConvencidosDTO.class);
 			return lstDto;
 		} else {
-			throw new ConvencidosException("No se encontro ningun usuario con el parametro ingresado", 204);
+			throw new ConvencidosException("No se encontro ningun usuario con el parametro ingresado", 409);
 		}
 
 	}
 
 	@Override
 	public Long save(long idUsuario, ConvencidosDTO dto) throws ConvencidosException {
+		
+		if (dto.getClaveElector().length() == 18) {
+			List<Convencidos> convencidoEx = convencidosRepository.findByClaveElector(dto.getClaveElector());
 
-		List<Convencidos> convencidoEx = convencidosRepository.findByClaveElector(dto.getClaveElector());
+			if (convencidoEx != null) {
+				throw new ConvencidosException("La clave de elector ya se encuentra registrada", 409);
+			} else {
 
-		if (convencidoEx != null) {
-			throw new ConvencidosException("La clave de elector ya se encuentra registrada", 204);
-		} else {
+				Convencidos convencido = new Convencidos();
 
-			Convencidos convencido = new Convencidos();
+				MapperUtil.map(dto, convencido);
+				if (!dto.getIsClaveElector()) {
+					convencido.setClaveElector(sinClave);
+				}
+				if(!dto.getIsCalle()) {
+					convencido.setCalle("");
+				}
+				convencido.setFechaRegistro(new Date());
+				convencido.setEstatus(ESTATUS_ALTA);
+				convencido.setEstado(dto.getIdEstado());
+				convencido.setDistritoFederal(dto.getIdFederal());
+				convencido.setMunicipio(dto.getIdMunicipio());
+				convencido.setUsuario(idUsuario);
+				convencido.setFechaSistema(new Timestamp(new Date().getTime()));
 
-			dto.setEstatus(ESTATUS_ALTA);
-			dto.setFechaRegistro(new Date());
+				convencidosRepository.save(convencido);
 
-			MapperUtil.map(dto, convencido);
-			if (!dto.getIsClaveElector()) {
-				convencido.setClaveElector(sinClave);
+				return convencido.getId();
+
 			}
-			convencido.setEstado(dto.getIdEstado());
-			convencido.setDistritoFederal(dto.getIdFederal());
-			convencido.setMunicipio(dto.getIdMunicipio());
-			convencido.setUsuario(idUsuario);
-			convencido.setFechaSistema(new Timestamp(new Date().getTime()));
-
-			convencidosRepository.save(convencido);
-
-			return convencido.getId();
-
+		} else {
+			throw new ConvencidosException("El numero de caracteres ingresado en la clave de elector es incorrecto", 400);
 		}
 
 	}
 
 	@Override
 	public boolean findByClaveElector(String claveElector) throws ConvencidosException {
-		List<Convencidos> convencidos = convencidosRepository.findByClaveElector(claveElector);
-		if (convencidos == null) {
-			return false;
+		
+		if (claveElector.length() == 18) {
+			List<Convencidos> convencidos = convencidosRepository.findByClaveElector(claveElector);
+			if (convencidos == null) {
+				return false;
+			} else {
+				return true;
+			}
 		} else {
-			return true;
+			throw new ConvencidosException("El numero de caracteres ingresado en la clave de elector es incorrecto", 400);
 		}
 	}
 
