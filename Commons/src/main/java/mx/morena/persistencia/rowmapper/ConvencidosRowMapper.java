@@ -16,8 +16,8 @@ public class ConvencidosRowMapper implements RowMapper<List<Convencidos>> {
 
 		List<Convencidos> convencidos = new ArrayList<Convencidos>();
 		Convencidos convencido = null;
-		while (rs.next()) {
 
+		do {
 			convencido = new Convencidos();
 
 			convencido.setId(rs.getLong("id"));
@@ -49,8 +49,8 @@ public class ConvencidosRowMapper implements RowMapper<List<Convencidos>> {
 			convencido.setUsuario(rs.getLong("usuario_id_usuario"));
 
 			convencidos.add(convencido);
+		} while (rs.next());
 
-		}
 
 		return convencidos;
 	}

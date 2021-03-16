@@ -71,7 +71,7 @@ public class ConvencidosServiceImpl implements IConvencidosService {
 			lstConv = convencidosRepository.findByClaveElector(claveElector);
 		}
 
-		if (!lstDto.isEmpty()) {
+		if (!lstConv.isEmpty()) {
 			lstDto = MapperUtil.mapAll(lstConv, ConvencidosDTO.class);
 			return lstDto;
 		} else {
