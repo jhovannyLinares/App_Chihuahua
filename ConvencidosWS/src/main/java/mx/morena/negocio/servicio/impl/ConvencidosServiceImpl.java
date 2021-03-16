@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import mx.morena.negocio.dto.ConvencidosDTO;
+import mx.morena.negocio.dto.ConvencidosResponseDTO;
 import mx.morena.negocio.exception.ConvencidosException;
 import mx.morena.negocio.servicio.IConvencidosService;
 import mx.morena.negocio.util.MapperUtil;
@@ -46,10 +47,10 @@ public class ConvencidosServiceImpl implements IConvencidosService {
 	private static String sinClave = "No Cuenta con ClaveElector";
 
 	@Override
-	public List<ConvencidosDTO> getConvencidos(Long distritoFederalId, Long idMunicipio, Long idSeccion,
+	public List<ConvencidosResponseDTO> getConvencidos(Long distritoFederalId, Long idMunicipio, Long idSeccion,
 			String claveElector) throws ConvencidosException {
 		List<Convencidos> lstConv = null;
-		List<ConvencidosDTO> lstDto = new ArrayList<ConvencidosDTO>();
+		List<ConvencidosResponseDTO> lstDto = new ArrayList<ConvencidosResponseDTO>();
 
 		if (distritoFederalId != null) {
 			DistritoFederal dFederal = dFederalRepository.findById(distritoFederalId);
@@ -72,7 +73,7 @@ public class ConvencidosServiceImpl implements IConvencidosService {
 		}
 
 		if (!lstConv.isEmpty()) {
-			lstDto = MapperUtil.mapAll(lstConv, ConvencidosDTO.class);
+			lstDto = MapperUtil.mapAll(lstConv, ConvencidosResponseDTO.class);
 			return lstDto;
 		} else {
 			throw new ConvencidosException("No se encontro ningun usuario con el parametro ingresado", 409);
