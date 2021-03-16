@@ -24,12 +24,12 @@ public class ConvencidosRepository implements IConvencidosRepository {
 	
 
 	@Override
-	public List<Convencidos> getByDistritoFederal(Long idFederal) {
+	public List<Convencidos> getByDistritoFederal(Long idFederal,Long tipo) {
 
 		String sql = "SELECT id, apellido_materno, apellido_paterno, banco, calle, clabe_interbancaria, clave_elector, colonia, correo, codigo_postal, curp, dv, estatus, fecha_baja, fecha_reactivacion, fecha_registro, fecha_sistema, mov, nombre, numero_exterior, numero_interior, telefono_casa, telefono_celular, distrito_federal_id, estado_id, municipio_id, usuario_id_usuario "
-				+ "FROM app_convencidos where distrito_federal_id = ? ";
+				+ "FROM app_convencidos where distrito_federal_id = ? and tipo = ? ";
 		try {
-			return template.queryForObject(sql, new Object[] { idFederal }, new int[] { Types.NUMERIC },
+			return template.queryForObject(sql, new Object[] { idFederal,tipo }, new int[] { Types.NUMERIC,Types.NUMERIC },
 					new ConvencidosRowMapper());
 		} catch (EmptyResultDataAccessException e) {
 
@@ -38,11 +38,11 @@ public class ConvencidosRepository implements IConvencidosRepository {
 	}
 
 	@Override
-	public List<Convencidos> getByMunicipio(Long municipio_id) {
+	public List<Convencidos> getByMunicipio(Long municipio_id,Long tipo) {
 		String sql = "SELECT id, apellido_materno, apellido_paterno, banco, calle, clabe_interbancaria, clave_elector, colonia, correo, codigo_postal, curp, dv, estatus, fecha_baja, fecha_reactivacion, fecha_registro, fecha_sistema, mov, nombre, numero_exterior, numero_interior, telefono_casa, telefono_celular, distrito_federal_id, estado_id, municipio_id, usuario_id_usuario "
-				+ "FROM app_convencidos where municipio_id = ? ";
+				+ "FROM app_convencidos where municipio_id = ? and tipo = ?";
 		try {
-			return template.queryForObject(sql, new Object[] { municipio_id }, new int[] { Types.NUMERIC },
+			return template.queryForObject(sql, new Object[] { municipio_id,tipo }, new int[] { Types.NUMERIC,Types.NUMERIC },
 					new ConvencidosRowMapper());
 		} catch (EmptyResultDataAccessException e) {
 
@@ -51,26 +51,31 @@ public class ConvencidosRepository implements IConvencidosRepository {
 	}
 
 	@Override
-	public List<Convencidos> getBySeccionesElectoralesIn(List<SeccionElectoral> seccion) {
+	public List<Convencidos> getBySeccionesElectoralesIn(List<SeccionElectoral> seccion,Long tipo) {
 		String sql = "SELECT id, apellido_materno, apellido_paterno, banco, calle, clabe_interbancaria, clave_elector, colonia, correo, codigo_postal, curp, dv, estatus, fecha_baja, fecha_reactivacion, fecha_registro, fecha_sistema, mov, nombre, numero_exterior, numero_interior, telefono_casa, telefono_celular, distrito_federal_id, estado_id, municipio_id, usuario_id_usuario "
-				+ "FROM app_convencidos where municipio_id = ? ";
+				+ "FROM app_convencidos where municipio_id = ? and tipo = ?";
 
-		Object[] objects = new Object[seccion.size()];
-		int[] intr = new int[seccion.size()];
+		Object[] objects = new Object[seccion.size()+1];
+		
+		int[] intr = new int[seccion.size()+1];
+		
 		for (int i = 0; i < seccion.size(); i++) {
 			objects[i] = seccion.get(i).getId();
 			intr[i] = Types.NUMERIC;
 		}
+		
+		objects[seccion.size()] = tipo;
+		intr[seccion.size()] = Types.NUMERIC;
 
 		return template.queryForObject(sql, objects, intr, new ConvencidosRowMapper());
 	}
 	
 	@Override
-	public List<Convencidos> findByClaveElector(String claveElector) {
+	public List<Convencidos> findByClaveElector(String claveElector,Long tipo) {
 		String sql = "SELECT id, apellido_materno, apellido_paterno, banco, calle, clabe_interbancaria, clave_elector, colonia, correo, codigo_postal, curp, dv, estatus, fecha_baja, fecha_reactivacion, fecha_registro, fecha_sistema, mov, nombre, numero_exterior, numero_interior, telefono_casa, telefono_celular, distrito_federal_id, estado_id, municipio_id, usuario_id_usuario "
-				+ "FROM app_convencidos where clave_elector = ? ";
+				+ "FROM app_convencidos where clave_elector = ? and tipo = ?";
 		try {
-			return template.queryForObject(sql, new Object[] { claveElector }, new int[] { Types.VARCHAR },
+			return template.queryForObject(sql, new Object[] { claveElector,tipo }, new int[] { Types.VARCHAR,Types.NUMERIC },
 					new ConvencidosRowMapper());
 		} catch (EmptyResultDataAccessException e) {
 			return null;
@@ -78,11 +83,11 @@ public class ConvencidosRepository implements IConvencidosRepository {
 	}
 
 	@Override
-	public Convencidos getByCurp(String curp) {
+	public Convencidos getByCurp(String curp,Long tipo) {
 		String sql = "SELECT id, apellido_materno, apellido_paterno, banco, calle, clabe_interbancaria, clave_elector, colonia, correo, codigo_postal, curp, dv, estatus, fecha_baja, fecha_reactivacion, fecha_registro, fecha_sistema, mov, nombre, numero_exterior, numero_interior, telefono_casa, telefono_celular, distrito_federal_id, estado_id, municipio_id, usuario_id_usuario "
-				+ "FROM app_convencidos where curp = ? ";
+				+ "FROM app_convencidos where curp = ? and tipo = ?";
 		try {
-			return template.queryForObject(sql, new Object[] { curp }, new int[] { Types.VARCHAR },
+			return template.queryForObject(sql, new Object[] { curp,tipo }, new int[] { Types.VARCHAR,Types.NUMERIC },
 				new ConvencidoRowMapper());
 		} catch (EmptyResultDataAccessException e) {
 			return null;
@@ -90,12 +95,12 @@ public class ConvencidosRepository implements IConvencidosRepository {
 	}
 
 	@Override
-	public Convencidos getByIdAndEstatus(Long idCot, char estatus) {
+	public Convencidos getByIdAndEstatus(Long idCot, char estatus,Long tipo) {
 		String sql = "SELECT id, apellido_materno, apellido_paterno, banco, calle, clabe_interbancaria, clave_elector, colonia, correo, codigo_postal, curp, dv, estatus, fecha_baja, fecha_reactivacion, fecha_registro, fecha_sistema, mov, nombre, numero_exterior, numero_interior, telefono_casa, telefono_celular, distrito_federal_id, estado_id, municipio_id, usuario_id_usuario "
-				+ "FROM app_convencidos where id = ? and estatus = ? ";
+				+ "FROM app_convencidos where id = ? and estatus = ? and tipo = ? ";
 
-		return template.queryForObject(sql, new Object[] { idCot, estatus },
-				new int[] { Types.NUMERIC, Types.NVARCHAR }, new ConvencidoRowMapper());
+		return template.queryForObject(sql, new Object[] { idCot, estatus,tipo },
+				new int[] { Types.NUMERIC, Types.NVARCHAR,Types.NUMERIC }, new ConvencidoRowMapper());
 	}
 
 	@Override
@@ -105,8 +110,8 @@ public class ConvencidosRepository implements IConvencidosRepository {
 				+ " codigo_postal, " + " curp, " + " dv, " + " estatus, " + " fecha_baja, " + " fecha_reactivacion, "
 				+ " fecha_registro, " + " fecha_sistema, " + " mov, " + " nombre, " + " numero_exterior, "
 				+ " numero_interior, " + " telefono_casa, " + " telefono_celular, " + " distrito_federal_id, "
-				+ " estado_id, " + " municipio_id, " + " usuario_id_usuario) VALUES( "
-				+ " (SELECT MAX(id)+1 FROM app_convencidos), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+				+ " estado_id, " + " municipio_id, " + " usuario_id_usuario, " + "tipo) VALUES( "
+				+ " (SELECT MAX(id)+1 FROM app_convencidos), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 		template.update(sql,
 				new Object[] {  convencidos.getaMaterno(), convencidos.getaPaterno(),
@@ -117,16 +122,16 @@ public class ConvencidosRepository implements IConvencidosRepository {
 						convencidos.getFechaSistema(), convencidos.isMov(), convencidos.getNombre(),
 						convencidos.getNumExterior(), convencidos.getNumInterior(), convencidos.getTelCasa(),
 						convencidos.getTelCelular(), convencidos.getDistritoFederal(), convencidos.getEstado(),
-						convencidos.getMunicipio(), convencidos.getUsuario() });
+						convencidos.getMunicipio(), convencidos.getUsuario(), convencidos.getTipo() });
 
 	}
 
 	@Override
-	public void updateStatusCot(Long id, char estatus, Date fechaBaja) {
-		String sql = "UPDATE app_convencidos SET estatus = ?, fecha_baja = ? WHERE id = ?";
+	public void updateStatusCot(Long id, char estatus, Date fechaBaja,Long tipo) {
+		String sql = "UPDATE app_convencidos SET estatus = ?, fecha_baja = ? WHERE id = ? and tipo = ?";
 		
 		template.update(sql,
-				new Object[] { estatus, fechaBaja, id });
+				new Object[] { estatus, fechaBaja, id,tipo });
 	}
 
 }

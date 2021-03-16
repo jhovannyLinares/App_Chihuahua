@@ -21,9 +21,10 @@ import mx.morena.persistencia.repository.IConvencidosRepository;
 import mx.morena.persistencia.repository.IDistritoFederalRepository;
 import mx.morena.persistencia.repository.IMunicipioRepository;
 import mx.morena.persistencia.repository.ISeccionElectoralRepository;
+import mx.morena.security.servicio.MasterService;
 
 @Service
-public class ConvencidosServiceImpl implements IConvencidosService {
+public class ConvencidosServiceImpl extends MasterService implements IConvencidosService {
 
 	@Autowired
 	private IConvencidosRepository convencidosRepository;
@@ -54,22 +55,22 @@ public class ConvencidosServiceImpl implements IConvencidosService {
 
 		if (distritoFederalId != null) {
 			DistritoFederal dFederal = dFederalRepository.findById(distritoFederalId);
-			lstConv = convencidosRepository.getByDistritoFederal(dFederal.getId());
+			lstConv = convencidosRepository.getByDistritoFederal(dFederal.getId(),CONVENCIDO);
 		}
 		if (idMunicipio != null) {
 			Municipio municipio = municipioRepository.findById(idMunicipio);
-			lstConv = convencidosRepository.getByMunicipio(municipio.getId());
+			lstConv = convencidosRepository.getByMunicipio(municipio.getId(),CONVENCIDO);
 		}
 
 		if (idSeccion != null) {
 			List<SeccionElectoral> seccion = seccionRepository.findByCotId(idSeccion);
 			if (seccion != null) {
-				lstConv = convencidosRepository.getBySeccionesElectoralesIn(seccion);
+				lstConv = convencidosRepository.getBySeccionesElectoralesIn(seccion,CONVENCIDO);
 			}
 		}
 
 		if (claveElector != null) {
-			lstConv = convencidosRepository.findByClaveElector(claveElector);
+			lstConv = convencidosRepository.findByClaveElector(claveElector,CONVENCIDO);
 		}
 
 		if (!lstConv.isEmpty()) {
@@ -85,7 +86,7 @@ public class ConvencidosServiceImpl implements IConvencidosService {
 	public Long save(long idUsuario, ConvencidosDTO dto) throws ConvencidosException {
 		
 		if (dto.getClaveElector().length() == 18) {
-			List<Convencidos> convencidoEx = convencidosRepository.findByClaveElector(dto.getClaveElector());
+			List<Convencidos> convencidoEx = convencidosRepository.findByClaveElector(dto.getClaveElector(),CONVENCIDO);
 
 			if (convencidoEx != null) {
 				throw new ConvencidosException("La clave de elector ya se encuentra registrada", 409);
@@ -120,7 +121,7 @@ public class ConvencidosServiceImpl implements IConvencidosService {
 	public boolean findByClaveElector(String claveElector) throws ConvencidosException {
 		
 		if (claveElector.length() == 18) {
-			List<Convencidos> convencidos = convencidosRepository.findByClaveElector(claveElector);
+			List<Convencidos> convencidos = convencidosRepository.findByClaveElector(claveElector,CONVENCIDO);
 			if (convencidos == null) {
 				return false;
 			} else {

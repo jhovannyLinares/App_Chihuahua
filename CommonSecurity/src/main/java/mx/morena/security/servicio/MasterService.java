@@ -15,5 +15,10 @@ public class MasterService {
 	protected static final Long PERFIL_CRG = 7L;
 	protected static final Long PERFIL_RG = 8L;
 	protected static final Long PERFIL_RC = 9L;
+	
+	protected static final Long CONVENCIDO = 1L;
+	protected static final Long COT = 2L;
+	
+	
 
 }

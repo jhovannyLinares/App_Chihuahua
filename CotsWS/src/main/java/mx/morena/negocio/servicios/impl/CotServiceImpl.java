@@ -15,9 +15,10 @@ import mx.morena.persistencia.entidad.Convencidos;
 import mx.morena.persistencia.entidad.SeccionElectoral;
 import mx.morena.persistencia.repository.IConvencidosRepository;
 import mx.morena.persistencia.repository.ISeccionElectoralRepository;
+import mx.morena.security.servicio.MasterService;
 
 @Service
-public class CotServiceImpl implements ICotService {
+public class CotServiceImpl extends MasterService implements ICotService {
 
 	@Autowired
 	private IConvencidosRepository cotRepository;
@@ -36,8 +37,8 @@ public class CotServiceImpl implements ICotService {
 
 		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL || perfil == PERFIL_MUNICIPAL) {
 			if (cotDto.getClaveElector().length() == 18 && cotDto.getCurp().length() == 18) {
-				Convencidos existeCurp = cotRepository.getByCurp(cotDto.getCurp());
-				List<Convencidos> existeClave = cotRepository.findByClaveElector(cotDto.getClaveElector());
+				Convencidos existeCurp = cotRepository.getByCurp(cotDto.getCurp(),COT);
+				List<Convencidos> existeClave = cotRepository.findByClaveElector(cotDto.getClaveElector(),COT);
 
 				if (existeClave != null) {
 					throw new CotException("La clave de elector ya esta en uso, intente con otra", 400);
@@ -75,7 +76,7 @@ public class CotServiceImpl implements ICotService {
 	public String asignarSecciones(List<String> idSecciones, Long idCot, long perfil) throws CotException {
 		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL || perfil == PERFIL_MUNICIPAL) {
 			List<SeccionElectoral> secciones = seccionRepository.findAllById(idSecciones);
-			Convencidos cot = cotRepository.getByIdAndEstatus(idCot, ESTATUS_ALTA);
+			Convencidos cot = cotRepository.getByIdAndEstatus(idCot, ESTATUS_ALTA,COT);
 
 			if (secciones != null && cot != null) {
 				for (SeccionElectoral sec : secciones) {
@@ -106,12 +107,12 @@ public class CotServiceImpl implements ICotService {
 	public String suspender(Long idCot, long perfil, long idUsuario) throws CotException {
 		
 		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL || perfil == PERFIL_MUNICIPAL) {
-			Convencidos cot = cotRepository.getByIdAndEstatus(idCot, ESTATUS_ALTA);
+			Convencidos cot = cotRepository.getByIdAndEstatus(idCot, ESTATUS_ALTA,COT);
 			
 			if (cot != null) {
 				List<SeccionElectoral> secciones = seccionRepository.findByCotId(idCot);
 				
-				cotRepository.updateStatusCot(idCot, ESTATUS_SUSPENDIDO, new Date(System.currentTimeMillis()));
+				cotRepository.updateStatusCot(idCot, ESTATUS_SUSPENDIDO, new Date(System.currentTimeMillis()),COT);
 				
 				if (secciones != null) {
 					seccionRepository.updateIdCot(idCot);

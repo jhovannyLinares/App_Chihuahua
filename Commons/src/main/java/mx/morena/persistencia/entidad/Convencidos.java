@@ -49,7 +49,7 @@ public class Convencidos {
 	private Date fechaBaja;
 
 	private Date fechaReactivacion;
-	
+
 	private String banco;
 
 	private String clabeInterbancaria;
@@ -61,6 +61,8 @@ public class Convencidos {
 	private boolean mov;
 
 	private Timestamp fechaSistema;
+
+	private Long tipo;
 
 	public Long getId() {
 		return id;
@@ -284,6 +286,14 @@ public class Convencidos {
 
 	public void setFechaSistema(Timestamp fechaSistema) {
 		this.fechaSistema = fechaSistema;
+	}
+
+	public Long getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(Long tipo) {
+		this.tipo = tipo;
 	}
 
 }
