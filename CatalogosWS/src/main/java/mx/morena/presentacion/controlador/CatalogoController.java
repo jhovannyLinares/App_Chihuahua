@@ -47,14 +47,6 @@ public class CatalogoController extends MasterController {
 		return ICatService.getCasillas(getUsuario(request), getPerfil(request),distritoFederalId,municipioId,seccionId);
 
 	}
-	
-//	@GetMapping("/casillas")
-//	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-//	private List<CasillaDTO> getCasillas(HttpServletRequest request) {
-//
-//		return ICatService.getCasillas(getUsuario(request), getPerfil(request));
-//
-//	}
 
 	@GetMapping("/entidades")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))

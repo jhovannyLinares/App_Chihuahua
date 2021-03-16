@@ -214,15 +214,15 @@ public class CatalogoServiceImpl extends MasterService implements ICatalogoServi
 		List<Casilla> casillas = null;
 		List<CasillaDTO> dtos = new ArrayList<CasillaDTO>();
 
-		if (seccionId < 0) {
+		if (seccionId != null) {
 			casillas = casillaRepository.getCasillasSeccion(seccionId);
 		} else
 
-		if (municipioId < 0) {
+		if (municipioId != null) {
 			casillas = casillaRepository.getCasillasMunicipio(municipioId);
 		} else
 
-		if (distritoFederalId < 0) {
+		if (distritoFederalId != null) {
 			casillas = casillaRepository.getCasillasFederal(distritoFederalId);
 		} else {
 			casillas = casillaRepository.getCasillas(usuario.getEntidad());
