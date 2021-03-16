@@ -190,7 +190,7 @@ public class CatalogoServiceImpl extends MasterService implements ICatalogoServi
 
 				localidadDTOOfflines = MapperUtil.mapAll(localidadDTOs, LocalidadDTOOffline.class);
 
-				municipioDTO.setLocalidades(localidadDTOOfflines);
+				municipioDTO.setSecciones(localidadDTOOfflines);
 
 			}
 			distritoFederalDTO.setMunicipios(municipioDTOsOfflines);
@@ -206,30 +206,28 @@ public class CatalogoServiceImpl extends MasterService implements ICatalogoServi
 	}
 
 	@Override
-	public List<CasillaDTO> getCasillas(long idUsuario, long perfil) {
+	public List<CasillaDTO> getCasillas(long idUsuario, long perfil, Long distritoFederalId, Long municipioId,
+			Long seccionId) {
 
 		Usuario usuario = usuarioRepository.findById(idUsuario);
 
 		List<Casilla> casillas = null;
 		List<CasillaDTO> dtos = new ArrayList<CasillaDTO>();
 
-		if (usuario.getPerfil().equals(PERFIL_ESTATAL)) {
+		if (seccionId < 0) {
+			casillas = casillaRepository.getCasillasSeccion(seccionId);
+		} else
+
+		if (municipioId < 0) {
+			casillas = casillaRepository.getCasillasMunicipio(municipioId);
+		} else
+
+		if (distritoFederalId < 0) {
+			casillas = casillaRepository.getCasillasFederal(distritoFederalId);
+		} else {
 			casillas = casillaRepository.getCasillas(usuario.getEntidad());
 		}
-		if (usuario.getPerfil().equals(PERFIL_FEDERAL)) {
-			casillas = casillaRepository.getCasillas(usuario.getEntidad(), usuario.getFederal());
-		}
-//		if (usuario.getPerfil().equals(PERFIL_LOCAL)) {
-//			getCasillas(usuario.getEntidad(),usuario.getFederal(),usuario.get);
-//		}
-		if (usuario.getPerfil().equals(PERFIL_MUNICIPAL)) {
-			casillas = casillaRepository.getCasillas(usuario.getEntidad(), usuario.getFederal(),
-					usuario.getMunicipio());
-		}
-//		if (usuario.getPerfil().equals(PERFIL_COTS)) {
-//			getCasillas(usuario.getEntidad(),usuario.getFederal(),usuario.getMunicipio());
-//		}
-		
+
 		dtos = MapperUtil.mapAll(casillas, CasillaDTO.class);
 
 		return dtos;

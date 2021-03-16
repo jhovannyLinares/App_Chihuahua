@@ -21,6 +21,6 @@ public interface ICatalogoService {
 
 	CatalogoDTOOffline getCatalogos(long usuario, long perfil);
 
-	List<CasillaDTO> getCasillas(long usuario, long perfil);
+	List<CasillaDTO> getCasillas(long usuario, long perfil, Long distritoFederalId, Long municipioId, Long seccionId);
 
 }

@@ -8,7 +8,7 @@ public class MunicipioDTOOffline {
 
 	private String descripcion;
 
-	private List<LocalidadDTOOffline> localidades;
+	private List<LocalidadDTOOffline> secciones;
 
 	public Long getId() {
 		return id;
@@ -26,17 +26,12 @@ public class MunicipioDTOOffline {
 		this.descripcion = descripcion;
 	}
 
-	public List<LocalidadDTOOffline> getLocalidades() {
-		return localidades;
+	public List<LocalidadDTOOffline> getSecciones() {
+		return secciones;
 	}
 
-	public void setLocalidades(List<LocalidadDTOOffline> localidades) {
-		this.localidades = localidades;
-	}
-
-	@Override
-	public String toString() {
-		return "MunicipioDTO [id=" + id + ", descripcion=" + descripcion + ", localidades=" + localidades + "]";
+	public void setSecciones(List<LocalidadDTOOffline> secciones) {
+		this.secciones = secciones;
 	}
 
 }

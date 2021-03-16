@@ -12,4 +12,10 @@ public interface ICasillaRepository {
 
 	public List<Casilla> getCasillas(Long entidad, Long federal, Long municipio);
 
+	public List<Casilla> getCasillasFederal(Long distritoFederalId);
+
+	public List<Casilla> getCasillasMunicipio(Long municipioId);
+
+	public List<Casilla> getCasillasSeccion(Long seccionId);
+
 }

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -38,11 +39,22 @@ public class CatalogoController extends MasterController {
 	
 	@GetMapping("/casillas")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	private List<CasillaDTO> getCasillas(HttpServletRequest request) {
+	private List<CasillaDTO> getCasillas(HttpServletRequest request,
+			@RequestParam(value = "distritoFederalId", required = false) Long distritoFederalId,
+			@RequestParam(value = "municipioId", required = false) Long municipioId,
+			@RequestParam(value = "seccionId", required = false) Long seccionId) {
 
-		return ICatService.getCasillas(getUsuario(request), getPerfil(request));
+		return ICatService.getCasillas(getUsuario(request), getPerfil(request),distritoFederalId,municipioId,seccionId);
 
 	}
+	
+//	@GetMapping("/casillas")
+//	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+//	private List<CasillaDTO> getCasillas(HttpServletRequest request) {
+//
+//		return ICatService.getCasillas(getUsuario(request), getPerfil(request));
+//
+//	}
 
 	@GetMapping("/entidades")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
@@ -79,7 +91,7 @@ public class CatalogoController extends MasterController {
 
 	}
 
-	@GetMapping("/municipios/{id}/localidades")
+	@GetMapping("/municipios/{id}/secciones")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
 	private List<LocalidadDTO> getLocalidadByMunicipio(HttpServletRequest request,
 			@PathVariable("id") Long idMunicipio) {

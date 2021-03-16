@@ -45,4 +45,31 @@ public class CasillaRepository implements ICasillaRepository {
 
 	}
 
+	@Override
+	public List<Casilla> getCasillasFederal(Long distritoFederalId) {
+		String sql = "SELECT federal_id, local_id, municpio_id, seccion_id, tipo_casilla, tipologia, tipo_domicilio, calle, numero, colonia, cp, ubicacion, referencia FROM app_casilla"
+				+ " where federal_id = ? ";
+
+		return template.queryForObject(sql, new Object[] { distritoFederalId, }, new int[] { Types.NUMERIC },
+				new CasillasRowMapper());
+	}
+
+	@Override
+	public List<Casilla> getCasillasMunicipio(Long municipioId) {
+		String sql = "SELECT federal_id, local_id, municpio_id, seccion_id, tipo_casilla, tipologia, tipo_domicilio, calle, numero, colonia, cp, ubicacion, referencia FROM app_casilla"
+				+ " where  municpio_id = ? ";
+
+		return template.queryForObject(sql, new Object[] { municipioId }, new int[] { Types.NUMERIC },
+				new CasillasRowMapper());
+	}
+
+	@Override
+	public List<Casilla> getCasillasSeccion(Long seccionId) {
+		String sql = "SELECT federal_id, local_id, municpio_id, seccion_id, tipo_casilla, tipologia, tipo_domicilio, calle, numero, colonia, cp, ubicacion, referencia FROM app_casilla"
+				+ " where  seccion_id = ? ";
+
+		return template.queryForObject(sql, new Object[] { seccionId }, new int[] { Types.NUMERIC },
+				new CasillasRowMapper());
+	}
+
 }
