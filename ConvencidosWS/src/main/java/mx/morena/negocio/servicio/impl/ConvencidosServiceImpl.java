@@ -76,7 +76,7 @@ public class ConvencidosServiceImpl implements IConvencidosService {
 			lstDto = MapperUtil.mapAll(lstConv, ConvencidosResponseDTO.class);
 			return lstDto;
 		} else {
-			throw new ConvencidosException("No se encontro ningun usuario con el parametro ingresado", 409);
+			throw new ConvencidosException("No se encontro ningun usuario con el parametro ingresado", 204);
 		}
 
 	}
@@ -96,9 +96,6 @@ public class ConvencidosServiceImpl implements IConvencidosService {
 				MapperUtil.map(dto, convencido);
 				if (!dto.getIsClaveElector()) {
 					convencido.setClaveElector(sinClave);
-				}
-				if(!dto.getIsCalle()) {
-					convencido.setCalle("");
 				}
 				convencido.setFechaRegistro(new Date());
 				convencido.setEstatus(ESTATUS_ALTA);
