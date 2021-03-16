@@ -1,5 +1,6 @@
 package mx.morena.persistencia.repository;
 
+import java.util.Date;
 import java.util.List;
 
 import mx.morena.persistencia.entidad.Convencidos;
@@ -20,4 +21,6 @@ public interface IConvencidosRepository {
 	public Convencidos getByIdAndEstatus(Long idCot, char estatus);
 
 	void save(Convencidos convencidos);
+	
+	void updateStatusCot(Long id, char estatus, Date fechaBaja);
 }

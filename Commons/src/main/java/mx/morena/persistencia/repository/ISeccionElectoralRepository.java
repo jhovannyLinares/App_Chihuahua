@@ -11,5 +11,7 @@ public interface ISeccionElectoralRepository {
 	List<SeccionElectoral> findAllById(List<String> idSecciones);
 
 	void save(SeccionElectoral sec);
+	
+	void updateIdCot(Long idSeccion);
 
 }

@@ -4,7 +4,9 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -45,6 +47,19 @@ public class CotController extends MasterController {
 
 		try {
 			return cotService.asignarSecciones(secciones.getIdSecciones(), secciones.getIdCot(), perfil);
+		} catch (CotException e) {
+			throw new ResponseStatusException(HttpStatus.resolve(e.getCodeError()), e.getLocalizedMessage());
+		}
+	}
+	
+	@PutMapping("/cots/{id}")
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	public String suspender(HttpServletRequest request, @PathVariable("id") Long idCot) {
+		long perfil = getPerfil(request);
+		long usuario = getUsuario(request);
+
+		try {
+			return cotService.suspender(idCot, perfil, usuario);
 		} catch (CotException e) {
 			throw new ResponseStatusException(HttpStatus.resolve(e.getCodeError()), e.getLocalizedMessage());
 		}

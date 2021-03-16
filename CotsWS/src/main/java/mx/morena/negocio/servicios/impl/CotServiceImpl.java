@@ -1,7 +1,8 @@
 package mx.morena.negocio.servicios.impl;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
+import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,34 +29,40 @@ public class CotServiceImpl implements ICotService {
 	private static final Integer PERFIL_FEDERAL = 2;
 	private static final Integer PERFIL_MUNICIPAL = 4;
 	private static final char ESTATUS_ALTA = 'A';
+	private static final char ESTATUS_SUSPENDIDO = 'S';
 
 	@Override
 	public Long save(CotDTO cotDto, long perfil, long idUsuario) throws CotException {
 
 		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL || perfil == PERFIL_MUNICIPAL) {
-			Convencidos existeCurp = cotRepository.getByCurp(cotDto.getCurp());
-			List<Convencidos> existeClave = cotRepository.findByClaveElector(cotDto.getClaveElector());
+			if (cotDto.getClaveElector().length() == 18 && cotDto.getCurp().length() == 18) {
+				Convencidos existeCurp = cotRepository.getByCurp(cotDto.getCurp());
+				List<Convencidos> existeClave = cotRepository.findByClaveElector(cotDto.getClaveElector());
 
-			if (existeClave != null) {
-				throw new CotException("La clave de elector ya esta en uso, intente con otra", 400);
-			} else if (existeCurp != null) {
-				throw new CotException("La CURP ya esta en uso, intente con otra", 400);
+				if (existeClave != null) {
+					throw new CotException("La clave de elector ya esta en uso, intente con otra", 400);
+				} else if (existeCurp != null) {
+					throw new CotException("La CURP ya esta en uso, intente con otra", 400);
+				} else {
+					Convencidos personaCot = new Convencidos();
+
+					MapperUtil.map(cotDto, personaCot);
+					
+					personaCot.setFechaRegistro(new Date(System.currentTimeMillis()));
+					personaCot.setEstatus(ESTATUS_ALTA);
+					personaCot.setFechaSistema(new Timestamp(new Date().getTime()));
+					personaCot.setEstado(cotDto.getIdEstado());
+					personaCot.setDistritoFederal(cotDto.getIdDistritoFederal());
+					personaCot.setMunicipio(cotDto.getIdMunicipio());
+					personaCot.setUsuario(idUsuario);
+					
+					cotRepository.save(personaCot);
+					System.out.println(personaCot.getId());
+					return personaCot.getId();
+				}
+				
 			} else {
-				Convencidos personaCot = new Convencidos();
-
-				cotDto.setFechaRegistro(new Date(System.currentTimeMillis()));
-				cotDto.setEstatus(ESTATUS_ALTA);
-				MapperUtil.map(cotDto, personaCot);
-
-				personaCot.setEstado(cotDto.getIdEstado());
-				personaCot.setDistritoFederal(cotDto.getIdDistritoFederal());
-				personaCot.setMunicipio(cotDto.getIdMunicipio());
-				personaCot.setUsuario(idUsuario);
-
-				System.out.println(personaCot);
-				cotRepository.save(personaCot);
-
-				return personaCot.getId();
+				throw new CotException("CURP o Clave no valida", 400);
 			}
 
 		} else {
@@ -93,6 +100,33 @@ public class CotServiceImpl implements ICotService {
 		} else {
 			throw new CotException("No cuenta con suficientes permisos.", 401);
 		}
+	}
+
+	@Override
+	public String suspender(Long idCot, long perfil, long idUsuario) throws CotException {
+		
+		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL || perfil == PERFIL_MUNICIPAL) {
+			Convencidos cot = cotRepository.getByIdAndEstatus(idCot, ESTATUS_ALTA);
+			
+			if (cot != null) {
+				List<SeccionElectoral> secciones = seccionRepository.findByCotId(idCot);
+				
+				cotRepository.updateStatusCot(idCot, ESTATUS_SUSPENDIDO, new Date(System.currentTimeMillis()));
+				
+				if (secciones != null) {
+					seccionRepository.updateIdCot(idCot);
+				} else {
+					System.out.println("No hay secciones por liberar");
+				}
+				
+				return "COT suspendido";
+				
+			} else {
+				throw new CotException("No se encontraron datos.", 404);
+			}
+			
+		}
+		throw new CotException("Permisos insuficientes.", 401);
 	}
 
 }

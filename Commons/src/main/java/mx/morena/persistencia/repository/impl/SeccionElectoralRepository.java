@@ -28,5 +28,11 @@ public class SeccionElectoralRepository implements ISeccionElectoralRepository {
 		
 	}
 
+	@Override
+	public void updateIdCot(Long idSeccion) {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 }

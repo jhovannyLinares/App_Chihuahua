@@ -1,10 +1,7 @@
 package mx.morena.negocio.dto;
 
-import java.util.Date;
-
 public class CotDTO {
-	private Long id;
-	private Date fechaRegistro;
+
 	private Long idEstado;
 	private Long idDistritoFederal;
 	private Long idMunicipio;
@@ -21,27 +18,8 @@ public class CotDTO {
 	private String telCelular;
 	private String correo;
 	private String curp;
-	private Date fechaBaja;
-	private Date fechaReactivacion;
 	private String banco;
 	private String clabeInterbancaria;
-	private char estatus;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public Date getFechaRegistro() {
-		return fechaRegistro;
-	}
-
-	public void setFechaRegistro(Date fechaRegistro) {
-		this.fechaRegistro = fechaRegistro;
-	}
 
 	public String getNombre() {
 		return nombre;
@@ -147,22 +125,6 @@ public class CotDTO {
 		this.curp = curp;
 	}
 
-	public Date getFechaBaja() {
-		return fechaBaja;
-	}
-
-	public void setFechaBaja(Date fechaBaja) {
-		this.fechaBaja = fechaBaja;
-	}
-
-	public Date getFechaReactivacion() {
-		return fechaReactivacion;
-	}
-
-	public void setFechaReactivacion(Date fechaReactivacion) {
-		this.fechaReactivacion = fechaReactivacion;
-	}
-
 	public String getBanco() {
 		return banco;
 	}
@@ -178,38 +140,6 @@ public class CotDTO {
 	public void setClabeInterbancaria(String clabeInterbancaria) {
 		this.clabeInterbancaria = clabeInterbancaria;
 	}
-
-	public char getEstatus() {
-		return estatus;
-	}
-
-	public void setEstatus(char estatus) {
-		this.estatus = estatus;
-	}
-/*
-	public Entidad getEstado() {
-		return estado;
-	}
-
-	public void setEstado(Entidad estado) {
-		this.estado = estado;
-	}
-
-	public DistritoFederal getDistritoFederal() {
-		return distritoFederal;
-	}
-
-	public void setDistritoFederal(DistritoFederal distritoFederal) {
-		this.distritoFederal = distritoFederal;
-	}
-
-	public Municipio getMunicipio() {
-		return municipio;
-	}
-
-	public void setMunicipio(Municipio municipio) {
-		this.municipio = municipio;
-	}*/
 
 	public Long getIdDistritoFederal() {
 		return idDistritoFederal;
