@@ -98,6 +98,7 @@ public class ConvencidosServiceImpl extends MasterService implements IConvencido
 				if (!dto.getIsClaveElector()) {
 					convencido.setClaveElector(sinClave);
 				}
+				convencido.setTipo(CONVENCIDO);
 				convencido.setFechaRegistro(new Date());
 				convencido.setEstatus(ESTATUS_ALTA);
 				convencido.setEstado(dto.getIdEstado());
@@ -108,7 +109,7 @@ public class ConvencidosServiceImpl extends MasterService implements IConvencido
 
 				convencidosRepository.save(convencido);
 
-				return convencido.getId();
+				return convencidosRepository.idMax();
 
 			}
 		} else {

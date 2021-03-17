@@ -14,6 +14,7 @@ import mx.morena.persistencia.entidad.SeccionElectoral;
 import mx.morena.persistencia.repository.IConvencidosRepository;
 import mx.morena.persistencia.rowmapper.ConvencidoRowMapper;
 import mx.morena.persistencia.rowmapper.ConvencidosRowMapper;
+import mx.morena.persistencia.rowmapper.IdMaxConvencidos;
 
 @Repository
 public class ConvencidosRepository implements IConvencidosRepository {
@@ -136,6 +137,13 @@ public class ConvencidosRepository implements IConvencidosRepository {
 		template.update(sql,
 				new Object[] { estatus, fechaBaja, id, tipo },
 				new int[] { Types.CHAR, Types.DATE, Types.NUMERIC, Types.NUMERIC });
+	}
+
+	@Override
+	public Long idMax() {
+		String sql ="SELECT MAX(id) FROM app_convencidos";
+		return template.queryForObject(sql, new IdMaxConvencidos());
+		
 	}
 
 }

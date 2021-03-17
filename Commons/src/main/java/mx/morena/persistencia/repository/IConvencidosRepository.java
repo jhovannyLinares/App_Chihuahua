@@ -23,4 +23,6 @@ public interface IConvencidosRepository {
 	void save(Convencidos convencidos);
 	
 	void updateStatusCot(Long id, char estatus, Date fechaBaja,Long tipo);
+	
+	Long idMax();
 }
