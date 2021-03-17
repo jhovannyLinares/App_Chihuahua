@@ -21,8 +21,8 @@ public class ConvencidosRowMapper implements RowMapper<List<Convencidos>> {
 			convencido = new Convencidos();
 
 			convencido.setId(rs.getLong("id"));
-			convencido.setaMaterno(rs.getString("apellido_materno"));
-			convencido.setaPaterno(rs.getString("apellido_paterno"));
+			convencido.setApellidoMaterno(rs.getString("apellido_materno"));
+			convencido.setApellidoPaterno(rs.getString("apellido_paterno"));
 			convencido.setBanco(rs.getString("banco"));
 			convencido.setCalle(rs.getString("calle"));
 			convencido.setClabeInterbancaria(rs.getString("clabe_interbancaria"));

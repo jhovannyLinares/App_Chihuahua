@@ -118,7 +118,7 @@ public class ConvencidosRepository implements IConvencidosRepository {
 				+ " (SELECT MAX(id)+1 FROM app_convencidos), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 		template.update(sql,
-				new Object[] {  convencidos.getaMaterno(), convencidos.getaPaterno(),
+				new Object[] {  convencidos.getApellidoMaterno(), convencidos.getApellidoPaterno(),
 						convencidos.getBanco(), convencidos.getCalle(), convencidos.getClabeInterbancaria(),
 						convencidos.getClaveElector(), convencidos.getColonia(), convencidos.getCorreo(),
 						convencidos.getCp(), convencidos.getCurp(), convencidos.isDv(), convencidos.getEstatus(),
