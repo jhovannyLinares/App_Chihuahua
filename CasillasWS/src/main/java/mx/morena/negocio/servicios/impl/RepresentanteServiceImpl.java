@@ -173,7 +173,7 @@ public class RepresentanteServiceImpl extends MasterService implements IRepresen
 			throw new RepresentanteException("No se encontraron datos.", 404);
 		}
 
-		return "" + representanteDTO;
+		return "" + representanteRepository.getIdMax();
 	}
 
 }

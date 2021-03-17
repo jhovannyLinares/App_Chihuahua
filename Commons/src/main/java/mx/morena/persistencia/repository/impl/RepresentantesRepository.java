@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import mx.morena.persistencia.entidad.Representantes;
 import mx.morena.persistencia.repository.IRepresentanteRepository;
-import mx.morena.persistencia.rowmapper.ConvencidosRowMapper;
+import mx.morena.persistencia.rowmapper.IdMaxConvencidos;
 import mx.morena.persistencia.rowmapper.RepresentanteRowMapper;
 
 @Repository
@@ -35,7 +35,7 @@ public class RepresentantesRepository implements IRepresentanteRepository {
 			return null;
 		}
 	}
-
+	
 	@Override
 	public void save(Representantes representantes) {
 		String sql = " INSERT INTO app_representantes (id, " + "apellido_materno, " + "apellido_paterno, " + "calle, "
@@ -56,6 +56,13 @@ public class RepresentantesRepository implements IRepresentanteRepository {
 						representantes.getTelCelular(), representantes.getTipo(), representantes.getDistritoFederal(),
 						representantes.getEstado(), representantes.getMunicipio(), representantes.getSeccionElectoral(),
 						representantes.getUsuario() });
+	}
+
+	@Override
+	public Long getIdMax() {
+		
+		String sql = "SELECT MAX(id) FROM app_representantes";
+		return template.queryForObject(sql, new IdMaxConvencidos());
 	}
 
 }
