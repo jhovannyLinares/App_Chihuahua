@@ -12,10 +12,12 @@ public class SeccionElectoral {
 	private String descripcion;
 
 	//@ManyToOne
-	private Localidad localidad;
+	//private Localidad localidad;
+	private Long localidad;
 
 	//@ManyToOne
-	private Convencidos cot;
+	//private Convencidos cot;
+	private Long cot;
 
 	public Long getId() {
 		return id;
@@ -33,19 +35,19 @@ public class SeccionElectoral {
 		this.descripcion = descripcion;
 	}
 
-	public Localidad getLocalidad() {
+	public Long getLocalidad() {
 		return localidad;
 	}
 
-	public void setLocalidad(Localidad localidad) {
+	public void setLocalidad(Long localidad) {
 		this.localidad = localidad;
 	}
 
-	public Convencidos getCot() {
+	public Long getCot() {
 		return cot;
 	}
 
-	public void setCot(Convencidos cot) {
+	public void setCot(Long cot) {
 		this.cot = cot;
 	}
 

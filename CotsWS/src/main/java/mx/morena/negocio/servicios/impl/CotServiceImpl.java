@@ -26,9 +26,6 @@ public class CotServiceImpl extends MasterService implements ICotService {
 	@Autowired
 	private ISeccionElectoralRepository seccionRepository;
 
-	private static final Integer PERFIL_ESTATAL = 1;
-	private static final Integer PERFIL_FEDERAL = 2;
-	private static final Integer PERFIL_MUNICIPAL = 4;
 	private static final char ESTATUS_ALTA = 'A';
 	private static final char ESTATUS_SUSPENDIDO = 'S';
 
@@ -76,13 +73,13 @@ public class CotServiceImpl extends MasterService implements ICotService {
 	public String asignarSecciones(List<String> idSecciones, Long idCot, long perfil) throws CotException {
 		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL || perfil == PERFIL_MUNICIPAL) {
 			List<SeccionElectoral> secciones = seccionRepository.findAllById(idSecciones);
-			Convencidos cot = cotRepository.getByIdAndEstatus(idCot, ESTATUS_ALTA,COT);
+			Convencidos cot = cotRepository.getByIdAndEstatus(idCot, ESTATUS_ALTA, COT);
 
 			if (secciones != null && cot != null) {
 				for (SeccionElectoral sec : secciones) {
 
 					if (sec.getCot() == null) {
-						sec.setCot(cot);
+						sec.setCot(idCot);
 						System.out.println("asignarSecciones:");
 						System.out.println(sec);
 						seccionRepository.save(sec);
@@ -107,15 +104,17 @@ public class CotServiceImpl extends MasterService implements ICotService {
 	public String suspender(Long idCot, long perfil, long idUsuario) throws CotException {
 		
 		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL || perfil == PERFIL_MUNICIPAL) {
-			Convencidos cot = cotRepository.getByIdAndEstatus(idCot, ESTATUS_ALTA,COT);
+			
+			Convencidos cot = cotRepository.getByIdAndEstatus(idCot, ESTATUS_ALTA, COT);
 			
 			if (cot != null) {
-				List<SeccionElectoral> secciones = seccionRepository.findByCotId(idCot);
+				List<SeccionElectoral> secciones = seccionRepository.findByCotId(idCot, COT);
 				
-				cotRepository.updateStatusCot(idCot, ESTATUS_SUSPENDIDO, new Date(System.currentTimeMillis()),COT);
+				cotRepository.updateStatusCot(idCot, ESTATUS_SUSPENDIDO, new Date(System.currentTimeMillis()), COT);
 				
 				if (secciones != null) {
 					seccionRepository.updateIdCot(idCot);
+					System.out.println("Se han liberado las secciones del COT");
 				} else {
 					System.out.println("No hay secciones por liberar");
 				}

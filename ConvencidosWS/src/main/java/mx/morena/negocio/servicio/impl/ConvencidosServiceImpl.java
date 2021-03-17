@@ -63,7 +63,7 @@ public class ConvencidosServiceImpl extends MasterService implements IConvencido
 		}
 
 		if (idSeccion != null) {
-			List<SeccionElectoral> seccion = seccionRepository.findByCotId(idSeccion);
+			List<SeccionElectoral> seccion = seccionRepository.findByCotId(idSeccion, CONVENCIDO);
 			if (seccion != null) {
 				lstConv = convencidosRepository.getBySeccionesElectoralesIn(seccion,CONVENCIDO);
 			}

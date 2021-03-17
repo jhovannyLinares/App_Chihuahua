@@ -97,10 +97,13 @@ public class ConvencidosRepository implements IConvencidosRepository {
 	@Override
 	public Convencidos getByIdAndEstatus(Long idCot, char estatus,Long tipo) {
 		String sql = "SELECT id, apellido_materno, apellido_paterno, banco, calle, clabe_interbancaria, clave_elector, colonia, correo, codigo_postal, curp, dv, estatus, fecha_baja, fecha_reactivacion, fecha_registro, fecha_sistema, mov, nombre, numero_exterior, numero_interior, telefono_casa, telefono_celular, distrito_federal_id, estado_id, municipio_id, usuario_id_usuario "
-				+ "FROM app_convencidos where id = ? and estatus = ? and tipo = ? ";
-
-		return template.queryForObject(sql, new Object[] { idCot, estatus,tipo },
-				new int[] { Types.NUMERIC, Types.NVARCHAR,Types.NUMERIC }, new ConvencidoRowMapper());
+				+ "FROM app_convencidos where id = ? and estatus = ? and tipo = ?";
+		try {
+			return template.queryForObject(sql, new Object[] { idCot, estatus, tipo },
+				new int[] { Types.NUMERIC, Types.CHAR, Types.NUMERIC }, new ConvencidoRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
 	}
 
 	@Override
@@ -127,11 +130,12 @@ public class ConvencidosRepository implements IConvencidosRepository {
 	}
 
 	@Override
-	public void updateStatusCot(Long id, char estatus, Date fechaBaja,Long tipo) {
+	public void updateStatusCot(Long id, char estatus, Date fechaBaja, Long tipo) {
 		String sql = "UPDATE app_convencidos SET estatus = ?, fecha_baja = ? WHERE id = ? and tipo = ?";
 		
 		template.update(sql,
-				new Object[] { estatus, fechaBaja, id,tipo });
+				new Object[] { estatus, fechaBaja, id, tipo },
+				new int[] { Types.CHAR, Types.DATE, Types.NUMERIC, Types.NUMERIC });
 	}
 
 }
