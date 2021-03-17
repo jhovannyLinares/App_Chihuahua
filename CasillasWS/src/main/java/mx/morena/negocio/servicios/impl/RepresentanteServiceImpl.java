@@ -27,8 +27,8 @@ public class RepresentanteServiceImpl extends MasterService implements IRepresen
 	private static final byte REP_RC = 6;
 
 	@Override
-	public String saveRepFederal(RepresentanteDTO representante, long perfil, long idUsuario) throws RepresentanteException {
-		String resp = null;
+	public Long saveRepFederal(RepresentanteDTO representante, long perfil, long idUsuario) throws RepresentanteException {
+		Long resp = null;
 		
 		if (perfil == PERFIL_ESTATAL) {
 			
@@ -46,8 +46,8 @@ public class RepresentanteServiceImpl extends MasterService implements IRepresen
 	}
 
 	@Override
-	public String saveRepLocal(RepresentanteDTO representante, long perfil, long idUsuario) throws RepresentanteException {
-		String resp = null;
+	public Long saveRepLocal(RepresentanteDTO representante, long perfil, long idUsuario) throws RepresentanteException {
+		Long resp = null;
 		
 		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL) {
 			
@@ -65,8 +65,8 @@ public class RepresentanteServiceImpl extends MasterService implements IRepresen
 	}
 
 	@Override
-	public String saveRepMunicipal(RepresentanteDTO representante, long perfil, long idUsuario) throws RepresentanteException {
-		String resp = null;
+	public Long saveRepMunicipal(RepresentanteDTO representante, long perfil, long idUsuario) throws RepresentanteException {
+		Long resp = null;
 		
 		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL || perfil == PERFIL_LOCAL) {
 			
@@ -84,8 +84,8 @@ public class RepresentanteServiceImpl extends MasterService implements IRepresen
 	}
 
 	@Override
-	public String saveRepCRG(RepresentanteDTO representante, long perfil, long idUsuario) throws RepresentanteException {
-		String resp = null;
+	public Long saveRepCRG(RepresentanteDTO representante, long perfil, long idUsuario) throws RepresentanteException {
+		Long resp = null;
 		
 		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL) {
 			
@@ -103,8 +103,8 @@ public class RepresentanteServiceImpl extends MasterService implements IRepresen
 	}
 
 	@Override
-	public String saveRepRG(RepresentanteDTO representante, long perfil, long idUsuario) throws RepresentanteException {
-		String resp = null;
+	public Long saveRepRG(RepresentanteDTO representante, long perfil, long idUsuario) throws RepresentanteException {
+		Long resp = null;
 		
 		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL || perfil == PERFIL_CRG || perfil == PERFIL_LOCAL
 				|| perfil == PERFIL_MUNICIPAL) {
@@ -123,8 +123,8 @@ public class RepresentanteServiceImpl extends MasterService implements IRepresen
 	}
 
 	@Override
-	public String saveRepRC(RepresentanteDTO representante, long perfil, long idUsuario) throws RepresentanteException {
-		String resp = null;
+	public Long saveRepRC(RepresentanteDTO representante, long perfil, long idUsuario) throws RepresentanteException {
+		Long resp = null;
 		
 		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL || perfil == PERFIL_CRG || perfil == PERFIL_LOCAL
 				|| perfil == PERFIL_MUNICIPAL || perfil == PERFIL_CRG || perfil == PERFIL_RG) {
@@ -142,7 +142,7 @@ public class RepresentanteServiceImpl extends MasterService implements IRepresen
 		return resp;
 	}
 
-	public String guardarRepresentante(RepresentanteDTO representanteDTO, long idUsuario, byte tipo) throws RepresentanteException {
+	public Long guardarRepresentante(RepresentanteDTO representanteDTO, long idUsuario, byte tipo) throws RepresentanteException {
 		
 		Representantes representante = new Representantes();
 		if (representanteDTO.getClaveElector() != null && representanteDTO.getClaveElector().length() == 18) {
@@ -173,7 +173,7 @@ public class RepresentanteServiceImpl extends MasterService implements IRepresen
 			throw new RepresentanteException("No se encontraron datos.", 404);
 		}
 
-		return "" + representanteRepository.getIdMax();
+		return representanteRepository.getIdMax();
 	}
 
 }

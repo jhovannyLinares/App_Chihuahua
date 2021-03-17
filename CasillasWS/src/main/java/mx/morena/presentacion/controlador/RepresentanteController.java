@@ -26,7 +26,7 @@ public class RepresentanteController extends MasterController {
 	
 	@PostMapping("/federal")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	public String guardarRepresentanteFederal(HttpServletRequest request, @RequestBody RepresentanteDTO representanteDTO) {
+	public Long guardarRepresentanteFederal(HttpServletRequest request, @RequestBody RepresentanteDTO representanteDTO) {
 		
 		try {
 			long perfil = getPerfil(request);
@@ -41,7 +41,7 @@ public class RepresentanteController extends MasterController {
 	
 	@PostMapping("/local")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	public String guardarRepresentanteLocal(HttpServletRequest request, @RequestBody RepresentanteDTO representanteDTO) {
+	public Long guardarRepresentanteLocal(HttpServletRequest request, @RequestBody RepresentanteDTO representanteDTO) {
 		
 		try {
 			long perfil = getPerfil(request);
@@ -56,7 +56,7 @@ public class RepresentanteController extends MasterController {
 	
 	@PostMapping("/municipal")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	public String guardarRepresentanteMunicipal(HttpServletRequest request, @RequestBody RepresentanteDTO representanteDTO) {
+	public Long guardarRepresentanteMunicipal(HttpServletRequest request, @RequestBody RepresentanteDTO representanteDTO) {
 		
 		try {
 			long perfil = getPerfil(request);
@@ -71,7 +71,7 @@ public class RepresentanteController extends MasterController {
 	
 	@PostMapping("/crg")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	public String guardarRepresentanteCRG(HttpServletRequest request, @RequestBody RepresentanteDTO representanteDTO) {
+	public Long guardarRepresentanteCRG(HttpServletRequest request, @RequestBody RepresentanteDTO representanteDTO) {
 		
 		try {
 			long perfil = getPerfil(request);
@@ -86,7 +86,7 @@ public class RepresentanteController extends MasterController {
 	
 	@PostMapping("/rg")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	public String guardarRepresentanteRG(HttpServletRequest request, @RequestBody RepresentanteDTO representanteDTO) {
+	public Long guardarRepresentanteRG(HttpServletRequest request, @RequestBody RepresentanteDTO representanteDTO) {
 		
 		try {
 			long perfil = getPerfil(request);
@@ -101,7 +101,7 @@ public class RepresentanteController extends MasterController {
 	
 	@PostMapping("/rc")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	public String guardarRepresentanteRC(HttpServletRequest request, @RequestBody RepresentanteDTO representanteDTO) {
+	public Long guardarRepresentanteRC(HttpServletRequest request, @RequestBody RepresentanteDTO representanteDTO) {
 		
 		try {
 			long perfil = getPerfil(request);
