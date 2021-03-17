@@ -1,18 +1,14 @@
 package mx.morena.negocio.dto;
 
-import java.util.Date;
-
 public class RepresentanteDTO {
 
-	private Long id;
 	private Long idEstado;
 	private Long idDistritoFederal;
 	private Long idMunicipio;
 	private Long idSeccionElectoral;
-	private Date fechaRegistro;
 	private String nombre;
-	private String aPaterno;
-	private String aMaterno;
+	private String apellidoPaterno;
+	private String apellidoMaterno;
 	private String claveElector;
 	private String calle;
 	private String numInterior;
@@ -26,16 +22,6 @@ public class RepresentanteDTO {
 	private String ineLado1;
 	private String ineLado2;
 	private String inePdf;
-	private String ruta;
-	private byte tipo;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	public Long getIdEstado() {
 		return idEstado;
@@ -69,14 +55,6 @@ public class RepresentanteDTO {
 		this.idSeccionElectoral = idSeccionElectoral;
 	}
 
-	public Date getFechaRegistro() {
-		return fechaRegistro;
-	}
-
-	public void setFechaRegistro(Date fechaRegistro) {
-		this.fechaRegistro = fechaRegistro;
-	}
-
 	public String getNombre() {
 		return nombre;
 	}
@@ -85,20 +63,20 @@ public class RepresentanteDTO {
 		this.nombre = nombre;
 	}
 
-	public String getaPaterno() {
-		return aPaterno;
+	public String getApellidoPaterno() {
+		return apellidoPaterno;
 	}
 
-	public void setaPaterno(String aPaterno) {
-		this.aPaterno = aPaterno;
+	public void setApellidoPaterno(String aPaterno) {
+		this.apellidoPaterno = aPaterno;
 	}
 
-	public String getaMaterno() {
-		return aMaterno;
+	public String getApellidoMaterno() {
+		return apellidoMaterno;
 	}
 
-	public void setaMaterno(String aMaterno) {
-		this.aMaterno = aMaterno;
+	public void setApellidoMaterno(String aMaterno) {
+		this.apellidoMaterno = aMaterno;
 	}
 
 	public String getClaveElector() {
@@ -205,32 +183,15 @@ public class RepresentanteDTO {
 		this.inePdf = inePdf;
 	}
 
-	public byte getTipo() {
-		return tipo;
-	}
-
-	public void setTipo(byte tipo) {
-		this.tipo = tipo;
-	}
-
-	public String getRuta() {
-		return ruta;
-	}
-
-	public void setRuta(String ruta) {
-		this.ruta = ruta;
-	}
-
 	@Override
 	public String toString() {
-		return "RepresentanteDTO [id=" + id + ", idEstado=" + idEstado + ", idDistritoFederal=" + idDistritoFederal
-				+ ", idMunicipio=" + idMunicipio + ", idSeccionElectoral=" + idSeccionElectoral + ", fechaRegistro="
-				+ fechaRegistro + ", nombre=" + nombre + ", aPaterno=" + aPaterno + ", aMaterno=" + aMaterno
+		return "RepresentanteDTO [idEstado=" + idEstado + ", idDistritoFederal=" + idDistritoFederal
+				+ ", idMunicipio=" + idMunicipio + ", idSeccionElectoral=" + idSeccionElectoral 
+				+ ", nombre=" + nombre + ", aPaterno=" + apellidoPaterno + ", aMaterno=" + apellidoMaterno
 				+ ", claveElector=" + claveElector + ", calle=" + calle + ", numInterior=" + numInterior
 				+ ", numExterior=" + numExterior + ", colonia=" + colonia + ", cp=" + cp + ", telCasa=" + telCasa
 				+ ", telCelular=" + telCelular + ", correo=" + correo + ", propuesto=" + propuesto + ", ineLado1="
-				+ ineLado1 + ", ineLado2=" + ineLado2 + ", inePdf=" + inePdf + ", ruta=" + ruta + ", tipo=" + tipo
-				+ "]";
+				+ ineLado1 + ", ineLado2=" + ineLado2 + ", inePdf=" + inePdf + "]";
 	}
 	
 }

@@ -9,46 +9,15 @@ import mx.morena.negocio.dto.RepresentanteDTO;
 import mx.morena.negocio.exception.RepresentanteException;
 import mx.morena.negocio.servicios.IRepresentanteService;
 import mx.morena.negocio.util.MapperUtil;
-import mx.morena.persistencia.entidad.DistritoFederal;
-import mx.morena.persistencia.entidad.Entidad;
-import mx.morena.persistencia.entidad.Municipio;
 import mx.morena.persistencia.entidad.Representantes;
-import mx.morena.persistencia.entidad.SeccionElectoral;
-import mx.morena.persistencia.entidad.Usuario;
-import mx.morena.persistencia.repository.IDistritoFederalRepository;
-import mx.morena.persistencia.repository.IEntidadRepository;
-import mx.morena.persistencia.repository.IMunicipioRepository;
 import mx.morena.persistencia.repository.IRepresentanteRepository;
-import mx.morena.persistencia.repository.ISeccionElectoralRepository;
-import mx.morena.persistencia.repository.IUsuarioRepository;
+import mx.morena.security.servicio.MasterService;
 
 @Service
-public class RepresentanteServiceImpl implements IRepresentanteService {
+public class RepresentanteServiceImpl extends MasterService implements IRepresentanteService {
 
 	@Autowired
 	private IRepresentanteRepository representanteRepository;
-
-	@Autowired
-	private IEntidadRepository entidadRepository;
-
-	@Autowired
-	private IDistritoFederalRepository distritoFederalRepository;
-
-	@Autowired
-	private IMunicipioRepository municipioRepository;
-
-	@Autowired
-	private ISeccionElectoralRepository seccionRepository;
-
-	@Autowired
-	private IUsuarioRepository usuarioRepository;
-
-	protected static final Integer PERFIL_ESTATAL = 1;
-	protected static final Integer PERFIL_FEDERAL = 2;
-	protected static final Integer PERFIL_LOCAL = 3;
-	protected static final Integer PERFIL_MUNICIPAL = 4;
-	protected static final Integer PERFIL_CRG = 7;
-	protected static final Integer PERFIL_RG = 8;
 
 	private static final byte REP_FEDERAL = 1;
 	private static final byte REP_LOCAL = 2;
@@ -176,36 +145,30 @@ public class RepresentanteServiceImpl implements IRepresentanteService {
 	public String guardarRepresentante(RepresentanteDTO representanteDTO, long idUsuario, byte tipo) throws RepresentanteException {
 		
 		Representantes representante = new Representantes();
-		if (representanteDTO.getClaveElector() != null && representanteDTO.getClaveElector().length() > 0) {
+		if (representanteDTO.getClaveElector() != null && representanteDTO.getClaveElector().length() == 18) {
 			Representantes existeClave = representanteRepository.findByClaveElector(representanteDTO.getClaveElector());
 
 			if (existeClave != null)
 				throw new RepresentanteException("La clave de elector ya se encuentra registrada", 400);
 		}
 
-			DistritoFederal distritoF = distritoFederalRepository.findById(representanteDTO.getIdDistritoFederal()).get();
-			Municipio municipio = municipioRepository.findById(representanteDTO.getIdMunicipio()).get();
-			Entidad entidad = entidadRepository.findById(representanteDTO.getIdEstado()).get();
-			SeccionElectoral seccion = seccionRepository.findById(representanteDTO.getIdSeccionElectoral()).get();
-			Usuario usuario = usuarioRepository.findById(idUsuario).get();
-	
-			if (distritoF != null && municipio != null && entidad != null && seccion != null && usuario != null) {
-				representanteDTO.setFechaRegistro(new Date(System.currentTimeMillis()));
-				representanteDTO.setTipo(tipo);
-				MapperUtil.map(representanteDTO, representante);
-	
-				representante.setEstado(entidad);
-				representante.setDistritoFederal(distritoF);
-				representante.setMunicipio(municipio);
-				representante.setSeccionElectoral(seccion);
-				representante.setUsuario(usuario);
-	
-				System.out.println(representante);
-				representanteRepository.save(representante);
-			} else {
-				throw new RepresentanteException("No se encontraron datos.", 404);
-			}
-		
+		if (representanteDTO.getIdDistritoFederal() != null && representanteDTO.getIdMunicipio() != null
+				&& representanteDTO.getIdEstado() != null && representanteDTO.getIdSeccionElectoral() != null) {
+			
+			MapperUtil.map(representanteDTO, representante);
+
+			representante.setFechaRegistro(new Date(System.currentTimeMillis()));
+			representante.setTipo(tipo);
+			representante.setRuta(null);
+			representante.setUsuario(idUsuario);
+
+			System.out.println(representanteDTO);
+			System.out.println(representante);
+			// representanteRepository.save(representante);
+		} else {
+			throw new RepresentanteException("No se encontraron datos.", 404);
+		}
+
 		return "" + representanteDTO;
 	}
 

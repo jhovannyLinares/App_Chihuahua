@@ -8,23 +8,23 @@ public class Representantes {
 
 	private Long id;
 
-	private Entidad estado;
+	private Long estado;
 
-	private DistritoFederal distritoFederal;
+	private Long distritoFederal;
 
-	private Municipio municipio;
+	private Long municipio;
 
-	private SeccionElectoral seccionElectoral;
+	private Long seccionElectoral;
 
-	private Usuario usuario;
+	private Long usuario;
 
 	private Date fechaRegistro;
 
 	private String nombre;
 
-	private String aPaterno;
+	private String apellidoPaterno;
 
-	private String aMaterno;
+	private String apellidoMaterno;
 
 	private String claveElector;
 
@@ -64,46 +64,6 @@ public class Representantes {
 		this.id = id;
 	}
 
-	public Entidad getEstado() {
-		return estado;
-	}
-
-	public void setEstado(Entidad estado) {
-		this.estado = estado;
-	}
-
-	public DistritoFederal getDistritoFederal() {
-		return distritoFederal;
-	}
-
-	public void setDistritoFederal(DistritoFederal distritoFederal) {
-		this.distritoFederal = distritoFederal;
-	}
-
-	public Municipio getMunicipio() {
-		return municipio;
-	}
-
-	public void setMunicipio(Municipio municipio) {
-		this.municipio = municipio;
-	}
-
-	public SeccionElectoral getSeccionElectoral() {
-		return seccionElectoral;
-	}
-
-	public void setSeccionElectoral(SeccionElectoral seccionElectoral) {
-		this.seccionElectoral = seccionElectoral;
-	}
-
-	public Usuario getUsuario() {
-		return usuario;
-	}
-
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
-	}
-
 	public Date getFechaRegistro() {
 		return fechaRegistro;
 	}
@@ -119,21 +79,21 @@ public class Representantes {
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
-
-	public String getaPaterno() {
-		return aPaterno;
+	
+	public String getApellidoPaterno() {
+		return apellidoPaterno;
 	}
 
-	public void setaPaterno(String aPaterno) {
-		this.aPaterno = aPaterno;
+	public void setApellidoPaterno(String apellidoPaterno) {
+		this.apellidoPaterno = apellidoPaterno;
 	}
 
-	public String getaMaterno() {
-		return aMaterno;
+	public String getApellidoMaterno() {
+		return apellidoMaterno;
 	}
 
-	public void setaMaterno(String aMaterno) {
-		this.aMaterno = aMaterno;
+	public void setApellidoMaterno(String apellidoMaterno) {
+		this.apellidoMaterno = apellidoMaterno;
 	}
 
 	public String getClaveElector() {
@@ -256,4 +216,56 @@ public class Representantes {
 		this.ruta = ruta;
 	}
 
+	public Long getEstado() {
+		return estado;
+	}
+
+	public void setEstado(Long estado) {
+		this.estado = estado;
+	}
+
+	public Long getDistritoFederal() {
+		return distritoFederal;
+	}
+
+	public void setDistritoFederal(Long distritoFederal) {
+		this.distritoFederal = distritoFederal;
+	}
+
+	public Long getMunicipio() {
+		return municipio;
+	}
+
+	public void setMunicipio(Long municipio) {
+		this.municipio = municipio;
+	}
+
+	public Long getSeccionElectoral() {
+		return seccionElectoral;
+	}
+
+	public void setSeccionElectoral(Long seccionElectoral) {
+		this.seccionElectoral = seccionElectoral;
+	}
+
+	public Long getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Long usuario) {
+		this.usuario = usuario;
+	}
+
+	@Override
+	public String toString() {
+		return "Representantes [id=" + id + ", estado=" + estado + ", distritoFederal=" + distritoFederal
+				+ ", municipio=" + municipio + ", seccionElectoral=" + seccionElectoral + ", usuario=" + usuario
+				+ ", fechaRegistro=" + fechaRegistro + ", nombre=" + nombre + ", aPaterno=" + apellidoPaterno + ", aMaterno="
+				+ apellidoMaterno + ", claveElector=" + claveElector + ", calle=" + calle + ", numInterior=" + numInterior
+				+ ", numExterior=" + numExterior + ", colonia=" + colonia + ", cp=" + cp + ", telCasa=" + telCasa
+				+ ", telCelular=" + telCelular + ", correo=" + correo + ", propuesto=" + propuesto + ", ineLado1="
+				+ ineLado1 + ", ineLado2=" + ineLado2 + ", inePdf=" + inePdf + ", ruta=" + ruta + ", tipo=" + tipo
+				+ "]";
+	}
+	
 }
