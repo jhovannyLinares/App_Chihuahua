@@ -91,14 +91,14 @@ public class CotServiceImpl extends MasterService implements ICotService {
 				}
 
 			} else {
-				throw new CotException("No se econtro el COT.", 404);
+				throw new CotException("No se encontro el COT ingresado", 404);
 			}
 
 		} else {
-			throw new CotException("No cuenta con suficientes permisos.", 401);
+			throw new CotException("No cuenta con suficientes permisos", 401);
 		}
 
-		return "Secciones asignadas al COT";
+		return "Se asignaron secciones al COT";
 
 	}
 
