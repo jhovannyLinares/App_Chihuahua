@@ -6,8 +6,8 @@ public class CotDTO {
 	private Long idDistritoFederal;
 	private Long idMunicipio;
 	private String nombre;
-	private String aPaterno;
-	private String aMaterno;
+	private String apellidoPaterno;
+	private String apellidoMaterno;
 	private String claveElector;
 	private String calle;
 	private String numInterior;
@@ -29,20 +29,20 @@ public class CotDTO {
 		this.nombre = nombre;
 	}
 
-	public String getaPaterno() {
-		return aPaterno;
+	public String getApellidoPaterno() {
+		return apellidoPaterno;
 	}
 
-	public void setaPaterno(String aPaterno) {
-		this.aPaterno = aPaterno;
+	public void setApellidoPaterno(String apellidoPaterno) {
+		this.apellidoPaterno = apellidoPaterno;
 	}
 
-	public String getaMaterno() {
-		return aMaterno;
+	public String getApellidoMaterno() {
+		return apellidoMaterno;
 	}
 
-	public void setaMaterno(String aMaterno) {
-		this.aMaterno = aMaterno;
+	public void setApellidoMaterno(String apellidoMaterno) {
+		this.apellidoMaterno = apellidoMaterno;
 	}
 
 	public String getClaveElector() {
