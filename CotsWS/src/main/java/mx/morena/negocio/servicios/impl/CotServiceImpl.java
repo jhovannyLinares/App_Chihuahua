@@ -76,7 +76,13 @@ public class CotServiceImpl extends MasterService implements ICotService {
 			
 			if (cot != null) {
 
-				for (Long idSeccion : idSecciones) {
+			List<SeccionElectoral> electorals = seccionRepository.findByCotId(idCot, COT);
+
+			for (SeccionElectoral seccionElectoral : electorals) {
+				seccionRepository.updateIdCot(seccionElectoral.getId(), 0l);
+			}
+
+			for (Long idSeccion : idSecciones) {
 
 					List<SeccionElectoral> secciones = seccionRepository.findById(idSeccion);
 
@@ -135,9 +141,9 @@ public class CotServiceImpl extends MasterService implements ICotService {
 	@Override
 	public String activar(Long idCot, long perfil) throws CotException {
 		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL || perfil == PERFIL_MUNICIPAL) {
-			
+
 			cotRepository.updateStatusCot(idCot, ESTATUS_ALTA, new Date(System.currentTimeMillis()), COT);
-			
+
 			return "COT activo";
 		} else {
 			throw new CotException("Permisos insuficientes.", 401);

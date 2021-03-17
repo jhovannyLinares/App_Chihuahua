@@ -98,8 +98,8 @@ public class ConvencidosRepository implements IConvencidosRepository {
 				+ " codigo_postal, " + " curp, " + " dv, " + " estatus, " + " fecha_baja, " + " fecha_reactivacion, "
 				+ " fecha_registro, " + " fecha_sistema, " + " mov, " + " nombre, " + " numero_exterior, "
 				+ " numero_interior, " + " telefono_casa, " + " telefono_celular, " + " distrito_federal_id, "
-				+ " estado_id, " + " municipio_id, " + " usuario_id_usuario, " + "tipo) VALUES( "
-				+ " (SELECT MAX(id)+1 FROM app_convencidos), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+				+ " estado_id, " + " municipio_id, " + " usuario_id_usuario, " + "tipo, seccion_id) VALUES( "
+				+ " (SELECT MAX(id)+1 FROM app_convencidos), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
 
 		template.update(sql,
 				new Object[] { convencidos.getApellidoMaterno(), convencidos.getApellidoPaterno(),
@@ -110,7 +110,7 @@ public class ConvencidosRepository implements IConvencidosRepository {
 						convencidos.getFechaSistema(), convencidos.isMov(), convencidos.getNombre(),
 						convencidos.getNumExterior(), convencidos.getNumInterior(), convencidos.getTelCasa(),
 						convencidos.getTelCelular(), convencidos.getDistritoFederal(), convencidos.getEstado(),
-						convencidos.getMunicipio(), convencidos.getUsuario(), convencidos.getTipo() });
+						convencidos.getMunicipio(), convencidos.getUsuario(), convencidos.getTipo(),convencidos.getSeccionElectoral() });
 
 	}
 
