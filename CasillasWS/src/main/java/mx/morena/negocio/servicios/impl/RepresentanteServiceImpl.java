@@ -164,7 +164,7 @@ public class RepresentanteServiceImpl extends MasterService implements IRepresen
 
 			System.out.println(representanteDTO);
 			System.out.println(representante);
-			// representanteRepository.save(representante);
+			 representanteRepository.save(representante);
 		} else {
 			throw new RepresentanteException("No se encontraron datos.", 404);
 		}

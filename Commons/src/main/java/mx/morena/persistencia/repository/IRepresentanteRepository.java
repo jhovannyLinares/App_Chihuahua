@@ -8,5 +8,7 @@ import mx.morena.persistencia.entidad.Representantes;
 public interface IRepresentanteRepository {
 
 	Representantes findByClaveElector(String claveElector);
+	
+	void save (Representantes representantes);
 
 }
