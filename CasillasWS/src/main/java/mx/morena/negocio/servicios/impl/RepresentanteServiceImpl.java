@@ -161,6 +161,10 @@ public class RepresentanteServiceImpl extends MasterService implements IRepresen
 			representante.setTipo(tipo);
 			representante.setRuta(null);
 			representante.setUsuario(idUsuario);
+			representante.setDistritoFederal(representanteDTO.getIdDistritoFederal());
+			representante.setEstado(representanteDTO.getIdEstado());
+			representante.setMunicipio(representanteDTO.getIdMunicipio());
+			representante.setSeccionElectoral(representanteDTO.getIdSeccionElectoral());
 
 			System.out.println(representanteDTO);
 			System.out.println(representante);

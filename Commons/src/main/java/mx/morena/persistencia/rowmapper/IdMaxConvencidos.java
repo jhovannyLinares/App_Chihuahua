@@ -12,9 +12,9 @@ public class IdMaxConvencidos implements RowMapper<Long>{
 	
 	public Long mapRow(ResultSet rs, int rowNum) throws SQLException {
 		
-		Convencidos convencido = new Convencidos();
-		
-		convencido.setId(rs.getLong(1));
+//		Convencidos convencido = new Convencidos();
+//		
+//		convencido.setId(rs.getLong(1));
 		
 		return rs.getLong(1);
 	}
