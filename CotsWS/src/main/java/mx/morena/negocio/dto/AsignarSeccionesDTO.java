@@ -4,15 +4,15 @@ import java.util.List;
 
 public class AsignarSeccionesDTO {
 	
-	private List<String> idSecciones;
+	private List<Long> idSecciones;
 	
 	private Long idCot;
 	
-	public List<String> getIdSecciones() {
+	public List<Long> getIdSecciones() {
 		return idSecciones;
 	}
 	
-	public void setIdSecciones(List<String> idSecciones) {
+	public void setIdSecciones(List<Long> idSecciones) {
 		this.idSecciones = idSecciones;
 	}
 	

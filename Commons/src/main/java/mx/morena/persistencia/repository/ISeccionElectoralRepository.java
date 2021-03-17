@@ -6,12 +6,12 @@ import mx.morena.persistencia.entidad.SeccionElectoral;
 
 public interface ISeccionElectoralRepository {
 
-	List<SeccionElectoral> findByCotId(Long cotId, Long tipo);
-
-	List<SeccionElectoral> findAllById(List<String> idSecciones);
-
-	void save(SeccionElectoral sec);
+	List<SeccionElectoral> findByCotId(Long cotId, Long tipo); 
 	
-	void updateIdCot(Long cotId);
+	SeccionElectoral findById(Long idSecciones);
+
+//	void save(SeccionElectoral sec);
+	
+	void updateIdCot(Long idSeccion, Long idCot);
 
 }

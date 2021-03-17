@@ -9,8 +9,10 @@ public interface ICotService {
 
 	public Long save(CotDTO cot, long perfil, long idUsuario) throws CotException;
 
-	public String asignarSecciones(List<String> idSecciones, Long idCot, long perfil) throws CotException;
+	public String asignarSecciones(List<Long> idSecciones, Long idCot, long perfil) throws CotException;
 	
 	public String suspender(Long idCot, long perfil, long idUsuario) throws CotException;
+
+	public String activar(Long idCot, long perfil) throws CotException;
 
 }

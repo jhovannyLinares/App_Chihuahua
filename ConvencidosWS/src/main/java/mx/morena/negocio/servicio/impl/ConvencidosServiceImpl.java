@@ -16,11 +16,9 @@ import mx.morena.negocio.util.MapperUtil;
 import mx.morena.persistencia.entidad.Convencidos;
 import mx.morena.persistencia.entidad.DistritoFederal;
 import mx.morena.persistencia.entidad.Municipio;
-import mx.morena.persistencia.entidad.SeccionElectoral;
 import mx.morena.persistencia.repository.IConvencidosRepository;
 import mx.morena.persistencia.repository.IDistritoFederalRepository;
 import mx.morena.persistencia.repository.IMunicipioRepository;
-import mx.morena.persistencia.repository.ISeccionElectoralRepository;
 import mx.morena.security.servicio.MasterService;
 
 @Service
@@ -32,17 +30,11 @@ public class ConvencidosServiceImpl extends MasterService implements IConvencido
 	@Autowired
 	private IDistritoFederalRepository dFederalRepository;
 
-//	@Autowired
-//	private IEntidadRepository entidadRepository;
 
 	@Autowired
 	private IMunicipioRepository municipioRepository;
 
-	@Autowired
-	private ISeccionElectoralRepository seccionRepository;
 
-//	@Autowired
-//	private IUsuarioRepository usuarioRepository;
 
 	private static final char ESTATUS_ALTA = 'A';
 	private static String sinClave = "No Cuenta con ClaveElector";
@@ -63,14 +55,12 @@ public class ConvencidosServiceImpl extends MasterService implements IConvencido
 		}
 
 		if (idSeccion != null) {
-			List<SeccionElectoral> seccion = seccionRepository.findByCotId(idSeccion, CONVENCIDO);
-			if (seccion != null) {
-				lstConv = convencidosRepository.getBySeccionesElectoralesIn(seccion,CONVENCIDO);
-			}
+				lstConv = convencidosRepository.getBySeccionesElectoralesIn(idSeccion,CONVENCIDO);
+			
 		}
 
 		if (claveElector != null) {
-			lstConv = convencidosRepository.findByClaveElector(claveElector,CONVENCIDO);
+			lstConv = convencidosRepository.findByClaveElector(claveElector);
 		}
 
 		if (!lstConv.isEmpty()) {
@@ -86,7 +76,7 @@ public class ConvencidosServiceImpl extends MasterService implements IConvencido
 	public Long save(long idUsuario, ConvencidosDTO dto) throws ConvencidosException {
 		
 		if (dto.getClaveElector().length() == 18) {
-			List<Convencidos> convencidoEx = convencidosRepository.findByClaveElector(dto.getClaveElector(),CONVENCIDO);
+			List<Convencidos> convencidoEx = convencidosRepository.findByClaveElector(dto.getClaveElector());
 
 			if (convencidoEx != null) {
 				throw new ConvencidosException("La clave de elector ya se encuentra registrada", 409);
@@ -101,6 +91,7 @@ public class ConvencidosServiceImpl extends MasterService implements IConvencido
 				convencido.setTipo(CONVENCIDO);
 				convencido.setFechaRegistro(new Date());
 				convencido.setEstatus(ESTATUS_ALTA);
+				convencido.setSeccionElectoral(dto.getIdSeccion());
 				convencido.setEstado(dto.getIdEstado());
 				convencido.setDistritoFederal(dto.getIdFederal());
 				convencido.setMunicipio(dto.getIdMunicipio());
@@ -109,7 +100,7 @@ public class ConvencidosServiceImpl extends MasterService implements IConvencido
 
 				convencidosRepository.save(convencido);
 
-				return convencidosRepository.idMax();
+				return convencidosRepository.getIdMax();
 
 			}
 		} else {
@@ -122,7 +113,7 @@ public class ConvencidosServiceImpl extends MasterService implements IConvencido
 	public boolean findByClaveElector(String claveElector) throws ConvencidosException {
 		
 		if (claveElector.length() == 18) {
-			List<Convencidos> convencidos = convencidosRepository.findByClaveElector(claveElector,CONVENCIDO);
+			List<Convencidos> convencidos = convencidosRepository.findByClaveElector(claveElector);
 			if (convencidos == null) {
 				return false;
 			} else {

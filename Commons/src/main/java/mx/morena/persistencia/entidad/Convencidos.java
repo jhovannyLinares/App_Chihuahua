@@ -2,7 +2,6 @@ package mx.morena.persistencia.entidad;
 
 import java.sql.Timestamp;
 import java.util.Date;
-import java.util.List;
 
 public class Convencidos {
 
@@ -16,7 +15,7 @@ public class Convencidos {
 
 	private Long municipio;
 
-	private List<SeccionElectoral> seccionesElectorales;
+	private Long seccionElectoral;
 
 	private Long usuario;
 
@@ -104,12 +103,12 @@ public class Convencidos {
 		this.municipio = municipio;
 	}
 
-	public List<SeccionElectoral> getSeccionesElectorales() {
-		return seccionesElectorales;
+	public Long getSeccionElectoral() {
+		return seccionElectoral;
 	}
 
-	public void setSeccionesElectorales(List<SeccionElectoral> seccionesElectorales) {
-		this.seccionesElectorales = seccionesElectorales;
+	public void setSeccionElectoral(Long seccionElectoral) {
+		this.seccionElectoral = seccionElectoral;
 	}
 
 	public Long getUsuario() {

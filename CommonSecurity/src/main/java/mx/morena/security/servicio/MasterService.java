@@ -19,6 +19,9 @@ public class MasterService {
 	protected static final Long CONVENCIDO = 1L;
 	protected static final Long COT = 2L;
 	
+	protected static final char ESTATUS_ALTA = 'A';
+	protected static final char ESTATUS_SUSPENDIDO = 'S';
+	
 	
 
 }
