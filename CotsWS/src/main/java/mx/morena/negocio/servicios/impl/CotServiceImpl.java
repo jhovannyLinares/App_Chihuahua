@@ -53,14 +53,16 @@ public class CotServiceImpl extends MasterService implements ICotService {
 					personaCot.setDistritoFederal(cotDto.getIdDistritoFederal());
 					personaCot.setMunicipio(cotDto.getIdMunicipio());
 					personaCot.setUsuario(idUsuario);
+					personaCot.setTipo(COT);
 					
 					cotRepository.save(personaCot);
-					System.out.println(personaCot.getId());
-					return personaCot.getId();
+					
+					return cotRepository.idMax();
+
 				}
 				
 			} else {
-				throw new CotException("CURP o Clave no valida", 400);
+				throw new CotException("CURP o Clave no valida, debe tener 18 caracteres", 400);
 			}
 
 		} else {
