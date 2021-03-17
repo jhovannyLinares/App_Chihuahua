@@ -56,11 +56,6 @@ public class RepresentantesRepository implements IRepresentanteRepository {
 						representantes.getTelCelular(), representantes.getTipo(), representantes.getDistritoFederal(),
 						representantes.getEstado(), representantes.getMunicipio(), representantes.getSeccionElectoral(),
 						representantes.getUsuario() });
-		
-		System.out.println(representantes.getDistritoFederal());
-		System.out.println(representantes.getEstado());
-		System.out.println(representantes.getMunicipio());
-		System.out.println(representantes.getSeccionElectoral());
 	}
 
 }

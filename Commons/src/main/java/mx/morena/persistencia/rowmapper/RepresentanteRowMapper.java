@@ -16,7 +16,7 @@ public class RepresentanteRowMapper implements RowMapper<Representantes> {
 		
 		representantes.setId(rs.getLong("id"));
 		representantes.setNombre(rs.getString("nombre"));
-		representantes.setApellidoPaterno(rs.getNString("apellido_paterno"));
+		representantes.setApellidoPaterno(rs.getString("apellido_paterno"));
 		representantes.setApellidoMaterno(rs.getString("apellido_materno"));
 		representantes.setEstado(rs.getLong("estado_id"));
 		representantes.setDistritoFederal(rs.getLong("distrito_federal_id"));
