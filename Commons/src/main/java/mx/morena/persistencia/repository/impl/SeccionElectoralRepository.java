@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 
 import mx.morena.persistencia.entidad.SeccionElectoral;
 import mx.morena.persistencia.repository.ISeccionElectoralRepository;
-import mx.morena.persistencia.rowmapper.SeccionRowMapper;
 import mx.morena.persistencia.rowmapper.SeccionesRowMapper;
 
 @Repository
@@ -45,18 +44,18 @@ public class SeccionElectoralRepository implements ISeccionElectoralRepository {
 	@Override
 	public void updateIdCot(Long idSeccion, Long idCot) {
 
-		String sql = "UPDATE app_localidad SET idcot = ? WHERE idcot = ?";
+		String sql = "UPDATE app_localidad SET idcot = ? WHERE seccion_id = ?";
 
-		template.update(sql, new Object[] { idSeccion, idCot }, new int[] { Types.NUMERIC, Types.NUMERIC });
+		template.update(sql, new Object[] { idCot, idSeccion }, new int[] { Types.NUMERIC, Types.NUMERIC });
 
 	}
 
 	@Override
-	public SeccionElectoral findById(Long idSeccion) {
-		String sql = "SELECT * FROM app_localidad  where id = ?";
+	public List<SeccionElectoral> findById(Long idSeccion) {
+		String sql = "SELECT seccion_id, tipo, idcot, id FROM app_localidad where seccion_id = ?";
 		try {
 			return template.queryForObject(sql, new Object[] { idSeccion }, new int[] { Types.NUMERIC },
-					new SeccionRowMapper());
+					new SeccionesRowMapper());
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}

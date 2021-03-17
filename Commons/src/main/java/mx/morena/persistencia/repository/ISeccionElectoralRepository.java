@@ -8,7 +8,7 @@ public interface ISeccionElectoralRepository {
 
 	List<SeccionElectoral> findByCotId(Long cotId, Long tipo); 
 	
-	SeccionElectoral findById(Long idSecciones);
+	List<SeccionElectoral> findById(Long idSecciones);
 
 //	void save(SeccionElectoral sec);
 	

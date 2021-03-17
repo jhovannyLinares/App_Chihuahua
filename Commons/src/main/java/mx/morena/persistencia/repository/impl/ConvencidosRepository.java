@@ -25,7 +25,7 @@ public class ConvencidosRepository implements IConvencidosRepository {
 	private String campos=" id, apellido_materno, apellido_paterno, banco, calle, clabe_interbancaria, clave_elector, "
 			+ "colonia, correo, codigo_postal, curp, dv, estatus, fecha_baja, fecha_reactivacion, fecha_registro, fecha_sistema, "
 			+ "mov, nombre, numero_exterior, numero_interior, telefono_casa, telefono_celular, distrito_federal_id, estado_id, "
-			+ "municipio_id, usuario_id_usuario, seccion_id +";
+			+ "municipio_id, usuario_id_usuario, seccion_id ";
 
 	@Override
 	public List<Convencidos> getByDistritoFederal(Long idFederal, Long tipo) {

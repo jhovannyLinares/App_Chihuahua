@@ -71,15 +71,27 @@ public class CotServiceImpl extends MasterService implements ICotService {
 	@Override
 	public String asignarSecciones(List<Long> idSecciones, Long idCot, long perfil) throws CotException {
 		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL || perfil == PERFIL_MUNICIPAL) {
+			
+			Convencidos cot = cotRepository.getByIdAndEstatus(idCot, ESTATUS_ALTA, COT);
+			
+			if (cot != null) {
 
-			for (Long idSeccion : idSecciones) {
+				for (Long idSeccion : idSecciones) {
 
-				SeccionElectoral se = seccionRepository.findById(idSeccion);
+					List<SeccionElectoral> secciones = seccionRepository.findById(idSeccion);
 
-				if (se.getCot().equals(0l)) {
-					seccionRepository.updateIdCot(idSeccion, idCot);
+					for (SeccionElectoral sec : secciones) {
+
+						if (sec.getCot().equals(0l)) {
+							seccionRepository.updateIdCot(idSeccion, idCot);
+						}
+
+					}
+
 				}
 
+			} else {
+				throw new CotException("No se econtro el COT.", 404);
 			}
 
 		} else {
