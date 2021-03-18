@@ -1,7 +1,10 @@
 package mx.morena.negocio.dto;
 
+import java.util.Date;
+
 public class RepresentanteDTO {
 
+	private Date fechaRegistro;
 	private Long idEstado;
 	private Long idDistritoFederal;
 	private Long idMunicipio;
@@ -24,6 +27,14 @@ public class RepresentanteDTO {
 	private String inePdf;
 	private Boolean isClaveElector;
 	private Boolean isCalle;
+
+	public Date getFechaRegistro() {
+		return fechaRegistro;
+	}
+
+	public void setFechaRegistro(Date fechaRegistro) {
+		this.fechaRegistro = fechaRegistro;
+	}
 
 	public Long getIdEstado() {
 		return idEstado;
@@ -203,12 +214,13 @@ public class RepresentanteDTO {
 
 	@Override
 	public String toString() {
-		return "RepresentanteDTO [idEstado=" + idEstado + ", idDistritoFederal=" + idDistritoFederal + ", idMunicipio="
-				+ idMunicipio + ", idSeccionElectoral=" + idSeccionElectoral + ", nombre=" + nombre
-				+ ", apellidoPaterno=" + apellidoPaterno + ", apellidoMaterno=" + apellidoMaterno + ", claveElector="
-				+ claveElector + ", calle=" + calle + ", numInterior=" + numInterior + ", numExterior=" + numExterior
-				+ ", colonia=" + colonia + ", cp=" + cp + ", telCasa=" + telCasa + ", telCelular=" + telCelular
-				+ ", correo=" + correo + ", propuesto=" + propuesto + ", ineLado1=" + ineLado1 + ", ineLado2="
-				+ ineLado2 + ", inePdf=" + inePdf + ", isClaveElector=" + isClaveElector + ", isCalle=" + isCalle + "]";
+		return "RepresentanteDTO [fechaRegistro=" + fechaRegistro + ", idEstado=" + idEstado + ", idDistritoFederal="
+				+ idDistritoFederal + ", idMunicipio=" + idMunicipio + ", idSeccionElectoral=" + idSeccionElectoral
+				+ ", nombre=" + nombre + ", apellidoPaterno=" + apellidoPaterno + ", apellidoMaterno=" + apellidoMaterno
+				+ ", claveElector=" + claveElector + ", calle=" + calle + ", numInterior=" + numInterior
+				+ ", numExterior=" + numExterior + ", colonia=" + colonia + ", cp=" + cp + ", telCasa=" + telCasa
+				+ ", telCelular=" + telCelular + ", correo=" + correo + ", propuesto=" + propuesto + ", ineLado1="
+				+ ineLado1 + ", ineLado2=" + ineLado2 + ", inePdf=" + inePdf + ", isClaveElector=" + isClaveElector
+				+ ", isCalle=" + isCalle + "]";
 	}
 }
