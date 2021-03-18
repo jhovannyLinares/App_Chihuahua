@@ -61,11 +61,11 @@ public class ConvencidosServiceImpl extends MasterService implements IConvencido
 	@Override
 	public Long save(long idUsuario, ConvencidosDTO dto) throws ConvencidosException {
 
-		if(dto.getIsClaveElector() != true) {
+		if(dto.getIsClaveElector() == true) {
 			dto.setClaveElector(null);
 		}
 		
-		if (dto.getIsClaveElector() != true || dto.getClaveElector().length() == 18) {
+		if (dto.getIsClaveElector()== true || dto.getClaveElector().length() == 18) {
 			List<Convencidos> convencidoEx = convencidosRepository.findByClaveElector(dto.getClaveElector());
 
 			if (convencidoEx != null) {
@@ -75,7 +75,7 @@ public class ConvencidosServiceImpl extends MasterService implements IConvencido
 				Convencidos convencido = new Convencidos();
 
 				MapperUtil.map(dto, convencido);
-				if (!dto.getIsClaveElector()) {
+				if (dto.getIsClaveElector()) {
 					convencido.setClaveElector(sinClave);
 				}
 				convencido.setTipo(CONVENCIDO);
