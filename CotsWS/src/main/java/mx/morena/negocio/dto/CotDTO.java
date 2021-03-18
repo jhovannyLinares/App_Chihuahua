@@ -5,6 +5,7 @@ public class CotDTO {
 	private Long idEstado;
 	private Long idDistritoFederal;
 	private Long idMunicipio;
+	private Long idSeccion;
 	private String nombre;
 	private String apellidoPaterno;
 	private String apellidoMaterno;
@@ -163,6 +164,14 @@ public class CotDTO {
 
 	public void setIdEstado(Long idEstado) {
 		this.idEstado = idEstado;
+	}
+
+	public Long getIdSeccion() {
+		return idSeccion;
+	}
+
+	public void setIdSeccion(Long idSeccion) {
+		this.idSeccion = idSeccion;
 	}
 	
 }

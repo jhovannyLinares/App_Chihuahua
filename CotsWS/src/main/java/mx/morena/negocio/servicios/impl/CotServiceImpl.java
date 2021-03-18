@@ -49,6 +49,7 @@ public class CotServiceImpl extends MasterService implements ICotService {
 					personaCot.setIdEstado(cotDto.getIdEstado());
 					personaCot.setIdFederal(cotDto.getIdDistritoFederal());
 					personaCot.setIdMunicipio(cotDto.getIdMunicipio());
+					personaCot.setIdSeccion(cotDto.getIdSeccion());
 					personaCot.setUsuario(idUsuario);
 					personaCot.setTipo(COT);
 
