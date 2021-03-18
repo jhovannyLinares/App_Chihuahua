@@ -126,7 +126,10 @@ public class CotServiceImpl extends MasterService implements ICotService {
 
 				String info = "";
 				if (secciones != null) {
-					seccionRepository.updateIdCot(0l, idCot);
+					
+					for (SeccionElectoral seccion : secciones) {
+						seccionRepository.updateIdCot(seccion.getId(), 0l);
+					}
 					info = ", se han liberado las secciones del COT";
 				} else {
 					info = ", no hay secciones por liberar";
