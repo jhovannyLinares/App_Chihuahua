@@ -24,7 +24,7 @@ public class ConvencidosServiceImpl extends MasterService implements IConvencido
 	private IConvencidosRepository convencidosRepository;
 
 	private static final char ESTATUS_ALTA = 'A';
-	private static String sinClave = "No Cuenta con ClaveElector";
+	private static String sinClave = "No cuenta con Clave Elector";
 
 	@Override
 	public List<ConvencidosResponseDTO> getConvencidos(Long distritoFederalId, Long idMunicipio, Long idSeccion,
