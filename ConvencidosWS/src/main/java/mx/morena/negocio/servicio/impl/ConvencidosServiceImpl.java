@@ -25,6 +25,7 @@ public class ConvencidosServiceImpl extends MasterService implements IConvencido
 
 	private static final char ESTATUS_ALTA = 'A';
 	private static String sinClave = "No cuenta con Clave Elector";
+	private static String sinCalle = "No se cuenta con calle";
 
 	@Override
 	public List<ConvencidosResponseDTO> getConvencidos(Long distritoFederalId, Long idMunicipio, Long idSeccion,
@@ -77,6 +78,9 @@ public class ConvencidosServiceImpl extends MasterService implements IConvencido
 				MapperUtil.map(dto, convencido);
 				if (dto.getIsClaveElector()) {
 					convencido.setClaveElector(sinClave);
+				}
+				if(dto.getIsCalle()) {
+					convencido.setCalle(sinCalle);
 				}
 				convencido.setTipo(CONVENCIDO);
 				convencido.setFechaRegistro(new Date());

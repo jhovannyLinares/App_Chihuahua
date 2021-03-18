@@ -43,8 +43,8 @@ public class RepresentantesRepository implements IRepresentanteRepository {
 				+ "ine_img_lado1, " + "ine_img_lado2, " + "ine_pdf, " + "nombre, " + "numero_exterior, "
 				+ "numero_interior, " + "propuesto, " + "ruta, " + "telefono_casa, " + "telefono_celular, "
 				+ "tipo_representante, " + "distrito_federal_id, " + "estado_id, " + "municipio_id, "
-				+ "seccion_electoral_id, " + "usuario_id)"
-				+ "VALUES ((SELECT MAX(id)+1 FROM app_representantes), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
+				+ "seccion_electoral_id, " + "usuario_id, " + "fecha_sistema)"
+				+ "VALUES ((SELECT MAX(id)+1 FROM app_representantes), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
 
 		template.update(sql,
 				new Object[] { representantes.getApellidoMaterno(), representantes.getApellidoPaterno(),
@@ -55,7 +55,7 @@ public class RepresentantesRepository implements IRepresentanteRepository {
 						representantes.getPropuesto(), representantes.getRuta(), representantes.getTelCasa(),
 						representantes.getTelCelular(), representantes.getTipo(), representantes.getDistritoFederal(),
 						representantes.getEstado(), representantes.getMunicipio(), representantes.getSeccionElectoral(),
-						representantes.getUsuario() });
+						representantes.getUsuario(), representantes.getFechaSistema() });
 	}
 
 	@Override
