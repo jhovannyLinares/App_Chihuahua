@@ -38,7 +38,7 @@ public class CotController extends MasterController {
 		try {
 			return cotService.save(cot, perfil, usuario);
 		} catch (CotException e) {
-			((HttpServletResponse) response).sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
 			return null;
 		} catch (Exception e ) {
 			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
@@ -54,7 +54,7 @@ public class CotController extends MasterController {
 		try {
 			return cotService.asignarSecciones(secciones.getIdSecciones(), secciones.getIdCot(), perfil);
 		} catch (CotException e) {
-			((HttpServletResponse) response).sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
 			return null;
 		} catch (Exception e ) {
 			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
@@ -70,7 +70,7 @@ public class CotController extends MasterController {
 		try {
 			return cotService.activar(idCot, perfil);
 		} catch (CotException e) {
-			((HttpServletResponse) response).sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
 			return null;
 		} catch (Exception e ) {
 			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
@@ -87,7 +87,7 @@ public class CotController extends MasterController {
 		try {
 			return cotService.suspender(idCot, perfil, usuario);
 		} catch (CotException e) {
-			((HttpServletResponse) response).sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
 			return null;
 		} catch (Exception e ) {
 			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());

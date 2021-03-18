@@ -47,7 +47,7 @@ public class ConvencidosController extends MasterController {
 					idSeccion, claveElector);
 			return convencidos;
 		} catch (ConvencidosException e) {
-			((HttpServletResponse) response).sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
 			return null;
 		} catch (Exception e ) {
 			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
@@ -72,7 +72,7 @@ public class ConvencidosController extends MasterController {
 			return convencidosService.save(usuario, dto);
 
 		} catch (ConvencidosException e) {
-			((HttpServletResponse) response).sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
 			return null;
 		} catch (Exception e ) {
 			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
@@ -93,7 +93,7 @@ public class ConvencidosController extends MasterController {
 		try {
 			return convencidosService.findByClaveElector(claveElector);
 		} catch (ConvencidosException e) {
-			((HttpServletResponse) response).sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
 			return false;
 		} catch (Exception e ) {
 			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
