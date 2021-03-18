@@ -55,6 +55,8 @@ public class Representantes {
 	private String ruta;
 
 	private byte tipo;
+	
+	private Date fechaSistema;
 
 	public Long getId() {
 		return id;
@@ -256,16 +258,23 @@ public class Representantes {
 		this.usuario = usuario;
 	}
 
+	public Date getFechaSistema() {
+		return fechaSistema;
+	}
+
+	public void setFechaSistema(Date fechaSistema) {
+		this.fechaSistema = fechaSistema;
+	}
+
 	@Override
 	public String toString() {
 		return "Representantes [id=" + id + ", estado=" + estado + ", distritoFederal=" + distritoFederal
 				+ ", municipio=" + municipio + ", seccionElectoral=" + seccionElectoral + ", usuario=" + usuario
-				+ ", fechaRegistro=" + fechaRegistro + ", nombre=" + nombre + ", aPaterno=" + apellidoPaterno + ", aMaterno="
-				+ apellidoMaterno + ", claveElector=" + claveElector + ", calle=" + calle + ", numInterior=" + numInterior
-				+ ", numExterior=" + numExterior + ", colonia=" + colonia + ", cp=" + cp + ", telCasa=" + telCasa
-				+ ", telCelular=" + telCelular + ", correo=" + correo + ", propuesto=" + propuesto + ", ineLado1="
-				+ ineLado1 + ", ineLado2=" + ineLado2 + ", inePdf=" + inePdf + ", ruta=" + ruta + ", tipo=" + tipo
-				+ "]";
-	}
-	
+				+ ", fechaRegistro=" + fechaRegistro + ", nombre=" + nombre + ", apellidoPaterno=" + apellidoPaterno
+				+ ", apellidoMaterno=" + apellidoMaterno + ", claveElector=" + claveElector + ", calle=" + calle
+				+ ", numInterior=" + numInterior + ", numExterior=" + numExterior + ", colonia=" + colonia + ", cp="
+				+ cp + ", telCasa=" + telCasa + ", telCelular=" + telCelular + ", correo=" + correo + ", propuesto="
+				+ propuesto + ", ineLado1=" + ineLado1 + ", ineLado2=" + ineLado2 + ", inePdf=" + inePdf + ", ruta="
+				+ ruta + ", tipo=" + tipo + ", fechaSistema=" + fechaSistema + "]";
+	}	
 }

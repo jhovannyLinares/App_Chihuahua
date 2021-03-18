@@ -22,6 +22,8 @@ public class RepresentanteDTO {
 	private String ineLado1;
 	private String ineLado2;
 	private String inePdf;
+	private Boolean isClaveElector;
+	private Boolean isCalle;
 
 	public Long getIdEstado() {
 		return idEstado;
@@ -183,15 +185,30 @@ public class RepresentanteDTO {
 		this.inePdf = inePdf;
 	}
 
+	public Boolean getIsClaveElector() {
+		return isClaveElector;
+	}
+
+	public void setIsClaveElector(Boolean isClaveElector) {
+		this.isClaveElector = isClaveElector;
+	}
+
+	public Boolean getIsCalle() {
+		return isCalle;
+	}
+
+	public void setIsCalle(Boolean isCalle) {
+		this.isCalle = isCalle;
+	}
+
 	@Override
 	public String toString() {
-		return "RepresentanteDTO [idEstado=" + idEstado + ", idDistritoFederal=" + idDistritoFederal
-				+ ", idMunicipio=" + idMunicipio + ", idSeccionElectoral=" + idSeccionElectoral 
-				+ ", nombre=" + nombre + ", aPaterno=" + apellidoPaterno + ", aMaterno=" + apellidoMaterno
-				+ ", claveElector=" + claveElector + ", calle=" + calle + ", numInterior=" + numInterior
-				+ ", numExterior=" + numExterior + ", colonia=" + colonia + ", cp=" + cp + ", telCasa=" + telCasa
-				+ ", telCelular=" + telCelular + ", correo=" + correo + ", propuesto=" + propuesto + ", ineLado1="
-				+ ineLado1 + ", ineLado2=" + ineLado2 + ", inePdf=" + inePdf + "]";
+		return "RepresentanteDTO [idEstado=" + idEstado + ", idDistritoFederal=" + idDistritoFederal + ", idMunicipio="
+				+ idMunicipio + ", idSeccionElectoral=" + idSeccionElectoral + ", nombre=" + nombre
+				+ ", apellidoPaterno=" + apellidoPaterno + ", apellidoMaterno=" + apellidoMaterno + ", claveElector="
+				+ claveElector + ", calle=" + calle + ", numInterior=" + numInterior + ", numExterior=" + numExterior
+				+ ", colonia=" + colonia + ", cp=" + cp + ", telCasa=" + telCasa + ", telCelular=" + telCelular
+				+ ", correo=" + correo + ", propuesto=" + propuesto + ", ineLado1=" + ineLado1 + ", ineLado2="
+				+ ineLado2 + ", inePdf=" + inePdf + ", isClaveElector=" + isClaveElector + ", isCalle=" + isCalle + "]";
 	}
-	
 }
