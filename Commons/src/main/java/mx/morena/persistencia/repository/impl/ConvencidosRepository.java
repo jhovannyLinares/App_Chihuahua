@@ -114,8 +114,8 @@ public class ConvencidosRepository implements IConvencidosRepository {
 	}
 
 	@Override
-	public void updateStatusCot(Long id, char estatus, Date fechaBaja, Long tipo) {
-		String sql = "UPDATE app_convencidos SET estatus = ?, fecha_baja = ? WHERE id = ? and tipo = ?";
+	public void updateStatusCot(Long id, char estatus, Date fechaBaja, Long tipo, String tipoFecha) {
+		String sql = "UPDATE app_convencidos SET estatus = ?, " + tipoFecha + " = ? WHERE id = ? and tipo = ?";
 
 		template.update(sql, new Object[] { estatus, fechaBaja, id, tipo },
 				new int[] { Types.CHAR, Types.DATE, Types.NUMERIC, Types.NUMERIC });

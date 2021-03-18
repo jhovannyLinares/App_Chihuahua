@@ -19,7 +19,7 @@ public interface IConvencidosRepository {
 
 	void save(Convencidos convencidos);
 
-	void updateStatusCot(Long id, char estatus, Date fechaBaja, Long tipo);
+	void updateStatusCot(Long id, char estatus, Date fechaBaja, Long tipo, String tipoFecha);
 
 	Long getIdMax();
 

@@ -79,8 +79,10 @@ public class CotServiceImpl extends MasterService implements ICotService {
 
 			List<SeccionElectoral> electorals = seccionRepository.findByCotId(idCot, COT);
 
-			for (SeccionElectoral seccionElectoral : electorals) {
-				seccionRepository.updateIdCot(seccionElectoral.getId(), 0l);
+			if (electorals != null) {
+				for (SeccionElectoral seccionElectoral : electorals) {
+					seccionRepository.updateIdCot(seccionElectoral.getId(), 0l);
+				}
 			}
 
 			for (Long idSeccion : idSecciones) {
@@ -119,16 +121,18 @@ public class CotServiceImpl extends MasterService implements ICotService {
 			if (cot != null) {
 				List<SeccionElectoral> secciones = seccionRepository.findByCotId(idCot, COT);
 
-				cotRepository.updateStatusCot(idCot, ESTATUS_SUSPENDIDO, new Date(System.currentTimeMillis()), COT);
+				final String campoFecha = "fecha_baja";
+				cotRepository.updateStatusCot(idCot, ESTATUS_SUSPENDIDO, new Date(System.currentTimeMillis()), COT, campoFecha);
 
+				String info = "";
 				if (secciones != null) {
 					seccionRepository.updateIdCot(0l, idCot);
-					System.out.println("Se han liberado las secciones del COT");
+					info = ", se han liberado las secciones del COT";
 				} else {
-					System.out.println("No hay secciones por liberar");
+					info = ", no hay secciones por liberar";
 				}
 
-				return "COT suspendido";
+				return "COT suspendido" + info;
 
 			} else {
 				throw new CotException("No se encontraron datos.", 404);
@@ -141,11 +145,21 @@ public class CotServiceImpl extends MasterService implements ICotService {
 
 	@Override
 	public String activar(Long idCot, long perfil) throws CotException {
+		
 		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL || perfil == PERFIL_MUNICIPAL) {
+			Convencidos cot = cotRepository.getByIdAndEstatus(idCot, ESTATUS_SUSPENDIDO, COT);
 
-			cotRepository.updateStatusCot(idCot, ESTATUS_ALTA, new Date(System.currentTimeMillis()), COT);
+			if (cot != null) {
 
-			return "COT activo";
+				final String campoFecha = "fecha_reactivacion";
+				cotRepository.updateStatusCot(idCot, ESTATUS_ALTA, new Date(System.currentTimeMillis()), COT, campoFecha);
+
+				return "Se reactivo COT";
+
+			} else {
+				throw new CotException("No se encontro el COT ingresado", 404);
+			}
+
 		} else {
 			throw new CotException("Permisos insuficientes.", 401);
 		}
