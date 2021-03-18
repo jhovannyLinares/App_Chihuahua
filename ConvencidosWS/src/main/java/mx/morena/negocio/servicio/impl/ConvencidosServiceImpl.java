@@ -14,11 +14,7 @@ import mx.morena.negocio.exception.ConvencidosException;
 import mx.morena.negocio.servicio.IConvencidosService;
 import mx.morena.negocio.util.MapperUtil;
 import mx.morena.persistencia.entidad.Convencidos;
-import mx.morena.persistencia.entidad.DistritoFederal;
-import mx.morena.persistencia.entidad.Municipio;
 import mx.morena.persistencia.repository.IConvencidosRepository;
-import mx.morena.persistencia.repository.IDistritoFederalRepository;
-import mx.morena.persistencia.repository.IMunicipioRepository;
 import mx.morena.security.servicio.MasterService;
 
 @Service
@@ -27,34 +23,25 @@ public class ConvencidosServiceImpl extends MasterService implements IConvencido
 	@Autowired
 	private IConvencidosRepository convencidosRepository;
 
-	@Autowired
-	private IDistritoFederalRepository dFederalRepository;
-
-
-	@Autowired
-	private IMunicipioRepository municipioRepository;
-
-
-
 	private static final char ESTATUS_ALTA = 'A';
 	private static String sinClave = "No Cuenta con ClaveElector";
 
 	@Override
 	public List<ConvencidosResponseDTO> getConvencidos(Long distritoFederalId, Long idMunicipio, Long idSeccion,
 			String claveElector) throws ConvencidosException {
+
 		List<Convencidos> lstConv = null;
 		List<ConvencidosResponseDTO> lstDto = new ArrayList<ConvencidosResponseDTO>();
 
 		if (distritoFederalId != null) {
-			lstConv = convencidosRepository.getByDistritoFederal(distritoFederalId,CONVENCIDO);
+			lstConv = convencidosRepository.getByDistritoFederal(distritoFederalId, CONVENCIDO);
 		}
 		if (idMunicipio != null) {
-			lstConv = convencidosRepository.getByMunicipio(idMunicipio,CONVENCIDO);
+			lstConv = convencidosRepository.getByMunicipio(idMunicipio, CONVENCIDO);
 		}
 
 		if (idSeccion != null) {
-				lstConv = convencidosRepository.getBySeccionesElectoralesIn(idSeccion,CONVENCIDO);
-			
+			lstConv = convencidosRepository.getBySeccionesElectoralesIn(idSeccion, CONVENCIDO);
 		}
 
 		if (claveElector != null) {
@@ -64,6 +51,7 @@ public class ConvencidosServiceImpl extends MasterService implements IConvencido
 		if (lstConv != null) {
 			lstDto = MapperUtil.mapAll(lstConv, ConvencidosResponseDTO.class);
 			return lstDto;
+
 		} else {
 			throw new ConvencidosException("No se encontro ningun usuario con el parametro ingresado", 404);
 		}
@@ -72,8 +60,8 @@ public class ConvencidosServiceImpl extends MasterService implements IConvencido
 
 	@Override
 	public Long save(long idUsuario, ConvencidosDTO dto) throws ConvencidosException {
-		
-		if (dto.getIsClaveElector()!= true || dto.getClaveElector().length() == 18) {
+
+		if (dto.getIsClaveElector() != true || dto.getClaveElector().length() == 18) {
 			List<Convencidos> convencidoEx = convencidosRepository.findByClaveElector(dto.getClaveElector());
 
 			if (convencidoEx != null) {
@@ -102,14 +90,15 @@ public class ConvencidosServiceImpl extends MasterService implements IConvencido
 
 			}
 		} else {
-			throw new ConvencidosException("El numero de caracteres ingresado en la clave de elector es incorrecto", 400);
+			throw new ConvencidosException("El numero de caracteres ingresado en la clave de elector es incorrecto",
+					400);
 		}
 
 	}
 
 	@Override
 	public boolean findByClaveElector(String claveElector) throws ConvencidosException {
-		
+
 		if (claveElector.length() == 18) {
 			List<Convencidos> convencidos = convencidosRepository.findByClaveElector(claveElector);
 			if (convencidos == null) {
@@ -118,7 +107,8 @@ public class ConvencidosServiceImpl extends MasterService implements IConvencido
 				return true;
 			}
 		} else {
-			throw new ConvencidosException("El numero de caracteres ingresado en la clave de elector es incorrecto", 400);
+			throw new ConvencidosException("El numero de caracteres ingresado en la clave de elector es incorrecto",
+					400);
 		}
 	}
 
