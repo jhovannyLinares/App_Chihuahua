@@ -46,9 +46,9 @@ public class CotServiceImpl extends MasterService implements ICotService {
 					personaCot.setFechaRegistro(new Date(System.currentTimeMillis()));
 					personaCot.setEstatus(ESTATUS_ALTA);
 					personaCot.setFechaSistema(new Timestamp(new Date().getTime()));
-					personaCot.setEstado(cotDto.getIdEstado());
-					personaCot.setDistritoFederal(cotDto.getIdDistritoFederal());
-					personaCot.setMunicipio(cotDto.getIdMunicipio());
+					personaCot.setIdEstado(cotDto.getIdEstado());
+					personaCot.setIdFederal(cotDto.getIdDistritoFederal());
+					personaCot.setIdMunicipio(cotDto.getIdMunicipio());
 					personaCot.setUsuario(idUsuario);
 					personaCot.setTipo(COT);
 

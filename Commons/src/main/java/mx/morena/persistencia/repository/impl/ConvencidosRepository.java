@@ -109,8 +109,8 @@ public class ConvencidosRepository implements IConvencidosRepository {
 						convencidos.getFechaBaja(), convencidos.getFechaReactivacion(), convencidos.getFechaRegistro(),
 						convencidos.getFechaSistema(), convencidos.isMov(), convencidos.getNombre(),
 						convencidos.getNumExterior(), convencidos.getNumInterior(), convencidos.getTelCasa(),
-						convencidos.getTelCelular(), convencidos.getDistritoFederal(), convencidos.getEstado(),
-						convencidos.getMunicipio(), convencidos.getUsuario(), convencidos.getTipo(),convencidos.getSeccionElectoral() });
+						convencidos.getTelCelular(), convencidos.getIdFederal(), convencidos.getIdEstado(),
+						convencidos.getIdMunicipio(), convencidos.getUsuario(), convencidos.getTipo(),convencidos.getIdSeccion() });
 
 	}
 

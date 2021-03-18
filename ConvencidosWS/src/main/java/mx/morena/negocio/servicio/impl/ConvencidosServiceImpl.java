@@ -91,10 +91,10 @@ public class ConvencidosServiceImpl extends MasterService implements IConvencido
 				convencido.setTipo(CONVENCIDO);
 				convencido.setFechaRegistro(new Date());
 				convencido.setEstatus(ESTATUS_ALTA);
-				convencido.setSeccionElectoral(dto.getIdSeccion());
-				convencido.setEstado(dto.getIdEstado());
-				convencido.setDistritoFederal(dto.getIdFederal());
-				convencido.setMunicipio(dto.getIdMunicipio());
+				convencido.setIdSeccion(dto.getIdSeccion());
+				convencido.setIdEstado(dto.getIdEstado());
+				convencido.setIdFederal(dto.getIdFederal());
+				convencido.setIdMunicipio(dto.getIdMunicipio());
 				convencido.setUsuario(idUsuario);
 				convencido.setFechaSistema(new Timestamp(new Date().getTime()));
 

@@ -6,13 +6,13 @@ public class ConvencidosResponseDTO {
 	
 	private Date fechaRegistro;
 
-	private Long estado;
+	private Long idEstado;
 
-	private Long distritoFederal;
+	private Long idFederal;
 
-	private Long municipio;
+	private Long idMunicipio;
 
-	private Long seccionElectoral;
+	private Long idSeccion;
 
 	private String nombre;
 
@@ -50,36 +50,36 @@ public class ConvencidosResponseDTO {
 		this.fechaRegistro = fechaRegistro;
 	}
 
-	public Long getEstado() {
-		return estado;
+	public Long getIdEstado() {
+		return idEstado;
 	}
 
-	public void setEstado(Long estado) {
-		this.estado = estado;
+	public void setIdEstado(Long idEstado) {
+		this.idEstado = idEstado;
 	}
 
-	public Long getDistritoFederal() {
-		return distritoFederal;
+	public Long getIdFederal() {
+		return idFederal;
 	}
 
-	public void setDistritoFederal(Long distritoFederal) {
-		this.distritoFederal = distritoFederal;
+	public void setIdFederal(Long idFederal) {
+		this.idFederal = idFederal;
 	}
 
-	public Long getMunicipio() {
-		return municipio;
+	public Long getIdMunicipio() {
+		return idMunicipio;
 	}
 
-	public void setMunicipio(Long municipio) {
-		this.municipio = municipio;
+	public void setIdMunicipio(Long idMunicipio) {
+		this.idMunicipio = idMunicipio;
 	}
 
-	public Long getSeccionElectoral() {
-		return seccionElectoral;
+	public Long getIdSeccion() {
+		return idSeccion;
 	}
 
-	public void setSeccionElectoral(Long seccionElectoral) {
-		this.seccionElectoral = seccionElectoral;
+	public void setIdSeccion(Long idSeccion) {
+		this.idSeccion = idSeccion;
 	}
 
 	public String getNombre() {

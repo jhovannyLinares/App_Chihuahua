@@ -37,11 +37,11 @@ public class ConvencidoRowMapper implements RowMapper<Convencidos> {
 		convencido.setNumInterior(rs.getString("numero_interior"));
 		convencido.setTelCasa(rs.getString("telefono_casa"));
 		convencido.setTelCelular(rs.getString("telefono_celular"));
-		convencido.setDistritoFederal(rs.getLong("distrito_federal_id"));
-		convencido.setEstado(rs.getLong("estado_id"));
-		convencido.setMunicipio(rs.getLong("municipio_id"));
+		convencido.setIdFederal(rs.getLong("distrito_federal_id"));
+		convencido.setIdEstado(rs.getLong("estado_id"));
+		convencido.setIdMunicipio(rs.getLong("municipio_id"));
 		convencido.setUsuario(rs.getLong("usuario_id_usuario"));
-		convencido.setSeccionElectoral(rs.getLong("seccion_id")); 
+		convencido.setIdSeccion(rs.getLong("seccion_id")); 
 
 		return convencido;
 	}
