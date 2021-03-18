@@ -65,7 +65,7 @@ public class ConvencidosServiceImpl extends MasterService implements IConvencido
 			dto.setClaveElector(null);
 		}
 		
-		if (dto.getIsClaveElector()== true || dto.getClaveElector().length() == 18) {
+		if (dto.getIsClaveElector() == true || dto.getClaveElector().length() == 18) {
 			List<Convencidos> convencidoEx = convencidosRepository.findByClaveElector(dto.getClaveElector());
 
 			if (convencidoEx != null) {
