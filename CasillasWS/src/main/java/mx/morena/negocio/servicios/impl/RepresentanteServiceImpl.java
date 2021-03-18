@@ -142,38 +142,46 @@ public class RepresentanteServiceImpl extends MasterService implements IRepresen
 		return resp;
 	}
 
-	public Long guardarRepresentante(RepresentanteDTO representanteDTO, long idUsuario, byte tipo) throws RepresentanteException {
-		
-		Representantes representante = new Representantes();
+	public Long guardarRepresentante(RepresentanteDTO representanteDTO, long idUsuario, byte tipo)
+			throws RepresentanteException {
+
 		if (representanteDTO.getClaveElector() != null && representanteDTO.getClaveElector().length() == 18) {
 			Representantes existeClave = representanteRepository.findByClaveElector(representanteDTO.getClaveElector());
 
-			if (existeClave != null)
+			if (existeClave != null) {
 				throw new RepresentanteException("La clave de elector ya se encuentra registrada", 400);
-		}
+			} else {
 
-		if (representanteDTO.getIdDistritoFederal() != null && representanteDTO.getIdMunicipio() != null
-				&& representanteDTO.getIdEstado() != null && representanteDTO.getIdSeccionElectoral() != null) {
-			
-			MapperUtil.map(representanteDTO, representante);
+				if (representanteDTO.getIdDistritoFederal() != null && representanteDTO.getIdMunicipio() != null
+						&& representanteDTO.getIdEstado() != null && representanteDTO.getIdSeccionElectoral() != null) {
 
-			representante.setFechaRegistro(new Date(System.currentTimeMillis()));
-			representante.setTipo(tipo);
-			representante.setRuta(null);
-			representante.setUsuario(idUsuario);
-			representante.setDistritoFederal(representanteDTO.getIdDistritoFederal());
-			representante.setEstado(representanteDTO.getIdEstado());
-			representante.setMunicipio(representanteDTO.getIdMunicipio());
-			representante.setSeccionElectoral(representanteDTO.getIdSeccionElectoral());
+					Representantes representante = new Representantes();
 
-			System.out.println(representanteDTO);
-			System.out.println(representante);
-			 representanteRepository.save(representante);
+					MapperUtil.map(representanteDTO, representante);
+
+					representante.setFechaRegistro(new Date(System.currentTimeMillis()));
+					representante.setTipo(tipo);
+					representante.setRuta(null);
+					representante.setUsuario(idUsuario);
+					representante.setDistritoFederal(representanteDTO.getIdDistritoFederal());
+					representante.setEstado(representanteDTO.getIdEstado());
+					representante.setMunicipio(representanteDTO.getIdMunicipio());
+					representante.setSeccionElectoral(representanteDTO.getIdSeccionElectoral());
+
+					representanteRepository.save(representante);
+
+					return representanteRepository.getIdMax();
+
+				} else {
+					throw new RepresentanteException("No se encontraron datos.", 404);
+				}
+			}
 		} else {
-			throw new RepresentanteException("No se encontraron datos.", 404);
+			throw new RepresentanteException("El numero de caracteres ingresado en la clave de elector es incorrecto",
+					400);
 		}
 
-		return representanteRepository.getIdMax();
 	}
+	
 
 }
