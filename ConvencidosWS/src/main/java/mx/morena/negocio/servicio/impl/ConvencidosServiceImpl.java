@@ -46,12 +46,10 @@ public class ConvencidosServiceImpl extends MasterService implements IConvencido
 		List<ConvencidosResponseDTO> lstDto = new ArrayList<ConvencidosResponseDTO>();
 
 		if (distritoFederalId != null) {
-			DistritoFederal dFederal = dFederalRepository.findById(distritoFederalId);
-			lstConv = convencidosRepository.getByDistritoFederal(dFederal.getId(),CONVENCIDO);
+			lstConv = convencidosRepository.getByDistritoFederal(distritoFederalId,CONVENCIDO);
 		}
 		if (idMunicipio != null) {
-			Municipio municipio = municipioRepository.findById(idMunicipio);
-			lstConv = convencidosRepository.getByMunicipio(municipio.getId(),CONVENCIDO);
+			lstConv = convencidosRepository.getByMunicipio(idMunicipio,CONVENCIDO);
 		}
 
 		if (idSeccion != null) {
@@ -63,7 +61,7 @@ public class ConvencidosServiceImpl extends MasterService implements IConvencido
 			lstConv = convencidosRepository.findByClaveElector(claveElector);
 		}
 
-		if (!lstConv.isEmpty()) {
+		if (lstConv != null) {
 			lstDto = MapperUtil.mapAll(lstConv, ConvencidosResponseDTO.class);
 			return lstDto;
 		} else {
