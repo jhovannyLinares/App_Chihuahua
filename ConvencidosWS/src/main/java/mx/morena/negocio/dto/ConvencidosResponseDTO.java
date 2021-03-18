@@ -6,19 +6,19 @@ public class ConvencidosResponseDTO {
 	
 	private Date fechaRegistro;
 
-	private Long idEstado;
+	private Long estado;
 
-	private Long idFederal;
+	private Long distritoFederal;
 
-	private Long idMunicipio;
+	private Long municipio;
 
-	private Long idSeccion;
+	private Long seccionElectoral;
 
 	private String nombre;
 
-	private String aPaterno;
+	private String apellidoPaterno;
 
-	private String aMaterno;
+	private String apellidoMaterno;
 
 	private String claveElector;
 
@@ -50,36 +50,36 @@ public class ConvencidosResponseDTO {
 		this.fechaRegistro = fechaRegistro;
 	}
 
-	public Long getIdEstado() {
-		return idEstado;
+	public Long getEstado() {
+		return estado;
 	}
 
-	public void setIdEstado(Long idEstado) {
-		this.idEstado = idEstado;
+	public void setEstado(Long estado) {
+		this.estado = estado;
 	}
 
-	public Long getIdFederal() {
-		return idFederal;
+	public Long getDistritoFederal() {
+		return distritoFederal;
 	}
 
-	public void setIdFederal(Long idFederal) {
-		this.idFederal = idFederal;
+	public void setDistritoFederal(Long distritoFederal) {
+		this.distritoFederal = distritoFederal;
 	}
 
-	public Long getIdMunicipio() {
-		return idMunicipio;
+	public Long getMunicipio() {
+		return municipio;
 	}
 
-	public void setIdMunicipio(Long idMunicipio) {
-		this.idMunicipio = idMunicipio;
+	public void setMunicipio(Long municipio) {
+		this.municipio = municipio;
 	}
 
-	public Long getIdSeccion() {
-		return idSeccion;
+	public Long getSeccionElectoral() {
+		return seccionElectoral;
 	}
 
-	public void setIdSeccion(Long idSeccion) {
-		this.idSeccion = idSeccion;
+	public void setSeccionElectoral(Long seccionElectoral) {
+		this.seccionElectoral = seccionElectoral;
 	}
 
 	public String getNombre() {
@@ -90,20 +90,20 @@ public class ConvencidosResponseDTO {
 		this.nombre = nombre;
 	}
 
-	public String getaPaterno() {
-		return aPaterno;
+	public String getApellidoPaterno() {
+		return apellidoPaterno;
 	}
 
-	public void setaPaterno(String aPaterno) {
-		this.aPaterno = aPaterno;
+	public void setApellidoPaterno(String apellidoPaterno) {
+		this.apellidoPaterno = apellidoPaterno;
 	}
 
-	public String getaMaterno() {
-		return aMaterno;
+	public String getApellidoMaterno() {
+		return apellidoMaterno;
 	}
 
-	public void setaMaterno(String aMaterno) {
-		this.aMaterno = aMaterno;
+	public void setApellidoMaterno(String apellidoMaterno) {
+		this.apellidoMaterno = apellidoMaterno;
 	}
 
 	public String getClaveElector() {
