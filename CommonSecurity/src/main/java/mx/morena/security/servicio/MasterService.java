@@ -22,6 +22,13 @@ public class MasterService {
 	protected static final char ESTATUS_ALTA = 'A';
 	protected static final char ESTATUS_SUSPENDIDO = 'S';
 	
+	protected static final byte REP_FEDERAL = 2;
+	protected static final byte REP_LOCAL = 3;
+	protected static final byte REP_MUNICIPAL = 4;
+	protected static final byte REP_CRG = 7;
+	protected static final byte REP_RG = 8;
+	protected static final byte REP_RC = 9;
+	
 	
 
 }

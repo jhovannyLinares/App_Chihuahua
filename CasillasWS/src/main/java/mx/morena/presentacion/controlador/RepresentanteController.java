@@ -1,14 +1,15 @@
 package mx.morena.presentacion.controlador;
 
+import java.io.IOException;
+
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -26,90 +27,111 @@ public class RepresentanteController extends MasterController {
 	
 	@PostMapping("/federal")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	public Long guardarRepresentanteFederal(HttpServletRequest request, @RequestBody RepresentanteDTO representanteDTO) {
+	public Long guardarRepresentanteFederal(HttpServletResponse response,HttpServletRequest request, @RequestBody RepresentanteDTO representanteDTO) throws IOException {
 		
 		try {
 			long perfil = getPerfil(request);
 			long usuario = getUsuario(request);
 			
 			return representanteService.saveRepFederal(representanteDTO, perfil, usuario);
-		} catch (RepresentanteException ex) {
-			throw new ResponseStatusException(HttpStatus.resolve(ex.getCodeError()), ex.getLocalizedMessage());
+		} catch (RepresentanteException e) {
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+			return null;
+		} catch (Exception e ) {
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			return null;
 		}
-		
 	}
 	
 	@PostMapping("/local")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	public Long guardarRepresentanteLocal(HttpServletRequest request, @RequestBody RepresentanteDTO representanteDTO) {
+	public Long guardarRepresentanteLocal(HttpServletResponse response,HttpServletRequest request, @RequestBody RepresentanteDTO representanteDTO) throws IOException {
 		
 		try {
 			long perfil = getPerfil(request);
 			long usuario = getUsuario(request);
 			
 			return representanteService.saveRepLocal(representanteDTO, perfil, usuario);
-		} catch (RepresentanteException ex) {
-			throw new ResponseStatusException(HttpStatus.resolve(ex.getCodeError()), ex.getLocalizedMessage());
+		} catch (RepresentanteException e) {
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+			return null;
+		} catch (Exception e ) {
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			return null;
 		}
 		
 	}
 	
 	@PostMapping("/municipal")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	public Long guardarRepresentanteMunicipal(HttpServletRequest request, @RequestBody RepresentanteDTO representanteDTO) {
+	public Long guardarRepresentanteMunicipal(HttpServletResponse response,HttpServletRequest request, @RequestBody RepresentanteDTO representanteDTO) throws IOException {
 		
 		try {
 			long perfil = getPerfil(request);
 			long usuario = getUsuario(request);
 			
 			return representanteService.saveRepMunicipal(representanteDTO, perfil, usuario);
-		} catch (RepresentanteException ex) {
-			throw new ResponseStatusException(HttpStatus.resolve(ex.getCodeError()), ex.getLocalizedMessage());
+		} catch (RepresentanteException e) {
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+			return null;
+		} catch (Exception e ) {
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			return null;
 		}
-		
 	}
 	
 	@PostMapping("/crg")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	public Long guardarRepresentanteCRG(HttpServletRequest request, @RequestBody RepresentanteDTO representanteDTO) {
+	public Long guardarRepresentanteCRG(HttpServletResponse response,HttpServletRequest request, @RequestBody RepresentanteDTO representanteDTO) throws IOException {
 		
 		try {
 			long perfil = getPerfil(request);
 			long usuario = getUsuario(request);
 			
 			return representanteService.saveRepCRG(representanteDTO, perfil, usuario);
-		} catch (RepresentanteException ex) {
-			throw new ResponseStatusException(HttpStatus.resolve(ex.getCodeError()), ex.getLocalizedMessage());
+		} catch (RepresentanteException e) {
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+			return null;
+		} catch (Exception e ) {
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			return null;
 		}
 		
 	}
 	
 	@PostMapping("/rg")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	public Long guardarRepresentanteRG(HttpServletRequest request, @RequestBody RepresentanteDTO representanteDTO) {
+	public Long guardarRepresentanteRG(HttpServletResponse response,HttpServletRequest request, @RequestBody RepresentanteDTO representanteDTO) throws IOException {
 		
 		try {
 			long perfil = getPerfil(request);
 			long usuario = getUsuario(request);
 			
 			return representanteService.saveRepRG(representanteDTO, perfil, usuario);
-		} catch (RepresentanteException ex) {
-			throw new ResponseStatusException(HttpStatus.resolve(ex.getCodeError()), ex.getLocalizedMessage());
+		} catch (RepresentanteException e) {
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+			return null;
+		} catch (Exception e ) {
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			return null;
 		}
-		
 	}
 	
 	@PostMapping("/rc")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	public Long guardarRepresentanteRC(HttpServletRequest request, @RequestBody RepresentanteDTO representanteDTO) {
+	public Long guardarRepresentanteRC(HttpServletResponse response,HttpServletRequest request, @RequestBody RepresentanteDTO representanteDTO) throws IOException {
 		
 		try {
 			long perfil = getPerfil(request);
 			long usuario = getUsuario(request);
 			
 			return representanteService.saveRepRC(representanteDTO, perfil, usuario);
-		} catch (RepresentanteException ex) {
-			throw new ResponseStatusException(HttpStatus.resolve(ex.getCodeError()), ex.getLocalizedMessage());
+		} catch (RepresentanteException e) {
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+			return null;
+		} catch (Exception e ) {
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			return null;
 		}
 		
 	}

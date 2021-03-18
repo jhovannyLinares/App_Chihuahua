@@ -19,12 +19,7 @@ public class RepresentanteServiceImpl extends MasterService implements IRepresen
 	@Autowired
 	private IRepresentanteRepository representanteRepository;
 
-	private static final byte REP_FEDERAL = 1;
-	private static final byte REP_LOCAL = 2;
-	private static final byte REP_MUNICIPAL = 3;
-	private static final byte REP_CRG = 4;
-	private static final byte REP_RG = 5;
-	private static final byte REP_RC = 6;
+	
 
 	@Override
 	public Long saveRepFederal(RepresentanteDTO representante, long perfil, long idUsuario) throws RepresentanteException {
