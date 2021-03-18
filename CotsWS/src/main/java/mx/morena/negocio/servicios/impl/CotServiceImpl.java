@@ -42,7 +42,11 @@ public class CotServiceImpl extends MasterService implements ICotService {
 					Convencidos personaCot = new Convencidos();
 
 					MapperUtil.map(cotDto, personaCot);
-
+					
+					if(cotDto.getIsCalle()) {
+						personaCot.setCalle(SIN_CALLE);
+					}
+					
 					personaCot.setFechaRegistro(new Date(System.currentTimeMillis()));
 					personaCot.setEstatus(ESTATUS_ALTA);
 					personaCot.setFechaSistema(new Timestamp(new Date().getTime()));

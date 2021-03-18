@@ -21,6 +21,7 @@ public class CotDTO {
 	private String curp;
 	private String banco;
 	private String clabeInterbancaria;
+	private Boolean isCalle;
 
 	public String getNombre() {
 		return nombre;
@@ -172,6 +173,14 @@ public class CotDTO {
 
 	public void setIdSeccion(Long idSeccion) {
 		this.idSeccion = idSeccion;
+	}
+
+	public Boolean getIsCalle() {
+		return isCalle;
+	}
+
+	public void setIsCalle(Boolean isCalle) {
+		this.isCalle = isCalle;
 	}
 	
 }

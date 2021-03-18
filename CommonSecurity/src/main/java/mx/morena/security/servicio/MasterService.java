@@ -29,6 +29,6 @@ public class MasterService {
 	protected static final byte REP_RG = 8;
 	protected static final byte REP_RC = 9;
 	
-	
+	protected static final String SIN_CALLE = "No se cuenta con Calle";
 
 }
