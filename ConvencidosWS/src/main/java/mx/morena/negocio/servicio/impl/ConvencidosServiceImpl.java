@@ -65,7 +65,7 @@ public class ConvencidosServiceImpl extends MasterService implements IConvencido
 			lstDto = MapperUtil.mapAll(lstConv, ConvencidosResponseDTO.class);
 			return lstDto;
 		} else {
-			throw new ConvencidosException("No se encontro ningun usuario con el parametro ingresado", 204);
+			throw new ConvencidosException("No se encontro ningun usuario con el parametro ingresado", 404);
 		}
 
 	}
