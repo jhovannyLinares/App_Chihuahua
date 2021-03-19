@@ -75,7 +75,7 @@ public class CotServiceImpl extends MasterService implements ICotService {
 	}
 
 	@Override
-	@Transactional
+	@Transactional(rollbackFor={CotException.class})
 	public String asignarSecciones(List<Long> idSecciones, Long idCot, long perfil) throws CotException {
 		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL || perfil == PERFIL_MUNICIPAL) {
 			
