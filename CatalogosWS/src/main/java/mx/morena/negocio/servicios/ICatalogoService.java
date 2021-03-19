@@ -24,6 +24,6 @@ public interface ICatalogoService {
 
 	List<CasillaDTO> getCasillas(long usuario, long perfil, Long distritoFederalId, Long municipioId, Long seccionId);
 
-	Map<Byte, String> getRepresentantes(long perfil);
+	Map<Integer, String> getRepresentantes(long perfil);
 
 }

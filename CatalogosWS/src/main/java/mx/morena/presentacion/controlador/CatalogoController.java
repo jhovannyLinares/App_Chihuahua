@@ -40,7 +40,7 @@ public class CatalogoController extends MasterController {
 	
 	@GetMapping("/representantes")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	private Map<Byte,String> getCasillas(HttpServletRequest request){
+	private Map<Integer,String> getRepresentantes(HttpServletRequest request){
 
 		return ICatService.getRepresentantes( getPerfil(request));
 

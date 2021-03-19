@@ -54,7 +54,7 @@ public class Representantes {
 
 	private String ruta;
 
-	private byte tipo;
+	private Integer tipo;
 	
 	private Date fechaSistema;
 
@@ -202,11 +202,11 @@ public class Representantes {
 		this.inePdf = inePdf;
 	}
 
-	public byte getTipo() {
+	public Integer getTipo() {
 		return tipo;
 	}
 
-	public void setTipo(byte tipo) {
+	public void setTipo(Integer tipo) {
 		this.tipo = tipo;
 	}
 

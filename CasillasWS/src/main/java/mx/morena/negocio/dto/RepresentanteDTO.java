@@ -27,6 +27,7 @@ public class RepresentanteDTO {
 	private String inePdf;
 	private Boolean isClaveElector;
 	private Boolean isCalle;
+	private Integer tipo;
 
 	public Date getFechaRegistro() {
 		return fechaRegistro;
@@ -212,6 +213,14 @@ public class RepresentanteDTO {
 		this.isCalle = isCalle;
 	}
 
+	public Integer getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(Integer tipo) {
+		this.tipo = tipo;
+	}
+
 	@Override
 	public String toString() {
 		return "RepresentanteDTO [fechaRegistro=" + fechaRegistro + ", idEstado=" + idEstado + ", idDistritoFederal="
@@ -221,6 +230,7 @@ public class RepresentanteDTO {
 				+ ", numExterior=" + numExterior + ", colonia=" + colonia + ", cp=" + cp + ", telCasa=" + telCasa
 				+ ", telCelular=" + telCelular + ", correo=" + correo + ", propuesto=" + propuesto + ", ineLado1="
 				+ ineLado1 + ", ineLado2=" + ineLado2 + ", inePdf=" + inePdf + ", isClaveElector=" + isClaveElector
-				+ ", isCalle=" + isCalle + "]";
+				+ ", isCalle=" + isCalle + ", tipo=" + tipo + "]";
 	}
+
 }

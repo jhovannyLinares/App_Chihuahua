@@ -1,5 +1,6 @@
 package mx.morena.persistencia.repository.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,8 +38,12 @@ public class UsuarioRepository implements IUsuarioRepository {
 	public Usuario findById(long idUsuario) {
 
 		String sql = "SELECT * FROM app_usuario WHERE id = ?::INTEGER";
+		try {
+			return template.queryForObject(sql, new Object[] { idUsuario }, new int[] { 1 }, new UsuarioRowMapper());
+		} catch (EmptyResultDataAccessException e) {
 
-		return template.queryForObject(sql, new Object[] { idUsuario }, new int[] { 1 }, new UsuarioRowMapper());
+			return null;
+		}
 	}
 
 	@Override
@@ -62,16 +67,24 @@ public class UsuarioRepository implements IUsuarioRepository {
 	public Perfil findPerfilById(long id) {
 
 		String sql = "SELECT * FROM app_perfil WHERE id = ?::INTEGER";
+		try {
+			return template.queryForObject(sql, new Long[] { id }, new int[] { 1 }, new PerfilRowMapper());
+		} catch (EmptyResultDataAccessException e) {
 
-		return template.queryForObject(sql, new Long[] { id }, new int[] { 1 }, new PerfilRowMapper());
+			return null;
+		}
 	}
 
 	@Override
 	public List<Modulo> findModulosByPerfil(Long id) {
 
 		String sql = "select * from app_perfil_modulo apm inner join app_modulo am on apm.id_modulo = am.id where id_perfil = ?::INTEGER";
+		try {
+			return template.queryForObject(sql, new Long[] { id }, new int[] { 1 }, new ModulosRowMapper());
+		} catch (EmptyResultDataAccessException e) {
 
-		return template.queryForObject(sql, new Long[] { id }, new int[] { 1 }, new ModulosRowMapper());
+			return new ArrayList<Modulo>();
+		}
 
 	}
 

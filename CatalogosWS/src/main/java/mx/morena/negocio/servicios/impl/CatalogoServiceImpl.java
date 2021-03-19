@@ -236,8 +236,8 @@ public class CatalogoServiceImpl extends MasterService implements ICatalogoServi
 	}
 
 	@Override
-	public Map<Byte, String> getRepresentantes(long perfil) {
-		Map<Byte, String> representantes = new HashMap<Byte, String>();
+	public Map<Integer, String> getRepresentantes(long perfil) {
+		Map<Integer, String> representantes = new HashMap<Integer, String>();
 
 		if (perfil < PERFIL_RC) {
 			representantes.put(REP_RC, "Representante RC");

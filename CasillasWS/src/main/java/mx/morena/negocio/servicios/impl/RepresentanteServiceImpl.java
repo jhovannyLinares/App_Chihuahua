@@ -1,6 +1,8 @@
 package mx.morena.negocio.servicios.impl;
 
 import java.sql.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,7 +11,6 @@ import mx.morena.negocio.dto.RepresentanteDTO;
 import mx.morena.negocio.exception.RepresentanteException;
 import mx.morena.negocio.servicios.IRepresentanteService;
 import mx.morena.negocio.util.MapperUtil;
-import mx.morena.persistencia.entidad.Convencidos;
 import mx.morena.persistencia.entidad.Representantes;
 import mx.morena.persistencia.repository.IRepresentanteRepository;
 import mx.morena.security.servicio.MasterService;
@@ -24,129 +25,61 @@ public class RepresentanteServiceImpl extends MasterService implements IRepresen
 	private static String sinCalle = "No se cuenta con calle";
 
 	@Override
-	public Long saveRepFederal(RepresentanteDTO representante, long perfil, long idUsuario) throws RepresentanteException {
+	public Long saveRepresentante(RepresentanteDTO representante, long perfil, long idUsuario)
+			throws RepresentanteException {
 		Long resp = null;
-		
-		if (perfil == PERFIL_ESTATAL) {
-			
-			if (representante != null) {
-				resp = guardarRepresentante(representante, idUsuario, REP_FEDERAL);
-			} else {
-				throw new RepresentanteException("El representante debe tener datos.", 400);
-			}
-			
+
+		Map<Integer, String> rep = getTipoRepresentante(perfil);
+
+		if (rep.containsKey(representante.getTipo())) {
+
+			resp = guardarRepresentante(representante, idUsuario, REP_RC);
+
 		} else {
+			
 			throw new RepresentanteException("Permisos insuficientes", 401);
 		}
-		
+
 		return resp;
 	}
 
-	@Override
-	public Long saveRepLocal(RepresentanteDTO representante, long perfil, long idUsuario) throws RepresentanteException {
-		Long resp = null;
-		
-		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL) {
-			
-			if (representante != null) {
-				resp = guardarRepresentante(representante, idUsuario, REP_LOCAL);
-			} else {
-				throw new RepresentanteException("El representante debe tener datos.", 400);
-			}
-			
-		} else {
-			throw new RepresentanteException("Permisos insuficientes", 401);
+	private Map<Integer, String> getTipoRepresentante(long perfil) {
+
+		Map<Integer, String> representantes = new HashMap<Integer, String>();
+
+		if (perfil < PERFIL_RC) {
+			representantes.put(REP_RC, "Representante RC");
 		}
-		
-		return resp;
+
+		if (perfil < PERFIL_RG) {
+			representantes.put(REP_RG, "Representante RG");
+		}
+
+		if (perfil < PERFIL_MUNICIPAL) {
+			representantes.put(REP_MUNICIPAL, "Representante Municipal");
+		}
+
+		if (perfil < PERFIL_LOCAL) {
+			representantes.put(REP_LOCAL, "Representante Local");
+			representantes.put(REP_CRG, "Representante CRG");
+		}
+
+		if (perfil < PERFIL_FEDERAL) {
+			representantes.put(REP_FEDERAL, "Representante Federal");
+		}
+
+		return representantes;
 	}
 
-	@Override
-	public Long saveRepMunicipal(RepresentanteDTO representante, long perfil, long idUsuario) throws RepresentanteException {
-		Long resp = null;
-		
-		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL || perfil == PERFIL_LOCAL) {
-			
-			if (representante != null) {
-				resp = guardarRepresentante(representante, idUsuario, REP_MUNICIPAL);
-			} else {
-				throw new RepresentanteException("El representante debe tener datos.", 400);
-			}
-			
-		} else {
-			throw new RepresentanteException("Permisos insuficientes", 401);
-		}
-		
-		return resp;
-	}
-
-	@Override
-	public Long saveRepCRG(RepresentanteDTO representante, long perfil, long idUsuario) throws RepresentanteException {
-		Long resp = null;
-		
-		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL) {
-			
-			if (representante != null) {
-				resp = guardarRepresentante(representante, idUsuario, REP_CRG);
-			} else {
-				throw new RepresentanteException("El representante debe tener datos.", 400);
-			}
-			
-		} else {
-			throw new RepresentanteException("Permisos insuficientes", 401);
-		}
-		
-		return resp;
-	}
-
-	@Override
-	public Long saveRepRG(RepresentanteDTO representante, long perfil, long idUsuario) throws RepresentanteException {
-		Long resp = null;
-		
-		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL || perfil == PERFIL_CRG || perfil == PERFIL_LOCAL
-				|| perfil == PERFIL_MUNICIPAL) {
-			
-			if (representante != null) {
-				resp = guardarRepresentante(representante, idUsuario, REP_RG);
-			} else {
-				throw new RepresentanteException("El representante debe tener datos.", 400);
-			}
-			
-		} else {
-			throw new RepresentanteException("Permisos insuficientes", 401);
-		}
-		
-		return resp;
-	}
-
-	@Override
-	public Long saveRepRC(RepresentanteDTO representante, long perfil, long idUsuario) throws RepresentanteException {
-		Long resp = null;
-		
-		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL || perfil == PERFIL_CRG || perfil == PERFIL_LOCAL
-				|| perfil == PERFIL_MUNICIPAL || perfil == PERFIL_CRG || perfil == PERFIL_RG) {
-			
-			if (representante != null) {
-				resp = guardarRepresentante(representante, idUsuario, REP_RC);
-			} else {
-				throw new RepresentanteException("El representante debe tener datos.", 400);
-			}
-			
-		} else {
-			throw new RepresentanteException("Permisos insuficientes", 401);
-		}
-		
-		return resp;
-	}
-
-	public Long guardarRepresentante(RepresentanteDTO representanteDTO, long idUsuario, byte tipo)
+	public Long guardarRepresentante(RepresentanteDTO representanteDTO, long idUsuario, Integer tipo)
 			throws RepresentanteException {
 
-		if(representanteDTO.getIsClaveElector() == true) {
+		if (representanteDTO.getIsClaveElector() == true) {
 			representanteDTO.setClaveElector(null);
 		}
 
-		if (representanteDTO.getIsClaveElector()== true || (representanteDTO.getClaveElector() != null && representanteDTO.getClaveElector().length() == 18)) {
+		if (representanteDTO.getIsClaveElector() == true
+				|| (representanteDTO.getClaveElector() != null && representanteDTO.getClaveElector().length() == 18)) {
 			Representantes existeClave = representanteRepository.findByClaveElector(representanteDTO.getClaveElector());
 
 			if (existeClave != null) {
@@ -159,11 +92,11 @@ public class RepresentanteServiceImpl extends MasterService implements IRepresen
 					Representantes representante = new Representantes();
 
 					MapperUtil.map(representanteDTO, representante);
-					
-					if(representanteDTO.getIsCalle()) {
+
+					if (representanteDTO.getIsCalle()) {
 						representante.setCalle(sinCalle);
 					}
-					if(representanteDTO.getIsClaveElector()) {
+					if (representanteDTO.getIsClaveElector()) {
 						representante.setClaveElector(sinClave);
 					}
 
@@ -190,6 +123,5 @@ public class RepresentanteServiceImpl extends MasterService implements IRepresen
 		}
 
 	}
-	
 
 }

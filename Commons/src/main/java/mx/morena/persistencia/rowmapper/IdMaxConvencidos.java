@@ -5,8 +5,6 @@ import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
 
-import mx.morena.persistencia.entidad.Convencidos;
-
 public class IdMaxConvencidos implements RowMapper<Long>{
 
 	

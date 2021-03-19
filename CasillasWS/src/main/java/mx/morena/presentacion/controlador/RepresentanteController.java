@@ -25,7 +25,7 @@ public class RepresentanteController extends MasterController {
 	@Autowired
 	private IRepresentanteService representanteService;
 	
-	@PostMapping("/federal")
+	@PostMapping
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
 	public Long guardarRepresentanteFederal(HttpServletResponse response,HttpServletRequest request, @RequestBody RepresentanteDTO representanteDTO) throws IOException {
 		
@@ -33,7 +33,7 @@ public class RepresentanteController extends MasterController {
 			long perfil = getPerfil(request);
 			long usuario = getUsuario(request);
 			
-			return representanteService.saveRepFederal(representanteDTO, perfil, usuario);
+			return representanteService.saveRepresentante(representanteDTO, perfil, usuario);
 		} catch (RepresentanteException e) {
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
 			return null;
@@ -44,102 +44,6 @@ public class RepresentanteController extends MasterController {
 		}
 	}
 	
-	@PostMapping("/local")
-	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	public Long guardarRepresentanteLocal(HttpServletResponse response,HttpServletRequest request, @RequestBody RepresentanteDTO representanteDTO) throws IOException {
-		
-		try {
-			long perfil = getPerfil(request);
-			long usuario = getUsuario(request);
-			
-			return representanteService.saveRepLocal(representanteDTO, perfil, usuario);
-		} catch (RepresentanteException e) {
-			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
-			return null;
-		} catch (Exception e ) {
-			e.printStackTrace();
-			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
-			return null;
-		}
-		
-	}
 	
-	@PostMapping("/municipal")
-	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	public Long guardarRepresentanteMunicipal(HttpServletResponse response,HttpServletRequest request, @RequestBody RepresentanteDTO representanteDTO) throws IOException {
-		
-		try {
-			long perfil = getPerfil(request);
-			long usuario = getUsuario(request);
-			
-			return representanteService.saveRepMunicipal(representanteDTO, perfil, usuario);
-		} catch (RepresentanteException e) {
-			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
-			return null;
-		} catch (Exception e ) {
-			e.printStackTrace();
-			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
-			return null;
-		}
-	}
-	
-	@PostMapping("/crg")
-	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	public Long guardarRepresentanteCRG(HttpServletResponse response,HttpServletRequest request, @RequestBody RepresentanteDTO representanteDTO) throws IOException {
-		
-		try {
-			long perfil = getPerfil(request);
-			long usuario = getUsuario(request);
-			
-			return representanteService.saveRepCRG(representanteDTO, perfil, usuario);
-		} catch (RepresentanteException e) {
-			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
-			return null;
-		} catch (Exception e ) {
-			e.printStackTrace();
-			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
-			return null;
-		}
-		
-	}
-	
-	@PostMapping("/rg")
-	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	public Long guardarRepresentanteRG(HttpServletResponse response,HttpServletRequest request, @RequestBody RepresentanteDTO representanteDTO) throws IOException {
-		
-		try {
-			long perfil = getPerfil(request);
-			long usuario = getUsuario(request);
-			
-			return representanteService.saveRepRG(representanteDTO, perfil, usuario);
-		} catch (RepresentanteException e) {
-			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
-			return null;
-		} catch (Exception e ) {
-			e.printStackTrace();
-			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
-			return null;
-		}
-	}
-	
-	@PostMapping("/rc")
-	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	public Long guardarRepresentanteRC(HttpServletResponse response,HttpServletRequest request, @RequestBody RepresentanteDTO representanteDTO) throws IOException {
-		
-		try {
-			long perfil = getPerfil(request);
-			long usuario = getUsuario(request);
-			
-			return representanteService.saveRepRC(representanteDTO, perfil, usuario);
-		} catch (RepresentanteException e) {
-			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
-			return null;
-		} catch (Exception e ) {
-			e.printStackTrace();
-			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
-			return null;
-		}
-		
-	}
 	
 }
