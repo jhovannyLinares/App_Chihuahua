@@ -35,6 +35,7 @@ public class RepresentanteController extends MasterController {
 			
 			return representanteService.saveRepresentante(representanteDTO, perfil, usuario);
 		} catch (RepresentanteException e) {
+			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
 			return null;
 		} catch (Exception e ) {

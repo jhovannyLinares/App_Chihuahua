@@ -36,6 +36,7 @@ public class ConfiguracionController extends MasterController {
 			return usuarioService.updatePwd(idUsuario, usuario);
 
 		} catch (UsuarioException e) {
+			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
 			return null;
 		} catch (Exception e ) {

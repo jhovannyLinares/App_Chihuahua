@@ -33,11 +33,11 @@ public class RepresentanteServiceImpl extends MasterService implements IRepresen
 
 		if (rep.containsKey(representante.getTipo())) {
 
-			resp = guardarRepresentante(representante, idUsuario, REP_RC);
+			resp = guardarRepresentante(representante, idUsuario, representante.getTipo());
 
 		} else {
 			
-			throw new RepresentanteException("Permisos insuficientes", 401);
+			throw new RepresentanteException("Permisos insuficientes para dar de alta el tipo de representante", 401);
 		}
 
 		return resp;

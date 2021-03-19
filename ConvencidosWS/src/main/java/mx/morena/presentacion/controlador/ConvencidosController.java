@@ -47,6 +47,7 @@ public class ConvencidosController extends MasterController {
 					idSeccion, claveElector);
 			return convencidos;
 		} catch (ConvencidosException e) {
+			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
 			return null;
 		} catch (Exception e ) {
@@ -73,6 +74,7 @@ public class ConvencidosController extends MasterController {
 			return convencidosService.save(usuario, dto);
 
 		} catch (ConvencidosException e) {
+			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
 			return null;
 		} catch (Exception e ) {
@@ -95,6 +97,7 @@ public class ConvencidosController extends MasterController {
 		try {
 			return convencidosService.findByClaveElector(claveElector);
 		} catch (ConvencidosException e) {
+			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
 			return false;
 		} catch (Exception e ) {

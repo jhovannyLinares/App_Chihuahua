@@ -38,6 +38,7 @@ public class CotController extends MasterController {
 		try {
 			return cotService.save(cot, perfil, usuario);
 		} catch (CotException e) {
+			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
 			return null;
 		} catch (Exception e ) {
@@ -55,6 +56,7 @@ public class CotController extends MasterController {
 		try {
 			return cotService.asignarSecciones(secciones.getIdSecciones(), secciones.getIdCot(), perfil);
 		} catch (CotException e) {
+			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
 			return null;
 		} catch (Exception e ) {
@@ -72,6 +74,7 @@ public class CotController extends MasterController {
 		try {
 			return cotService.activar(idCot, perfil);
 		} catch (CotException e) {
+			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
 			return null;
 		} catch (Exception e ) {
@@ -90,6 +93,7 @@ public class CotController extends MasterController {
 		try {
 			return cotService.suspender(idCot, perfil, usuario);
 		} catch (CotException e) {
+			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
 			return null;
 		} catch (Exception e ) {
