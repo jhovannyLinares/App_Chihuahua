@@ -97,6 +97,9 @@ public class CotServiceImpl extends MasterService implements ICotService {
 
 						if (sec.getCot().equals(0l)) {
 							seccionRepository.updateIdCot(idSeccion, idCot);
+						} else {
+							throw new CotException("La seccion " + sec.getId() + "-" + sec.getDescripcion()
+							+ " ya la tiene asignada otro Cot", 400);
 						}
 
 					}
