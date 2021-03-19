@@ -2,6 +2,7 @@ package mx.morena.negocio.servicios.impl;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import mx.morena.negocio.dto.CotDTO;
+import mx.morena.negocio.dto.CotResponseDTO;
 import mx.morena.negocio.exception.CotException;
 import mx.morena.negocio.servicios.ICotService;
 import mx.morena.negocio.util.MapperUtil;
@@ -179,4 +181,37 @@ public class CotServiceImpl extends MasterService implements ICotService {
 		}
 	}
 
+	@Override
+	public List<CotResponseDTO> getCots(Long perfil) throws CotException {
+		
+		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL || perfil == PERFIL_MUNICIPAL) {
+			List<Convencidos> cots = cotRepository.getAllCots(COT);
+				
+			if (cots != null) {
+				return cots.stream().map(this::convertirADto).collect(Collectors.toList());
+			} else {
+				return null;
+			}
+		} else {
+			throw new CotException("Permisos insuficientes.", 401);
+		}
+	}
+	
+	public CotResponseDTO convertirADto(Convencidos cot) {
+		CotResponseDTO cotDto = new CotResponseDTO();
+		
+		cotDto.setNombreCompleto(cot.getNombre() + " " + cot.getApellidoPaterno() + " " + cot.getApellidoMaterno());
+		cotDto.setNombreDistrito(cot.getIdFederal() + "-" + cot.getNombreDistrito());
+		cotDto.setNombreMunicipio(cot.getIdMunicipio() + "-" + cot.getNombreMunicipio());
+		
+		if (cot.getEstatus() == ESTATUS_ALTA) {
+			cotDto.setEstatus("Activo");
+		} else {
+			cotDto.setEstatus("Suspendido");
+		}
+		
+		cotDto.setFechaRegistro(cot.getFechaRegistro());
+		
+		return cotDto;
+	}
 }

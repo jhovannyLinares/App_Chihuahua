@@ -160,7 +160,19 @@ public class ConvencidosRepository implements IConvencidosRepository {
 
 	}
 
-	
+	@Override
+	public List<Convencidos> getAllCots(Long tipo) {
+		String sql = "SELECT " + campos + ", am.nombre as nombre_municipio, adf.\"NOMBRE MUNICIPIO CABECERA\" as nombre_distrito, adf.nombre as nombre_estado, al.tipo as nombre_seccion "
+				+ "FROM app_convencidos ac inner join app_municipio am on am.id = ac.municipio_id "
+				+ "inner join app_distrito_federal adf on adf.id = ac.distrito_federal_id "
+				+ "inner join app_localidad al on al.id = ac.seccion_id WHERE ac.tipo = ? ";
+		try {
+			return template.queryForObject(sql, new Object[] { tipo }, new int[] { Types.NUMERIC },
+					new ConvencidosRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
 
 
 }

@@ -24,4 +24,6 @@ public interface IConvencidosRepository {
 	Long getIdMax();
 
 	List<Convencidos> getBySeccionesElectoralesIn(Long idSeccion, Long tipo);
+	
+	List<Convencidos> getAllCots(Long tipo);
 }

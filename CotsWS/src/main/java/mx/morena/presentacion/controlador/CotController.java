@@ -1,12 +1,14 @@
 package mx.morena.presentacion.controlador;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -18,6 +20,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import mx.morena.negocio.dto.AsignarSeccionesDTO;
 import mx.morena.negocio.dto.CotDTO;
+import mx.morena.negocio.dto.CotResponseDTO;
 import mx.morena.negocio.exception.CotException;
 import mx.morena.negocio.servicios.ICotService;
 import mx.morena.security.controller.MasterController;
@@ -31,7 +34,7 @@ public class CotController extends MasterController {
 
 	@PostMapping("/cots")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	public Long guardarCots(HttpServletResponse response,HttpServletRequest request, @RequestBody CotDTO cot) throws IOException {
+	public Long guardarCots(HttpServletResponse response, HttpServletRequest request, @RequestBody CotDTO cot) throws IOException {
 		long perfil = getPerfil(request);
 		long usuario = getUsuario(request);
 
@@ -50,7 +53,7 @@ public class CotController extends MasterController {
 
 	@PostMapping("/cots/secciones")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	public String asignarSeccionesCots(HttpServletResponse response,HttpServletRequest request, @RequestBody AsignarSeccionesDTO secciones) throws IOException {
+	public String asignarSeccionesCots(HttpServletResponse response, HttpServletRequest request, @RequestBody AsignarSeccionesDTO secciones) throws IOException {
 		long perfil = getPerfil(request);
 
 		try {
@@ -68,7 +71,7 @@ public class CotController extends MasterController {
 	
 	@PutMapping("/cots/{id}")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	public String activar(HttpServletResponse response,HttpServletRequest request, @PathVariable("id") Long idCot) throws IOException {
+	public String activar(HttpServletResponse response, HttpServletRequest request, @PathVariable("id") Long idCot) throws IOException {
 		long perfil = getPerfil(request);
 
 		try {
@@ -86,12 +89,30 @@ public class CotController extends MasterController {
 	
 	@DeleteMapping("/cots/{id}")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	public String suspender(HttpServletResponse response,HttpServletRequest request, @PathVariable("id") Long idCot) throws IOException {
+	public String suspender(HttpServletResponse response, HttpServletRequest request, @PathVariable("id") Long idCot) throws IOException {
 		long perfil = getPerfil(request);
 		long usuario = getUsuario(request);
 
 		try {
 			return cotService.suspender(idCot, perfil, usuario);
+		} catch (CotException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+			return null;
+		} catch (Exception e ) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			return null;
+		}
+	}
+	
+	@GetMapping("/cots")
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	public List<CotResponseDTO> getCots(HttpServletResponse response, HttpServletRequest request) throws IOException {
+		long perfil = getPerfil(request);
+		
+		try {
+			return cotService.getCots(perfil);
 		} catch (CotException e) {
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());

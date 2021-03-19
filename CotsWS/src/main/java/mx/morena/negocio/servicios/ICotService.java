@@ -3,6 +3,7 @@ package mx.morena.negocio.servicios;
 import java.util.List;
 
 import mx.morena.negocio.dto.CotDTO;
+import mx.morena.negocio.dto.CotResponseDTO;
 import mx.morena.negocio.exception.CotException;
 
 public interface ICotService {
@@ -14,5 +15,7 @@ public interface ICotService {
 	public String suspender(Long idCot, long perfil, long idUsuario) throws CotException;
 
 	public String activar(Long idCot, long perfil) throws CotException;
+	
+	public List<CotResponseDTO> getCots(Long perfil) throws CotException;
 
 }
