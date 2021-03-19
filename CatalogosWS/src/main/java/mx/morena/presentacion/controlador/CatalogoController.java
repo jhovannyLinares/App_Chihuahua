@@ -1,6 +1,7 @@
 package mx.morena.presentacion.controlador;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -34,6 +35,14 @@ public class CatalogoController extends MasterController {
 	private CatalogoDTOOffline getCatalogos(HttpServletRequest request) {
 
 		return ICatService.getCatalogos(getUsuario(request), getPerfil(request));
+
+	}
+	
+	@GetMapping("/representantes")
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	private Map<Byte,String> getCasillas(HttpServletRequest request){
+
+		return ICatService.getRepresentantes( getPerfil(request));
 
 	}
 	

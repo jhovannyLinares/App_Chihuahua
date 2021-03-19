@@ -1,6 +1,7 @@
 package mx.morena.negocio.servicios;
 
 import java.util.List;
+import java.util.Map;
 
 import mx.morena.negocio.dto.CasillaDTO;
 import mx.morena.negocio.dto.DistritoFederalDTO;
@@ -22,5 +23,7 @@ public interface ICatalogoService {
 	CatalogoDTOOffline getCatalogos(long usuario, long perfil);
 
 	List<CasillaDTO> getCasillas(long usuario, long perfil, Long distritoFederalId, Long municipioId, Long seccionId);
+
+	Map<Byte, String> getRepresentantes(long perfil);
 
 }

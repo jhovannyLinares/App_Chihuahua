@@ -3,6 +3,7 @@ package mx.morena.persistencia.repository.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -24,9 +25,12 @@ public class UsuarioRepository implements IUsuarioRepository {
 	public Usuario findByUsuario(String usuario) {
 
 		String sql = "SELECT * FROM app_usuario WHERE usuario = ?";
+		try {
+			return template.queryForObject(sql, new Object[] { usuario }, new int[] { 1 }, new UsuarioRowMapper());
+		} catch (EmptyResultDataAccessException e) {
 
-		return template.queryForObject(sql, new Object[] { usuario }, new int[] { 1 }, new UsuarioRowMapper());
-
+			return null;
+		}
 	}
 
 	@Override
@@ -42,8 +46,8 @@ public class UsuarioRepository implements IUsuarioRepository {
 
 		String sql = "update app_usuario set email = ?, password= ? where id = ?::INTEGER";
 
-		int status = template.update(sql, usuario.getEmail(), usuario.getPassword(),usuario.getId());
-	
+		int status = template.update(sql, usuario.getEmail(), usuario.getPassword(), usuario.getId());
+
 		if (status != 0) {
 
 			return true;

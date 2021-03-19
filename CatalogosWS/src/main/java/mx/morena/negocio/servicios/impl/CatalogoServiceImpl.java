@@ -1,7 +1,9 @@
 package mx.morena.negocio.servicios.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -231,6 +233,34 @@ public class CatalogoServiceImpl extends MasterService implements ICatalogoServi
 		dtos = MapperUtil.mapAll(casillas, CasillaDTO.class);
 
 		return dtos;
+	}
+
+	@Override
+	public Map<Byte, String> getRepresentantes(long perfil) {
+		Map<Byte, String> representantes = new HashMap<Byte, String>();
+
+		if (perfil < PERFIL_RC) {
+			representantes.put(REP_RC, "Representante RC");
+		}
+
+		if (perfil < PERFIL_RG) {
+			representantes.put(REP_RG, "Representante RG");
+		}
+
+		if (perfil < PERFIL_MUNICIPAL) {
+			representantes.put(REP_MUNICIPAL, "Representante Municipal");
+		}
+
+		if (perfil < PERFIL_LOCAL) {
+			representantes.put(REP_LOCAL, "Representante Local");
+			representantes.put(REP_CRG, "Representante CRG");
+		}
+
+		if (perfil < PERFIL_FEDERAL) {
+			representantes.put(REP_FEDERAL, "Representante Federal");
+		}
+
+		return representantes;
 	}
 
 }
