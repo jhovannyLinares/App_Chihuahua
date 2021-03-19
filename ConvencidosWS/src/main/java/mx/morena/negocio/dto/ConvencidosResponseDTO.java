@@ -41,6 +41,14 @@ public class ConvencidosResponseDTO {
 	private boolean dv;
 	
 	private boolean mov;
+	
+	private String nombreDistrito;
+	
+	private String nombreEstado;
+	
+	private String nombreMunicipio;
+	
+	private String nombreSeccion;
 
 	public Date getFechaRegistro() {
 		return fechaRegistro;
@@ -194,8 +202,36 @@ public class ConvencidosResponseDTO {
 		this.mov = mov;
 	}
 
+	public String getNombreDistrito() {
+		return nombreDistrito;
+	}
 
-	
-	
+	public void setNombreDistrito(String nombreDistrito) {
+		this.nombreDistrito = nombreDistrito;
+	}
+
+	public String getNombreEstado() {
+		return nombreEstado;
+	}
+
+	public void setNombreEstado(String nombreEstado) {
+		this.nombreEstado = nombreEstado;
+	}
+
+	public String getNombreMunicipio() {
+		return nombreMunicipio;
+	}
+
+	public void setNombreMunicipio(String nombreMunicipio) {
+		this.nombreMunicipio = nombreMunicipio;
+	}
+
+	public String getNombreSeccion() {
+		return nombreSeccion;
+	}
+
+	public void setNombreSeccion(String nombreSeccion) {
+		this.nombreSeccion = nombreSeccion;
+	}
 
 }

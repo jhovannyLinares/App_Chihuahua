@@ -62,6 +62,15 @@ public class Convencidos {
 	private Timestamp fechaSistema;
 
 	private Long tipo;
+	
+	//   consultas de nombres
+	private String nombreDistrito;
+	
+	private String nombreEstado;
+	
+	private String nombreMunicipio;
+	
+	private String nombreSeccion;
 
 	public Long getId() {
 		return id;
@@ -293,6 +302,38 @@ public class Convencidos {
 
 	public void setTipo(Long tipo) {
 		this.tipo = tipo;
+	}
+
+	public String getNombreDistrito() {
+		return nombreDistrito;
+	}
+
+	public void setNombreDistrito(String nombreDistrito) {
+		this.nombreDistrito = nombreDistrito;
+	}
+
+	public String getNombreEstado() {
+		return nombreEstado;
+	}
+
+	public void setNombreEstado(String nombreEstado) {
+		this.nombreEstado = nombreEstado;
+	}
+
+	public String getNombreMunicipio() {
+		return nombreMunicipio;
+	}
+
+	public void setNombreMunicipio(String nombreMunicipio) {
+		this.nombreMunicipio = nombreMunicipio;
+	}
+
+	public String getNombreSeccion() {
+		return nombreSeccion;
+	}
+
+	public void setNombreSeccion(String nombreSeccion) {
+		this.nombreSeccion = nombreSeccion;
 	}
 
 }
