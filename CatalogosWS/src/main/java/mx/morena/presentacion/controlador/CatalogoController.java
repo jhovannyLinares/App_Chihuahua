@@ -1,7 +1,6 @@
 package mx.morena.presentacion.controlador;
 
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -19,6 +18,7 @@ import mx.morena.negocio.dto.DistritoFederalDTO;
 import mx.morena.negocio.dto.EntidadDTO;
 import mx.morena.negocio.dto.LocalidadDTO;
 import mx.morena.negocio.dto.MunicipioDTO;
+import mx.morena.negocio.dto.RepresentanteDTO;
 import mx.morena.negocio.dto.offline.CatalogoDTOOffline;
 import mx.morena.negocio.servicios.ICatalogoService;
 import mx.morena.security.controller.MasterController;
@@ -40,7 +40,7 @@ public class CatalogoController extends MasterController {
 	
 	@GetMapping("/representantes")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	private Map<Integer,String> getRepresentantes(HttpServletRequest request){
+	private List<RepresentanteDTO> getRepresentantes(HttpServletRequest request){
 
 		return ICatService.getRepresentantes( getPerfil(request));
 

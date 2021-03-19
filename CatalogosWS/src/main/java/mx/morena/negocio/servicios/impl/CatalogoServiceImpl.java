@@ -1,9 +1,7 @@
 package mx.morena.negocio.servicios.impl;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +11,7 @@ import mx.morena.negocio.dto.DistritoFederalDTO;
 import mx.morena.negocio.dto.EntidadDTO;
 import mx.morena.negocio.dto.LocalidadDTO;
 import mx.morena.negocio.dto.MunicipioDTO;
+import mx.morena.negocio.dto.RepresentanteDTO;
 import mx.morena.negocio.dto.offline.CatalogoDTOOffline;
 import mx.morena.negocio.dto.offline.DistritoFederalDTOOffline;
 import mx.morena.negocio.dto.offline.EntidadDTOOffline;
@@ -236,28 +235,48 @@ public class CatalogoServiceImpl extends MasterService implements ICatalogoServi
 	}
 
 	@Override
-	public Map<Integer, String> getRepresentantes(long perfil) {
-		Map<Integer, String> representantes = new HashMap<Integer, String>();
+	public List<RepresentanteDTO> getRepresentantes(long perfil) {
+		List<RepresentanteDTO> representantes = new ArrayList<RepresentanteDTO>();
 
 		if (perfil < PERFIL_RC) {
-			representantes.put(REP_RC, "Representante RC");
+			RepresentanteDTO dto = new RepresentanteDTO();
+			dto.setId(REP_RC);
+			dto.setDescripcion("Representante RC");
+			representantes.add(dto);
 		}
 
 		if (perfil < PERFIL_RG) {
-			representantes.put(REP_RG, "Representante RG");
+			RepresentanteDTO dto = new RepresentanteDTO();
+			dto.setId(REP_RG);
+			dto.setDescripcion("Representante RG");
+			representantes.add(dto);
 		}
 
 		if (perfil < PERFIL_MUNICIPAL) {
-			representantes.put(REP_MUNICIPAL, "Representante Municipal");
+			RepresentanteDTO dto = new RepresentanteDTO();
+			dto.setId(REP_MUNICIPAL);
+			dto.setDescripcion("Representante Municipal");
+			representantes.add(dto);
 		}
 
 		if (perfil < PERFIL_LOCAL) {
-			representantes.put(REP_LOCAL, "Representante Local");
-			representantes.put(REP_CRG, "Representante CRG");
+			
+			RepresentanteDTO dto = new RepresentanteDTO();
+			dto.setId(REP_LOCAL);
+			dto.setDescripcion("Representante Local");
+			representantes.add(dto);
+			
+			dto = new RepresentanteDTO();
+			dto.setId(REP_CRG);
+			dto.setDescripcion("Representante CRG");
+			representantes.add(dto);
 		}
 
 		if (perfil < PERFIL_FEDERAL) {
-			representantes.put(REP_FEDERAL, "Representante Federal");
+			RepresentanteDTO dto = new RepresentanteDTO();
+			dto.setId(REP_FEDERAL);
+			dto.setDescripcion("Representante Federal");
+			representantes.add(dto);
 		}
 
 		return representantes;
