@@ -6,6 +6,7 @@ import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import mx.morena.negocio.dto.CotDTO;
 import mx.morena.negocio.exception.CotException;
@@ -74,6 +75,7 @@ public class CotServiceImpl extends MasterService implements ICotService {
 	}
 
 	@Override
+	@Transactional
 	public String asignarSecciones(List<Long> idSecciones, Long idCot, long perfil) throws CotException {
 		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL || perfil == PERFIL_MUNICIPAL) {
 			
@@ -119,6 +121,7 @@ public class CotServiceImpl extends MasterService implements ICotService {
 	}
 
 	@Override
+	@Transactional
 	public String suspender(Long idCot, long perfil, long idUsuario) throws CotException {
 
 		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL || perfil == PERFIL_MUNICIPAL) {
@@ -154,6 +157,7 @@ public class CotServiceImpl extends MasterService implements ICotService {
 	}
 
 	@Override
+	@Transactional
 	public String activar(Long idCot, long perfil) throws CotException {
 		
 		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL || perfil == PERFIL_MUNICIPAL) {
