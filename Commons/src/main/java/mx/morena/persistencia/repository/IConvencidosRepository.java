@@ -26,4 +26,13 @@ public interface IConvencidosRepository {
 	List<Convencidos> getBySeccionesElectoralesIn(Long idSeccion, Long tipo);
 	
 	List<Convencidos> getAllCots(Long tipo);
+
+    List<Convencidos> getByDfAndMpio(Long idDistrito, Long idMunicipio, Long tipo);
+    
+    List<Convencidos> getByDfAndMpioAndSeccion(Long distritoFederalId, Long idMunicipio, Long idSeccion,
+			Long convencido);
+
+	List<Convencidos> getByDfAndMpioAndSeccionAndCveE(Long distritoFederalId, Long idMunicipio, Long idSeccion,
+			String claveElector, Long convencido);
+
 }
