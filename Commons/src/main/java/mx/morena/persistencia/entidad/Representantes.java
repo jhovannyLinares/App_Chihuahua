@@ -46,16 +46,16 @@ public class Representantes {
 
 	private String propuesto;
 
-	private String ineLado1;
+	private String rutaIneLado1;
 
-	private String ineLado2;
+	private String rutaIneLado2;
 
-	private String inePdf;
+	private String rutaInePdf;
 
 	private String ruta;
 
 	private Integer tipo;
-	
+
 	private Date fechaSistema;
 
 	public Long getId() {
@@ -81,7 +81,7 @@ public class Representantes {
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
-	
+
 	public String getApellidoPaterno() {
 		return apellidoPaterno;
 	}
@@ -178,28 +178,28 @@ public class Representantes {
 		this.propuesto = propuesto;
 	}
 
-	public String getIneLado1() {
-		return ineLado1;
+	public String getRutaIneLado1() {
+		return rutaIneLado1;
 	}
 
-	public void setIneLado1(String ineLado1) {
-		this.ineLado1 = ineLado1;
+	public void setRutaIneLado1(String rutaIneLado1) {
+		this.rutaIneLado1 = rutaIneLado1;
 	}
 
-	public String getIneLado2() {
-		return ineLado2;
+	public String getRutaIneLado2() {
+		return rutaIneLado2;
 	}
 
-	public void setIneLado2(String ineLado2) {
-		this.ineLado2 = ineLado2;
+	public void setRutaIneLado2(String rutaIneLado2) {
+		this.rutaIneLado2 = rutaIneLado2;
 	}
 
-	public String getInePdf() {
-		return inePdf;
+	public String getRutaInePdf() {
+		return rutaInePdf;
 	}
 
-	public void setInePdf(String inePdf) {
-		this.inePdf = inePdf;
+	public void setRutaInePdf(String rutaInePdf) {
+		this.rutaInePdf = rutaInePdf;
 	}
 
 	public Integer getTipo() {
@@ -276,5 +276,5 @@ public class Representantes {
 				+ cp + ", telCasa=" + telCasa + ", telCelular=" + telCelular + ", correo=" + correo + ", propuesto="
 				+ propuesto + ", ineLado1=" + ineLado1 + ", ineLado2=" + ineLado2 + ", inePdf=" + inePdf + ", ruta="
 				+ ruta + ", tipo=" + tipo + ", fechaSistema=" + fechaSistema + "]";
-	}	
+	}
 }
