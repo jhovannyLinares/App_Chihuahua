@@ -41,18 +41,18 @@ public class RepresentantesRepository implements IRepresentanteRepository {
 		String sql = " INSERT INTO app_representantes (id, " + "apellido_materno, " + "apellido_paterno, " + "calle, "
 				+ "clave_elector, " + "colonia, " + "correo, " + "codigo_postal, " + "fecha_registro, "
 				+ "ine_img_lado1, " + "ine_img_lado2, " + "ine_pdf, " + "nombre, " + "numero_exterior, "
-				+ "numero_interior, " + "propuesto, " + "ruta, " + "telefono_casa, " + "telefono_celular, "
+				+ "numero_interior, " + "propuesto, " + "telefono_casa, " + "telefono_celular, "
 				+ "tipo_representante, " + "distrito_federal_id, " + "estado_id, " + "municipio_id, "
 				+ "seccion_electoral_id, " + "usuario_id, " + "fecha_sistema)"
-				+ "VALUES ((SELECT MAX(id)+1 FROM app_representantes), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
+				+ "VALUES ((SELECT MAX(id)+1 FROM app_representantes), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
 
 		template.update(sql,
 				new Object[] { representantes.getApellidoMaterno(), representantes.getApellidoPaterno(),
 						representantes.getCalle(), representantes.getClaveElector(), representantes.getColonia(),
 						representantes.getCorreo(), representantes.getCp(), representantes.getFechaRegistro(),
-						representantes.getIneLado1(), representantes.getIneLado2(), representantes.getInePdf(),
+						representantes.getRutaIneLado1(), representantes.getRutaIneLado2(), representantes.getRutaInePdf(),
 						representantes.getNombre(), representantes.getNumExterior(), representantes.getNumInterior(),
-						representantes.getPropuesto(), representantes.getRuta(), representantes.getTelCasa(),
+						representantes.getPropuesto(),  representantes.getTelCasa(),
 						representantes.getTelCelular(), representantes.getTipo(), representantes.getDistritoFederal(),
 						representantes.getEstado(), representantes.getMunicipio(), representantes.getSeccionElectoral(),
 						representantes.getUsuario(), representantes.getFechaSistema() });

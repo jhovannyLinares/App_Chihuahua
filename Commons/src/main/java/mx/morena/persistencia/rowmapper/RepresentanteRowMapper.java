@@ -34,10 +34,9 @@ public class RepresentanteRowMapper implements RowMapper<Representantes> {
 		representantes.setTelCelular(rs.getString("telefono_celular"));
 		representantes.setCorreo(rs.getString("correo"));
 		representantes.setPropuesto(rs.getString("propuesto"));
-		representantes.setIneLado1(rs.getString("ine_img_lado1"));
-		representantes.setIneLado2(rs.getString("ine_img_lado2"));
-		representantes.setInePdf(rs.getString("ine_pdf"));
-		representantes.setRuta(rs.getString("ruta"));
+		representantes.setRutaIneLado1(rs.getString("ine_img_lado1"));
+		representantes.setRutaIneLado2(rs.getString("ine_img_lado2"));
+		representantes.setRutaInePdf(rs.getString("ine_pdf"));
 		representantes.setTipo(rs.getInt("tipo_representante"));
 		
 		

@@ -102,7 +102,6 @@ public class RepresentanteServiceImpl extends MasterService implements IRepresen
 
 					representante.setFechaSistema(new Date(System.currentTimeMillis()));
 					representante.setTipo(tipo);
-					representante.setRuta(null);
 					representante.setUsuario(idUsuario);
 					representante.setDistritoFederal(representanteDTO.getIdDistritoFederal());
 					representante.setEstado(representanteDTO.getIdEstado());

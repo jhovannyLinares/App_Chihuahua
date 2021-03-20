@@ -2,8 +2,6 @@ package mx.morena.persistencia.entidad;
 
 import java.util.Date;
 
-//@Entity
-//@Table(name = "app_representantes")
 public class Representantes {
 
 	private Long id;
@@ -51,8 +49,6 @@ public class Representantes {
 	private String rutaIneLado2;
 
 	private String rutaInePdf;
-
-	private String ruta;
 
 	private Integer tipo;
 
@@ -210,14 +206,6 @@ public class Representantes {
 		this.tipo = tipo;
 	}
 
-	public String getRuta() {
-		return ruta;
-	}
-
-	public void setRuta(String ruta) {
-		this.ruta = ruta;
-	}
-
 	public Long getEstado() {
 		return estado;
 	}
@@ -266,15 +254,5 @@ public class Representantes {
 		this.fechaSistema = fechaSistema;
 	}
 
-	@Override
-	public String toString() {
-		return "Representantes [id=" + id + ", estado=" + estado + ", distritoFederal=" + distritoFederal
-				+ ", municipio=" + municipio + ", seccionElectoral=" + seccionElectoral + ", usuario=" + usuario
-				+ ", fechaRegistro=" + fechaRegistro + ", nombre=" + nombre + ", apellidoPaterno=" + apellidoPaterno
-				+ ", apellidoMaterno=" + apellidoMaterno + ", claveElector=" + claveElector + ", calle=" + calle
-				+ ", numInterior=" + numInterior + ", numExterior=" + numExterior + ", colonia=" + colonia + ", cp="
-				+ cp + ", telCasa=" + telCasa + ", telCelular=" + telCelular + ", correo=" + correo + ", propuesto="
-				+ propuesto + ", ineLado1=" + ineLado1 + ", ineLado2=" + ineLado2 + ", inePdf=" + inePdf + ", ruta="
-				+ ruta + ", tipo=" + tipo + ", fechaSistema=" + fechaSistema + "]";
-	}
+
 }
