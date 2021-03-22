@@ -6,8 +6,6 @@ public class SeccionDTO {
 
 	private String descripcion;
 
-	private String localidadId;
-
 	public Long getId() {
 		return id;
 	}
@@ -22,14 +20,6 @@ public class SeccionDTO {
 
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
-	}
-
-	public String getLocalidadId() {
-		return localidadId;
-	}
-
-	public void setLocalidadId(String localidadId) {
-		this.localidadId = localidadId;
 	}
 
 }

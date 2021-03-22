@@ -14,4 +14,8 @@ public interface ISeccionElectoralRepository {
 	
 	void updateIdCot(Long idSeccion, Long idCot);
 
+	SeccionElectoral getById(Long localidad);
+
+	List<SeccionElectoral> getByMunicipio(Long idMunicipio);
+
 }

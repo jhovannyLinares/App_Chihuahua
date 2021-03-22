@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 import mx.morena.negocio.dto.CasillaDTO;
 import mx.morena.negocio.dto.DistritoFederalDTO;
 import mx.morena.negocio.dto.EntidadDTO;
-import mx.morena.negocio.dto.LocalidadDTO;
 import mx.morena.negocio.dto.MunicipioDTO;
 import mx.morena.negocio.dto.RepresentanteDTO;
+import mx.morena.negocio.dto.SeccionDTO;
 import mx.morena.negocio.dto.offline.CatalogoDTOOffline;
 import mx.morena.negocio.dto.offline.DistritoFederalDTOOffline;
 import mx.morena.negocio.dto.offline.EntidadDTOOffline;
@@ -22,14 +22,14 @@ import mx.morena.negocio.util.MapperUtil;
 import mx.morena.persistencia.entidad.Casilla;
 import mx.morena.persistencia.entidad.DistritoFederal;
 import mx.morena.persistencia.entidad.Entidad;
-import mx.morena.persistencia.entidad.Localidad;
 import mx.morena.persistencia.entidad.Municipio;
+import mx.morena.persistencia.entidad.SeccionElectoral;
 import mx.morena.persistencia.entidad.Usuario;
 import mx.morena.persistencia.repository.ICasillaRepository;
 import mx.morena.persistencia.repository.IDistritoFederalRepository;
 import mx.morena.persistencia.repository.IEntidadRepository;
-import mx.morena.persistencia.repository.ILocalidadRepository;
 import mx.morena.persistencia.repository.IMunicipioRepository;
+import mx.morena.persistencia.repository.ISeccionElectoralRepository;
 import mx.morena.persistencia.repository.IUsuarioRepository;
 import mx.morena.security.servicio.MasterService;
 
@@ -42,11 +42,11 @@ public class CatalogoServiceImpl extends MasterService implements ICatalogoServi
 	@Autowired
 	private IMunicipioRepository municipioRepository;
 
-	@Autowired
-	private ILocalidadRepository localidadRepository;
-
 //	@Autowired
-//	private ISeccionElectoralRepository seccionRepository;
+//	private ILocalidadRepository localidadRepository;
+
+	@Autowired
+	private ISeccionElectoralRepository seccionRepository;
 
 	@Autowired
 	private IEntidadRepository entidadRepository;
@@ -124,32 +124,32 @@ public class CatalogoServiceImpl extends MasterService implements ICatalogoServi
 		return municipioDTOs;
 	}
 
-	@Override
-	public List<LocalidadDTO> getLocalidadByMunicipio(long idUsuario, long idPerfil, Long municipio) {
-
-		Usuario usuario = usuarioRepository.findById(idUsuario);
-
-		List<LocalidadDTO> localidadDTOs = null;
-
-		if (usuario.getPerfil() > PERFIL_MUNICIPAL) {
-
-			Localidad localidad = localidadRepository.getById(usuario.getLocalidad());
-			LocalidadDTO dto = new LocalidadDTO();
-			MapperUtil.map(localidad, dto);
-
-			localidadDTOs = new ArrayList<LocalidadDTO>();
-			localidadDTOs.add(dto);
-
-		} else {
-
-			List<Localidad> municipios = localidadRepository.getByMunicipio(municipio);
-
-			localidadDTOs = MapperUtil.mapAll(municipios, LocalidadDTO.class);
-
-		}
-
-		return localidadDTOs;
-	}
+//	@Override
+//	public List<LocalidadDTO> getLocalidadByMunicipio(long idUsuario, long idPerfil, Long municipio) {
+//
+//		Usuario usuario = usuarioRepository.findById(idUsuario);
+//
+//		List<LocalidadDTO> localidadDTOs = null;
+//
+//		if (usuario.getPerfil() > PERFIL_MUNICIPAL) {
+//
+//			Localidad localidad = localidadRepository.getById(usuario.getLocalidad());
+//			LocalidadDTO dto = new LocalidadDTO();
+//			MapperUtil.map(localidad, dto);
+//
+//			localidadDTOs = new ArrayList<LocalidadDTO>();
+//			localidadDTOs.add(dto);
+//
+//		} else {
+//
+//			List<Localidad> municipios = localidadRepository.getByMunicipio(municipio);
+//
+//			localidadDTOs = MapperUtil.mapAll(municipios, LocalidadDTO.class);
+//
+//		}
+//
+//		return localidadDTOs;
+//	}
 
 	@Override
 	public CatalogoDTOOffline getCatalogos(long usuarioId, long perfilId) {
@@ -185,7 +185,7 @@ public class CatalogoServiceImpl extends MasterService implements ICatalogoServi
 
 				logger.debug("municipioDTO " + municipioDTO.getId());
 
-				List<LocalidadDTO> localidadDTOs = getLocalidadByMunicipio(usuarioId, perfilId, municipioDTO.getId());
+				List<SeccionDTO> localidadDTOs = getSeccionesByMunicipio(usuarioId, perfilId, municipioDTO.getId());
 
 				List<LocalidadDTOOffline> localidadDTOOfflines = new ArrayList<LocalidadDTOOffline>();
 
@@ -280,6 +280,29 @@ public class CatalogoServiceImpl extends MasterService implements ICatalogoServi
 		}
 
 		return representantes;
+	}
+
+	@Override
+	public List<SeccionDTO> getSeccionesByMunicipio(long idUsuario, long idPerfil, Long idMunicipio) {
+		
+		Usuario usuario = usuarioRepository.findById(idUsuario);
+
+		List<SeccionDTO> seccionDTOs = null;
+
+		if (usuario.getPerfil() > PERFIL_MUNICIPAL) {
+
+			List<SeccionElectoral> seccionElectoral = seccionRepository.getByMunicipio(usuario.getMunicipio());
+			seccionDTOs = MapperUtil.mapAll(seccionElectoral, SeccionDTO.class);
+
+		} else {
+
+			List<SeccionElectoral> seccionElectoral = seccionRepository.getByMunicipio(idMunicipio);
+
+			seccionDTOs = MapperUtil.mapAll(seccionElectoral, SeccionDTO.class);
+
+		}
+
+		return seccionDTOs;
 	}
 
 }

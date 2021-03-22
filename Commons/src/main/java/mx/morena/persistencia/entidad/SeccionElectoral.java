@@ -1,22 +1,13 @@
 package mx.morena.persistencia.entidad;
 
-//@Entity
-//@Table(name = "app_seccionElectoral")
 public class SeccionElectoral {
 
-	//@Id
-	//@Column(unique = true, name = "id")
 	private Long id;
 
-	//@Column(name = "descripcion")
 	private String descripcion;
 
-	//@ManyToOne
-	//private Localidad localidad;
 	private Long localidad;
 
-	//@ManyToOne
-	//private Convencidos cot;
 	private Long cot;
 
 	public Long getId() {

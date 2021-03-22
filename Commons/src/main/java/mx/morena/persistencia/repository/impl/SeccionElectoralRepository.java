@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import mx.morena.persistencia.entidad.SeccionElectoral;
 import mx.morena.persistencia.repository.ISeccionElectoralRepository;
+import mx.morena.persistencia.rowmapper.SeccionRowMapper;
 import mx.morena.persistencia.rowmapper.SeccionesRowMapper;
 
 @Repository
@@ -20,7 +21,7 @@ public class SeccionElectoralRepository implements ISeccionElectoralRepository {
 
 	@Override
 	public List<SeccionElectoral> findByCotId(Long cotId, Long tipo) {
-		String sql = "SELECT * FROM app_localidad l INNER JOIN app_convencidos c ON l.idcot = c.id where l.idcot = ? and c.tipo = ?";
+		String sql = "SELECT * FROM app_secciones l INNER JOIN app_convencidos c ON l.idcot = c.id where l.idcot = ? and c.tipo = ?";
 		try {
 			return template.queryForObject(sql, new Object[] { cotId, tipo },
 					new int[] { Types.NUMERIC, Types.NUMERIC }, new SeccionesRowMapper());
@@ -29,22 +30,12 @@ public class SeccionElectoralRepository implements ISeccionElectoralRepository {
 		}
 	}
 
-//	@Override
-//	public List<SeccionElectoral> findAllById(List<String> idSecciones) {
-//
-//		String sql = "SELECT entidad_id, municipio_id, id, nombre, tipo, seccion_id, idcot FROM app_localidad ";
-//		try {
-//			return template.queryForObject(sql, new Object[] { idSecciones }, new int[] { Types.NUMERIC },
-//					new SeccioneRowMapper());
-//		} catch (EmptyResultDataAccessException e) {
-//			return null;
-//		}
-//	}
+
 
 	@Override
 	public void updateIdCot(Long idSeccion, Long idCot) {
 
-		String sql = "UPDATE app_localidad SET idcot = ? WHERE seccion_id = ?";
+		String sql = "UPDATE app_secciones SET idcot = ? WHERE id = ?";
 
 		template.update(sql, new Object[] { idCot, idSeccion }, new int[] { Types.NUMERIC, Types.NUMERIC });
 
@@ -52,10 +43,30 @@ public class SeccionElectoralRepository implements ISeccionElectoralRepository {
 
 	@Override
 	public List<SeccionElectoral> findById(Long idSeccion) {
-		String sql = "SELECT seccion_id, tipo, idcot, id FROM app_localidad where seccion_id = ?";
+		String sql = "SELECT id as seccion_id, tipo, idcot, id FROM app_secciones where id = ?";
 		try {
 			return template.queryForObject(sql, new Object[] { idSeccion }, new int[] { Types.NUMERIC },
 					new SeccionesRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+	
+
+	@Override
+	public List<SeccionElectoral> getByMunicipio(Long municipio_id) {
+		String sql = "SELECT id as seccion_id, municipio_id FROM app_secciones  where municipio_id = ?  order by id";
+
+		return template.queryForObject(sql, new Object[] { municipio_id }, new int[] { Types.NUMERIC },
+				new SeccionesRowMapper()); 
+	}
+
+	@Override
+	public SeccionElectoral getById(Long idSeccion) {
+		String sql = "SELECT id as seccion_id, municipio_id FROM app_secciones where id = ?";
+		try {
+			return template.queryForObject(sql, new Object[] { idSeccion }, new int[] { Types.NUMERIC },
+					new SeccionRowMapper());
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}

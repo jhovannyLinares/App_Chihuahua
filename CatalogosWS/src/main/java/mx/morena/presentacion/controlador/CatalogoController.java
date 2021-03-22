@@ -16,9 +16,9 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import mx.morena.negocio.dto.CasillaDTO;
 import mx.morena.negocio.dto.DistritoFederalDTO;
 import mx.morena.negocio.dto.EntidadDTO;
-import mx.morena.negocio.dto.LocalidadDTO;
 import mx.morena.negocio.dto.MunicipioDTO;
 import mx.morena.negocio.dto.RepresentanteDTO;
+import mx.morena.negocio.dto.SeccionDTO;
 import mx.morena.negocio.dto.offline.CatalogoDTOOffline;
 import mx.morena.negocio.servicios.ICatalogoService;
 import mx.morena.security.controller.MasterController;
@@ -94,15 +94,15 @@ public class CatalogoController extends MasterController {
 
 	@GetMapping("/municipios/{id}/secciones")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	private List<LocalidadDTO> getLocalidadByMunicipio(HttpServletRequest request,
+	private List<SeccionDTO> getLocalidadByMunicipio(HttpServletRequest request,
 			@PathVariable("id") Long idMunicipio) {
 
 		long usuario = getUsuario(request);
 		long idPerfil = getPerfil(request);
 
-		List<LocalidadDTO> localidad = ICatService.getLocalidadByMunicipio(usuario, idPerfil, idMunicipio);
+		List<SeccionDTO> secciones = ICatService.getSeccionesByMunicipio(usuario, idPerfil, idMunicipio);
 
-		return localidad;
+		return secciones;
 	}
 
 }
