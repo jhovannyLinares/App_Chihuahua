@@ -44,41 +44,6 @@ public class ConvencidosRepository implements IConvencidosRepository {
 		}
 	}
 
-	@Override
-	public List<Convencidos> getByMunicipio(Long municipio_id, Long tipo) {
-		String sql = "SELECT " + campos + ", adf.nombre as nombre_distrito, ae.nombre as nombre_estado, am.nombre as nombre_municipio, al.nombre as nombre_seccion"
-				+ " FROM app_convencidos ac "
-				+ " inner join app_distrito_federal adf on ac.distrito_federal_id = adf.id "
-				+ " inner join app_entidad ae on ac.estado_id = ae.id "
-				+ " inner join app_municipio am on ac.municipio_id = am.id "
-				+ " inner join app_localidad al on ac.seccion_id = al.id "
-				+ " where ac.municipio_id = ? and ac.tipo = ?";
-		try {
-			return template.queryForObject(sql, new Object[] { municipio_id, tipo },
-					new int[] { Types.NUMERIC, Types.NUMERIC }, new ConvencidosRowMapper());
-		} catch (EmptyResultDataAccessException e) {
-
-			return null;
-		}
-	}
-
-	@Override
-	public List<Convencidos> getBySeccionesElectoralesIn(Long idSeccion, Long tipo) {
-		String sql = "SELECT " + campos + ", adf.nombre as nombre_distrito, ae.nombre as nombre_estado, am.nombre as nombre_municipio, al.nombre as nombre_seccion"
-		+ " FROM app_convencidos ac "
-		+ " inner join app_distrito_federal adf on ac.distrito_federal_id = adf.id "
-		+ " inner join app_entidad ae on ac.estado_id = ae.id "
-		+ " inner join app_municipio am on ac.municipio_id = am.id "
-		+ " inner join app_localidad al on ac.seccion_id = al.id "
-		+ " where ac.seccion_id = ? and ac.tipo = ?";
-		
-		try {
-			return template.queryForObject(sql, new Object[] { idSeccion, tipo },
-					new int[] { Types.NUMERIC, Types.NUMERIC }, new ConvencidosRowMapper());
-		} catch (EmptyResultDataAccessException e) {
-			return null;
-		}
-	}
 
 	@Override
 	public List<Convencidos> findByClaveElector(String claveElector) {

@@ -9,8 +9,6 @@ public interface IConvencidosRepository {
 
 	List<Convencidos> getByDistritoFederal(Long idDistrito, Long tipo);
 
-	List<Convencidos> getByMunicipio(Long municipio, Long tipo);
-
 	List<Convencidos> findByClaveElector(String claveElector);
 
 	public Convencidos getByCurp(String curp, Long tipo);
@@ -22,8 +20,6 @@ public interface IConvencidosRepository {
 	void updateStatusCot(Long id, char estatus, Date fechaBaja, Long tipo, String tipoFecha);
 
 	Long getIdMax();
-
-	List<Convencidos> getBySeccionesElectoralesIn(Long idSeccion, Long tipo);
 	
 	List<Convencidos> getAllCots(Long tipo);
 
