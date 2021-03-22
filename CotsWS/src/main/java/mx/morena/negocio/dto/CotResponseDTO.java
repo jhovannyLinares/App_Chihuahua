@@ -2,6 +2,9 @@ package mx.morena.negocio.dto;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+
+import mx.morena.persistencia.entidad.SeccionElectoral;
 
 public class CotResponseDTO {
 
@@ -27,7 +30,7 @@ public class CotResponseDTO {
 	private String clabeInterbancaria;
 	private String estatus;
 	private Date fechaRegistro;
-	private HashMap<Long, String> secciones;
+	private List<SeccionDTO> secciones;
 
 	public Long getId() {
 		return id;
@@ -205,23 +208,13 @@ public class CotResponseDTO {
 		this.fechaRegistro = fechaRegistro;
 	}
 
-	public HashMap<Long, String> getSecciones() {
+	public List<SeccionDTO> getSecciones() {
 		return secciones;
 	}
 
-	public void setSecciones(HashMap<Long, String> secciones) {
+	public void setSecciones(List<SeccionDTO> secciones) {
 		this.secciones = secciones;
 	}
 
-	@Override
-	public String toString() {
-		return "CotResponseDTO [id=" + id + ", idEstado=" + idEstado + ", idDistritoFederal=" + idDistritoFederal
-				+ ", idMunicipio=" + idMunicipio + ", idSeccion=" + idSeccion + ", nombre=" + nombre
-				+ ", apellidoPaterno=" + apellidoPaterno + ", apellidoMaterno=" + apellidoMaterno + ", claveElector="
-				+ claveElector + ", calle=" + calle + ", numInterior=" + numInterior + ", numExterior=" + numExterior
-				+ ", colonia=" + colonia + ", cp=" + cp + ", telCasa=" + telCasa + ", telCelular=" + telCelular
-				+ ", correo=" + correo + ", curp=" + curp + ", banco=" + banco + ", clabeInterbancaria="
-				+ clabeInterbancaria + ", estatus=" + estatus + ", fechaRegistro="
-				+ fechaRegistro + ", secciones=" + secciones + "]";
-	}
+	
 }
