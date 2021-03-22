@@ -16,6 +16,6 @@ public interface ICotService {
 
 	public String activar(Long idCot, long perfil) throws CotException;
 	
-	public List<CotResponseDTO> getCots(Long perfil) throws CotException;
+	public List<CotResponseDTO> getCots(Long perfil, Long idDistrito, Long idMunicipio) throws CotException;
 
 }

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -108,11 +109,13 @@ public class CotController extends MasterController {
 	
 	@GetMapping("/cots")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	public List<CotResponseDTO> getCots(HttpServletResponse response, HttpServletRequest request) throws IOException {
+	public List<CotResponseDTO> getCots(HttpServletResponse response, HttpServletRequest request,
+			@RequestParam(value = "idFederal", required = false) Long idDistritoFederal,
+			@RequestParam(value = "idMunicipio", required = false) Long idMunicipio) throws IOException {
 		long perfil = getPerfil(request);
 		
 		try {
-			return cotService.getCots(perfil);
+			return cotService.getCots(perfil, idDistritoFederal, idMunicipio);
 		} catch (CotException e) {
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());

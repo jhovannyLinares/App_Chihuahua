@@ -3,7 +3,9 @@ package mx.morena.negocio.servicios.impl;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -182,36 +184,76 @@ public class CotServiceImpl extends MasterService implements ICotService {
 	}
 
 	@Override
-	public List<CotResponseDTO> getCots(Long perfil) throws CotException {
+	public List<CotResponseDTO> getCots(Long perfil, Long idDistrito, Long idMunicipio) throws CotException {
 		
 		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL || perfil == PERFIL_MUNICIPAL) {
-			List<Convencidos> cots = cotRepository.getAllCots(COT);
+			List<Convencidos> cots = new ArrayList<Convencidos>();
+			List<CotResponseDTO> cotsDto = new ArrayList<CotResponseDTO>();
+			
+			if (idDistrito != null && idMunicipio == null) {
+				cots = cotRepository.getByDistritoFederal(idDistrito, COT);
 				
-			if (cots != null) {
-				return cots.stream().map(this::convertirADto).collect(Collectors.toList());
-			} else {
-				return null;
+			} else if (idDistrito != null && idMunicipio != null) {
+				cots = cotRepository.getByDfAndMpio(idDistrito, idMunicipio, COT);
+				
 			}
-		} else {
-			throw new CotException("Permisos insuficientes.", 401);
+			
+			cotsDto = cots.stream().map(this::convertirADto).collect(Collectors.toList());
+				
+			return cotsDto;
+				
+			} else {
+				throw new CotException("Permisos insuficientes.", 401);
 		}
+
 	}
 	
 	public CotResponseDTO convertirADto(Convencidos cot) {
 		CotResponseDTO cotDto = new CotResponseDTO();
+		HashMap<Long, String> listaSecciones = new HashMap<Long, String>();
 		
-		cotDto.setNombreCompleto(cot.getNombre() + " " + cot.getApellidoPaterno() + " " + cot.getApellidoMaterno());
-		cotDto.setNombreDistrito(cot.getIdFederal() + "-" + cot.getNombreDistrito());
-		cotDto.setNombreMunicipio(cot.getIdMunicipio() + "-" + cot.getNombreMunicipio());
+		cotDto.setId(cot.getId());
+		cotDto.setNombre(cot.getNombre());
+		cotDto.setApellidoPaterno(cot.getApellidoPaterno());
+		cotDto.setApellidoMaterno(cot.getApellidoMaterno());
+		cotDto.setIdEstado(cot.getIdEstado());
+		cotDto.setIdDistritoFederal(cot.getIdFederal());
+		cotDto.setIdMunicipio(cot.getIdMunicipio());
+		cotDto.setIdSeccion(cot.getIdSeccion());
+		cotDto.setClaveElector(cot.getClaveElector());
+		cotDto.setCalle(cot.getCalle());
+		cotDto.setNumInterior(cot.getNumInterior());
+		cotDto.setNumExterior(cot.getNumExterior());
+		cotDto.setColonia(cot.getColonia());
+		cotDto.setCp(cot.getCp());
+		cotDto.setTelCasa(cot.getTelCasa());
+		cotDto.setTelCelular(cot.getTelCelular());
+		cotDto.setCorreo(cot.getCorreo());
+		cotDto.setCurp(cot.getCurp());
+		cotDto.setBanco(cot.getBanco());
+		cotDto.setClabeInterbancaria(cot.getClabeInterbancaria());
+		cotDto.setFechaRegistro(cot.getFechaRegistro());
 		
+		List<SeccionElectoral> secciones = seccionRepository.findByCotId(cot.getId(), COT);
+		
+		 if (secciones != null) {
+			for (SeccionElectoral seccionElectoral : secciones) {
+				listaSecciones.put(seccionElectoral.getId(), seccionElectoral.getDescripcion());
+			}
+		}
+		
+		cotDto.setSecciones(listaSecciones);
 		if (cot.getEstatus() == ESTATUS_ALTA) {
 			cotDto.setEstatus("Activo");
 		} else {
 			cotDto.setEstatus("Suspendido");
 		}
 		
-		cotDto.setFechaRegistro(cot.getFechaRegistro());
-		
 		return cotDto;
+	}
+	
+	public String seccionesSinAsignar(long perfil) throws CotException {
+		//List<SeccionElectoral> secciones = seccionRepository.getSeccionesLibres();
+		return null;
 	}
 }
