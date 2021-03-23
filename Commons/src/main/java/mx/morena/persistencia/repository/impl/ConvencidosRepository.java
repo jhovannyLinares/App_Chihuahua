@@ -30,10 +30,10 @@ public class ConvencidosRepository implements IConvencidosRepository {
 	@Override
 	public List<Convencidos> getByDistritoFederal(Long idFederal, Long tipo) {
 
-		String sql = "SELECT " + campos + ", adf.nombre as nombre_distrito, al.entidad as nombre_estado , al.municipio as nombre_municipio, al.nombre as nombre_seccion"
+		String sql = "SELECT " + campos + ", adf.nombre as nombre_distrito, al.entidad as nombre_estado , al.municipio as nombre_municipio" 
 				+ " FROM app_convencidos ac "
 				+ " inner join app_distrito_federal adf on ac.distrito_federal_id = adf.id "
-				+ " inner join app_localidad al on ac.seccion_id = al.id "
+				+ " inner join app_secciones al on ac.seccion_id = al.id "
 				+ " where ac.distrito_federal_id = ? and ac.tipo = ? ";
 		try {
 			return template.queryForObject(sql, new Object[] { idFederal, tipo },
@@ -47,10 +47,10 @@ public class ConvencidosRepository implements IConvencidosRepository {
 
 	@Override
 	public List<Convencidos> findByClaveElector(String claveElector) {
-		String sql = "SELECT " + campos + ", adf.nombre as nombre_distrito, al.entidad as nombre_estado , al.municipio as nombre_municipio, al.nombre as nombre_seccion"
+		String sql = "SELECT " + campos + ", adf.nombre as nombre_distrito, al.entidad as nombre_estado , al.municipio as nombre_municipio"
 				+ " FROM app_convencidos ac "
 				+ " inner join app_distrito_federal adf on ac.distrito_federal_id = adf.id "
-				+ " inner join app_localidad al on ac.seccion_id = al.id "
+				+ " inner join app_secciones al on ac.seccion_id = al.id "
 				+ " where ac.clave_elector = ? ";
 		try {
 			return template.queryForObject(sql, new Object[] { claveElector }, new int[] { Types.VARCHAR },
@@ -136,10 +136,10 @@ public class ConvencidosRepository implements IConvencidosRepository {
 	}
 
 	public List<Convencidos> getByDfAndMpio(Long idDistrito, Long idMunicipio, Long tipo) {
-		String sql = "SELECT " + campos + ", adf.nombre as nombre_distrito, al.entidad as nombre_estado , al.municipio as nombre_municipio, al.nombre as nombre_seccion"
+		String sql = "SELECT " + campos + ", adf.nombre as nombre_distrito, al.entidad as nombre_estado , al.municipio as nombre_municipio" 
 				+ " FROM app_convencidos ac "
 				+ " inner join app_distrito_federal adf on ac.distrito_federal_id = adf.id "
-				+ " inner join app_localidad al on ac.seccion_id = al.id "
+				+ " inner join app_secciones al on ac.seccion_id = al.id "
 				+ " where ac.distrito_federal_id = ? and ac.municipio_id = ? and ac.tipo = ?";
 		try {
 			return template.queryForObject(sql, new Object[] { idDistrito, idMunicipio, tipo },
@@ -153,10 +153,10 @@ public class ConvencidosRepository implements IConvencidosRepository {
 	@Override
 	public List<Convencidos> getByDfAndMpioAndSeccion(Long idDistrito, Long idMunicipio, Long idSeccion, Long tipo) {
 		
-		String sql = "SELECT " + campos + ", adf.nombre as nombre_distrito, al.entidad as nombre_estado , al.municipio as nombre_municipio, al.nombre as nombre_seccion"
+		String sql = "SELECT " + campos + ", adf.nombre as nombre_distrito, al.entidad as nombre_estado , al.municipio as nombre_municipio" 
 				+ " FROM app_convencidos ac "
 				+ " inner join app_distrito_federal adf on ac.distrito_federal_id = adf.id "
-				+ " inner join app_localidad al on ac.seccion_id = al.id "
+				+ " inner join app_secciones al on ac.seccion_id = al.id "
 				+ " where ac.distrito_federal_id = ? and ac.municipio_id = ? and ac.seccion_id = ?  and ac.tipo = ?";
 		try {
 			return template.queryForObject(sql, new Object[] { idDistrito, idMunicipio, idSeccion, tipo },
@@ -170,10 +170,10 @@ public class ConvencidosRepository implements IConvencidosRepository {
 	@Override
 	public List<Convencidos> getByDfAndMpioAndSeccionAndCveE(Long idDistrito, Long idMunicipio, Long idSeccion,
 			String claveElector, Long tipo) {
-		String sql = "SELECT " + campos + ", adf.nombre as nombre_distrito, al.entidad as nombre_estado , al.municipio as nombre_municipio, al.nombre as nombre_seccion"
+		String sql = "SELECT " + campos + ", adf.nombre as nombre_distrito, al.entidad as nombre_estado , al.municipio as nombre_municipio" 
 				+ " FROM app_convencidos ac "
 				+ " inner join app_distrito_federal adf on ac.distrito_federal_id = adf.id "
-				+ " inner join app_localidad al on ac.seccion_id = al.id "
+				+ " inner join app_secciones al on ac.seccion_id = al.id "
 				+ " where ac.distrito_federal_id = ? and ac.municipio_id = ? and ac.seccion_id = ? and ac.clave_elector = ? and ac.tipo = ?";
 		try {
 			return template.queryForObject(sql, new Object[] { idDistrito, idMunicipio, idSeccion, claveElector, tipo },
