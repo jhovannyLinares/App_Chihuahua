@@ -30,5 +30,7 @@ public interface IConvencidosRepository {
 
 	List<Convencidos> getByDfAndMpioAndSeccionAndCveE(Long distritoFederalId, Long idMunicipio, Long idSeccion,
 			String claveElector, Long convencido);
+	
+	void update(Convencidos convencidos);
 
 }

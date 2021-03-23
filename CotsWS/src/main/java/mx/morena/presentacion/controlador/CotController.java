@@ -22,6 +22,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import mx.morena.negocio.dto.AsignarSeccionesDTO;
 import mx.morena.negocio.dto.CotDTO;
 import mx.morena.negocio.dto.CotResponseDTO;
+import mx.morena.negocio.dto.SeccionDTO;
 import mx.morena.negocio.exception.CotException;
 import mx.morena.negocio.servicios.ICotService;
 import mx.morena.security.controller.MasterController;
@@ -110,12 +111,31 @@ public class CotController extends MasterController {
 	@GetMapping("/cots")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
 	public List<CotResponseDTO> getCots(HttpServletResponse response, HttpServletRequest request,
-			@RequestParam(value = "idFederal", required = false) Long idDistritoFederal,
+			@RequestParam(value = "idFederal") Long idDistritoFederal,
 			@RequestParam(value = "idMunicipio", required = false) Long idMunicipio) throws IOException {
 		long perfil = getPerfil(request);
 		
 		try {
 			return cotService.getCots(perfil, idDistritoFederal, idMunicipio);
+		} catch (CotException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+			return null;
+		} catch (Exception e ) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			return null;
+		}
+	}
+	
+	@GetMapping("/cots/secciones/{idMunicipio}")
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	public List<SeccionDTO> getSeccionesLibres(HttpServletResponse response, HttpServletRequest request,
+			@RequestParam(value = "idMunicipio") Long idMunicipio) throws IOException {
+		long perfil = getPerfil(request);
+		
+		try {
+			return cotService.seccionesSinAsignar(perfil, idMunicipio);
 		} catch (CotException e) {
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());

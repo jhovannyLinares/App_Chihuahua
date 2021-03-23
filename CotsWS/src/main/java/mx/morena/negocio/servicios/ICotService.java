@@ -20,4 +20,6 @@ public interface ICotService {
 	public List<CotResponseDTO> getCots(long perfil, Long idDistrito, Long idMunicipio) throws CotException;
 	
 	public List<SeccionDTO> seccionesSinAsignar(long perfil, Long idMunicipio) throws CotException;
+	
+	public String update(CotDTO cot, long perfil, Long id) throws CotException;
 }

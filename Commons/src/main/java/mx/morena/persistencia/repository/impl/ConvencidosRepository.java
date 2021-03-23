@@ -185,4 +185,24 @@ public class ConvencidosRepository implements IConvencidosRepository {
 	}
 
 
+	@Override
+	public void update(Convencidos convencidos) {
+		String sql = "UPDATE app_convencidos "
+				+ "SET apellido_materno = ?, apellido_paterno = ?, banco = ?, calle = ?, clabe_interbancaria = ?, "
+				+ "clave_elector = ?, colonia = ?, correo = ?, codigo_postal = ?, curp = ?, "
+				+ "nombre = ?, numero_exterior = ?, numero_interior = ?, telefono_casa = ?, telefono_celular = ?, "
+				+ "distrito_federal_id = ?, estado_id = ?, municipio_id = ?, seccion_id = ? "
+				+ "WHERE id = ? and tipo = ?";
+
+		template.update(sql,
+				new Object[] { convencidos.getApellidoMaterno(), convencidos.getApellidoPaterno(),
+						convencidos.getBanco(), convencidos.getCalle(), convencidos.getClabeInterbancaria(),
+						convencidos.getClaveElector(), convencidos.getColonia(), convencidos.getCorreo(),
+						convencidos.getCp(), convencidos.getCurp(), convencidos.getNombre(),
+						convencidos.getNumExterior(), convencidos.getNumInterior(), convencidos.getTelCasa(),
+						convencidos.getTelCelular(), convencidos.getIdFederal(), convencidos.getIdEstado(),
+						convencidos.getIdMunicipio(), convencidos.getIdSeccion(), convencidos.getId(), convencidos.getTipo() });
+
+	}
+
 }

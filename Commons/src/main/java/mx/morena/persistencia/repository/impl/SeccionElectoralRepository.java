@@ -43,7 +43,7 @@ public class SeccionElectoralRepository implements ISeccionElectoralRepository {
 
 	@Override
 	public List<SeccionElectoral> findById(Long idSeccion) {
-		String sql = "SELECT id as seccion_id, tipo, idcot, id FROM app_secciones where id = ?";
+		String sql = "SELECT id as seccion_id, idcot, id FROM app_secciones where id = ?";
 		try {
 			return template.queryForObject(sql, new Object[] { idSeccion }, new int[] { Types.NUMERIC },
 					new SeccionesRowMapper());
@@ -55,7 +55,7 @@ public class SeccionElectoralRepository implements ISeccionElectoralRepository {
 
 	@Override
 	public List<SeccionElectoral> getByMunicipio(Long municipio_id) {
-		String sql = "SELECT id as seccion_id, municipio_id FROM app_secciones  where municipio_id = ?  order by id";
+		String sql = "SELECT id as seccion_id, municipio_id FROM app_secciones where municipio_id = ? order by id";
 
 		return template.queryForObject(sql, new Object[] { municipio_id }, new int[] { Types.NUMERIC },
 				new SeccionesRowMapper()); 

@@ -104,8 +104,8 @@ public class CotServiceImpl extends MasterService implements ICotService {
 						if (sec.getCot().equals(0l)) {
 							seccionRepository.updateIdCot(idSeccion, idCot);
 						} else {
-							throw new CotException("La seccion " + sec.getId() + "-" + sec.getDescripcion()
-							+ " ya la tiene asignada otro Cot", 400);
+							throw new CotException("La seccion " + sec.getId()
+							+ " ya se encuentra asignada, favor de revisar", 400);
 						}
 
 					}
@@ -247,6 +247,8 @@ public class CotServiceImpl extends MasterService implements ICotService {
 		
 		if(secciones != null) {
 			listaSecciones = secciones.stream().map(this::convertirSeccion).collect(Collectors.toList());
+		} else {
+			listaSecciones = null;
 		}
 		
 		cotDto.setSecciones(listaSecciones);
@@ -254,6 +256,12 @@ public class CotServiceImpl extends MasterService implements ICotService {
 			cotDto.setEstatus("Activo");
 		} else {
 			cotDto.setEstatus("Suspendido");
+		}
+		
+		if (cot.getCalle().equals(SIN_CALLE)) {
+			cotDto.setIsCalle(true);
+		} else {
+			cotDto.setIsCalle(false);
 		}
 		
 		return cotDto;
@@ -287,6 +295,47 @@ public class CotServiceImpl extends MasterService implements ICotService {
 			
 		} else {
 			throw new CotException("Permisos insuficientes.", 401);
+		}
+	}
+
+	@Override
+	public String update(CotDTO cotDto, long perfil, Long id) throws CotException {
+		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL || perfil == PERFIL_MUNICIPAL) {
+			if (cotDto.getClaveElector().trim().length() == 18 && cotDto.getCurp().trim().length() == 18) {
+				Convencidos existeCurp = cotRepository.getByCurp(cotDto.getCurp(), COT);
+				List<Convencidos> existeClave = cotRepository.findByClaveElector(cotDto.getClaveElector());
+
+				if (existeClave != null) {
+					throw new CotException("La clave de elector ya esta en uso, intente con otra", 400);
+				} else if (existeCurp != null) {
+					throw new CotException("La CURP ya esta en uso, intente con otra", 400);
+				} else {
+					Convencidos personaCot = new Convencidos();
+
+					MapperUtil.map(cotDto, personaCot);
+					
+					if(cotDto.getIsCalle()) {
+						personaCot.setCalle(SIN_CALLE);
+					}
+					
+					personaCot.setIdEstado(cotDto.getIdEstado());
+					personaCot.setIdFederal(cotDto.getIdDistritoFederal());
+					personaCot.setIdMunicipio(cotDto.getIdMunicipio());
+					personaCot.setIdSeccion(cotDto.getIdSeccion());
+					personaCot.setTipo(COT);
+
+					cotRepository.update(personaCot);
+
+					return "";
+
+				}
+
+			} else {
+				throw new CotException("CURP o Clave no valida, debe tener 18 caracteres", 400);
+			}
+
+		} else {
+			throw new CotException("No cuenta con suficientes permisos", 401);
 		}
 	}
 }

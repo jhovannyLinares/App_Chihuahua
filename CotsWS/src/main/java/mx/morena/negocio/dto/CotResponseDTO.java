@@ -32,6 +32,7 @@ public class CotResponseDTO {
 	private String estatus;
 	private Date fechaRegistro;
 	private List<SeccionDTO> secciones;
+	private Boolean isCalle;
 
 	public Long getId() {
 		return id;
@@ -247,6 +248,14 @@ public class CotResponseDTO {
 
 	public void setSeccion(String seccion) {
 		this.seccion = seccion;
+	}
+
+	public Boolean getIsCalle() {
+		return isCalle;
+	}
+
+	public void setIsCalle(Boolean isCalle) {
+		this.isCalle = isCalle;
 	}
 	
 }
