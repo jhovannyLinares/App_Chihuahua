@@ -8,8 +8,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import mx.morena.negocio.dto.CatalogoCrgDTO;
+import mx.morena.negocio.dto.RutasResponseDTO;
 import mx.morena.negocio.exception.RutasException;
 import mx.morena.negocio.servicios.IRutasService;
+import mx.morena.negocio.util.MapperUtil;
 import mx.morena.persistencia.entidad.Representantes;
 import mx.morena.persistencia.entidad.Rutas;
 import mx.morena.persistencia.repository.IRutasRepository;
@@ -90,7 +92,37 @@ public class RutasServiceImpl extends MasterService implements IRutasService{
 
 		return "Se asignaron rutas al Crg";
 	}
-	
-	
+
+	@Override
+	public List<RutasResponseDTO> getRutas(Long idFederal, Long zonaCRG, Long ruta, Long casilla, Long perfil)
+			throws RutasException {
+		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL) {
+
+			List<RutasResponseDTO> lstRutasDTO = null;
+			List<Rutas> lstRutas = null;
+
+			if (idFederal != null && zonaCRG == null && ruta == null && casilla == null) {
+				lstRutas = rutasRepository.getByFederal(idFederal);
+			}
+			if (idFederal != null && zonaCRG != null && ruta == null && casilla == null) {
+				lstRutas = rutasRepository.getByFedAndZonaCrg(idFederal, zonaCRG);
+			}
+			if (idFederal != null && zonaCRG != null && ruta != null && casilla == null) {
+				lstRutas = rutasRepository.getByFedAndZonaCrgAndRuta(idFederal, zonaCRG, ruta);
+			}
+			if (idFederal != null && zonaCRG != null && ruta != null && casilla != null) {
+				lstRutas = rutasRepository.getByFedAndZonaCrgAndRutaAndCasilla(idFederal, zonaCRG, ruta, casilla);
+			}
+
+			if (lstRutas != null) {
+				lstRutasDTO = MapperUtil.mapAll(lstRutas, RutasResponseDTO.class);
+				return lstRutasDTO;
+			}else {
+				throw new RutasException("No se encontraron serultados con los datos ingresados", 401);
+			}
+		} else {
+			throw new RutasException("No cuenta con permisos suficientes.", 401);
+		}
+	}
 
 }

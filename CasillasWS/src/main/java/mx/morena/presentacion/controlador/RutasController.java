@@ -11,16 +11,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import mx.morena.negocio.dto.AsignarRutasDTO;
 import mx.morena.negocio.dto.CatalogoCrgDTO;
-import mx.morena.negocio.dto.RutasDTO;
 import mx.morena.negocio.exception.RutasException;
 import mx.morena.negocio.servicios.IRutasService;
 import mx.morena.security.controller.MasterController;
+import mx.morena.negocio.dto.RutasResponseDTO;
 
 @RestController
 @RequestMapping(value = "/")
@@ -29,11 +30,26 @@ public class RutasController extends MasterController {
 	@Autowired
 	private IRutasService rutasService;
 
-	@PostMapping("/rutas")
+	@GetMapping("/rutas")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	public Long saveRutas(HttpServletResponse response, HttpServletRequest request, @RequestBody RutasDTO dto) {
-		return null;
-		
+	public List<RutasResponseDTO> getRutas(HttpServletResponse response, HttpServletRequest request,
+			@RequestParam(value = "idFederal", required = false) Long idFederal,
+			@RequestParam(value = "", required = false) Long zonaCRG,
+			@RequestParam(value = "", required = false) Long ruta,
+			@RequestParam(value = "", required = false) Long casilla) throws IOException {
+
+		try {
+			long perfil = getPerfil(request);
+			return rutasService.getRutas(idFederal, zonaCRG, ruta, casilla, perfil);
+		} catch (RutasException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+			return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			return null;
+		}
 	}
 	
 	@PostMapping("/crg/rutas")
