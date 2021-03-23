@@ -1,10 +1,7 @@
 package mx.morena.negocio.dto;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-
-import mx.morena.persistencia.entidad.SeccionElectoral;
 
 public class CotResponseDTO {
 
@@ -13,6 +10,10 @@ public class CotResponseDTO {
 	private Long idDistritoFederal;
 	private Long idMunicipio;
 	private Long idSeccion;
+	private String estado;
+	private String distritoFederal;
+	private String municipio;
+	private String seccion;
 	private String nombre;
 	private String apellidoPaterno;
 	private String apellidoMaterno;
@@ -216,5 +217,36 @@ public class CotResponseDTO {
 		this.secciones = secciones;
 	}
 
+	public String getEstado() {
+		return estado;
+	}
+
+	public void setEstado(String estado) {
+		this.estado = estado;
+	}
+
+	public String getDistritoFederal() {
+		return distritoFederal;
+	}
+
+	public void setDistritoFederal(String distritoFederal) {
+		this.distritoFederal = distritoFederal;
+	}
+
+	public String getMunicipio() {
+		return municipio;
+	}
+
+	public void setMunicipio(String municipio) {
+		this.municipio = municipio;
+	}
+
+	public String getSeccion() {
+		return seccion;
+	}
+
+	public void setSeccion(String seccion) {
+		this.seccion = seccion;
+	}
 	
 }

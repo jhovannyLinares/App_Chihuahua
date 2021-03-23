@@ -4,6 +4,7 @@ import java.util.List;
 
 import mx.morena.negocio.dto.CotDTO;
 import mx.morena.negocio.dto.CotResponseDTO;
+import mx.morena.negocio.dto.SeccionDTO;
 import mx.morena.negocio.exception.CotException;
 
 public interface ICotService {
@@ -16,6 +17,7 @@ public interface ICotService {
 
 	public String activar(Long idCot, long perfil) throws CotException;
 	
-	public List<CotResponseDTO> getCots(Long perfil, Long idDistrito, Long idMunicipio) throws CotException;
-
+	public List<CotResponseDTO> getCots(long perfil, Long idDistrito, Long idMunicipio) throws CotException;
+	
+	public List<SeccionDTO> seccionesSinAsignar(long perfil, Long idMunicipio) throws CotException;
 }

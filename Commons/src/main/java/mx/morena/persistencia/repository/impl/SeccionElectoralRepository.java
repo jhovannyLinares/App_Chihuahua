@@ -21,7 +21,7 @@ public class SeccionElectoralRepository implements ISeccionElectoralRepository {
 
 	@Override
 	public List<SeccionElectoral> findByCotId(Long cotId, Long tipo) {
-		String sql = "SELECT * FROM app_secciones l INNER JOIN app_convencidos c ON l.idcot = c.id where l.idcot = ? and c.tipo = ?";
+		String sql = "SELECT l.id as seccion_id, l.idcot FROM app_secciones l INNER JOIN app_convencidos c ON l.idcot = c.id where l.idcot = ? and c.tipo = ?";
 		try {
 			return template.queryForObject(sql, new Object[] { cotId, tipo },
 					new int[] { Types.NUMERIC, Types.NUMERIC }, new SeccionesRowMapper());
@@ -67,6 +67,18 @@ public class SeccionElectoralRepository implements ISeccionElectoralRepository {
 		try {
 			return template.queryForObject(sql, new Object[] { idSeccion }, new int[] { Types.NUMERIC },
 					new SeccionRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+
+	@Override
+	public List<SeccionElectoral> getSeccionesLibresByMpo(Long idMunicipio) {
+		String sql = "SELECT s.id AS seccion_id, s.idcot FROM app_secciones s "
+				+ "WHERE s.municipio_id = ? AND (s.idcot IS NULL OR s.idcot = 0)";
+		try {
+			return template.queryForObject(sql, new Object[] { idMunicipio }, new int[] { Types.NUMERIC },
+					new SeccionesRowMapper());
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}

@@ -18,4 +18,5 @@ public interface ISeccionElectoralRepository {
 
 	List<SeccionElectoral> getByMunicipio(Long idMunicipio);
 
+	List<SeccionElectoral> getSeccionesLibresByMpo(Long idMunicipio);
 }
