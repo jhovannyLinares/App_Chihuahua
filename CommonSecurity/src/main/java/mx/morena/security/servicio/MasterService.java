@@ -30,5 +30,7 @@ public class MasterService {
 	protected static final int REP_RC = 9;
 	
 	protected static final String SIN_CALLE = "No se cuenta con Calle";
+	
+	protected static final String RUTA_INE = "/INE/";
 
 }
