@@ -50,7 +50,7 @@ public class ConvencidosRepository implements IConvencidosRepository {
 		String sql = "SELECT " + campos + ", adf.nombre as nombre_distrito, al.entidad as nombre_estado , al.municipio as nombre_municipio"
 				+ " FROM app_convencidos ac "
 				+ " inner join app_distrito_federal adf on ac.distrito_federal_id = adf.id "
-				+ " inner join app_secciones al on ac.seccion_id = al.id "
+				+ " inner join app_localidad al on ac.seccion_id = al.id "
 				+ " where ac.clave_elector = ? ";
 		try {
 			return template.queryForObject(sql, new Object[] { claveElector }, new int[] { Types.VARCHAR },
@@ -126,7 +126,7 @@ public class ConvencidosRepository implements IConvencidosRepository {
 		String sql = "SELECT " + campos + ", am.nombre as nombre_municipio, adf.\"NOMBRE MUNICIPIO CABECERA\" as nombre_distrito, adf.nombre as nombre_estado, al.tipo as nombre_seccion "
 				+ "FROM app_convencidos ac inner join app_municipio am on am.id = ac.municipio_id "
 				+ "inner join app_distrito_federal adf on adf.id = ac.distrito_federal_id "
-				+ "inner join app_localidad al on al.id = ac.seccion_id WHERE ac.tipo = ? ";
+				+ "inner join app_secciones al on al.id = ac.seccion_id WHERE ac.tipo = ? ";
 		try {
 			return template.queryForObject(sql, new Object[] { tipo }, new int[] { Types.NUMERIC },
 					new ConvencidosRowMapper());
@@ -139,7 +139,7 @@ public class ConvencidosRepository implements IConvencidosRepository {
 		String sql = "SELECT " + campos + ", adf.nombre as nombre_distrito, al.entidad as nombre_estado , al.municipio as nombre_municipio" 
 				+ " FROM app_convencidos ac "
 				+ " inner join app_distrito_federal adf on ac.distrito_federal_id = adf.id "
-				+ " inner join app_secciones al on ac.seccion_id = al.id "
+				+ " inner join app_localidad al on ac.seccion_id = al.id "
 				+ " where ac.distrito_federal_id = ? and ac.municipio_id = ? and ac.tipo = ?";
 		try {
 			return template.queryForObject(sql, new Object[] { idDistrito, idMunicipio, tipo },
@@ -156,7 +156,7 @@ public class ConvencidosRepository implements IConvencidosRepository {
 		String sql = "SELECT " + campos + ", adf.nombre as nombre_distrito, al.entidad as nombre_estado , al.municipio as nombre_municipio" 
 				+ " FROM app_convencidos ac "
 				+ " inner join app_distrito_federal adf on ac.distrito_federal_id = adf.id "
-				+ " inner join app_secciones al on ac.seccion_id = al.id "
+				+ " inner join app_localidad al on ac.seccion_id = al.id "
 				+ " where ac.distrito_federal_id = ? and ac.municipio_id = ? and ac.seccion_id = ?  and ac.tipo = ?";
 		try {
 			return template.queryForObject(sql, new Object[] { idDistrito, idMunicipio, idSeccion, tipo },
@@ -173,7 +173,7 @@ public class ConvencidosRepository implements IConvencidosRepository {
 		String sql = "SELECT " + campos + ", adf.nombre as nombre_distrito, al.entidad as nombre_estado , al.municipio as nombre_municipio" 
 				+ " FROM app_convencidos ac "
 				+ " inner join app_distrito_federal adf on ac.distrito_federal_id = adf.id "
-				+ " inner join app_secciones al on ac.seccion_id = al.id "
+				+ " inner join app_localidad al on ac.seccion_id = al.id "
 				+ " where ac.distrito_federal_id = ? and ac.municipio_id = ? and ac.seccion_id = ? and ac.clave_elector = ? and ac.tipo = ?";
 		try {
 			return template.queryForObject(sql, new Object[] { idDistrito, idMunicipio, idSeccion, claveElector, tipo },

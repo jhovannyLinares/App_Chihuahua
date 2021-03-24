@@ -251,7 +251,7 @@ public class CotServiceImpl extends MasterService implements ICotService {
 			listaSecciones = null;
 		}
 		
-		cotDto.setSecciones(listaSecciones);
+//		cotDto.setSecciones(listaSecciones);
 		if (cot.getEstatus() == ESTATUS_ALTA) {
 			cotDto.setEstatus("Activo");
 		} else {

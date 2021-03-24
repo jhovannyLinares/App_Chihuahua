@@ -42,6 +42,7 @@ public class ConvencidoRowMapper implements RowMapper<Convencidos> {
 		convencido.setIdMunicipio(rs.getLong("municipio_id"));
 		convencido.setUsuario(rs.getLong("usuario_id_usuario"));
 		convencido.setIdSeccion(rs.getLong("seccion_id")); 
+		convencido.setNombreSeccion(rs.getString("seccion_id"));
 
 		return convencido;
 	}

@@ -87,9 +87,7 @@ public class CatalogoController extends MasterController {
 		long idPerfil = getPerfil(request);
 
 		List<MunicipioDTO> local = ICatService.getMunicipioByFederal(usuario, idPerfil, idFederal);
-
 		return local;
-
 	}
 
 	@GetMapping("/municipios/{id}/secciones")
