@@ -18,5 +18,11 @@ public interface IRutasRepository {
 	void updateIdCrg(Long idRuta, Long idCrg);
 		
 	List<Rutas> getRutas(Long idFederal, Long zonaCRG, Long ruta, Long casilla);
+
+	List<Rutas> getZonasByDistrito(Long idDistrito);
+
+	List<Rutas> getRutasByZonas(Long zonaCrg);
+
+	List<Rutas> getCasillaByRuta(Long ruta);
 	
 }

@@ -7,8 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import mx.morena.negocio.dto.CasillasCatalogoDto;
 import mx.morena.negocio.dto.CatalogoCrgDTO;
+import mx.morena.negocio.dto.RutaCatalogoDto;
+import mx.morena.negocio.dto.RutasLiberacionDto;
 import mx.morena.negocio.dto.RutasResponseDTO;
+import mx.morena.negocio.dto.ZonaCrgDTO;
 import mx.morena.negocio.exception.RutasException;
 import mx.morena.negocio.servicios.IRutasService;
 import mx.morena.negocio.util.MapperUtil;
@@ -112,6 +116,52 @@ public class RutasServiceImpl extends MasterService implements IRutasService{
 		} else {
 			throw new RutasException("No cuenta con permisos suficientes.", 401);
 		}
+	}
+
+
+
+/////////////////////////////////////////////////////////     catalogos
+	@Override
+	public List<ZonaCrgDTO> getZonasByDistrito(long idPerfil, Long idDistrito) {
+
+		List<ZonaCrgDTO> lstDto = null;
+		
+		if (idPerfil == PERFIL_ESTATAL || idPerfil == PERFIL_FEDERAL) {
+			
+			List<Rutas> lstRutas = rutasRepository.getZonasByDistrito(idDistrito);
+			lstDto = MapperUtil.mapAll(lstRutas, ZonaCrgDTO.class);
+			System.out.println("***  zonas by distrito " + lstDto.size());
+			return lstDto;
+		}
+		return null;
+	}
+
+	@Override
+	public List<RutaCatalogoDto> getRutaByZonaCrg(long idPerfil, Long zonaCrg) {
+		
+		List<RutaCatalogoDto> lstDto = null;
+
+		if (idPerfil == PERFIL_ESTATAL || idPerfil == PERFIL_FEDERAL) {
+			
+			List<Rutas> lstRutas = rutasRepository.getRutasByZonas(zonaCrg);
+			lstDto = MapperUtil.mapAll(lstRutas, RutaCatalogoDto.class);
+			System.out.println("***  rutas by zona " + lstDto.size());
+			return lstDto;
+		}
+		return null;
+	}
+
+	@Override
+	public List<CasillasCatalogoDto> getCasillaByRuta(long idPerfil, Long ruta) {
+		List<CasillasCatalogoDto> lstDto = null;
+		if (idPerfil == PERFIL_ESTATAL || idPerfil == PERFIL_FEDERAL) {
+
+			List<Rutas> lstRutas = rutasRepository.getCasillaByRuta(ruta);
+			lstDto = MapperUtil.mapAll(lstRutas, CasillasCatalogoDto.class);
+			System.out.println("***  casillas by ruta " + lstDto.size());
+			return lstDto;
+		}
+		return null;
 	}
 
 }

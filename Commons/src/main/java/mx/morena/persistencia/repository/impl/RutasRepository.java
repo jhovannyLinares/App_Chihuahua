@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import mx.morena.persistencia.entidad.Representantes;
 import mx.morena.persistencia.entidad.Rutas;
 import mx.morena.persistencia.repository.IRutasRepository;
+import mx.morena.persistencia.rowmapper.RutaRowMapper;
 import mx.morena.persistencia.rowmapper.RutasRowMapper;
 
 @Repository
@@ -117,6 +118,39 @@ public class RutasRepository implements IRutasRepository {
 			return null;
 		}
 
+	}
+
+	@Override
+	public List<Rutas> getZonasByDistrito(Long idDistrito) {
+		String sql = "select * from app_rutas2 ar where distrito_federal_id =?";
+		try {
+			return template.queryForObject(sql, new Object[] {idDistrito}, new int[] { Types.NUMERIC },
+					new RutasRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+
+	@Override
+	public List<Rutas> getRutasByZonas(Long zonaCrg) {
+		String sql = "select * from app_rutas2 ar where zona_crg =?";
+		try {
+			return template.queryForObject(sql, new Object[] {zonaCrg}, new int[] { Types.NUMERIC },
+					new RutasRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+
+	@Override
+	public List<Rutas> getCasillaByRuta(Long ruta) {
+		String sql = "select * from app_rutas2 ar where ruta = ?";
+		try {
+			return template.queryForObject(sql, new Object[] {ruta}, new int[] { Types.NUMERIC },
+					new RutasRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
 	}
 
 }

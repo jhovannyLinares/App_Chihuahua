@@ -6,20 +6,20 @@ public class RutasResponseDTO {
     
     private String nombreDistrito;
 	
-	private Long zonaCrg;
-	
 	private String idRutaRg;
+	
+	private Long ruta;
 	
     private String tipoCasilla;
 	
 	private Long seccionId;
 	
-	private String Zona;
+	private Long zonaCrg;
 	
 	private String idZonaCrg;
-
-	//private Long status;
 	
+	private String Zona;
+
 	public Long getIdDistrito() {
 		return idDistrito;
 	}
@@ -36,20 +36,20 @@ public class RutasResponseDTO {
 		this.nombreDistrito = nombreDistrito;
 	}
 
-	public Long getZonaCrg() {
-		return zonaCrg;
-	}
-
-	public void setZonaCrg(Long zonaCrg) {
-		this.zonaCrg = zonaCrg;
-	}
-
 	public String getIdRutaRg() {
 		return idRutaRg;
 	}
 
 	public void setIdRutaRg(String idRutaRg) {
 		this.idRutaRg = idRutaRg;
+	}
+
+	public Long getRuta() {
+		return ruta;
+	}
+
+	public void setRuta(Long ruta) {
+		this.ruta = ruta;
 	}
 
 	public String getTipoCasilla() {
@@ -68,12 +68,12 @@ public class RutasResponseDTO {
 		this.seccionId = seccionId;
 	}
 
-	public String getZona() {
-		return Zona;
+	public Long getZonaCrg() {
+		return zonaCrg;
 	}
 
-	public void setZona(String zona) {
-		Zona = zona;
+	public void setZonaCrg(Long zonaCrg) {
+		this.zonaCrg = zonaCrg;
 	}
 
 	public String getIdZonaCrg() {
@@ -83,5 +83,13 @@ public class RutasResponseDTO {
 	public void setIdZonaCrg(String idZonaCrg) {
 		this.idZonaCrg = idZonaCrg;
 	}
-		
+
+	public String getZona() {
+		return Zona;
+	}
+
+	public void setZona(String zona) {
+		Zona = zona;
+	}
+	
 }
