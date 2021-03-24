@@ -11,7 +11,7 @@ public interface IConvencidosRepository {
 
 	List<Convencidos> findByClaveElector(String claveElector);
 
-	public Convencidos getByCurp(String curp, Long tipo);
+	public Convencidos getByCurp(String curp);
 
 	public Convencidos getByIdAndEstatus(Long idCot, char estatus, Long tipo);
 

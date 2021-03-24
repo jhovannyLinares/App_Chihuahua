@@ -22,4 +22,6 @@ public interface ICotService {
 	public List<SeccionDTO> seccionesSinAsignar(long perfil, Long idMunicipio) throws CotException;
 	
 	public String update(CotDTO cot, long perfil, Long id) throws CotException;
+	
+	public boolean getByCurp(String curp) throws CotException;
 }

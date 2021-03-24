@@ -62,10 +62,10 @@ public class ConvencidosRepository implements IConvencidosRepository {
 	}
 
 	@Override
-	public Convencidos getByCurp(String curp, Long tipo) {
-		String sql = "SELECT " + campos + " FROM app_convencidos ac WHERE ac.curp = ? AND ac.tipo = ? LIMIT 1 ";
+	public Convencidos getByCurp(String curp) {
+		String sql = "SELECT " + campos + " FROM app_convencidos ac WHERE ac.curp = ? LIMIT 1 ";
 		try {
-			return template.queryForObject(sql, new Object[] { curp, tipo }, new int[] { Types.VARCHAR, Types.NUMERIC },
+			return template.queryForObject(sql, new Object[] { curp }, new int[] { Types.VARCHAR },
 					new ConvencidoRowMapper());
 		} catch (EmptyResultDataAccessException e) {
 			return null;

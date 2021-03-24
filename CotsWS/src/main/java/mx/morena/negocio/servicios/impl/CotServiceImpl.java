@@ -36,7 +36,7 @@ public class CotServiceImpl extends MasterService implements ICotService {
 
 		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL || perfil == PERFIL_MUNICIPAL) {
 			if (cotDto.getClaveElector().length() == 18 && cotDto.getCurp().length() == 18) {
-				Convencidos existeCurp = cotRepository.getByCurp(cotDto.getCurp(), COT);
+				Convencidos existeCurp = cotRepository.getByCurp(cotDto.getCurp());
 				List<Convencidos> existeClave = cotRepository.findByClaveElector(cotDto.getClaveElector());
 
 				if (existeClave != null) {
@@ -365,4 +365,19 @@ public class CotServiceImpl extends MasterService implements ICotService {
         
         return true;
     }
+
+	@Override
+	public boolean getByCurp(String curp) throws CotException {
+		if (curp.trim().length() == 18) {
+			Convencidos convencido = cotRepository.getByCurp(curp);
+			if (convencido == null) {
+				return false;
+			} else {
+				return true;
+			}
+		} else {
+			throw new CotException("El numero de caracteres ingresado en la curp es incorrecto",
+					400);
+		}
+	}
 }

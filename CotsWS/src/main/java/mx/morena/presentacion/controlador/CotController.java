@@ -167,5 +167,21 @@ public class CotController extends MasterController {
 			return null;
 		}
 	}
+	
+	@GetMapping("/cots/{curp}")
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	private boolean getClaveElector(HttpServletResponse response, @PathVariable("curp") String curp) throws IOException {
+		try {
+			return cotService.getByCurp(curp);
+		} catch (CotException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+			return false;
+		} catch (Exception e ) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			return false;
+		}
+	}
 
 }
