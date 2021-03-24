@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -138,6 +139,24 @@ public class CotController extends MasterController {
 		
 		try {
 			return cotService.seccionesSinAsignar(perfil, idMunicipio);
+		} catch (CotException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+			return null;
+		} catch (Exception e ) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			return null;
+		}
+	}
+	
+	@PatchMapping("/cots/{id}")
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	public String update(HttpServletResponse response, HttpServletRequest request, @RequestBody CotDTO cot, @RequestParam(value = "id") Long id) throws IOException {
+		long perfil = getPerfil(request);
+		
+		try {
+			return cotService.update(cot, perfil, id);
 		} catch (CotException e) {
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());

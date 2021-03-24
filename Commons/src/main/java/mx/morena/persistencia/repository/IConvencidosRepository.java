@@ -30,4 +30,8 @@ public interface IConvencidosRepository {
 	List<Convencidos> getConvencidos(Long distritoFederalId, Long idMunicipio, Long idSeccion, String claveElector,
 			Long convencido);
 
+	Convencidos findByClaveOCurp(String nombreCampo, String valorCampo, Long id);
+	
+	Convencidos getByIdAndTipoA(Long id, Long tipo);
+	
 }

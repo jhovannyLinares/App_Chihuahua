@@ -263,4 +263,27 @@ public List<Convencidos> getConvencidos(Long distritoFederalId, Long idMunicipio
 
 }
 
+	@Override
+	public Convencidos findByClaveOCurp(String nombreCampo, String valorCampo, Long id) {
+		String sql = "SELECT " + campos + " FROM app_convencidos ac WHERE ac." + nombreCampo + " = ? AND NOT ac.id = ? LIMIT 1 ";
+		try {
+			return template.queryForObject(sql, new Object[] { valorCampo, id }, new int[] { Types.VARCHAR, Types.NUMERIC },
+					new ConvencidoRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	
+	}
+	
+	@Override
+	public Convencidos getByIdAndTipoA(Long id, Long tipo) {
+		String sql = "SELECT " + campos + " FROM app_convencidos ac WHERE ac.id = ? AND ac.tipo = ? ";
+		try {
+			return template.queryForObject(sql, new Object[] { id, tipo }, new int[] { Types.NUMERIC, Types.NUMERIC },
+					new ConvencidoRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+
 }

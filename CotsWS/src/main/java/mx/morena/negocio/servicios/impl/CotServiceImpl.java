@@ -251,7 +251,7 @@ public class CotServiceImpl extends MasterService implements ICotService {
 			listaSecciones = null;
 		}
 		
-//		cotDto.setSecciones(listaSecciones);
+		cotDto.setSecciones(listaSecciones);
 		if (cot.getEstatus() == ESTATUS_ALTA) {
 			cotDto.setEstatus("Activo");
 		} else {
@@ -301,41 +301,68 @@ public class CotServiceImpl extends MasterService implements ICotService {
 	@Override
 	public String update(CotDTO cotDto, long perfil, Long id) throws CotException {
 		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL || perfil == PERFIL_MUNICIPAL) {
-			if (cotDto.getClaveElector().trim().length() == 18 && cotDto.getCurp().trim().length() == 18) {
-				Convencidos existeCurp = cotRepository.getByCurp(cotDto.getCurp(), COT);
-				List<Convencidos> existeClave = cotRepository.findByClaveElector(cotDto.getClaveElector());
+			if (id != null && cotDto != null) {
+				if (cotDto.getClaveElector().trim().length() == 18 && cotDto.getCurp().trim().length() == 18) {
+					Convencidos existeCot = cotRepository.getByIdAndTipoA(id, COT);
+					if (existeCot != null) {
 
-				if (existeClave != null) {
-					throw new CotException("La clave de elector ya esta en uso, intente con otra", 400);
-				} else if (existeCurp != null) {
-					throw new CotException("La CURP ya esta en uso, intente con otra", 400);
-				} else {
-					Convencidos personaCot = new Convencidos();
+						final String campoClave = "clave_elector";
+						final String campoCurp = "curp";
 
-					MapperUtil.map(cotDto, personaCot);
-					
-					if(cotDto.getIsCalle()) {
-						personaCot.setCalle(SIN_CALLE);
+						boolean existeCurp = datosDuplicados(cotDto.getCurp(), campoCurp, id);
+						boolean existeClave = datosDuplicados(cotDto.getClaveElector(), campoClave, id);
+
+						if (!existeCurp && !existeClave) {
+							Convencidos personaCot = new Convencidos();
+
+							MapperUtil.map(cotDto, personaCot);
+
+							if (cotDto.getIsCalle()) {
+								personaCot.setCalle(SIN_CALLE);
+							}
+
+							// personaCot.setTipo(cotDto.getTipo().charAt(0));
+							personaCot.setId(id);
+							personaCot.setIdEstado(cotDto.getIdEstado());
+							personaCot.setIdFederal(cotDto.getIdDistritoFederal());
+							personaCot.setIdMunicipio(cotDto.getIdMunicipio());
+							personaCot.setIdSeccion(cotDto.getIdSeccion());
+							personaCot.setTipo(COT);
+
+							System.out.println(personaCot);
+							cotRepository.update(personaCot);
+
+							return "Cot editado correctamente " + cotDto.getNombre();
+
+						} else if (existeCurp) {
+							throw new CotException("Curp duplicada, favor de validar", 400);
+						} else {
+							throw new CotException("Clave de elector duplicada, favor de validar", 400);
+						}
+
+					} else {
+						throw new CotException("No existe el COT ingresado", 404);
 					}
-					
-					personaCot.setIdEstado(cotDto.getIdEstado());
-					personaCot.setIdFederal(cotDto.getIdDistritoFederal());
-					personaCot.setIdMunicipio(cotDto.getIdMunicipio());
-					personaCot.setIdSeccion(cotDto.getIdSeccion());
-					personaCot.setTipo(COT);
-
-					cotRepository.update(personaCot);
-
-					return "";
-
+				} else {
+					throw new CotException("CURP o Clave no valida, debe tener 18 caracteres", 400);
 				}
 
 			} else {
-				throw new CotException("CURP o Clave no valida, debe tener 18 caracteres", 400);
+				throw new CotException("Ingrese todos los datos", 400);
 			}
 
 		} else {
 			throw new CotException("No cuenta con suficientes permisos", 401);
 		}
 	}
+	
+	private boolean datosDuplicados(String valorCampo, String campo, Long id){
+        Convencidos existeDuplicado = cotRepository.findByClaveOCurp(campo, valorCampo, id);
+        
+        if (existeDuplicado ==  null) {
+			return false;
+		}
+        
+        return true;
+    }
 }
