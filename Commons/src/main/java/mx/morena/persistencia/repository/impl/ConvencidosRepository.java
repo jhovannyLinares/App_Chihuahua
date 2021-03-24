@@ -1,6 +1,7 @@
 package mx.morena.persistencia.repository.impl;
 
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -150,40 +151,6 @@ public class ConvencidosRepository implements IConvencidosRepository {
 		}
 	}
 
-	@Override
-	public List<Convencidos> getByDfAndMpioAndSeccion(Long idDistrito, Long idMunicipio, Long idSeccion, Long tipo) {
-		
-		String sql = "SELECT " + campos + ", adf.nombre as nombre_distrito, al.entidad as nombre_estado , al.municipio as nombre_municipio" 
-				+ " FROM app_convencidos ac "
-				+ " inner join app_distrito_federal adf on ac.distrito_federal_id = adf.id "
-				+ " inner join app_localidad al on ac.seccion_id = al.id "
-				+ " where ac.distrito_federal_id = ? and ac.municipio_id = ? and ac.seccion_id = ?  and ac.tipo = ?";
-		try {
-			return template.queryForObject(sql, new Object[] { idDistrito, idMunicipio, idSeccion, tipo },
-					new int[] { Types.NUMERIC, Types.NUMERIC, Types.NUMERIC, Types.NUMERIC }, new ConvencidosRowMapper());
-		} catch (EmptyResultDataAccessException e) {
-
-			return null;
-		}
-	}
-
-	@Override
-	public List<Convencidos> getByDfAndMpioAndSeccionAndCveE(Long idDistrito, Long idMunicipio, Long idSeccion,
-			String claveElector, Long tipo) {
-		String sql = "SELECT " + campos + ", adf.nombre as nombre_distrito, al.entidad as nombre_estado , al.municipio as nombre_municipio" 
-				+ " FROM app_convencidos ac "
-				+ " inner join app_distrito_federal adf on ac.distrito_federal_id = adf.id "
-				+ " inner join app_localidad al on ac.seccion_id = al.id "
-				+ " where ac.distrito_federal_id = ? and ac.municipio_id = ? and ac.seccion_id = ? and ac.clave_elector = ? and ac.tipo = ?";
-		try {
-			return template.queryForObject(sql, new Object[] { idDistrito, idMunicipio, idSeccion, claveElector, tipo },
-					new int[] { Types.NUMERIC, Types.NUMERIC, Types.NUMERIC, Types.VARCHAR, Types.NUMERIC }, new ConvencidosRowMapper());
-		} catch (EmptyResultDataAccessException e) {
-
-			return null;
-		}
-	}
-
 
 	@Override
 	public void update(Convencidos convencidos) {
@@ -204,5 +171,96 @@ public class ConvencidosRepository implements IConvencidosRepository {
 						convencidos.getIdMunicipio(), convencidos.getIdSeccion(), convencidos.getId(), convencidos.getTipo() });
 
 	}
+
+
+
+@Override
+public List<Convencidos> getConvencidos(Long distritoFederalId, Long idMunicipio, Long idSeccion, String claveElector,
+		Long convencido) {
+
+	
+	String select = "SELECT" + campos  + ", adf.nombre as nombre_distrito, al.entidad as nombre_estado , al.municipio as nombre_municipio"
+			+ " FROM app_convencidos ac "
+			+ " inner join app_distrito_federal adf on ac.distrito_federal_id = adf.id "
+			+ " inner join app_localidad al on ac.seccion_id = al.id ";
+	
+	String sql = null;
+	String where = "";
+	List<Object> para = new ArrayList<Object>();
+	List<Integer> type = new ArrayList<Integer>();
+
+	if (distritoFederalId != null) {
+		where = " where ac.distrito_federal_id = ? ";
+		para.add(distritoFederalId);
+		type.add(Types.NUMERIC);
+	}
+
+	if (idMunicipio != null) {
+
+		if (para.size() > 0) {
+			where = where.concat(" and ac.municipio_id = ? ");
+		} else {
+			where = " where ac.municipio_id = ? ";
+		}
+		para.add(idMunicipio);
+		type.add(Types.NUMERIC);
+	}
+
+	if (idSeccion != null) {
+		if (para.size() > 0) {
+			where = where.concat(" and ac.seccion_id = ? ");
+		} else {
+			where = " where ac.seccion_id = ? ";
+		}
+		para.add(idSeccion);
+		type.add(Types.NUMERIC);
+	}
+	
+	if (claveElector != null) {
+
+		if (para.size() > 0) {
+			where = where.concat(" and ac.clave_elector = ? ");
+		} else {
+			where = " where ac.clave_elector = ? ";
+		}
+		para.add(claveElector);
+		type.add(Types.VARCHAR);
+	}
+	
+	if (convencido != null) {
+
+		if (para.size() > 0) {
+			where = where.concat(" and ac.tipo = ? ");
+		} else {
+			where = " where ac.tipo = ? ";
+		}
+		para.add(convencido);
+		type.add(Types.NUMERIC);
+	}
+
+	Object[] parametros = new Object[para.size()];
+	int[] types = new int[para.size()];
+
+	for (int i = 0; i < para.size(); i++) {
+		parametros[i] = para.get(i);
+		types[i] = type.get(i);
+	}
+
+	try {
+		
+		System.out.println("\n");
+		
+		 sql = select.concat(where);
+		 System.out.println(sql);
+		 
+		 System.out.println("*************    convencidos ");
+		 System.out.println("\n");
+
+		return template.queryForObject(sql, parametros, types, new ConvencidosRowMapper());
+	} catch (EmptyResultDataAccessException e) {
+		return null;
+	}
+
+}
 
 }

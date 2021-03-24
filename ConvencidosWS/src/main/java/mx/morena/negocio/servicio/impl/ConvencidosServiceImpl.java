@@ -34,28 +34,10 @@ public class ConvencidosServiceImpl extends MasterService implements IConvencido
 		List<Convencidos> lstConv = null;
 		List<ConvencidosResponseDTO> lstDto = new ArrayList<ConvencidosResponseDTO>();
 
-
-		if (distritoFederalId != null && idMunicipio == null && idSeccion == null && claveElector == null) {
-			lstConv = convencidosRepository.getByDistritoFederal(distritoFederalId, CONVENCIDO);
-		}
-
-		if(distritoFederalId != null && idMunicipio != null && idSeccion == null && claveElector == null) {
-			lstConv = convencidosRepository.getByDfAndMpio(distritoFederalId, idMunicipio, CONVENCIDO);
-		}
-
-		if(distritoFederalId != null && idMunicipio != null && idSeccion != null && claveElector == null) {
-			lstConv = convencidosRepository.getByDfAndMpioAndSeccion(distritoFederalId, idMunicipio, idSeccion, CONVENCIDO);
-		}
-
-		if(distritoFederalId != null && idMunicipio != null && idSeccion != null && claveElector != null) {
-			lstConv = convencidosRepository.getByDfAndMpioAndSeccionAndCveE(distritoFederalId, idMunicipio, idSeccion,  claveElector, CONVENCIDO);
-		}
-
-		if (distritoFederalId == null && idMunicipio == null && idSeccion == null && claveElector != null) {
-			lstConv = convencidosRepository.findByClaveElector(claveElector);
-		}
+			lstConv = convencidosRepository.getConvencidos(distritoFederalId,idMunicipio, idSeccion, claveElector, CONVENCIDO);
 
 		if (lstConv != null) {
+			System.out.println("**** " + lstConv.size());
 			lstDto = MapperUtil.mapAll(lstConv, ConvencidosResponseDTO.class);
 			return lstDto;
 
