@@ -101,18 +101,7 @@ public class RutasServiceImpl extends MasterService implements IRutasService{
 			List<RutasResponseDTO> lstRutasDTO = null;
 			List<Rutas> lstRutas = null;
 
-			if (idFederal != null && zonaCRG == null && ruta == null && casilla == null) {
-				lstRutas = rutasRepository.getByFederal(idFederal);
-			}
-			if (idFederal != null && zonaCRG != null && ruta == null && casilla == null) {
-				lstRutas = rutasRepository.getByFedAndZonaCrg(idFederal, zonaCRG);
-			}
-			if (idFederal != null && zonaCRG != null && ruta != null && casilla == null) {
-				lstRutas = rutasRepository.getByFedAndZonaCrgAndRuta(idFederal, zonaCRG, ruta);
-			}
-			if (idFederal != null && zonaCRG != null && ruta != null && casilla != null) {
-				lstRutas = rutasRepository.getByFedAndZonaCrgAndRutaAndCasilla(idFederal, zonaCRG, ruta, casilla);
-			}
+				lstRutas = rutasRepository.getRutas(idFederal, zonaCRG, ruta, casilla);	
 
 			if (lstRutas != null) {
 				lstRutasDTO = MapperUtil.mapAll(lstRutas, RutasResponseDTO.class);

@@ -12,7 +12,6 @@ import org.springframework.stereotype.Repository;
 import mx.morena.persistencia.entidad.Representantes;
 import mx.morena.persistencia.entidad.Rutas;
 import mx.morena.persistencia.repository.IRutasRepository;
-import mx.morena.persistencia.rowmapper.RepresentanteRowMapper;
 import mx.morena.persistencia.rowmapper.RutasRowMapper;
 
 @Repository
@@ -89,7 +88,7 @@ public class RutasRepository implements IRutasRepository {
 				where = " where ruta = ? ";
 			}
 			para.add(ruta);
-			type.add(Types.VARCHAR);
+			type.add(Types.NUMERIC);
 		}
 		if (casilla != null) {
 
@@ -106,14 +105,12 @@ public class RutasRepository implements IRutasRepository {
 		int[] types = new int[para.size()];
 
 		for (int i = 0; i < para.size(); i++) {
-			parametros[i] = para.get(i + 1);
-			types[i] = type.get(i + 1);
+			parametros[i] = para.get(i);
+			types[i] = type.get(i);
 		}
 
 		try {
-			sql = sql.concat(where);
-
-			System.out.println(sql);
+			 sql = select.concat(where);
 
 			return template.queryForObject(sql, parametros, types, new RutasRowMapper());
 		} catch (EmptyResultDataAccessException e) {
