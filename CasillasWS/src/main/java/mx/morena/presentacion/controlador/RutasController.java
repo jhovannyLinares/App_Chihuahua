@@ -7,11 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,7 +21,6 @@ import mx.morena.negocio.dto.AsignarRutasDTO;
 import mx.morena.negocio.dto.CasillasCatalogoDto;
 import mx.morena.negocio.dto.CatalogoCrgDTO;
 import mx.morena.negocio.dto.RutaCatalogoDto;
-import mx.morena.negocio.dto.RutasLiberacionDto;
 import mx.morena.negocio.exception.RutasException;
 import mx.morena.negocio.servicios.IRutasService;
 import mx.morena.security.controller.MasterController;
@@ -46,7 +43,7 @@ public class RutasController extends MasterController {
 			@RequestParam(value = "", required = false) Long casilla) throws IOException {
 
 		try {
-			long perfil = getPerfil(request);
+			long perfil = 1L;// getPerfil(request);
 			return rutasService.getRutas(idFederal, zonaCRG, ruta, casilla, perfil);
 		} catch (RutasException e) {
 			e.printStackTrace();
@@ -105,7 +102,7 @@ public class RutasController extends MasterController {
 	private List<ZonaCrgDTO> getZonasCrgByDistrito(HttpServletRequest request,
 			@PathVariable("id") Long idDistrito) {
 
-		long idPerfil = 1L;// getPerfil(request);
+		long idPerfil =  getPerfil(request);
 
 		List<ZonaCrgDTO> zonasCrg = rutasService.getZonasByDistrito(idPerfil, idDistrito);
 
@@ -117,7 +114,7 @@ public class RutasController extends MasterController {
 	private List<RutaCatalogoDto> getLocalidadByMunicipio(HttpServletRequest request,
 			@PathVariable("id") Long zonaCrg) {
 
-		long idPerfil = 1L;// getPerfil(request);
+		long idPerfil =  getPerfil(request);
 
 		List<RutaCatalogoDto> rutas = rutasService.getRutaByZonaCrg(idPerfil, zonaCrg);
 
@@ -129,7 +126,7 @@ public class RutasController extends MasterController {
 	private List<CasillasCatalogoDto> getCasillaByRuta(HttpServletRequest request,
 			@PathVariable("id") Long ruta) {
 		
-		long idPerfil = 1L;// getPerfil(request);
+		long idPerfil = getPerfil(request);
 		
 		List<CasillasCatalogoDto> casillas = rutasService.getCasillaByRuta(idPerfil, ruta);
 		return casillas;

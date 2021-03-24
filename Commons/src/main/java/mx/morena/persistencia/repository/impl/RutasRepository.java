@@ -12,7 +12,6 @@ import org.springframework.stereotype.Repository;
 import mx.morena.persistencia.entidad.Representantes;
 import mx.morena.persistencia.entidad.Rutas;
 import mx.morena.persistencia.repository.IRutasRepository;
-import mx.morena.persistencia.rowmapper.RutaRowMapper;
 import mx.morena.persistencia.rowmapper.RutasRowMapper;
 
 @Repository

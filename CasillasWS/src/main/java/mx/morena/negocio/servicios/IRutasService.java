@@ -5,7 +5,6 @@ import java.util.List;
 import mx.morena.negocio.dto.CasillasCatalogoDto;
 import mx.morena.negocio.dto.CatalogoCrgDTO;
 import mx.morena.negocio.dto.RutaCatalogoDto;
-import mx.morena.negocio.dto.RutasLiberacionDto;
 import mx.morena.negocio.dto.RutasResponseDTO;
 import mx.morena.negocio.dto.ZonaCrgDTO;
 import mx.morena.negocio.exception.RutasException;
