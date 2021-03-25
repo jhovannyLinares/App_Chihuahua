@@ -13,6 +13,8 @@ import mx.morena.persistencia.entidad.Representantes;
 import mx.morena.persistencia.entidad.Rutas;
 import mx.morena.persistencia.repository.IRutasRepository;
 import mx.morena.persistencia.rowmapper.RutasRowMapper;
+import mx.morena.persistencia.rowmapper.RepresentanteRowMapper;
+import mx.morena.persistencia.rowmapper.RutaRowMapper;
 
 @Repository
 public class RutasRepository implements IRutasRepository {
@@ -23,34 +25,48 @@ public class RutasRepository implements IRutasRepository {
 	private String campos = " id, distrito_federal_id, nombre_distrito, zona_crg, id_zona_crg, ruta, id_casilla, tipo_casilla, seccion_id, id_ruta_rg, status, id_crg ";
 
 	@Override
-	public List<Representantes> getAllCrg(int tipo) {
-		// TODO Auto-generated method stub
-		return null;
+	public Representantes getAllCrg(Long tipo) {
+		String sql = "SELECT nombre, apellido_paterno, apellido_materno, tipo_representante from app_representantes ar"
+		+ "inner join app_perfil ap"
+		+ "on ar.tipo_representante = ap.id"
+		+ "where ar.tipo_representante = ? ";
+		try {
+			return template.queryForObject(sql, new Object[] { tipo }, new int[] { Types.NUMERIC },
+					new RepresentanteRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
 	}
 
 	@Override
-	public List<Rutas> findByCrgId(Long crgId, Long tipo) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Rutas getByIdAndEstatus(Long idCrg, char estatus, Long tipo) {
-		// TODO Auto-generated method stub
-		return null;
-
+	public List<Rutas> findByCrgId(Long crgId) {
+		String sql = "select id as ruta_id, id_crg from app_rutas2 where id_crg = ?";
+		try {
+			return template.queryForObject(sql, new Object[] { crgId },
+					new int[] { Types.NUMERIC }, new RutaRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
 	}
 
 	@Override
 	public List<Rutas> findById(Long idRutas) {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = "SELECT id as ruta_id, id_crg, id, status FROM app_rutas2 where id = ?";
+		try {
+			return template.queryForObject(sql, new Object[] { idRutas }, new int[] { Types.NUMERIC },
+					new RutaRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
 	}
 
 	@Override
 	public void updateIdCrg(Long idRuta, Long idCrg) {
-		// TODO Auto-generated method stub
+		String sql = "UPDATE app_rutas2 SET id_crg = ?, status = 01 WHERE id = ? and status != 1";
 
+		template.update(sql, new Object[] { idCrg, idRuta }, new int[] { Types.NUMERIC, Types.NUMERIC });
+
+		
 	}
 
 	@Override

@@ -7,13 +7,11 @@ import mx.morena.persistencia.entidad.Rutas;
 
 public interface IRutasRepository {
 	
-	List<Rutas> findByCrgId(Long crgId, Long tipo); 
+	public List<Rutas> findByCrgId(Long crgId);
 
-	List<Representantes> getAllCrg(int tipo);
+	public Representantes getAllCrg(Long tipo);
 	
-	public Rutas getByIdAndEstatus(Long idCrg, char estatus, Long tipo);
-	
-	List<Rutas> findById(Long idRutas);
+	public List<Rutas> findById(Long idRutas);
 	
 	void updateIdCrg(Long idRuta, Long idCrg);
 		

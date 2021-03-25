@@ -1,16 +1,20 @@
 package mx.morena.persistencia.repository.impl;
 
 import java.sql.Types;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import mx.morena.persistencia.entidad.Perfil;
 import mx.morena.persistencia.entidad.Representantes;
 import mx.morena.persistencia.repository.IRepresentanteRepository;
 import mx.morena.persistencia.rowmapper.IdMaxConvencidos;
 import mx.morena.persistencia.rowmapper.RepresentanteRowMapper;
+import mx.morena.persistencia.rowmapper.RepresentantesCrgRowMapper;
+import mx.morena.persistencia.rowmapper.TipoRepresentanteRowMapper;
 
 @Repository
 public class RepresentantesRepository implements IRepresentanteRepository {
@@ -63,6 +67,40 @@ public class RepresentantesRepository implements IRepresentanteRepository {
 		
 		String sql = "SELECT MAX(id) FROM app_representantes";
 		return template.queryForObject(sql, new IdMaxConvencidos());
+	}
+
+	@Override
+	public Representantes getById(Long idCrg) {
+		
+		String sql = "select " + campos +" from app_representantes ar where id = ? and tipo_representante = 7";
+		try {
+			return template.queryForObject(sql, new Object[] { idCrg },
+					new int[] { Types.NUMERIC }, new RepresentanteRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+
+	@Override
+	public List<Representantes> getAllCrg(Long tipoRepresentante) {
+		System.out.print("repository tipo_rep" +tipoRepresentante);
+		String sql = "SELECT ar.id, ar.nombre, ar.apellido_paterno, ar.apellido_materno, ar.tipo_representante from app_representantes ar where ar.tipo_representante = ?";
+		try {
+			return template.queryForObject(sql, new Object[] {tipoRepresentante }, new int[] { Types.NUMERIC },
+					new RepresentantesCrgRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+
+	@Override
+	public List<Perfil> getAllTipoRep() {
+		String sql = "select id, nombre from app_perfil";
+		try {
+			return template.queryForObject(sql,new Object[] {}, new int[] { }, new TipoRepresentanteRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
 	}
 
 }

@@ -2,6 +2,7 @@ package mx.morena.negocio.servicios.impl;
 
 import java.sql.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -9,9 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import mx.morena.negocio.dto.RepresentanteDTO;
+import mx.morena.negocio.dto.TipoRepDTO;
 import mx.morena.negocio.exception.RepresentanteException;
+import mx.morena.negocio.exception.RutasException;
 import mx.morena.negocio.servicios.IRepresentanteService;
 import mx.morena.negocio.util.MapperUtil;
+import mx.morena.persistencia.entidad.Perfil;
 import mx.morena.persistencia.entidad.Representantes;
 import mx.morena.persistencia.repository.IRepresentanteRepository;
 import mx.morena.security.servicio.MasterService;
@@ -138,6 +142,21 @@ public class RepresentanteServiceImpl extends MasterService implements IRepresen
 					400);
 		}
 
+	}
+
+	@Override
+	public List<TipoRepDTO> getAllTipo() {
+		
+		List<TipoRepDTO> lstRepDTO = null;
+		List<Perfil> lstPerfil = null;
+		
+		lstPerfil = representanteRepository.getAllTipoRep();
+		
+		if (lstPerfil != null) {
+			
+			lstRepDTO = MapperUtil.mapAll(lstPerfil, TipoRepDTO.class);
+		}
+		return lstRepDTO;
 	}
 
 }

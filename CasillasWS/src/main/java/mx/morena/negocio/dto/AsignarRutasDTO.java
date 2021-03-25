@@ -4,9 +4,11 @@ import java.util.List;
 
 public class AsignarRutasDTO {
 
+//	private Long id;
+	
 	private List<Long> idRuta;
 	
-	private Long isCrg;
+	private Long idCrg;
 	
 	public AsignarRutasDTO() {
 		// TODO Auto-generated constructor stub
@@ -20,11 +22,16 @@ public class AsignarRutasDTO {
 		this.idRuta = idRuta;
 	}
 
-	public Long getIsCrg() {
-		return isCrg;
+	public Long getIdCrg() {
+		return idCrg;
 	}
 
-	public void setIsCrg(Long isCrg) {
-		this.isCrg = isCrg;
+	public void setIdCrg(Long idCrg) {
+		this.idCrg = idCrg;
+	}
+
+	@Override
+	public String toString() {
+		return "AsignarRutasDTO [idRuta=" + idRuta + ", idCrg=" + idCrg + "]";
 	}
 }

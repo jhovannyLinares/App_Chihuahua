@@ -11,7 +11,7 @@ import mx.morena.negocio.exception.RutasException;
 
 public interface IRutasService {
 
-	public List<CatalogoCrgDTO>getCatalogo(Long perfil) throws RutasException;
+	public List<CatalogoCrgDTO>getCatalogo(Long isRepresentante, Long perfil) throws RutasException;
 	
 	public String asignarRutas(List<Long> idRutas, Long idCrg, long perfil) throws RutasException;
 	

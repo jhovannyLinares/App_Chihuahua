@@ -1,5 +1,7 @@
 package mx.morena.negocio.servicios.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,6 +19,7 @@ import mx.morena.negocio.servicios.IRutasService;
 import mx.morena.negocio.util.MapperUtil;
 import mx.morena.persistencia.entidad.Representantes;
 import mx.morena.persistencia.entidad.Rutas;
+import mx.morena.persistencia.repository.IRepresentanteRepository;
 import mx.morena.persistencia.repository.IRutasRepository;
 import mx.morena.security.servicio.MasterService;
 
@@ -24,32 +27,33 @@ import mx.morena.security.servicio.MasterService;
 public class RutasServiceImpl extends MasterService implements IRutasService{
 
 	@Autowired
+	private IRepresentanteRepository crgRepository;
+	
+	@Autowired
 	private IRutasRepository rutasRepository;
 	
 	@Override
-	public List<CatalogoCrgDTO> getCatalogo(Long perfil) throws RutasException{
+	public List<CatalogoCrgDTO> getCatalogo(Long tipoRepresentante, Long perfil) throws RutasException{
 		
-		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL || perfil == PERFIL_MUNICIPAL) {
-			List<Representantes> crg = rutasRepository.getAllCrg(REP_CRG);
-				
+		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL) {
+			
+			List<CatalogoCrgDTO> crgDto = null;
+			List<Representantes> crg = null;
+			crg = crgRepository.getAllCrg(tipoRepresentante);
+			
 			if (crg != null) {
-				return crg.stream().map(this::convertirADto).collect(Collectors.toList());
-			} else {
-				return null;
+			
+			crgDto = MapperUtil.mapAll(crg, CatalogoCrgDTO.class);
+			
+			return crgDto;
+			
+			}else {
+				throw new RutasException("El Representante no fue Encontrado.", 401);
 			}
+			
 		} else {
-			throw new RutasException("Permisos insuficientes.", 401);
+			throw new RutasException("Permisos Insuficientes.", 401);
 		}
-	}
-	
-	public CatalogoCrgDTO convertirADto(Representantes crg) {
-		CatalogoCrgDTO crgDto = new CatalogoCrgDTO();
-		
-		crgDto.setNombre(crg.getNombre() + " " + crg.getApellidoPaterno() + " " + crg.getApellidoMaterno());
-		crgDto.setTipo(crg.getTipo());
-
-		
-		return crgDto;
 	}
 
 	@Override
@@ -57,32 +61,23 @@ public class RutasServiceImpl extends MasterService implements IRutasService{
 	public String asignarRutas(List<Long> idRutas, Long idCrg, long perfil) throws RutasException {
 		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL) {
 			
-			Rutas crg = rutasRepository.getByIdAndEstatus(idCrg, ESTATUS_ALTA, COT);
+			Representantes crg = crgRepository.getById(idCrg);
 			
 			if (crg != null) {
-
-			List<Rutas> rutas = rutasRepository.findByCrgId(idCrg, COT);
-
-			if (rutas != null) {
-				for (Rutas ruta : rutas) {
-					rutasRepository.updateIdCrg(ruta.getId(), 0l);
-				}
-			}
 
 			for (Long idRuta : idRutas) {
 
 					List<Rutas> rutasCrg = rutasRepository.findById(idRuta);
-
 					for (Rutas rut : rutasCrg) {
-
-						if (rut.getRuta().equals(0l)) {
+						
+						if (rut.getStatus() == 0) {
+							
 							rutasRepository.updateIdCrg(idRuta, idCrg);
+							
 						} else {
 							throw new RutasException("La ruta " + rut.getId() + " ya la tiene asignada otro Crg", 400);
 						}
-
 					}
-
 				}
 
 			} else {
@@ -93,7 +88,7 @@ public class RutasServiceImpl extends MasterService implements IRutasService{
 			throw new RutasException("No cuenta con suficientes permisos", 401);
 		}
 
-		return "Se asignaron rutas al Crg";
+		return "Se asignaron rutas al Crg "+ idCrg;
 	}
 
 	@Override
@@ -116,6 +111,8 @@ public class RutasServiceImpl extends MasterService implements IRutasService{
 			throw new RutasException("No cuenta con permisos suficientes.", 401);
 		}
 	}
+	
+	
 
 
 

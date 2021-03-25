@@ -56,13 +56,13 @@ public class RutasController extends MasterController {
 		}
 	}
 	
-	@PostMapping("/crg/rutas")
+	@PostMapping("crg/rutas")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	public String asignarSeccionesCots(HttpServletResponse response, HttpServletRequest request, @RequestBody AsignarRutasDTO rutas) throws IOException {
+	public String asignarRutasCrg(HttpServletResponse response, HttpServletRequest request, @RequestBody AsignarRutasDTO rutas) throws IOException {
 		long perfil = getPerfil(request);
 
 		try {
-			return rutasService.asignarRutas(rutas.getIdRuta(), rutas.getIsCrg(), perfil);
+			return rutasService.asignarRutas(rutas.getIdRuta(), rutas.getIdCrg(), perfil);
 		} catch (RutasException e) {
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
@@ -76,12 +76,13 @@ public class RutasController extends MasterController {
 	
 	@GetMapping("catalogo/crg")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	private List<CatalogoCrgDTO> getCatalogoCrg(HttpServletResponse response, HttpServletRequest request) throws IOException {
+	private List<CatalogoCrgDTO> getCatalogoCrg(HttpServletResponse response, HttpServletRequest request,
+			@RequestParam(value = "tipoRepresentante") Long tipoRepresentante) throws IOException {
 
 		long perfil = getPerfil(request);
 		
 		try {
-			return rutasService.getCatalogo(perfil);
+			return rutasService.getCatalogo(tipoRepresentante,perfil);
 		}catch (RutasException e) {
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
