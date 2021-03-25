@@ -35,8 +35,11 @@ public class CotServiceImpl extends MasterService implements ICotService {
 	public Long save(CotDTO cotDto, long perfil, long idUsuario) throws CotException {
 
 		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL || perfil == PERFIL_MUNICIPAL) {
+			
 			if (cotDto.getClaveElector().length() == 18 && cotDto.getCurp().length() == 18) {
+				
 				Convencidos existeCurp = cotRepository.getByCurp(cotDto.getCurp());
+				
 				List<Convencidos> existeClave = cotRepository.findByClaveElector(cotDto.getClaveElector());
 
 				if (existeClave != null) {

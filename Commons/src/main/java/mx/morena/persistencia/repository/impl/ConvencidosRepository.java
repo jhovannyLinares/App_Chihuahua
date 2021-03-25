@@ -14,6 +14,7 @@ import mx.morena.persistencia.entidad.Convencidos;
 import mx.morena.persistencia.repository.IConvencidosRepository;
 import mx.morena.persistencia.rowmapper.ConvencidoRowMapper;
 import mx.morena.persistencia.rowmapper.ConvencidosRowMapper;
+import mx.morena.persistencia.rowmapper.ConvencidosValRowMapper;
 import mx.morena.persistencia.rowmapper.IdMaxConvencidos;
 
 @Repository
@@ -53,9 +54,26 @@ public class ConvencidosRepository implements IConvencidosRepository {
 				+ " inner join app_distrito_federal adf on ac.distrito_federal_id = adf.id "
 				+ " inner join app_localidad al on ac.seccion_id = al.id "
 				+ " where ac.clave_elector = ? ";
+		
+		System.out.println(sql);
 		try {
 			return template.queryForObject(sql, new Object[] { claveElector }, new int[] { Types.VARCHAR },
 					new ConvencidosRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+	
+	
+	public List<Convencidos> findByClaveElectorVal(String claveElector) {
+		String sql = "SELECT " + campos
+				+ " FROM app_convencidos ac "
+				+ " where ac.clave_elector = ? ";
+		
+		System.out.println(sql);
+		try {
+			return template.queryForObject(sql, new Object[] { claveElector }, new int[] { Types.VARCHAR },
+					new ConvencidosValRowMapper());
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}

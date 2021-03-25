@@ -33,5 +33,7 @@ public interface IConvencidosRepository {
 	Convencidos findByClaveOCurp(String nombreCampo, String valorCampo, Long id);
 	
 	Convencidos getByIdAndTipoA(Long id, Long tipo);
+
+	List<Convencidos> findByClaveElectorVal(String claveElector);
 	
 }

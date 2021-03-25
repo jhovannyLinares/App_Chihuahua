@@ -96,7 +96,7 @@ public class ConvencidosServiceImpl extends MasterService implements IConvencido
 	public boolean findByClaveElector(String claveElector) throws ConvencidosException {
 
 		if (claveElector.length() == 18) {
-			List<Convencidos> convencidos = convencidosRepository.findByClaveElector(claveElector);
+			List<Convencidos> convencidos = convencidosRepository.findByClaveElectorVal(claveElector);
 			if (convencidos == null) {
 				return false;
 			} else {
