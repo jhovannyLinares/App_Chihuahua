@@ -5,6 +5,8 @@ public class RutaCatalogoDto {
 	private Long ruta;
 	
 	private String idRutaRg;
+	
+	private String idZonaCrg;
 
 	public Long getRuta() {
 		return ruta;
@@ -20,6 +22,14 @@ public class RutaCatalogoDto {
 
 	public void setIdRutaRg(String idRutaRg) {
 		this.idRutaRg = idRutaRg;
+	}
+
+	public String getIdZonaCrg() {
+		return idZonaCrg;
+	}
+
+	public void setIdZonaCrg(String idZonaCrg) {
+		this.idZonaCrg = idZonaCrg;
 	}
 
 }

@@ -112,7 +112,7 @@ public class RutasController extends MasterController {
 	
 	@GetMapping("/zonaCrg/{id}/ruta")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	private List<RutaCatalogoDto> getLocalidadByMunicipio(HttpServletRequest request,
+	private List<RutaCatalogoDto> getRutasByZona(HttpServletRequest request,
 			@PathVariable("id") Long zonaCrg) {
 
 		long idPerfil =  getPerfil(request);

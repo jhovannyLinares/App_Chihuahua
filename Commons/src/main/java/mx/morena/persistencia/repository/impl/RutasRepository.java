@@ -15,7 +15,10 @@ import mx.morena.persistencia.repository.IRutasRepository;
 import mx.morena.persistencia.rowmapper.RutaConsultaRowMapper;
 import mx.morena.persistencia.rowmapper.RutaRowMapper;
 import mx.morena.persistencia.rowmapper.RutasRowMapper;
+import mx.morena.persistencia.rowmapper.ZonasByDfRowMapper;
+import mx.morena.persistencia.rowmapper.CasillaByRutaRowMapper;
 import mx.morena.persistencia.rowmapper.RepresentanteRowMapper;
+import mx.morena.persistencia.rowmapper.RutaByZonaRowMapper;
 
 @Repository
 public class RutasRepository implements IRutasRepository {
@@ -145,10 +148,11 @@ public class RutasRepository implements IRutasRepository {
 	
 	@Override
 	public List<Rutas> getZonasByDistrito(Long idDistrito) {
-		String sql = "select * from app_rutas2 ar where distrito_federal_id =?";
+		String sql = "select distrito_federal_id, nombre_distrito, zona_crg, id_zona_crg from app_rutas2 ar "
+				+ " where distrito_federal_id = ? group by distrito_federal_id, nombre_distrito, zona_crg, id_zona_crg order by zona_crg asc";
 		try {
 			return template.queryForObject(sql, new Object[] {idDistrito}, new int[] { Types.NUMERIC },
-					new RutasRowMapper());
+					new ZonasByDfRowMapper());
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}
@@ -156,10 +160,11 @@ public class RutasRepository implements IRutasRepository {
 
 	@Override
 	public List<Rutas> getRutasByZonas(Long zonaCrg) {
-		String sql = "select * from app_rutas2 ar where zona_crg =?";
+		String sql = "select ruta, id_ruta_rg, id_zona_crg from app_rutas2 ar where zona_crg = ?"
+				+ " group by ruta, id_ruta_rg, id_zona_crg order by ruta asc ";
 		try {
 			return template.queryForObject(sql, new Object[] {zonaCrg}, new int[] { Types.NUMERIC },
-					new RutasRowMapper());
+					new RutaByZonaRowMapper());
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}
@@ -167,10 +172,10 @@ public class RutasRepository implements IRutasRepository {
 
 	@Override
 	public List<Rutas> getCasillaByRuta(Long ruta) {
-		String sql = "select * from app_rutas2 ar where ruta = ?";
+		String sql = "select id_casilla , id_ruta_rg, ruta, tipo_casilla from app_rutas2 ar where ruta =? group by id_ruta_rg, id_casilla, ruta, tipo_casilla";
 		try {
 			return template.queryForObject(sql, new Object[] {ruta}, new int[] { Types.NUMERIC },
-					new RutasRowMapper());
+					new CasillaByRutaRowMapper());
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}
