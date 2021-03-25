@@ -134,7 +134,7 @@ public class CotController extends MasterController {
 	@GetMapping("/cots/secciones/{idMunicipio}")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
 	public List<SeccionDTO> getSeccionesLibres(HttpServletResponse response, HttpServletRequest request,
-			@RequestParam(value = "idMunicipio") Long idMunicipio) throws IOException {
+			@PathVariable("idMunicipio") Long idMunicipio) throws IOException {
 		long perfil = getPerfil(request);
 		
 		try {
@@ -152,7 +152,7 @@ public class CotController extends MasterController {
 	
 	@PatchMapping("/cots/{id}")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	public String update(HttpServletResponse response, HttpServletRequest request, @RequestBody CotDTO cot, @RequestParam(value = "id") Long id) throws IOException {
+	public String update(HttpServletResponse response, HttpServletRequest request, @RequestBody CotDTO cot, @PathVariable("id") Long id) throws IOException {
 		long perfil = getPerfil(request);
 		
 		try {
