@@ -12,9 +12,10 @@ import org.springframework.stereotype.Repository;
 import mx.morena.persistencia.entidad.Representantes;
 import mx.morena.persistencia.entidad.Rutas;
 import mx.morena.persistencia.repository.IRutasRepository;
+import mx.morena.persistencia.rowmapper.RutaCatalogoRowMapper;
+import mx.morena.persistencia.rowmapper.RutaRowMapper;
 import mx.morena.persistencia.rowmapper.RutasRowMapper;
 import mx.morena.persistencia.rowmapper.RepresentanteRowMapper;
-import mx.morena.persistencia.rowmapper.RutaRowMapper;
 
 @Repository
 public class RutasRepository implements IRutasRepository {
@@ -72,8 +73,11 @@ public class RutasRepository implements IRutasRepository {
 	@Override
 	public List<Rutas> getRutas(Long idFederal, Long zonaCRG, Long ruta, Long casilla) {
 		String select = "SELECT" + campos + " FROM app_rutas2 ";
+		String select2 = "select distrito_federal_id , nombre_distrito ,"
+				+" id_ruta_rg , id_zona_crg , ruta , seccion_id , zona_crg from app_rutas2 ";   
+	    String groupBy = " group by distrito_federal_id , nombre_distrito , "
+	    		+ "id_ruta_rg , id_zona_crg , ruta , seccion_id , zona_crg ";
 		String sql = null;
-		List<Rutas> rutas = null;
 
 		List<Object> para = new ArrayList<Object>();
 		List<Integer> type = new ArrayList<Integer>();
@@ -126,9 +130,10 @@ public class RutasRepository implements IRutasRepository {
 		}
 
 		try {
-			 sql = select.concat(where);
+			 sql = select2.concat(where);
+			 sql = sql.concat(groupBy);
 
-			return template.queryForObject(sql, parametros, types, new RutasRowMapper());
+			return template.queryForObject(sql, parametros, types, new RutaCatalogoRowMapper());
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}
@@ -167,5 +172,17 @@ public class RutasRepository implements IRutasRepository {
 			return null;
 		}
 	}
+
+	@Override
+	public List<Rutas> getTipoCasilla(String idRutaRg, Long seccionId) {
+		String sql = "select * from app_rutas2 ar where id_ruta_rg = ? and seccion_id = ? ";		try {
+			return template.queryForObject(sql, new Object[] { idRutaRg, seccionId }, new int[] { Types.VARCHAR, Types.NUMERIC },
+					new RutasRowMapper());
+		}catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+		
+	}
+
 
 }

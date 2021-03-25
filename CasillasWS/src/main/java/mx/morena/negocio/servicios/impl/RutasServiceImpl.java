@@ -12,7 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import mx.morena.negocio.dto.CasillasCatalogoDto;
 import mx.morena.negocio.dto.CatalogoCrgDTO;
 import mx.morena.negocio.dto.RutaCatalogoDto;
-import mx.morena.negocio.dto.RutasResponseDTO;
+import mx.morena.negocio.dto.RutaResponseDTO;
+import mx.morena.negocio.dto.TipoCasillaDTO;
 import mx.morena.negocio.dto.ZonaCrgDTO;
 import mx.morena.negocio.exception.RutasException;
 import mx.morena.negocio.servicios.IRutasService;
@@ -92,20 +93,33 @@ public class RutasServiceImpl extends MasterService implements IRutasService{
 	}
 
 	@Override
-	public List<RutasResponseDTO> getRutas(Long idFederal, Long zonaCRG, Long ruta, Long casilla, Long perfil)
+	public List<RutaResponseDTO> getRutas(Long idFederal, Long zonaCRG, Long ruta, Long casilla, Long perfil)
 			throws RutasException {
 		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL) {
 
-			List<RutasResponseDTO> lstRutasDTO = null;
+			List<RutaResponseDTO> lstRutasDTO = null;
 			List<Rutas> lstRutas = null;
+			List<TipoCasillaDTO> lstRutasResponse = null;
 
-				lstRutas = rutasRepository.getRutas(idFederal, zonaCRG, ruta, casilla);	
+			lstRutas = rutasRepository.getRutas(idFederal, zonaCRG, ruta, casilla);
+			
+				lstRutasDTO = MapperUtil.mapAll(lstRutas, RutaResponseDTO.class);
+				
+				for (RutaResponseDTO rutas : lstRutasDTO) {
 
-			if (lstRutas != null) {
-				lstRutasDTO = MapperUtil.mapAll(lstRutas, RutasResponseDTO.class);
+					lstRutas = rutasRepository.getTipoCasilla(rutas.getIdRutaRg(), rutas.getSeccionId());
+					System.out.println(rutas.getIdRutaRg()+"  .   "+ rutas.getSeccionId());
+					lstRutasResponse = MapperUtil.mapAll(lstRutas, TipoCasillaDTO.class);
+					rutas.setLstTipoCasilla(lstRutasResponse);
+				}
+				
+				if (lstRutas != null) {
+				System.out.println("\n ");
+				System.out.println("lista rutas "+lstRutasDTO.size());
 				return lstRutasDTO;
-			}else {
-				throw new RutasException("No se encontraron serultados con los datos ingresados", 401);
+
+			} else {
+				throw new RutasException("No se encontraron resultados con los datos ingresados.", 404);
 			}
 		} else {
 			throw new RutasException("No cuenta con permisos suficientes.", 401);

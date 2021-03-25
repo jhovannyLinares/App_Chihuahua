@@ -2,6 +2,7 @@ package mx.morena.persistencia.repository;
 
 import java.util.List;
 
+
 import mx.morena.persistencia.entidad.Representantes;
 import mx.morena.persistencia.entidad.Rutas;
 
@@ -22,5 +23,7 @@ public interface IRutasRepository {
 	List<Rutas> getRutasByZonas(Long zonaCrg);
 
 	List<Rutas> getCasillaByRuta(Long ruta);
+
+	List<Rutas> getTipoCasilla(String idRutaRg, Long seccionId);
 	
 }

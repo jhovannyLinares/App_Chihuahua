@@ -21,10 +21,10 @@ import mx.morena.negocio.dto.AsignarRutasDTO;
 import mx.morena.negocio.dto.CasillasCatalogoDto;
 import mx.morena.negocio.dto.CatalogoCrgDTO;
 import mx.morena.negocio.dto.RutaCatalogoDto;
+import mx.morena.negocio.dto.RutaResponseDTO;
 import mx.morena.negocio.exception.RutasException;
 import mx.morena.negocio.servicios.IRutasService;
 import mx.morena.security.controller.MasterController;
-import mx.morena.negocio.dto.RutasResponseDTO;
 import mx.morena.negocio.dto.ZonaCrgDTO;
 
 @RestController
@@ -36,14 +36,14 @@ public class RutasController extends MasterController {
 
 	@GetMapping("/rutas")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	public List<RutasResponseDTO> getRutas(HttpServletResponse response, HttpServletRequest request,
+	public List<RutaResponseDTO> getRutas(HttpServletResponse response, HttpServletRequest request,
 			@RequestParam(value = "idFederal", required = false) Long idFederal,
 			@RequestParam(value = "", required = false) Long zonaCRG,
 			@RequestParam(value = "", required = false) Long ruta,
 			@RequestParam(value = "", required = false) Long casilla) throws IOException {
 
 		try {
-			long perfil = 1L;// getPerfil(request);
+			long perfil = getPerfil(request);
 			return rutasService.getRutas(idFederal, zonaCRG, ruta, casilla, perfil);
 		} catch (RutasException e) {
 			e.printStackTrace();
