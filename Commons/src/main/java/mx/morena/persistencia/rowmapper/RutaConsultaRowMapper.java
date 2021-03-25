@@ -9,7 +9,7 @@ import org.springframework.jdbc.core.RowMapper;
 
 import mx.morena.persistencia.entidad.Rutas;
 
-public class RutaCatalogoRowMapper implements RowMapper<List<Rutas>>{
+public class RutaConsultaRowMapper implements RowMapper<List<Rutas>>{
 
 	@Override
 	public List<Rutas> mapRow(ResultSet rs, int rowNum) throws SQLException {

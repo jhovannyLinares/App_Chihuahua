@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 import mx.morena.persistencia.entidad.Representantes;
 import mx.morena.persistencia.entidad.Rutas;
 import mx.morena.persistencia.repository.IRutasRepository;
-import mx.morena.persistencia.rowmapper.RutaCatalogoRowMapper;
+import mx.morena.persistencia.rowmapper.RutaConsultaRowMapper;
 import mx.morena.persistencia.rowmapper.RutaRowMapper;
 import mx.morena.persistencia.rowmapper.RutasRowMapper;
 import mx.morena.persistencia.rowmapper.RepresentanteRowMapper;
@@ -133,13 +133,16 @@ public class RutasRepository implements IRutasRepository {
 			 sql = select2.concat(where);
 			 sql = sql.concat(groupBy);
 
-			return template.queryForObject(sql, parametros, types, new RutaCatalogoRowMapper());
+			return template.queryForObject(sql, parametros, types, new RutaConsultaRowMapper());
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}
 
 	}
 
+	
+	/////////////////////////   catalogos
+	
 	@Override
 	public List<Rutas> getZonasByDistrito(Long idDistrito) {
 		String sql = "select * from app_rutas2 ar where distrito_federal_id =?";
