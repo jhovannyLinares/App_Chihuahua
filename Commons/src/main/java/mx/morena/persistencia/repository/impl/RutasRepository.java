@@ -44,7 +44,7 @@ public class RutasRepository implements IRutasRepository {
 
 	@Override
 	public List<Rutas> findByCrgId(Long crgId) {
-		String sql = "select id as ruta_id, id_crg from app_rutas2 where id_crg = ?";
+		String sql = "select id as ruta_id, id_crg from app_rutas where id_crg = ?";
 		try {
 			return template.queryForObject(sql, new Object[] { crgId },
 					new int[] { Types.NUMERIC }, new RutaRowMapper());
@@ -55,7 +55,7 @@ public class RutasRepository implements IRutasRepository {
 
 	@Override
 	public List<Rutas> findById(Long idRutas) {
-		String sql = "SELECT id as ruta_id, id_crg, id, status FROM app_rutas2 where id = ?";
+		String sql = "SELECT id as ruta_id, id_crg, id, status FROM app_rutas where id = ?";
 		try {
 			return template.queryForObject(sql, new Object[] { idRutas }, new int[] { Types.NUMERIC },
 					new RutaRowMapper());
@@ -66,7 +66,7 @@ public class RutasRepository implements IRutasRepository {
 
 	@Override
 	public void updateIdCrg(Long idRuta, Long idCrg) {
-		String sql = "UPDATE app_rutas2 SET id_crg = ?, status = 01 WHERE id = ? and status != 1";
+		String sql = "UPDATE app_rutas SET id_crg = ?, status = 01 WHERE id = ? and status != 1";
 
 		template.update(sql, new Object[] { idCrg, idRuta }, new int[] { Types.NUMERIC, Types.NUMERIC });
 
@@ -75,9 +75,9 @@ public class RutasRepository implements IRutasRepository {
 
 	@Override
 	public List<Rutas> getRutas(Long idFederal, Long zonaCRG, Long ruta, Long casilla) {
-		String select = "SELECT" + campos + " FROM app_rutas2 ";
+		String select = "SELECT" + campos + " FROM app_rutas ";
 		String select2 = "select distrito_federal_id , nombre_distrito ,"
-				+" id_ruta_rg , id_zona_crg , ruta , seccion_id , zona_crg from app_rutas2 ";   
+				+" id_ruta_rg , id_zona_crg , ruta , seccion_id , zona_crg from app_rutas ";   
 	    String groupBy = " group by distrito_federal_id , nombre_distrito , "
 	    		+ "id_ruta_rg , id_zona_crg , ruta , seccion_id , zona_crg ";
 		String sql = null;
@@ -148,7 +148,7 @@ public class RutasRepository implements IRutasRepository {
 	
 	@Override
 	public List<Rutas> getZonasByDistrito(Long idDistrito) {
-		String sql = "select distrito_federal_id, nombre_distrito, zona_crg, id_zona_crg from app_rutas2 ar "
+		String sql = "select distrito_federal_id, nombre_distrito, zona_crg, id_zona_crg from app_rutas ar "
 				+ " where distrito_federal_id = ? group by distrito_federal_id, nombre_distrito, zona_crg, id_zona_crg order by zona_crg asc";
 		try {
 			return template.queryForObject(sql, new Object[] {idDistrito}, new int[] { Types.NUMERIC },
@@ -160,7 +160,7 @@ public class RutasRepository implements IRutasRepository {
 
 	@Override
 	public List<Rutas> getRutasByZonas(Long zonaCrg) {
-		String sql = "select ruta, id_ruta_rg, id_zona_crg from app_rutas2 ar where zona_crg = ?"
+		String sql = "select ruta, id_ruta_rg, id_zona_crg from app_rutas ar where zona_crg = ?"
 				+ " group by ruta, id_ruta_rg, id_zona_crg order by ruta asc ";
 		try {
 			return template.queryForObject(sql, new Object[] {zonaCrg}, new int[] { Types.NUMERIC },
@@ -172,7 +172,7 @@ public class RutasRepository implements IRutasRepository {
 
 	@Override
 	public List<Rutas> getCasillaByRuta(Long ruta) {
-		String sql = "select id_casilla , id_ruta_rg, ruta, tipo_casilla from app_rutas2 ar where ruta =? group by id_ruta_rg, id_casilla, ruta, tipo_casilla";
+		String sql = "select id_casilla , id_ruta_rg, ruta, tipo_casilla from app_rutas ar where ruta =? group by id_ruta_rg, id_casilla, ruta, tipo_casilla";
 		try {
 			return template.queryForObject(sql, new Object[] {ruta}, new int[] { Types.NUMERIC },
 					new CasillaByRutaRowMapper());
@@ -183,7 +183,7 @@ public class RutasRepository implements IRutasRepository {
 
 	@Override
 	public List<Rutas> getTipoCasilla(String idRutaRg, Long seccionId) {
-		String sql = "select * from app_rutas2 ar where id_ruta_rg = ? and seccion_id = ? ";		try {
+		String sql = "select * from app_rutas ar where id_ruta_rg = ? and seccion_id = ? ";		try {
 			return template.queryForObject(sql, new Object[] { idRutaRg, seccionId }, new int[] { Types.VARCHAR, Types.NUMERIC },
 					new RutasRowMapper());
 		}catch (EmptyResultDataAccessException e) {
