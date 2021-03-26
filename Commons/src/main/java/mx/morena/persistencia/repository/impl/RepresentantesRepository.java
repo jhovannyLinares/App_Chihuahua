@@ -1,6 +1,7 @@
 package mx.morena.persistencia.repository.impl;
 
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import mx.morena.persistencia.entidad.Perfil;
 import mx.morena.persistencia.entidad.RepresentanteClaveElectoral;
 import mx.morena.persistencia.entidad.Representantes;
+import mx.morena.persistencia.entidad.RepresentantesAsignados;
 import mx.morena.persistencia.repository.IRepresentanteRepository;
 import mx.morena.persistencia.rowmapper.IdMaxConvencidos;
 import mx.morena.persistencia.rowmapper.RepresentanteClaveRowMapper;
@@ -104,6 +106,16 @@ public class RepresentantesRepository implements IRepresentanteRepository {
 			return null;
 		}
 	}
+	
+	@Override
+	public void asignaRepresentante(RepresentantesAsignados representante) {
+		String sql = "INSERT INTO app_representantes_asignados "  
+				   + " (id, " + " representante_id," + " usuario_id," + " cargo)"  
+				   + " values ((SELECT MAX(id)+1 FROM app_representantes_asignados),?, ?, ? );";  
+		
+		template.update(sql,
+				new Object[] {representante.getRepresentanteId(), representante.getUsuarioId(), representante.getCargo()});
+	}
 
 	@Override
 	public List<RepresentanteClaveElectoral> getAllRepresentantes(String claveElector) {
@@ -122,6 +134,131 @@ public class RepresentantesRepository implements IRepresentanteRepository {
 		
 		try {
 			return template.queryForObject(sql,new Object[] { claveElector }, new int[] { Types.VARCHAR }, new RepresentanteClaveRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+	@Override
+	public Long getIdMaxAsignados() {
+		
+		String sql = "SELECT MAX(id) FROM app_representantes_asignados";
+		return template.queryForObject(sql, new IdMaxConvencidos());
+	}
+
+	@Override
+	public void updateRepresentante(long perfil, RepresentantesAsignados rep, long asignacion) {
+		String update = "UPDATE app_representantes_asignados set ";
+		String sql = null;
+		String where = null;
+		String values = null;
+		
+		List<Object> para = new ArrayList<Object>();
+		List<Integer> type = new ArrayList<Integer>();
+
+
+		if (asignacion == 1) {
+			values = " distrito_federal_id = ? ";
+			where = " where representante_id = ? ";
+			sql = update.concat(values).concat(where);
+			System.out.println("**** " + sql);
+			para.add(rep.getDistritoFederalId());
+			para.add(rep.getRepresentanteId());
+			type.add(Types.NUMERIC);
+			type.add(Types.NUMERIC);
+		}
+
+		if (asignacion == 2) {
+			values = " distrito_local_id = ? ";
+			where = " where representante_id = ? ";
+			para.add(rep.getDistritoLocalId());
+			para.add(rep.getRepresentanteId());
+			type.add(Types.NUMERIC);
+			type.add(Types.NUMERIC);
+		}
+
+		if (asignacion == 3) {
+			values = " municipio_id = ? ";
+			where = " where representante_id = ? ";
+			para.add(rep.getMunicipioId());
+			para.add(rep.getRepresentanteId());
+			type.add(Types.NUMERIC);
+			type.add(Types.NUMERIC);
+		}
+
+		///////////
+		if (asignacion == 4) {
+			values = " distrito_federal_id = ?, ";
+			values = values.concat(" zona_id = ? ");
+			where = " where representante_id = ? ";
+			para.add(rep.getDistritoLocalId());
+			para.add(rep.getZonaId());
+			para.add(rep.getRepresentanteId());
+			type.add(Types.NUMERIC);
+			type.add(Types.NUMERIC);
+			type.add(Types.NUMERIC);
+		}
+
+		if (asignacion == 5) {
+			values = " distrito_federal_id = ?, ";
+			values = values.concat(" zona_id = ?, ");
+			values = values.concat(" ruta_id = ? ");
+			where = " where representante_id = ? ";
+			para.add(rep.getDistritoLocalId());
+			para.add(rep.getZonaId());
+			para.add(rep.getRutaId());
+			para.add(rep.getRepresentanteId());
+			type.add(Types.NUMERIC);
+			type.add(Types.NUMERIC);
+			type.add(Types.NUMERIC);
+			type.add(Types.NUMERIC);
+		}
+
+		if (asignacion == 6) {
+			values = " distrito_federal_id = ?, ";
+			values = values.concat(" zona_id = ?, ");
+			values = values.concat(" ruta_id = ?, ");
+			values = values.concat(" seccion_electoral_id = ?, ");
+			values = values.concat(" casilla_id = ? ");
+			where = " where representante_id = ? ";
+			para.add(rep.getDistritoLocalId());
+			para.add(rep.getZonaId());
+			para.add(rep.getRutaId());
+			para.add(rep.getSeccionElectoralId());
+			para.add(rep.getCasillaId());
+			para.add(rep.getRepresentanteId());
+			type.add(Types.NUMERIC);
+			type.add(Types.NUMERIC);
+			type.add(Types.NUMERIC);
+			type.add(Types.NUMERIC);
+			type.add(Types.NUMERIC);
+			type.add(Types.NUMERIC);
+		}
+
+		Object[] parametros = new Object[para.size()];
+		int[] types = new int[para.size()];
+
+		for (int i = 0; i < para.size(); i++) {
+			parametros[i] = para.get(i);
+			types[i] = type.get(i);
+		}
+		
+		sql = update.concat(values).concat(where);
+		System.out.println("***** " + sql);
+
+		template.update(sql, parametros, types);
+		try {
+
+		} catch (EmptyResultDataAccessException e) {
+
+		}
+	}
+
+	@Override
+	public Representantes getRepresentante(Long representanteId) {
+		String sql = " SELECT * FROM app_representantes where id = ? ";
+		try {
+			return template.queryForObject(sql, new Object[] { representanteId },
+					new int[] { Types.NUMERIC }, new RepresentanteRowMapper());
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}

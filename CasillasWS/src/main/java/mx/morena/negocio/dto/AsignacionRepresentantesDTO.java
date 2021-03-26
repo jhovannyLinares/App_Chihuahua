@@ -1,30 +1,24 @@
-package mx.morena.persistencia.entidad;
+package mx.morena.negocio.dto;
 
-public class RepresentantesAsignados {
-	
-	private Long id;
+public class AsignacionRepresentantesDTO {
+			
 	private Long representanteId;
-	private Long usuarioId;
+		
 	private int cargo;
-	private Long distritoFederalId;
-	private Long distritoLocalId;
-	private Long municipioId;
-	private Long rutaId;
-	private Long seccionElectoralId;
-	private Long casillaId;
-	private Long entidadId;
-
-	private Long ZonaId;
 	
-	private Long perfilRepresentante;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
+	private Long distritoFederalId;
+	
+	private Long distritoLocalId;
+	 
+	private Long municipioId;
+	
+	private Long rutaId;
+	
+	private Long seccionElectoralId;
+	
+	private Long casillaId;
+	
+	private Long ZonaId;
 
 	public Long getRepresentanteId() {
 		return representanteId;
@@ -32,14 +26,6 @@ public class RepresentantesAsignados {
 
 	public void setRepresentanteId(Long representanteId) {
 		this.representanteId = representanteId;
-	}
-
-	public Long getUsuarioId() {
-		return usuarioId;
-	}
-
-	public void setUsuarioId(Long usuarioId) {
-		this.usuarioId = usuarioId;
 	}
 
 	public int getCargo() {
@@ -98,14 +84,6 @@ public class RepresentantesAsignados {
 		this.casillaId = casillaId;
 	}
 
-	public Long getEntidadId() {
-		return entidadId;
-	}
-
-	public void setEntidadId(Long entidadId) {
-		this.entidadId = entidadId;
-	}
-
 	public Long getZonaId() {
 		return ZonaId;
 	}
@@ -113,13 +91,6 @@ public class RepresentantesAsignados {
 	public void setZonaId(Long zonaId) {
 		ZonaId = zonaId;
 	}
-
-	public Long getPerfilRepresentante() {
-		return perfilRepresentante;
-	}
-
-	public void setPerfilRepresentante(Long perfilRepresentante) {
-		this.perfilRepresentante = perfilRepresentante;
-	}
 	
+
 }

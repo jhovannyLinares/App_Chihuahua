@@ -9,6 +9,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import mx.morena.negocio.dto.AsignacionRepresentantesDTO;
 import mx.morena.negocio.dto.RepresentanteDTO;
 import mx.morena.negocio.dto.RepresentantesClaveDTO;
 import mx.morena.negocio.dto.TipoRepDTO;
@@ -18,7 +19,9 @@ import mx.morena.negocio.util.MapperUtil;
 import mx.morena.persistencia.entidad.Perfil;
 import mx.morena.persistencia.entidad.RepresentanteClaveElectoral;
 import mx.morena.persistencia.entidad.Representantes;
+import mx.morena.persistencia.entidad.RepresentantesAsignados;
 import mx.morena.persistencia.repository.IRepresentanteRepository;
+import mx.morena.persistencia.repository.impl.RepresentantesRepository;
 import mx.morena.security.servicio.MasterService;
 
 @Service
@@ -193,6 +196,77 @@ public class RepresentanteServiceImpl extends MasterService implements IRepresen
 			throw new RepresentanteException("El numero de caracteres ingresado en la clave de elector es incorrecto",
 						400);
 		}
+	}
+
+	@Override
+	public Long asignaRepresentante(long usuario, long perfil, AsignacionRepresentantesDTO dto)
+			throws RepresentanteException {
+
+		boolean estatalFederal = perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL;
+		if(estatalFederal || perfil == PERFIL_CRG ) {
+
+		Representantes representante = representanteRepository.getRepresentante(dto.getRepresentanteId());
+
+		if (representante != null) {
+			long tipoRepresentante = representante.getTipo().longValue();
+
+			if (dto.getRepresentanteId() != 0 && dto.getCargo() != 0) {
+
+				if (perfil == PERFIL_ESTATAL && tipoRepresentante == PERFIL_FEDERAL ) {
+					long asignacion = 1;
+					guardado(usuario, perfil, dto, asignacion);
+				}
+				
+				if (estatalFederal && tipoRepresentante == PERFIL_LOCAL) {
+					long asignacion = 2;
+					guardado(usuario, perfil, dto, asignacion);
+				} 
+				
+				if (estatalFederal && tipoRepresentante == PERFIL_MUNICIPAL) {
+					long asignacion = 3;
+					guardado(usuario, perfil, dto, asignacion);
+				}
+
+				if (estatalFederal && tipoRepresentante == PERFIL_CRG) {
+					long asignacion = 4;
+					guardado(usuario, perfil, dto, asignacion);
+				}
+
+				if (estatalFederal && tipoRepresentante == PERFIL_RG) {
+					long asignacion = 5;
+					guardado(usuario, perfil, dto, asignacion);
+				}
+
+				if ((estatalFederal || perfil == PERFIL_CRG) && tipoRepresentante == PERFIL_RC) {
+					long asignacion = 6;
+					guardado(usuario, perfil, dto, asignacion);
+				}
+
+			} else {
+				throw new RepresentanteException("Ingrese  los campos obligatorios", 400);
+			}
+		} else {
+			throw new RepresentanteException("El representante solicitado no existe", 400);
+		}
+		}else {
+			throw new RepresentanteException("No cuenta con perfisos suficientes para realizar la operacion", 401);
+		}
+		return representanteRepository.getIdMaxAsignados();
+	}
+	
+	
+	public void guardado(long usuario, long perfil, AsignacionRepresentantesDTO dto, long asignacion) {
+		
+		RepresentantesAsignados representante = new RepresentantesAsignados();
+
+		MapperUtil.map(dto, representante);
+
+		representante.setUsuarioId(usuario);
+
+		representanteRepository.asignaRepresentante(representante);
+
+		representanteRepository.updateRepresentante(perfil, representante, asignacion);
+		
 	}
 
 }

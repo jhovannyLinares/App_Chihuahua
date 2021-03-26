@@ -5,6 +5,7 @@ import java.util.List;
 import mx.morena.persistencia.entidad.Perfil;
 import mx.morena.persistencia.entidad.RepresentanteClaveElectoral;
 import mx.morena.persistencia.entidad.Representantes;
+import mx.morena.persistencia.entidad.RepresentantesAsignados;
 
 
 public interface IRepresentanteRepository {
@@ -22,4 +23,13 @@ public interface IRepresentanteRepository {
 	List<Perfil> getAllTipoRep();
 	
 	List<RepresentanteClaveElectoral> getAllRepresentantes(String claveElector);
+
+	void asignaRepresentante(RepresentantesAsignados representante);
+
+	Long getIdMaxAsignados();
+
+	void updateRepresentante(long perfil, RepresentantesAsignados representante, long asignacion);
+
+	Representantes getRepresentante(Long representanteId);
+
 }

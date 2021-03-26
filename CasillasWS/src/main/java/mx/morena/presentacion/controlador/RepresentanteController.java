@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import mx.morena.negocio.dto.RepresentantesClaveDTO;
+import mx.morena.negocio.dto.AsignacionRepresentantesDTO;
 import mx.morena.negocio.dto.RepresentanteDTO;
 import mx.morena.negocio.dto.TipoRepDTO;
 import mx.morena.negocio.exception.RepresentanteException;
@@ -79,6 +80,25 @@ public class RepresentanteController extends MasterController {
 		}
 		
 	}
-	
+	@PostMapping("/representantes")
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	public Long asignaRepresentante(HttpServletResponse response,HttpServletRequest request, @RequestBody AsignacionRepresentantesDTO dto) throws IOException {
+		
+		try {
+			long usuario = getUsuario(request);
+		long perfil = getPerfil(request);
+		
+		return representanteService.asignaRepresentante(usuario, perfil, dto);
+		
+	} catch (RepresentanteException e) { 
+		e.printStackTrace();
+		((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+		return null;
+	} catch (Exception e ) {
+		e.printStackTrace();
+		((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+		return null;
+	}
+	}
 	
 }
