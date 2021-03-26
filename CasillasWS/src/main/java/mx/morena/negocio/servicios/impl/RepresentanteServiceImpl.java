@@ -10,12 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import mx.morena.negocio.dto.RepresentanteDTO;
+import mx.morena.negocio.dto.RepresentantesClaveDTO;
 import mx.morena.negocio.dto.TipoRepDTO;
 import mx.morena.negocio.exception.RepresentanteException;
-import mx.morena.negocio.exception.RutasException;
 import mx.morena.negocio.servicios.IRepresentanteService;
 import mx.morena.negocio.util.MapperUtil;
 import mx.morena.persistencia.entidad.Perfil;
+import mx.morena.persistencia.entidad.RepresentanteClaveElectoral;
 import mx.morena.persistencia.entidad.Representantes;
 import mx.morena.persistencia.repository.IRepresentanteRepository;
 import mx.morena.security.servicio.MasterService;
@@ -157,6 +158,41 @@ public class RepresentanteServiceImpl extends MasterService implements IRepresen
 			lstRepDTO = MapperUtil.mapAll(lstPerfil, TipoRepDTO.class);
 		}
 		return lstRepDTO;
+	}
+
+	@Override
+	public List<RepresentantesClaveDTO> getAllRepresentantes(String claveElector, boolean check)throws RepresentanteException {
+		
+		List<RepresentantesClaveDTO> lstRepreDTO = null;
+		List<RepresentanteClaveElectoral> lstRepre = null;
+		
+		if(claveElector != null &&  claveElector.length() == 18 && check == false) {
+			
+			lstRepre = representanteRepository.getAllRepresentantes(claveElector);
+			
+			if(lstRepre != null) {
+				
+				lstRepreDTO = MapperUtil.mapAll(lstRepre, RepresentantesClaveDTO.class);	
+				
+			}else {
+					throw new RepresentanteException("La clave de elector ingresada no esta registrada", 400);
+				}
+			
+			return lstRepreDTO;
+			
+		}else if(check == true){
+			claveElector = "No cuenta con Clave Elector";
+			
+			lstRepre = representanteRepository.getAllRepresentantes(claveElector);
+			
+			lstRepreDTO = MapperUtil.mapAll(lstRepre, RepresentantesClaveDTO.class);
+			
+			return lstRepreDTO;
+			
+		}else {
+			throw new RepresentanteException("El numero de caracteres ingresado en la clave de elector es incorrecto",
+						400);
+		}
 	}
 
 }

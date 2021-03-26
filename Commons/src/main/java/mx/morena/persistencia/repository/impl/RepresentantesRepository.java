@@ -9,9 +9,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import mx.morena.persistencia.entidad.Perfil;
+import mx.morena.persistencia.entidad.RepresentanteClaveElectoral;
 import mx.morena.persistencia.entidad.Representantes;
 import mx.morena.persistencia.repository.IRepresentanteRepository;
 import mx.morena.persistencia.rowmapper.IdMaxConvencidos;
+import mx.morena.persistencia.rowmapper.RepresentanteClaveRowMapper;
 import mx.morena.persistencia.rowmapper.RepresentanteRowMapper;
 import mx.morena.persistencia.rowmapper.RepresentantesCrgRowMapper;
 import mx.morena.persistencia.rowmapper.TipoRepresentanteRowMapper;
@@ -103,4 +105,25 @@ public class RepresentantesRepository implements IRepresentanteRepository {
 		}
 	}
 
+	@Override
+	public List<RepresentanteClaveElectoral> getAllRepresentantes(String claveElector) {
+		
+		String sql = "select ar.id, ar.nombre, ar.apellido_paterno, ar.apellido_materno, ar.tipo_representante as idTipoRep, ap.nombre as nombreTipoRep, ar.distrito_federal_id as idDistrito, adf.nombre as nombredistrito, ara.distrito_federal_id as iddistriroasignado, adf2.nombre as nombredistritoasignado, ar.is_asignado "
+				+ "from app_representantes ar "
+				+ "left join app_perfil ap "
+				+ "on ar.tipo_representante = ap.id "
+				+ "left join app_distrito_federal adf "
+				+ "on ar.distrito_federal_id = adf.id "
+				+ "left join app_representantes_asignados ara "
+				+ "on ar.id = ara.id "
+				+ "left join app_distrito_federal adf2 "
+				+ "on ara.distrito_federal_id = adf2.id "
+				+ "where ar.clave_elector = ?";
+		
+		try {
+			return template.queryForObject(sql,new Object[] { claveElector }, new int[] { Types.VARCHAR }, new RepresentanteClaveRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
 }
