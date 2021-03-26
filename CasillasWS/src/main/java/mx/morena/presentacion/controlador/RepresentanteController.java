@@ -63,7 +63,7 @@ public class RepresentanteController extends MasterController {
 	@GetMapping("/claveElectoral")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
 	public List<RepresentantesClaveDTO> getAllRepresentantes(HttpServletResponse response,HttpServletRequest request,
-			@RequestParam(value = "calveElector", required = false) String claveElector,
+			@RequestParam(value = "claveElector", required = false) String claveElector,
 			@RequestParam(value = "sinClaveElector", required = true) boolean sinClaveElector) throws IOException {
 		
 		try {
