@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,9 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import mx.morena.negocio.dto.AsignarCasillasDTO;
 import mx.morena.negocio.dto.AsignarRutasDTO;
 import mx.morena.negocio.dto.CasillasCatalogoDto;
 import mx.morena.negocio.dto.CatalogoCrgDTO;
+import mx.morena.negocio.dto.DesasignarCasillasDTO;
 import mx.morena.negocio.dto.RutaCatalogoDto;
 import mx.morena.negocio.dto.RutaResponseDTO;
 import mx.morena.negocio.exception.RutasException;
@@ -131,5 +134,43 @@ public class RutasController extends MasterController {
 		
 		List<CasillasCatalogoDto> casillas = rutasService.getCasillaByRuta(idPerfil, ruta);
 		return casillas;
+	}
+	
+	@PostMapping("/rutas/casillas")
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	private String asignarCasillas(HttpServletResponse response, HttpServletRequest request,
+				@RequestBody AsignarCasillasDTO casillas) throws IOException {
+		
+		try {
+			long perfil = getPerfil(request);
+			return rutasService.asignarCasillas(perfil, casillas);
+		} catch (RutasException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+			return null;
+		} catch (Exception e ) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			return null;
+		}
+	}
+	
+	@DeleteMapping("/rutas/casillas")
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	private String desasignarCasillas(HttpServletResponse response, HttpServletRequest request,
+				@RequestBody DesasignarCasillasDTO casillas) throws IOException {
+		
+		try {
+			long perfil = getPerfil(request);
+			return rutasService.desasignarCasillas(perfil, casillas);
+		} catch (RutasException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+			return null;
+		} catch (Exception e ) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			return null;
+		}
 	}
 }

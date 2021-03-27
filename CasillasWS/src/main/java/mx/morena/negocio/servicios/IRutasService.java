@@ -2,8 +2,10 @@ package mx.morena.negocio.servicios;
 
 import java.util.List;
 
+import mx.morena.negocio.dto.AsignarCasillasDTO;
 import mx.morena.negocio.dto.CasillasCatalogoDto;
 import mx.morena.negocio.dto.CatalogoCrgDTO;
+import mx.morena.negocio.dto.DesasignarCasillasDTO;
 import mx.morena.negocio.dto.RutaCatalogoDto;
 import mx.morena.negocio.dto.RutaResponseDTO;
 import mx.morena.negocio.dto.ZonaCrgDTO;
@@ -22,6 +24,10 @@ public interface IRutasService {
 
 	public List<RutaCatalogoDto> getRutaByZonaCrg(long idPerfil, Long zonaCrg);
 
-	public List<CasillasCatalogoDto> getCasillaByRuta(long idPerfil, Long ruta); 
+	public List<CasillasCatalogoDto> getCasillaByRuta(long idPerfil, Long ruta);
+	
+	public String asignarCasillas(long idPerfil, AsignarCasillasDTO asignarCasillasDTO) throws RutasException;
+	
+	public String desasignarCasillas(long idPerfil, DesasignarCasillasDTO desasignarCasillasDTO) throws RutasException;
 	
 }

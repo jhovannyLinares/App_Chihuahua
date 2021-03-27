@@ -1,16 +1,15 @@
 package mx.morena.negocio.servicios.impl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import mx.morena.negocio.dto.AsignarCasillasDTO;
 import mx.morena.negocio.dto.CasillasCatalogoDto;
 import mx.morena.negocio.dto.CatalogoCrgDTO;
+import mx.morena.negocio.dto.DesasignarCasillasDTO;
 import mx.morena.negocio.dto.RutaCatalogoDto;
 import mx.morena.negocio.dto.RutaResponseDTO;
 import mx.morena.negocio.dto.TipoCasillaDTO;
@@ -172,6 +171,47 @@ public class RutasServiceImpl extends MasterService implements IRutasService{
 			return lstDto;
 		}
 		return null;
+	}
+
+	@Override
+	@Transactional(rollbackFor={RutasException.class})
+	public String asignarCasillas(long idPerfil, AsignarCasillasDTO asignarCasilla) throws RutasException {
+		if (idPerfil == PERFIL_ESTATAL || idPerfil == PERFIL_FEDERAL) {
+			
+		}
+		return null;
+	}
+
+	@Override
+	@Transactional(rollbackFor={RutasException.class})
+	public String desasignarCasillas(long idPerfil, DesasignarCasillasDTO casillas) throws RutasException {
+		if (idPerfil == PERFIL_ESTATAL || idPerfil == PERFIL_FEDERAL) {
+			
+			if (casillas.getIdCasillas() != null && !casillas.getIdCasillas().isEmpty()) {
+				
+				String info = "";
+				final int ALTA_CASILLA = 1;
+				
+				for (Long casilla : casillas.getIdCasillas()) {
+					Rutas ruta = rutasRepository.getCasillaByIdAndEstatus(casilla, ALTA_CASILLA);
+					
+					if (ruta != null) {
+						rutasRepository.desasignarCasillas(casilla);
+						info += ", " + casilla.toString(); 
+					} else {
+						throw new RutasException("No se encontro la casilla " + casilla , 404);
+					}
+				}
+				
+				return "Se desasignaron las casillas" + info;
+				
+			} else {
+				throw new RutasException("Ingrese por lo menos una casilla", 400);
+			}
+		} else {
+			throw new RutasException("Permisos insuficientes", 401);
+		}
+		
 	}
 
 }

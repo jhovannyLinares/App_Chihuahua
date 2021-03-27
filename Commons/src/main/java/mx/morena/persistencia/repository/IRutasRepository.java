@@ -26,4 +26,10 @@ public interface IRutasRepository {
 
 	List<Rutas> getTipoCasilla(String idRutaRg, Long seccionId);
 	
+	void asignarCasillas(Long idCasilla, Long idRuta);
+	
+	void desasignarCasillas(Long idCasilla);
+	
+	Rutas getCasillaByIdAndEstatus(Long idCasilla, int asignado);
+	
 }

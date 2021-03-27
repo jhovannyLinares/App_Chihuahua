@@ -17,6 +17,7 @@ import mx.morena.persistencia.rowmapper.RutaRowMapper;
 import mx.morena.persistencia.rowmapper.RutasRowMapper;
 import mx.morena.persistencia.rowmapper.ZonasByDfRowMapper;
 import mx.morena.persistencia.rowmapper.CasillaByRutaRowMapper;
+import mx.morena.persistencia.rowmapper.CasillaRowMapper;
 import mx.morena.persistencia.rowmapper.RepresentanteRowMapper;
 import mx.morena.persistencia.rowmapper.RutaByZonaRowMapper;
 
@@ -192,5 +193,40 @@ public class RutasRepository implements IRutasRepository {
 		
 	}
 
+	@Override
+	public void asignarCasillas(Long idCasilla, Long idRuta) {
+		
+		
+	}
 
+	@Override
+	public void desasignarCasillas(Long idCasilla) {
+		String sql = "UPDATE app_rutas SET ruta = 0, id_ruta_rg = null "
+				+ "WHERE id_casilla = ? ";
+
+		template.update(sql, new Object[] { idCasilla }, new int[] { Types.NUMERIC });
+		
+	}
+
+	@Override
+	public Rutas getCasillaByIdAndEstatus(Long idCasilla, int asignado) {
+		String campo = "";
+		
+		if (asignado == 1) {
+			campo = "IS NOT NULL AND ruta != 0";
+		} else {
+			campo = "IS NULL AND ruta = 0";
+		}
+		
+		String sql = "SELECT id, distrito_federal_id, nombre_distrito, id_zona_crg, ruta, id_casilla, tipo_casilla, seccion_id, status, id_ruta_rg"
+				+ " FROM app_rutas WHERE id_casilla = ? AND id_ruta_rg "+ campo;
+		try {
+			return template.queryForObject(sql, new Object[] { idCasilla }, new int[] { Types.NUMERIC },
+					new CasillaRowMapper());
+		}catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+
+	
 }
