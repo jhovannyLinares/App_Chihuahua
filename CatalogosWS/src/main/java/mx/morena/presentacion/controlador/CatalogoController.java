@@ -1,10 +1,13 @@
 package mx.morena.presentacion.controlador;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,12 +22,16 @@ import mx.morena.negocio.dto.EntidadDTO;
 import mx.morena.negocio.dto.MunicipioDTO;
 import mx.morena.negocio.dto.RepresentanteDTO;
 import mx.morena.negocio.dto.SeccionDTO;
+import mx.morena.negocio.dto.ZonaDTO;
 import mx.morena.negocio.dto.offline.CatalogoDTOOffline;
+import mx.morena.negocio.exception.CatalogoException;
 import mx.morena.negocio.servicios.ICatalogoService;
+import mx.morena.negocio.servicios.impl.CargoDTO;
 import mx.morena.security.controller.MasterController;
 
 @RestController
 @RequestMapping(value = "catalogos")
+@CrossOrigin
 public class CatalogoController extends MasterController {
 
 	@Autowired
@@ -37,23 +44,43 @@ public class CatalogoController extends MasterController {
 		return ICatService.getCatalogos(getUsuario(request), getPerfil(request));
 
 	}
-	
+
 	@GetMapping("/representantes")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	private List<RepresentanteDTO> getRepresentantes(HttpServletRequest request){
+	private List<RepresentanteDTO> getRepresentantes(HttpServletRequest request) {
 
-		return ICatService.getRepresentantes( getPerfil(request));
+		return ICatService.getRepresentantes(getPerfil(request));
 
 	}
-	
+
+	@GetMapping("/{tipoRepresentante}/cargos")
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	private List<CargoDTO> getCargos(HttpServletResponse response, HttpServletRequest request,
+			@PathVariable("tipoRepresentante") Long tipoRepresentante) throws IOException {
+		try {
+			return ICatService.getCargos(tipoRepresentante);
+		} catch (CatalogoException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+			return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			return null;
+		}
+
+	}
+
 	@GetMapping("/casillas")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
 	private List<CasillaDTO> getCasillas(HttpServletRequest request,
 			@RequestParam(value = "distritoFederalId", required = false) Long distritoFederalId,
 			@RequestParam(value = "municipioId", required = false) Long municipioId,
-			@RequestParam(value = "seccionId", required = false) Long seccionId) {
+			@RequestParam(value = "seccionId", required = false) Long seccionId,
+			@RequestParam(value = "isLibres", required = false) Boolean isLibres) {
 
-		return ICatService.getCasillas(getUsuario(request), getPerfil(request),distritoFederalId,municipioId,seccionId);
+		return ICatService.getCasillas(getUsuario(request), getPerfil(request), distritoFederalId, municipioId,
+				seccionId, isLibres);
 
 	}
 
@@ -92,8 +119,7 @@ public class CatalogoController extends MasterController {
 
 	@GetMapping("/municipios/{id}/secciones")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	private List<SeccionDTO> getLocalidadByMunicipio(HttpServletRequest request,
-			@PathVariable("id") Long idMunicipio) {
+	private List<SeccionDTO> getLocalidadByMunicipio(HttpServletRequest request, @PathVariable("id") Long idMunicipio) {
 
 		long usuario = getUsuario(request);
 		long idPerfil = getPerfil(request);
@@ -101,6 +127,21 @@ public class CatalogoController extends MasterController {
 		List<SeccionDTO> secciones = ICatService.getSeccionesByMunicipio(usuario, idPerfil, idMunicipio);
 
 		return secciones;
+	}
+
+	@GetMapping("/distritosFederales/{idFederal}/zonas")
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	private List<ZonaDTO> getZonas(HttpServletRequest request, @PathVariable("idFederal") Long idFederal) throws CatalogoException {
+
+		long usuario = getUsuario(request);
+		long idPerfil = getPerfil(request);
+		
+		
+		List<ZonaDTO> dto;
+
+		dto = ICatService.getZonas(usuario, idPerfil, idFederal);
+
+		return dto;
 	}
 
 }

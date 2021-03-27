@@ -28,8 +28,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.authorizeRequests()
 				.antMatchers(HttpMethod.GET, "/**").permitAll()
 				.antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-				.antMatchers("/representantes")
-				.authenticated().anyRequest().authenticated()
+				.antMatchers("/representantes").authenticated()
+				.antMatchers("/rutas").authenticated()
+				.antMatchers("/crg").authenticated()
+				.antMatchers("/catalogo").authenticated()
+				.antMatchers("/distrito").authenticated()
+				.antMatchers("/zonaCrg").authenticated()
+				.antMatchers("/rutaCrg").authenticated()
+				.antMatchers("/rutas").authenticated()
+				.anyRequest().authenticated()
 				.and().addFilterAfter(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
 	}
 }

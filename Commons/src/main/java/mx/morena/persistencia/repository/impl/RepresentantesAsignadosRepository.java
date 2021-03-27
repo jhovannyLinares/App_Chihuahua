@@ -15,10 +15,10 @@ public class RepresentantesAsignadosRepository implements IRepresentantesAsignad
 
 	@Override
 	public void save(RepresentantesAsignados representantes) {
-		String sql = " INSERT INTO app_representantes_asignados (id, " + "representante_id, " + "usuario_id, " + "cargo, "
+		String sql = " INSERT INTO app_asignacion_representantes (id, " + "representante_id, " + "usuario_id, " + "cargo, "
 				+ "distrito_federal_id, " + "distrito_local_id, " + "municipio_id, " + "ruta_id, " + "seccion_electoral_id, "
 				+ "casilla_id, " + "entidad_id) "
-				+ "VALUES ((SELECT MAX(id)+1 FROM app_representantes_asignados), ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
+				+ "VALUES ((SELECT MAX(id)+1 FROM app_asignacion_representantes), ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
 
 		template.update(sql,
 				new Object[] { representantes.getRepresentanteId(), representantes.getUsuarioId(), representantes.getCargo(),

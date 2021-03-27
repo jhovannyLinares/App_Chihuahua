@@ -12,19 +12,24 @@ import mx.morena.negocio.dto.EntidadDTO;
 import mx.morena.negocio.dto.MunicipioDTO;
 import mx.morena.negocio.dto.RepresentanteDTO;
 import mx.morena.negocio.dto.SeccionDTO;
+import mx.morena.negocio.dto.ZonaDTO;
 import mx.morena.negocio.dto.offline.CatalogoDTOOffline;
 import mx.morena.negocio.dto.offline.DistritoFederalDTOOffline;
 import mx.morena.negocio.dto.offline.EntidadDTOOffline;
 import mx.morena.negocio.dto.offline.LocalidadDTOOffline;
 import mx.morena.negocio.dto.offline.MunicipioDTOOffline;
+import mx.morena.negocio.exception.CatalogoException;
 import mx.morena.negocio.servicios.ICatalogoService;
 import mx.morena.negocio.util.MapperUtil;
+import mx.morena.persistencia.entidad.Cargo;
 import mx.morena.persistencia.entidad.Casilla;
 import mx.morena.persistencia.entidad.DistritoFederal;
 import mx.morena.persistencia.entidad.Entidad;
 import mx.morena.persistencia.entidad.Municipio;
 import mx.morena.persistencia.entidad.SeccionElectoral;
 import mx.morena.persistencia.entidad.Usuario;
+import mx.morena.persistencia.entidad.Zona;
+import mx.morena.persistencia.repository.ICargosRepository;
 import mx.morena.persistencia.repository.ICasillaRepository;
 import mx.morena.persistencia.repository.IDistritoFederalRepository;
 import mx.morena.persistencia.repository.IEntidadRepository;
@@ -42,8 +47,8 @@ public class CatalogoServiceImpl extends MasterService implements ICatalogoServi
 	@Autowired
 	private IMunicipioRepository municipioRepository;
 
-//	@Autowired
-//	private ILocalidadRepository localidadRepository;
+	@Autowired
+	private ICargosRepository cargosRepository;
 
 	@Autowired
 	private ISeccionElectoralRepository seccionRepository;
@@ -208,7 +213,7 @@ public class CatalogoServiceImpl extends MasterService implements ICatalogoServi
 
 	@Override
 	public List<CasillaDTO> getCasillas(long idUsuario, long perfil, Long distritoFederalId, Long municipioId,
-			Long seccionId) {
+			Long seccionId, Boolean isLibres) {
 
 		Usuario usuario = usuarioRepository.findById(idUsuario);
 
@@ -228,8 +233,22 @@ public class CatalogoServiceImpl extends MasterService implements ICatalogoServi
 		} else {
 			casillas = casillaRepository.getCasillas(usuario.getEntidad());
 		}
+		
+		if (isLibres != null) {
+			
+			CasillaDTO dto = null;
+			for (Casilla casilla : casillas) {
+				if (casilla.isAsignado() != isLibres) {
+					dto = new CasillaDTO();
+					MapperUtil.map(casilla, dto);
+					dtos.add(dto);
+				}
+			}
 
-		dtos = MapperUtil.mapAll(casillas, CasillaDTO.class);
+		} else {
+			dtos = MapperUtil.mapAll(casillas, CasillaDTO.class);
+		}
+		
 
 		return dtos;
 	}
@@ -260,12 +279,12 @@ public class CatalogoServiceImpl extends MasterService implements ICatalogoServi
 		}
 
 		if (perfil < PERFIL_LOCAL) {
-			
+
 			RepresentanteDTO dto = new RepresentanteDTO();
 			dto.setId(REP_LOCAL);
 			dto.setDescripcion("Representante Local");
 			representantes.add(dto);
-			
+
 			dto = new RepresentanteDTO();
 			dto.setId(REP_CRG);
 			dto.setDescripcion("Representante CRG");
@@ -284,7 +303,7 @@ public class CatalogoServiceImpl extends MasterService implements ICatalogoServi
 
 	@Override
 	public List<SeccionDTO> getSeccionesByMunicipio(long idUsuario, long idPerfil, Long idMunicipio) {
-		
+
 		Usuario usuario = usuarioRepository.findById(idUsuario);
 
 		List<SeccionDTO> seccionDTOs = null;
@@ -303,6 +322,39 @@ public class CatalogoServiceImpl extends MasterService implements ICatalogoServi
 		}
 
 		return seccionDTOs;
+	}
+
+	@Override
+	public List<CargoDTO> getCargos(Long tipoRepresentante) throws CatalogoException {
+
+		List<Cargo> cargos = cargosRepository.getCargos(tipoRepresentante);
+		List<CargoDTO> cargoDTOs = null;
+
+		if (cargos != null) {
+
+			cargoDTOs = MapperUtil.mapAll(cargos, CargoDTO.class);
+		} else {
+			throw new CatalogoException("No se encontraron datos", 401);
+		}
+
+		return cargoDTOs;
+	}
+
+	@Override
+	public List<ZonaDTO> getZonas(long usuario, long idPerfil, Long idFederal) throws CatalogoException {
+		
+		List<Zona> zonas = cargosRepository.getZonas(idFederal);
+		
+		List<ZonaDTO> zonasDTO = null;
+
+		if (zonas != null) {
+
+			zonasDTO = MapperUtil.mapAll(zonas, ZonaDTO.class);
+		} else {
+			throw new CatalogoException("No se encontraron datos", 401);
+		}
+
+		return zonasDTO;
 	}
 
 }

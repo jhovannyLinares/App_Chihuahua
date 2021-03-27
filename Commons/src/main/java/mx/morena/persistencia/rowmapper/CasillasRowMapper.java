@@ -33,6 +33,8 @@ public class CasillasRowMapper implements RowMapper<List<Casilla>> {
 			casilla.setCp(rs.getString("cp"));
 			casilla.setUbicacion(rs.getString("ubicacion"));
 			casilla.setReferencia(rs.getString("referencia"));
+			casilla.setAsignado(rs.getBoolean("is_asignada"));
+
 			casillas.add(casilla);
 
 		} while (rs.next());

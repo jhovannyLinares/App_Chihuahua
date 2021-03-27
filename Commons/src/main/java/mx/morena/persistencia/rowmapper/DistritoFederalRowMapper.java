@@ -15,7 +15,7 @@ public class DistritoFederalRowMapper implements RowMapper<DistritoFederal> {
 		DistritoFederal distritoFederal = new DistritoFederal();
 
 		distritoFederal.setId(rs.getLong("id"));
-		distritoFederal.setCabeceraFederal(rs.getLong("id")   +" - "+rs.getString("NOMBRE MUNICIPIO CABECERA")); 
+		distritoFederal.setCabeceraFederal(rs.getLong("id")   +" - "+rs.getString("nombre")); 
 
 		return distritoFederal;
 	}

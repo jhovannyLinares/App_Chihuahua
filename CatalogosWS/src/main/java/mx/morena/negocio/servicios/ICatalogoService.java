@@ -8,7 +8,10 @@ import mx.morena.negocio.dto.EntidadDTO;
 import mx.morena.negocio.dto.MunicipioDTO;
 import mx.morena.negocio.dto.RepresentanteDTO;
 import mx.morena.negocio.dto.SeccionDTO;
+import mx.morena.negocio.dto.ZonaDTO;
 import mx.morena.negocio.dto.offline.CatalogoDTOOffline;
+import mx.morena.negocio.exception.CatalogoException;
+import mx.morena.negocio.servicios.impl.CargoDTO;
 
 public interface ICatalogoService {
 
@@ -22,10 +25,14 @@ public interface ICatalogoService {
 
 	CatalogoDTOOffline getCatalogos(long usuario, long perfil);
 
-	List<CasillaDTO> getCasillas(long usuario, long perfil, Long distritoFederalId, Long municipioId, Long seccionId);
+	List<CasillaDTO> getCasillas(long usuario, long perfil, Long distritoFederalId, Long municipioId, Long seccionId, Boolean isLibres);
 
 	List<RepresentanteDTO> getRepresentantes(long perfil);
 
 	List<SeccionDTO> getSeccionesByMunicipio(long idUsuario, long idPerfil, Long idMunicipio);
+
+	List<CargoDTO> getCargos(Long tipoRepresentante) throws CatalogoException;
+
+	List<ZonaDTO> getZonas(long usuario, long idPerfil, Long idFederal) throws CatalogoException;
 
 }

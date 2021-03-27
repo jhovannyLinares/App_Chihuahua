@@ -21,7 +21,6 @@ import mx.morena.persistencia.entidad.RepresentanteClaveElectoral;
 import mx.morena.persistencia.entidad.Representantes;
 import mx.morena.persistencia.entidad.RepresentantesAsignados;
 import mx.morena.persistencia.repository.IRepresentanteRepository;
-import mx.morena.persistencia.repository.impl.RepresentantesRepository;
 import mx.morena.security.servicio.MasterService;
 
 @Service

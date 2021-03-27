@@ -3,23 +3,27 @@ package mx.morena.negocio.dto;
 import java.util.List;
 
 public class RutaResponseDTO {
-	
+
 	private Long idDistrito;
-	
+
 	private String nombreDistrito;
-	
+
 	private String idRutaRg;
-	
+
 	private String idZonaCrg;
-	
+
 	private Long ruta;
-	
+
 	private Long seccionId;
-		
-	private String Zona;
-	
+
+	private String zona;
+
 	private Long zonaCrg;
-	
+
+	private Long idMunicipio;
+
+	private String municipio;
+
 	private List<TipoCasillaDTO> lstTipoCasilla;
 
 	public Long getIdDistrito() {
@@ -71,11 +75,11 @@ public class RutaResponseDTO {
 	}
 
 	public String getZona() {
-		return Zona;
+		return zona;
 	}
 
 	public void setZona(String zona) {
-		Zona = zona;
+		this.zona = zona;
 	}
 
 	public Long getZonaCrg() {
@@ -93,7 +97,21 @@ public class RutaResponseDTO {
 	public void setLstTipoCasilla(List<TipoCasillaDTO> lstTipoCasilla) {
 		this.lstTipoCasilla = lstTipoCasilla;
 	}
-	
-	
+
+	public Long getIdMunicipio() {
+		return idMunicipio;
+	}
+
+	public void setIdMunicipio(Long idMunicipio) {
+		this.idMunicipio = idMunicipio;
+	}
+
+	public String getMunicipio() {
+		return municipio;
+	}
+
+	public void setMunicipio(String municipio) {
+		this.municipio = municipio;
+	}
 
 }

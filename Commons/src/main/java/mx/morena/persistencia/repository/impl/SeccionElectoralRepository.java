@@ -63,7 +63,7 @@ public class SeccionElectoralRepository implements ISeccionElectoralRepository {
 
 	@Override
 	public SeccionElectoral getById(Long idSeccion) {
-		String sql = "SELECT id as seccion_id, municipio_id FROM app_secciones where id = ?";
+		String sql = "SELECT id as seccion_id, municipio_id,  municipio FROM app_secciones where id = ?";
 		try {
 			return template.queryForObject(sql, new Object[] { idSeccion }, new int[] { Types.NUMERIC },
 					new SeccionRowMapper());

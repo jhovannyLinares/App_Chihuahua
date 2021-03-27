@@ -16,8 +16,8 @@ public class SeccionRowMapper implements RowMapper<SeccionElectoral> {
 
 		seccion.setId(rs.getLong("seccion_id"));
 		seccion.setDescripcion(rs.getString("seccion_id"));
-//		seccion.setCot(rs.getLong("idcot"));
-//		seccion.setLocalidad(rs.getLong("id"));
+		seccion.setMunicipioId(rs.getLong("municipio_id"));
+		seccion.setMunicipio(rs.getString("municipio"));
 
 		return seccion;
 	}

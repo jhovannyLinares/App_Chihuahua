@@ -8,6 +8,10 @@ public class SeccionElectoral {
 
 	private Long localidad;
 
+	private Long municipioId;
+	
+	private String municipio;
+
 	private Long cot;
 
 	public Long getId() {
@@ -34,6 +38,22 @@ public class SeccionElectoral {
 		this.localidad = localidad;
 	}
 
+	public Long getMunicipioId() {
+		return municipioId;
+	}
+
+	public void setMunicipioId(Long municipioId) {
+		this.municipioId = municipioId;
+	}
+
+	public String getMunicipio() {
+		return municipio;
+	}
+
+	public void setMunicipio(String municipio) {
+		this.municipio = municipio;
+	}
+
 	public Long getCot() {
 		return cot;
 	}
@@ -41,5 +61,7 @@ public class SeccionElectoral {
 	public void setCot(Long cot) {
 		this.cot = cot;
 	}
+
+	
 
 }

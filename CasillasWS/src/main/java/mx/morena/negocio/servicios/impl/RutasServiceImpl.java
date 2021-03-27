@@ -19,8 +19,10 @@ import mx.morena.negocio.servicios.IRutasService;
 import mx.morena.negocio.util.MapperUtil;
 import mx.morena.persistencia.entidad.Representantes;
 import mx.morena.persistencia.entidad.Rutas;
+import mx.morena.persistencia.entidad.SeccionElectoral;
 import mx.morena.persistencia.repository.IRepresentanteRepository;
 import mx.morena.persistencia.repository.IRutasRepository;
+import mx.morena.persistencia.repository.ISeccionElectoralRepository;
 import mx.morena.security.servicio.MasterService;
 
 @Service
@@ -31,6 +33,9 @@ public class RutasServiceImpl extends MasterService implements IRutasService{
 	
 	@Autowired
 	private IRutasRepository rutasRepository;
+	
+	@Autowired
+	private ISeccionElectoralRepository seccionElectoralRepository;
 	
 	@Override
 	public List<CatalogoCrgDTO> getCatalogo(Long tipoRepresentante, Long perfil) throws RutasException{
@@ -110,6 +115,13 @@ public class RutasServiceImpl extends MasterService implements IRutasService{
 					System.out.println(rutas.getIdRutaRg()+"  .   "+ rutas.getSeccionId());
 					lstRutasResponse = MapperUtil.mapAll(lstRutas, TipoCasillaDTO.class);
 					rutas.setLstTipoCasilla(lstRutasResponse);
+					
+					
+					SeccionElectoral se= seccionElectoralRepository.getById(rutas.getSeccionId());
+					
+					rutas.setIdMunicipio(se.getMunicipioId());
+					rutas.setMunicipio(se.getMunicipio());
+					
 				}
 				
 				if (lstRutas != null) {

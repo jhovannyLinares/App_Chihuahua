@@ -20,6 +20,8 @@ public class Casilla {
 	private String ubicacion;
 	private String referencia;
 
+	private boolean asignado;
+
 	public Long getId() {
 		return id;
 	}
@@ -122,6 +124,14 @@ public class Casilla {
 
 	public void setReferencia(String referencia) {
 		this.referencia = referencia;
+	}
+
+	public boolean isAsignado() {
+		return asignado;
+	}
+
+	public void setAsignado(boolean asignado) {
+		this.asignado = asignado;
 	}
 
 }
