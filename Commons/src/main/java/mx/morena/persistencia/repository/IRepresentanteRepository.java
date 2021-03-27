@@ -32,4 +32,6 @@ public interface IRepresentanteRepository {
 
 	Representantes getRepresentante(Long representanteId);
 
+	void updateStatusRepresentantes(Long id);
+
 }

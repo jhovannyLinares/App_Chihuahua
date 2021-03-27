@@ -151,16 +151,14 @@ public class RepresentantesRepository implements IRepresentanteRepository {
 		String sql = null;
 		String where = null;
 		String values = null;
-		
+
 		List<Object> para = new ArrayList<Object>();
 		List<Integer> type = new ArrayList<Integer>();
-
 
 		if (asignacion == 1) {
 			values = " distrito_federal_id = ? ";
 			where = " where representante_id = ? ";
 			sql = update.concat(values).concat(where);
-			System.out.println("**** " + sql);
 			para.add(rep.getDistritoFederalId());
 			para.add(rep.getRepresentanteId());
 			type.add(Types.NUMERIC);
@@ -185,7 +183,6 @@ public class RepresentantesRepository implements IRepresentanteRepository {
 			type.add(Types.NUMERIC);
 		}
 
-		///////////
 		if (asignacion == 4) {
 			values = " distrito_federal_id = ?, ";
 			values = values.concat(" zona_id = ? ");
@@ -241,9 +238,8 @@ public class RepresentantesRepository implements IRepresentanteRepository {
 			parametros[i] = para.get(i);
 			types[i] = type.get(i);
 		}
-		
+
 		sql = update.concat(values).concat(where);
-		System.out.println("***** " + sql);
 
 		template.update(sql, parametros, types);
 		try {
@@ -257,10 +253,19 @@ public class RepresentantesRepository implements IRepresentanteRepository {
 	public Representantes getRepresentante(Long representanteId) {
 		String sql = " SELECT * FROM app_representantes where id = ? ";
 		try {
-			return template.queryForObject(sql, new Object[] { representanteId },
-					new int[] { Types.NUMERIC }, new RepresentanteRowMapper());
+			return template.queryForObject(sql, new Object[] { representanteId }, new int[] { Types.NUMERIC },
+					new RepresentanteRowMapper());
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}
+	}
+
+	@Override
+	public void updateStatusRepresentantes(Long id) {
+		String sql = "update app_representantes set is_asignado = true where id = ?";
+		
+		template.update(sql, new Object[] {id},
+				new int[] {Types.NUMERIC });
+		
 	}
 }

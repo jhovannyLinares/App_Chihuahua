@@ -16,8 +16,6 @@ public class RepresentantesAsignados {
 
 	private Long ZonaId;
 	
-	private Long perfilRepresentante;
-
 	public Long getId() {
 		return id;
 	}
@@ -113,13 +111,4 @@ public class RepresentantesAsignados {
 	public void setZonaId(Long zonaId) {
 		ZonaId = zonaId;
 	}
-
-	public Long getPerfilRepresentante() {
-		return perfilRepresentante;
-	}
-
-	public void setPerfilRepresentante(Long perfilRepresentante) {
-		this.perfilRepresentante = perfilRepresentante;
-	}
-	
 }

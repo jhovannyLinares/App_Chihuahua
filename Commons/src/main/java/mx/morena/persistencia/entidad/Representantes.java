@@ -53,6 +53,8 @@ public class Representantes {
 	private Integer tipo;
 
 	private Date fechaSistema;
+	
+	private Boolean isAsignado;
 
 	public Long getId() {
 		return id;
@@ -254,5 +256,12 @@ public class Representantes {
 		this.fechaSistema = fechaSistema;
 	}
 
+	public Boolean getIsAsignado() {
+		return isAsignado;
+	}
+
+	public void setIsAsignado(Boolean isAsignado) {
+		this.isAsignado = isAsignado;
+	}
 
 }

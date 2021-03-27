@@ -38,6 +38,7 @@ public class RepresentanteRowMapper implements RowMapper<Representantes> {
 		representantes.setRutaIneLado2(rs.getString("ine_img_lado2"));
 		representantes.setRutaInePdf(rs.getString("ine_pdf"));
 		representantes.setTipo(rs.getInt("tipo_representante"));
+		representantes.setIsAsignado(rs.getBoolean("is_asignado"));
 		
 		
 		return representantes;
