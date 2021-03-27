@@ -28,6 +28,8 @@ public interface IRutasRepository {
 	
 	void asignarCasillas(Long idCasilla, Long idRuta);
 	
+	void cambiarEstatusCasilla(Long idCasilla, int asignado);
+	
 	void desasignarCasillas(Long idCasilla);
 	
 	Rutas getCasillaByIdAndEstatus(Long idCasilla, int asignado);

@@ -204,6 +204,7 @@ public class RutasServiceImpl extends MasterService implements IRutasService{
 
 						if (existeCasilla != null) {
 							rutasRepository.asignarCasillas(casilla, casillaDto.getIdRuta());
+							rutasRepository.cambiarEstatusCasilla(casilla, BAJA_CASILLA);
 							info += ", " + casilla.toString();
 							
 						} else {
@@ -240,6 +241,7 @@ public class RutasServiceImpl extends MasterService implements IRutasService{
 					
 					if (ruta != null) {
 						rutasRepository.desasignarCasillas(casilla);
+						rutasRepository.cambiarEstatusCasilla(casilla, ALTA_CASILLA);
 						info += ", " + casilla.toString(); 
 					} else {
 						throw new RutasException("No se encontro la casilla " + casilla , 404);

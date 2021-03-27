@@ -241,4 +241,19 @@ public class RutasRepository implements IRutasRepository {
 		}
 	}
 
+	@Override
+	public void cambiarEstatusCasilla(Long idCasilla, int asignado) {
+		String campo = "";
+
+		if (asignado == 1) {
+			campo = "false";
+		} else {
+			campo = "true";
+		}
+
+		String sql = "UPDATE app_casilla SET is_asignada = "+ campo + " where id = ? ";
+		
+		template.update(sql, new Object[] { idCasilla }, new int[] { Types.NUMERIC });
+	}
+
 }
