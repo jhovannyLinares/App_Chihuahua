@@ -214,13 +214,13 @@ public class RutasRepository implements IRutasRepository {
 		String campo = "";
 
 		if (asignado == 1) {
-			campo = "IS NOT NULL AND ruta != 0";
+			campo = "ruta != 0";
 		} else {
-			campo = "IS NULL AND ruta = 0";
+			campo = "id_ruta_rg IS NULL AND ruta = 0";
 		}
 
 		String sql = "SELECT id, distrito_federal_id, nombre_distrito, id_zona_crg, ruta, id_casilla, tipo_casilla, seccion_id, status, id_ruta_rg"
-				+ " FROM app_rutas WHERE id_casilla = ? AND id_ruta_rg " + campo;
+				+ " FROM app_rutas WHERE id_casilla = ? AND " + campo;
 		try {
 			return template.queryForObject(sql, new Object[] { idCasilla }, new int[] { Types.NUMERIC },
 					new CasillaRowMapper());
