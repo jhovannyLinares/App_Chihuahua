@@ -175,11 +175,42 @@ public class RutasServiceImpl extends MasterService implements IRutasService{
 
 	@Override
 	@Transactional(rollbackFor={RutasException.class})
-	public String asignarCasillas(long idPerfil, AsignarCasillasDTO asignarCasilla) throws RutasException {
+	public String asignarCasillas(long idPerfil, AsignarCasillasDTO casillaDto) throws RutasException {
 		if (idPerfil == PERFIL_ESTATAL || idPerfil == PERFIL_FEDERAL) {
+			if (!casillaDto.getIdCasillas().isEmpty() && casillaDto.getIdRuta() != null && casillaDto.getIdRuta() > 0) {
+				//Se valida que exista la ruta
+				Rutas ruta = rutasRepository.getRutaById(casillaDto.getIdRuta());
+				
+				if (ruta != null) {
+					
+					String info = "";
+					final int BAJA_CASILLA = 0;
+					
+					for (Long casilla : casillaDto.getIdCasillas()) {
+						//Se valida que existan las casillas sin asignar
+						Rutas existeCasilla = rutasRepository.getCasillaByIdAndEstatus(casilla, BAJA_CASILLA);
+
+						if (existeCasilla != null) {
+							rutasRepository.asignarCasillas(casilla, casillaDto.getIdRuta());
+							info += ", " + casilla.toString();
+							
+						} else {
+							throw new RutasException("No se encontro la casilla " + casilla, 404);
+						}
+					}
+
+					return "Se asignaron las casillas" + info;
+
+				} else {
+					throw new RutasException("No se encontro la ruta ingresada", 404);
+				}
+			} else {
+				throw new RutasException("Ingrese por lo menos una casilla o ruta", 400);
+			}
 			
+		} else {
+			throw new RutasException("Permisos insuficientes", 401);
 		}
-		return null;
 	}
 
 	@Override

@@ -32,4 +32,6 @@ public interface IRutasRepository {
 	
 	Rutas getCasillaByIdAndEstatus(Long idCasilla, int asignado);
 	
+	Rutas getRutaById(Long idRuta);
+	
 }

@@ -195,8 +195,9 @@ public class RutasRepository implements IRutasRepository {
 
 	@Override
 	public void asignarCasillas(Long idCasilla, Long idRuta) {
-		
-		
+		String sql = "UPDATE app_rutas SET ruta = ? WHERE id_casilla = ? AND ruta = 0";
+
+		template.update(sql, new Object[] { idRuta, idCasilla }, new int[] { Types.NUMERIC, Types.NUMERIC });
 	}
 
 	@Override
@@ -211,22 +212,33 @@ public class RutasRepository implements IRutasRepository {
 	@Override
 	public Rutas getCasillaByIdAndEstatus(Long idCasilla, int asignado) {
 		String campo = "";
-		
+
 		if (asignado == 1) {
 			campo = "IS NOT NULL AND ruta != 0";
 		} else {
 			campo = "IS NULL AND ruta = 0";
 		}
-		
+
 		String sql = "SELECT id, distrito_federal_id, nombre_distrito, id_zona_crg, ruta, id_casilla, tipo_casilla, seccion_id, status, id_ruta_rg"
-				+ " FROM app_rutas WHERE id_casilla = ? AND id_ruta_rg "+ campo;
+				+ " FROM app_rutas WHERE id_casilla = ? AND id_ruta_rg " + campo;
 		try {
 			return template.queryForObject(sql, new Object[] { idCasilla }, new int[] { Types.NUMERIC },
 					new CasillaRowMapper());
-		}catch (EmptyResultDataAccessException e) {
+		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}
 	}
 
-	
+	@Override
+	public Rutas getRutaById(Long idRuta) {
+		String sql = "SELECT id, distrito_federal_id, nombre_distrito, id_zona_crg, ruta, id_casilla, tipo_casilla, seccion_id, status, id_ruta_rg"
+				+ " FROM app_rutas WHERE ruta != 0 AND ruta = ? LIMIT 1";
+		try {
+			return template.queryForObject(sql, new Object[] { idRuta }, new int[] { Types.NUMERIC },
+					new CasillaRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+
 }
