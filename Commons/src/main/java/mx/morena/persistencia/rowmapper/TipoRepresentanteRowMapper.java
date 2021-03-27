@@ -21,7 +21,7 @@ public class TipoRepresentanteRowMapper implements RowMapper<List<Perfil>>{
 			prf = new Perfil();
 			
 			prf.setId(rs.getLong("id"));
-			prf.setNombre(rs.getString("nombre"));
+			prf.setNombre(rs.getString("tipo_representante"));
 			
 			perfil.add(prf);
 			
