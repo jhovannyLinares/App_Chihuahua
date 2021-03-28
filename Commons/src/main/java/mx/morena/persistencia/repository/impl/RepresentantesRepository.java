@@ -187,7 +187,7 @@ public class RepresentantesRepository implements IRepresentanteRepository {
 			values = " distrito_federal_id = ?, ";
 			values = values.concat(" zona_id = ? ");
 			where = " where representante_id = ? ";
-			para.add(rep.getDistritoLocalId());
+			para.add(rep.getDistritoFederalId());
 			para.add(rep.getZonaId());
 			para.add(rep.getRepresentanteId());
 			type.add(Types.NUMERIC);
@@ -200,7 +200,7 @@ public class RepresentantesRepository implements IRepresentanteRepository {
 			values = values.concat(" zona_id = ?, ");
 			values = values.concat(" ruta_id = ? ");
 			where = " where representante_id = ? ";
-			para.add(rep.getDistritoLocalId());
+			para.add(rep.getDistritoFederalId());
 			para.add(rep.getZonaId());
 			para.add(rep.getRutaId());
 			para.add(rep.getRepresentanteId());
@@ -217,7 +217,7 @@ public class RepresentantesRepository implements IRepresentanteRepository {
 			values = values.concat(" seccion_electoral_id = ?, ");
 			values = values.concat(" casilla_id = ? ");
 			where = " where representante_id = ? ";
-			para.add(rep.getDistritoLocalId());
+			para.add(rep.getDistritoFederalId());
 			para.add(rep.getZonaId());
 			para.add(rep.getRutaId());
 			para.add(rep.getSeccionElectoralId());
