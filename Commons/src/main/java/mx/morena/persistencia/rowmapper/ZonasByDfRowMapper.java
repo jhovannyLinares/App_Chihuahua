@@ -7,24 +7,25 @@ import java.util.List;
 
 import org.springframework.jdbc.core.RowMapper;
 
-import mx.morena.persistencia.entidad.Rutas;
+import mx.morena.persistencia.entidad.Zona;
 
-public class ZonasByDfRowMapper implements RowMapper<List<Rutas>> {
+public class ZonasByDfRowMapper implements RowMapper<List<Zona>> {
 
 	@Override
-	public List<Rutas> mapRow(ResultSet rs, int rowNum) throws SQLException {
-		List<Rutas> lstRutas = new ArrayList<Rutas>();
-		Rutas rutas = null;
+	public List<Zona> mapRow(ResultSet rs, int rowNum) throws SQLException {
+		List<Zona> lstRutas = new ArrayList<Zona>();
+		Zona zona = null;
 		
 		do {
-			rutas = new Rutas();
+			zona = new Zona();
 			
-			rutas.setIdDistrito(rs.getLong("distrito_federal_id"));
-			rutas.setNombreDistrito(rs.getString("nombre_distrito"));
-			rutas.setZonaCrg(rs.getLong("zona_crg"));
-			rutas.setIdZonaCrg(rs.getString("id_zona_crg"));
+			zona.setIdDistrito(rs.getLong("distrito_federal_id"));
+			zona.setNombreDistrito(rs.getString("nombre_distrito"));
+			zona.setZonaCrg(rs.getLong("zona_crg"));
+			zona.setIdZonaCrg(rs.getString("id_zona_crg"));
+			zona.setId(rs.getLong("id"));
 			
-			lstRutas.add(rutas);
+			lstRutas.add(zona);
 			
 		} while (rs.next());
 		

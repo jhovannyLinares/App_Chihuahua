@@ -2,9 +2,9 @@ package mx.morena.persistencia.repository;
 
 import java.util.List;
 
-
 import mx.morena.persistencia.entidad.Representantes;
 import mx.morena.persistencia.entidad.Rutas;
+import mx.morena.persistencia.entidad.Zona;
 
 public interface IRutasRepository {
 	
@@ -18,11 +18,11 @@ public interface IRutasRepository {
 		
 	List<Rutas> getRutas(Long idFederal, Long zonaCRG, Long ruta, Long casilla);
 
-	List<Rutas> getZonasByDistrito(Long idDistrito);
+	List<Zona> getZonasByDistrito(Long idDistrito);
 
-	List<Rutas> getRutasByZonas(Long zonaCrg);
+	List<Rutas> getRutasByZonas(Long zona, String idzona);
 
-	List<Rutas> getCasillaByRuta(Long ruta);
+	List<Rutas> getCasillaByRuta(String rutaRG);
 
 	List<Rutas> getTipoCasilla(String idRutaRg, Long seccionId);
 	
@@ -35,5 +35,11 @@ public interface IRutasRepository {
 	Rutas getCasillaByIdAndEstatus(Long idCasilla, int asignado);
 	
 	Rutas getRutaById(Long idRuta);
+
+	public Zona getZonasByid(Long zonaCrg);
+
+	public Rutas getRutaByid(Long rutaid);
+
+	public List<Rutas> getZonasByWhere(Long idFederal, Long zonaCRG, Long ruta, Long casilla);
 	
 }

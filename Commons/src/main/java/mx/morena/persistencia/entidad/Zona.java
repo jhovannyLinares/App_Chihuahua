@@ -3,7 +3,13 @@ package mx.morena.persistencia.entidad;
 public class Zona {
 	private Long id;
 
-	private String descripcion;
+	private Long idDistrito;
+
+	private String nombreDistrito;
+
+	private Long zonaCrg;
+
+	private String idZonaCrg;
 
 	public Long getId() {
 		return id;
@@ -13,11 +19,36 @@ public class Zona {
 		this.id = id;
 	}
 
-	public String getDescripcion() {
-		return descripcion;
+	public Long getIdDistrito() {
+		return idDistrito;
 	}
 
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
+	public void setIdDistrito(Long idDistrito) {
+		this.idDistrito = idDistrito;
 	}
+
+	public String getNombreDistrito() {
+		return nombreDistrito;
+	}
+
+	public void setNombreDistrito(String nombreDistrito) {
+		this.nombreDistrito = nombreDistrito;
+	}
+
+	public Long getZonaCrg() {
+		return zonaCrg;
+	}
+
+	public void setZonaCrg(Long zonaCrg) {
+		this.zonaCrg = zonaCrg;
+	}
+
+	public String getIdZonaCrg() {
+		return idZonaCrg;
+	}
+
+	public void setIdZonaCrg(String idZonaCrg) {
+		this.idZonaCrg = idZonaCrg;
+	}
+
 }

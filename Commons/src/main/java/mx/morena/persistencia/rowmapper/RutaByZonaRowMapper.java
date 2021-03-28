@@ -19,9 +19,9 @@ public class RutaByZonaRowMapper implements RowMapper<List<Rutas>> {
 		do {
 			rutas = new Rutas();
 			
-			rutas.setRuta(rs.getLong("ruta"));
+			rutas.setRuta(rs.getLong("id"));
 			rutas.setIdRutaRg(rs.getString("id_ruta_rg"));
-			rutas.setIdZonaCrg(rs.getString("id_zona_crg"));
+			rutas.setIdZonaCrg(rs.getString("id_zona"));
 			
 			lstRutas.add(rutas);
 			

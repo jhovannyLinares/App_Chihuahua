@@ -129,19 +129,19 @@ public class CatalogoController extends MasterController {
 		return secciones;
 	}
 
-	@GetMapping("/distritosFederales/{idFederal}/zonas")
-	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	private List<ZonaDTO> getZonas(HttpServletRequest request, @PathVariable("idFederal") Long idFederal) throws CatalogoException {
-
-		long usuario = getUsuario(request);
-		long idPerfil = getPerfil(request);
-		
-		
-		List<ZonaDTO> dto;
-
-		dto = ICatService.getZonas(usuario, idPerfil, idFederal);
-
-		return dto;
-	}
+//	@GetMapping("/distritosFederales/{idFederal}/zonas")
+//	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+//	private List<ZonaDTO> getZonas(HttpServletRequest request, @PathVariable("idFederal") Long idFederal) throws CatalogoException {
+//
+//		long usuario = getUsuario(request);
+//		long idPerfil = getPerfil(request);
+//		
+//		
+//		List<ZonaDTO> dto;
+//
+//		dto = ICatService.getZonas(usuario, idPerfil, idFederal);
+//
+//		return dto;
+//	}
 
 }

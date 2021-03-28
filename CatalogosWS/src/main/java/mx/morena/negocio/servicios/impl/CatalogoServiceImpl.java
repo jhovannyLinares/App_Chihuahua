@@ -340,21 +340,21 @@ public class CatalogoServiceImpl extends MasterService implements ICatalogoServi
 		return cargoDTOs;
 	}
 
-	@Override
-	public List<ZonaDTO> getZonas(long usuario, long idPerfil, Long idFederal) throws CatalogoException {
-		
-		List<Zona> zonas = cargosRepository.getZonas(idFederal);
-		
-		List<ZonaDTO> zonasDTO = null;
-
-		if (zonas != null) {
-
-			zonasDTO = MapperUtil.mapAll(zonas, ZonaDTO.class);
-		} else {
-			throw new CatalogoException("No se encontraron datos", 401);
-		}
-
-		return zonasDTO;
-	}
+//	@Override
+//	public List<ZonaDTO> getZonas(long usuario, long idPerfil, Long idFederal) throws CatalogoException {
+//		
+//		List<Zona> zonas = cargosRepository.getZonas(idFederal);
+//		
+//		List<ZonaDTO> zonasDTO = null;
+//
+//		if (zonas != null) {
+//
+//			zonasDTO = MapperUtil.mapAll(zonas, ZonaDTO.class);
+//		} else {
+//			throw new CatalogoException("No se encontraron datos", 401);
+//		}
+//
+//		return zonasDTO;
+//	}
 
 }

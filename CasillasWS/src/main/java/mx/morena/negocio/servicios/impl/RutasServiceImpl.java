@@ -1,5 +1,6 @@
 package mx.morena.negocio.servicios.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import mx.morena.negocio.util.MapperUtil;
 import mx.morena.persistencia.entidad.Representantes;
 import mx.morena.persistencia.entidad.Rutas;
 import mx.morena.persistencia.entidad.SeccionElectoral;
+import mx.morena.persistencia.entidad.Zona;
 import mx.morena.persistencia.repository.IRepresentanteRepository;
 import mx.morena.persistencia.repository.IRutasRepository;
 import mx.morena.persistencia.repository.ISeccionElectoralRepository;
@@ -100,35 +102,42 @@ public class RutasServiceImpl extends MasterService implements IRutasService{
 	public List<RutaResponseDTO> getRutas(Long idFederal, Long zonaCRG, Long ruta, Long casilla, Long perfil)
 			throws RutasException {
 		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL) {
-
-			List<RutaResponseDTO> lstRutasDTO = null;
-			List<Rutas> lstRutas = null;
-			List<TipoCasillaDTO> lstRutasResponse = null;
-
-			lstRutas = rutasRepository.getRutas(idFederal, zonaCRG, ruta, casilla);
 			
+			
+			
+			List<Rutas> lstRutas = rutasRepository.getZonasByWhere(idFederal,zonaCRG,ruta,casilla);
+
+			
+			List<RutaResponseDTO> lstRutasDTO = null;
+//			List<Rutas> lstRutas = null;
+			List<TipoCasillaDTO> lstRutasResponse = null;
+//
+//			lstRutas = rutasRepository.getRutas(idFederal, zonaCRG, ruta, casilla);
+//
+			if (lstRutas != null) {
+//
 				lstRutasDTO = MapperUtil.mapAll(lstRutas, RutaResponseDTO.class);
-				
+//
 				for (RutaResponseDTO rutas : lstRutasDTO) {
 
 					lstRutas = rutasRepository.getTipoCasilla(rutas.getIdRutaRg(), rutas.getSeccionId());
-					System.out.println(rutas.getIdRutaRg()+"  .   "+ rutas.getSeccionId());
+					
+					System.out.println(rutas.getIdRutaRg() + "  .   " + rutas.getSeccionId());
+					
 					lstRutasResponse = MapperUtil.mapAll(lstRutas, TipoCasillaDTO.class);
+					
 					rutas.setLstTipoCasilla(lstRutasResponse);
-					
-					
-					SeccionElectoral se= seccionElectoralRepository.getById(rutas.getSeccionId());
-					
+
+					SeccionElectoral se = seccionElectoralRepository.getById(rutas.getSeccionId());
+
 					rutas.setIdMunicipio(se.getMunicipioId());
 					rutas.setMunicipio(se.getMunicipio());
-					
-				}
-				
-				if (lstRutas != null) {
-				System.out.println("\n ");
-				System.out.println("lista rutas "+lstRutasDTO.size());
-				return lstRutasDTO;
 
+				}
+//
+					return lstRutasDTO;
+
+//
 			} else {
 				throw new RutasException("No se encontraron resultados con los datos ingresados.", 404);
 			}
@@ -145,13 +154,23 @@ public class RutasServiceImpl extends MasterService implements IRutasService{
 	@Override
 	public List<ZonaCrgDTO> getZonasByDistrito(long idPerfil, Long idDistrito) {
 
-		List<ZonaCrgDTO> lstDto = null;
+		List<ZonaCrgDTO> lstDto = new ArrayList<ZonaCrgDTO>();
 		
 		if (idPerfil == PERFIL_ESTATAL || idPerfil == PERFIL_FEDERAL) {
 			
-			List<Rutas> lstRutas = rutasRepository.getZonasByDistrito(idDistrito);
-			lstDto = MapperUtil.mapAll(lstRutas, ZonaCrgDTO.class);
-			System.out.println("***  zonas by distrito " + lstDto.size());
+			List<Zona> lstRutas = rutasRepository.getZonasByDistrito(idDistrito);
+			
+			ZonaCrgDTO dto = null;
+			for (Zona zona : lstRutas) {
+				dto = new ZonaCrgDTO();
+
+				dto.setIdDistrito(zona.getIdDistrito());
+				dto.setNombreDistrito(zona.getNombreDistrito());
+				dto.setZonaCrg(zona.getId());
+				dto.setIdZonaCrg(zona.getZonaCrg() + "-" + zona.getIdZonaCrg());
+
+				lstDto.add(dto);
+			}
 			return lstDto;
 		}
 		return null;
@@ -164,7 +183,9 @@ public class RutasServiceImpl extends MasterService implements IRutasService{
 
 		if (idPerfil == PERFIL_ESTATAL || idPerfil == PERFIL_FEDERAL) {
 			
-			List<Rutas> lstRutas = rutasRepository.getRutasByZonas(zonaCrg);
+			Zona zona = rutasRepository.getZonasByid(zonaCrg);
+			
+			List<Rutas> lstRutas = rutasRepository.getRutasByZonas(zona.getZonaCrg(),zona.getIdZonaCrg());
 			lstDto = MapperUtil.mapAll(lstRutas, RutaCatalogoDto.class);
 			System.out.println("***  rutas by zona " + lstDto.size());
 			return lstDto;
@@ -173,11 +194,13 @@ public class RutasServiceImpl extends MasterService implements IRutasService{
 	}
 
 	@Override
-	public List<CasillasCatalogoDto> getCasillaByRuta(long idPerfil, Long ruta) {
+	public List<CasillasCatalogoDto> getCasillaByRuta(long idPerfil, Long rutaid) {
 		List<CasillasCatalogoDto> lstDto = null;
 		if (idPerfil == PERFIL_ESTATAL || idPerfil == PERFIL_FEDERAL) {
+			
+			Rutas ruta = rutasRepository.getRutaByid(rutaid);
 
-			List<Rutas> lstRutas = rutasRepository.getCasillaByRuta(ruta);
+			List<Rutas> lstRutas = rutasRepository.getCasillaByRuta(ruta.getIdRutaRg());
 			lstDto = MapperUtil.mapAll(lstRutas, CasillasCatalogoDto.class);
 			System.out.println("***  casillas by ruta " + lstDto.size());
 			return lstDto;
