@@ -2,9 +2,14 @@ package mx.morena.negocio.dto;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class RutaResponseDTO {
 
 	private Long idDistrito;
+	
+	@JsonIgnore
+	private Long id;
 
 	private String nombreDistrito;
 
@@ -113,5 +118,16 @@ public class RutaResponseDTO {
 	public void setMunicipio(String municipio) {
 		this.municipio = municipio;
 	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+	
+	
+	
 
 }

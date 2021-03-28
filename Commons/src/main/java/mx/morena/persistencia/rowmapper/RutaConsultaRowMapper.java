@@ -27,6 +27,7 @@ public class RutaConsultaRowMapper implements RowMapper<List<Rutas>>{
 			rutas.setSeccionId(rs.getLong("seccion_id"));
 			rutas.setIdRutaRg(rs.getString("id_ruta_rg"));
 			rutas.setZona(rs.getString("zona_crg")+"-"+ rs.getString("id_zona_crg"));
+			rutas.setId(rs.getLong("id"));
 			lstRutas.add(rutas);
 			
 		} while (rs.next());

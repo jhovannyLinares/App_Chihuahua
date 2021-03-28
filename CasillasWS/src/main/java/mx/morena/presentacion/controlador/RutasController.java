@@ -26,6 +26,7 @@ import mx.morena.negocio.dto.CatalogoCrgDTO;
 import mx.morena.negocio.dto.DesasignarCasillasDTO;
 import mx.morena.negocio.dto.RutaCatalogoDto;
 import mx.morena.negocio.dto.RutaResponseDTO;
+import mx.morena.negocio.dto.SeccionDTO;
 import mx.morena.negocio.exception.RutasException;
 import mx.morena.negocio.servicios.IRutasService;
 import mx.morena.security.controller.MasterController;
@@ -125,6 +126,28 @@ public class RutasController extends MasterController {
 		List<RutaCatalogoDto> rutas = rutasService.getRutaByZonaCrg(idPerfil, zonaCrg);
 
 		return rutas;
+	}
+	
+	@GetMapping("/ruta/{idRuta}/seccion")
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	private List<SeccionDTO> getSeccionByRutas(HttpServletResponse response,HttpServletRequest request,
+			@PathVariable("idRuta") Long idRuta) throws IOException {
+
+		long idPerfil =  getPerfil(request);
+		try {
+			List<SeccionDTO> seccionDTOs = rutasService.getSeccionByRutas(idPerfil, idRuta);
+			return seccionDTOs;
+		} catch (RutasException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+			return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			return null;
+		}
+
+		
 	}
 	
 	@GetMapping("/rutaCrg/{id}/casilla")

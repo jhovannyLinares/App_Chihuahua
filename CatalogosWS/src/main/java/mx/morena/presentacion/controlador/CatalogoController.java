@@ -22,7 +22,6 @@ import mx.morena.negocio.dto.EntidadDTO;
 import mx.morena.negocio.dto.MunicipioDTO;
 import mx.morena.negocio.dto.RepresentanteDTO;
 import mx.morena.negocio.dto.SeccionDTO;
-import mx.morena.negocio.dto.ZonaDTO;
 import mx.morena.negocio.dto.offline.CatalogoDTOOffline;
 import mx.morena.negocio.exception.CatalogoException;
 import mx.morena.negocio.servicios.ICatalogoService;

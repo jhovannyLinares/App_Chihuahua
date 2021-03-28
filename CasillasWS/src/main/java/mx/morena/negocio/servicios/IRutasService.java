@@ -8,6 +8,7 @@ import mx.morena.negocio.dto.CatalogoCrgDTO;
 import mx.morena.negocio.dto.DesasignarCasillasDTO;
 import mx.morena.negocio.dto.RutaCatalogoDto;
 import mx.morena.negocio.dto.RutaResponseDTO;
+import mx.morena.negocio.dto.SeccionDTO;
 import mx.morena.negocio.dto.ZonaCrgDTO;
 import mx.morena.negocio.exception.RutasException;
 
@@ -29,5 +30,7 @@ public interface IRutasService {
 	public String asignarCasillas(long idPerfil, AsignarCasillasDTO asignarCasillasDTO) throws RutasException;
 	
 	public String desasignarCasillas(long idPerfil, DesasignarCasillasDTO desasignarCasillasDTO) throws RutasException;
+
+	public List<SeccionDTO> getSeccionByRutas(long idPerfil, Long idRuta) throws RutasException;
 	
 }

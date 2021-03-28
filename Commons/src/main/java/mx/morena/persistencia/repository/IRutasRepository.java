@@ -26,7 +26,7 @@ public interface IRutasRepository {
 
 	List<Rutas> getTipoCasilla(String idRutaRg, Long seccionId);
 	
-	void asignarCasillas(Long idCasilla, Long idRuta);
+	void asignarCasillas(Long idCasilla, Long idRuta, String ruta);
 	
 	void cambiarEstatusCasilla(Long idCasilla, int asignado);
 	
@@ -41,5 +41,7 @@ public interface IRutasRepository {
 	public Rutas getRutaByid(Long rutaid);
 
 	public List<Rutas> getZonasByWhere(Long idFederal, Long zonaCRG, Long ruta, Long casilla);
+
+	public List<Rutas> getRutasByIdRutaRG(String idRutaRg);
 	
 }

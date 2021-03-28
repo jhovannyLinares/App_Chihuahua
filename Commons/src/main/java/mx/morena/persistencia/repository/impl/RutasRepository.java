@@ -19,6 +19,7 @@ import mx.morena.persistencia.rowmapper.RepresentanteRowMapper;
 import mx.morena.persistencia.rowmapper.RutaByZonaRowMapper;
 import mx.morena.persistencia.rowmapper.RutaConsultaRowMapper;
 import mx.morena.persistencia.rowmapper.RutaRowMapper;
+import mx.morena.persistencia.rowmapper.RutaTempRowMapper;
 import mx.morena.persistencia.rowmapper.RutasRowMapper;
 import mx.morena.persistencia.rowmapper.RutasTempRowMapper;
 import mx.morena.persistencia.rowmapper.ZonaRowMapper;
@@ -194,10 +195,10 @@ public class RutasRepository implements IRutasRepository {
 	}
 
 	@Override
-	public void asignarCasillas(Long idCasilla, Long idRuta) {
-		String sql = "UPDATE app_asignacion_casillas SET ruta = ? WHERE id_casilla = ? AND ruta = 0";
+	public void asignarCasillas(Long idCasilla, Long idRuta,String ruta) {
+		String sql = "UPDATE app_asignacion_casillas SET ruta = ? ,id_ruta_rg = ? WHERE id_casilla = ? AND ruta = 0";
 
-		template.update(sql, new Object[] { idRuta, idCasilla }, new int[] { Types.NUMERIC, Types.NUMERIC });
+		template.update(sql, new Object[] { idRuta, ruta, idCasilla }, new int[] { Types.NUMERIC, Types.VARCHAR, Types.NUMERIC  });
 	}
 
 	@Override
@@ -231,11 +232,11 @@ public class RutasRepository implements IRutasRepository {
 
 	@Override
 	public Rutas getRutaById(Long idRuta) {
-		String sql = "SELECT id, distrito_federal_id, nombre_distrito, id_zona_crg, ruta, id_casilla, tipo_casilla, seccion_id, status, id_ruta_rg"
-				+ " FROM app_asignacion_casillas WHERE ruta != 0 AND ruta = ? LIMIT 1";
+		String sql = "SELECT id, distrito_federal_id, nombre_distrito, zona as zona_crg, id_zona as id_zona_crg, ruta, seccion_id, id_ruta_rg "
+				+ " FROM app_rutas WHERE  id = ? ";
 		try {
 			return template.queryForObject(sql, new Object[] { idRuta }, new int[] { Types.NUMERIC },
-					new CasillaRowMapper());
+					new RutaTempRowMapper());
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}
@@ -272,7 +273,7 @@ public class RutasRepository implements IRutasRepository {
 		String sql = "SELECT id, distrito_federal_id, nombre_distrito, zona as zona_crg, id_zona as id_zona_crg, ruta, seccion_id, id_ruta_rg FROM app_rutas where id = ?";
 		try {
 			return template.queryForObject(sql, new Object[] { rutaid }, new int[] { Types.NUMERIC },
-					new RutasTempRowMapper());
+					new RutaTempRowMapper());
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}
@@ -280,7 +281,7 @@ public class RutasRepository implements IRutasRepository {
 
 	@Override
 	public List<Rutas> getZonasByWhere(Long idFederal, Long zonaCRG, Long ruta, Long casilla) {
-		String sql = "select ar.id, ar.distrito_federal_id, ar.nombre_distrito, ar.zona as zona_crg, ar.id_zona as id_zona_crg, ar.ruta, ar.seccion_id, ar.id_ruta_rg from app_rutas ar " + 
+		String sql = "select min(ar.id) as id , min(ar.seccion_id) as seccion_id, ar.distrito_federal_id, ar.nombre_distrito, ar.zona as zona_crg, ar.id_zona as id_zona_crg, ar.ruta, ar.id_ruta_rg from app_rutas ar " + 
 				"left join app_zonas az on az.id_zona_crg =ar.id_zona  " + 
 				"left join app_asignacion_casillas aac on ar.id_ruta_rg =aac.id_ruta_rg and ar.ruta =aac.ruta";
 		
@@ -338,7 +339,7 @@ public class RutasRepository implements IRutasRepository {
 		
 		
 		try {
-			sql = sql.concat(where);
+			sql = sql.concat(where).concat(" group by ar.distrito_federal_id, ar.nombre_distrito, ar.zona , ar.id_zona , ar.ruta, ar.id_ruta_rg ");
 			System.out.println(sql);
 			
 			return template.queryForObject(sql, parametros, types,
@@ -346,6 +347,17 @@ public class RutasRepository implements IRutasRepository {
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}
+	}
+
+	@Override
+	public List<Rutas> getRutasByIdRutaRG(String idRutaRg) {
+			String sql = "select id, distrito_federal_id, nombre_distrito, zona as zona_crg, id_zona as id_zona_crg, ruta, seccion_id, id_ruta_rg from app_rutas where id_ruta_rg =?";
+	try {
+		return template.queryForObject(sql, new Object[] { idRutaRg }, new int[] { Types.VARCHAR },
+				new RutasTempRowMapper());
+	} catch (EmptyResultDataAccessException e) {
+		return null;
+	}
 	}
 
 }
