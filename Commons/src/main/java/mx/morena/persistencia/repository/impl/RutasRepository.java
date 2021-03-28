@@ -46,7 +46,7 @@ public class RutasRepository implements IRutasRepository {
 
 	@Override
 	public List<Rutas> findByCrgId(Long crgId) {
-		String sql = "select id as ruta_id, id_crg from app_asignacion_representantes where id_crg = ?";
+		String sql = "select id as ruta_id, id_crg from app_asignacion_casillas where id_crg = ?";
 		try {
 			return template.queryForObject(sql, new Object[] { crgId },
 					new int[] { Types.NUMERIC }, new RutaRowMapper());
@@ -57,7 +57,7 @@ public class RutasRepository implements IRutasRepository {
 
 	@Override
 	public List<Rutas> findById(Long idRutas) {
-		String sql = "SELECT id as ruta_id, id_crg, id, status FROM app_asignacion_representantes where id = ?";
+		String sql = "SELECT id as ruta_id, id_crg, id, status FROM app_asignacion_casillas where id = ?";
 		try {
 			return template.queryForObject(sql, new Object[] { idRutas }, new int[] { Types.NUMERIC },
 					new RutaRowMapper());
@@ -68,7 +68,7 @@ public class RutasRepository implements IRutasRepository {
 
 	@Override
 	public void updateIdCrg(Long idRuta, Long idCrg) {
-		String sql = "UPDATE app_asignacion_representantes SET id_crg = ?, status = 01 WHERE id = ? and status != 1";
+		String sql = "UPDATE app_asignacion_casillas SET id_crg = ?, status = 01 WHERE id = ? and status != 1";
 
 		template.update(sql, new Object[] { idCrg, idRuta }, new int[] { Types.NUMERIC, Types.NUMERIC });
 
@@ -80,7 +80,7 @@ public class RutasRepository implements IRutasRepository {
 		
 		
 		String select2 = "select distrito_federal_id , nombre_distrito ,"
-				+" id_ruta_rg , id_zona_crg , ruta , seccion_id , zona_crg from app_asignacion_representantes ";   
+				+" id_ruta_rg , id_zona_crg , ruta , seccion_id , zona_crg from app_asignacion_casillas ";   
 	    String groupBy = " group by distrito_federal_id , nombre_distrito , "
 	    		+ "id_ruta_rg , id_zona_crg , ruta , seccion_id , zona_crg ";
 		String sql = null;
@@ -162,7 +162,7 @@ public class RutasRepository implements IRutasRepository {
 
 	@Override
 	public List<Rutas> getRutasByZonas(Long zona, String idzona) {
-		String sql = "select * from app_rutas where zona = ? and id_zona = ? ";
+		String sql = "select MIN(id) id, distrito_federal_id, nombre_distrito, zona, id_zona, ruta, id_ruta_rg from app_rutas where zona = ? and id_zona = ? group by distrito_federal_id, nombre_distrito, zona, id_zona, ruta, id_ruta_rg ";
 		try {
 			return template.queryForObject(sql, new Object[] {zona,idzona}, new int[] { Types.NUMERIC ,Types.VARCHAR},
 					new RutaByZonaRowMapper());
@@ -173,7 +173,7 @@ public class RutasRepository implements IRutasRepository {
 
 	@Override
 	public List<Rutas> getCasillaByRuta(String rutaRG) {
-		String sql = "select id_casilla , id_ruta_rg, ruta, tipo_casilla from app_asignacion_representantes ar where id_ruta_rg =? group by id_ruta_rg, id_casilla, ruta, tipo_casilla";
+		String sql = "select id_casilla , id_ruta_rg, ruta, tipo_casilla from app_asignacion_casillas ar where id_ruta_rg =? group by id_ruta_rg, id_casilla, ruta, tipo_casilla";
 		try {
 			return template.queryForObject(sql, new Object[] {rutaRG}, new int[] { Types.VARCHAR },
 					new CasillaByRutaRowMapper());
@@ -195,14 +195,14 @@ public class RutasRepository implements IRutasRepository {
 
 	@Override
 	public void asignarCasillas(Long idCasilla, Long idRuta) {
-		String sql = "UPDATE app_asignacion_representantes SET ruta = ? WHERE id_casilla = ? AND ruta = 0";
+		String sql = "UPDATE app_asignacion_casillas SET ruta = ? WHERE id_casilla = ? AND ruta = 0";
 
 		template.update(sql, new Object[] { idRuta, idCasilla }, new int[] { Types.NUMERIC, Types.NUMERIC });
 	}
 
 	@Override
 	public void desasignarCasillas(Long idCasilla) {
-		String sql = "UPDATE app_asignacion_representantes SET ruta = 0, id_ruta_rg = null "
+		String sql = "UPDATE app_asignacion_casillas SET ruta = 0, id_ruta_rg = null "
 				+ "WHERE id_casilla = ? ";
 
 		template.update(sql, new Object[] { idCasilla }, new int[] { Types.NUMERIC });
@@ -220,7 +220,7 @@ public class RutasRepository implements IRutasRepository {
 		}
 
 		String sql = "SELECT id, distrito_federal_id, nombre_distrito, id_zona_crg, ruta, id_casilla, tipo_casilla, seccion_id, status, id_ruta_rg"
-				+ " FROM app_asignacion_representantes WHERE id_casilla = ? AND " + campo;
+				+ " FROM app_asignacion_casillas WHERE id_casilla = ? AND " + campo;
 		try {
 			return template.queryForObject(sql, new Object[] { idCasilla }, new int[] { Types.NUMERIC },
 					new CasillaRowMapper());
@@ -232,7 +232,7 @@ public class RutasRepository implements IRutasRepository {
 	@Override
 	public Rutas getRutaById(Long idRuta) {
 		String sql = "SELECT id, distrito_federal_id, nombre_distrito, id_zona_crg, ruta, id_casilla, tipo_casilla, seccion_id, status, id_ruta_rg"
-				+ " FROM app_asignacion_representantes WHERE ruta != 0 AND ruta = ? LIMIT 1";
+				+ " FROM app_asignacion_casillas WHERE ruta != 0 AND ruta = ? LIMIT 1";
 		try {
 			return template.queryForObject(sql, new Object[] { idRuta }, new int[] { Types.NUMERIC },
 					new CasillaRowMapper());
