@@ -197,73 +197,51 @@ public class RepresentanteServiceImpl extends MasterService implements IRepresen
 		}
 	}
 
-	@Override
-	public Long asignaRepresentante(long usuario, long perfil, AsignacionRepresentantesDTO dto)
+	public Long sRepresentante(long usuario, long perfil, AsignacionRepresentantesDTO dto, Representantes representante)
 			throws RepresentanteException {
 
 		boolean estatalFederal = perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL;
 		boolean Estatal = perfil == PERFIL_ESTATAL;
 
-		if (estatalFederal || perfil == PERFIL_CRG) {
+		long tipoRepresentante = representante.getTipo().longValue();
 
-			Representantes representante = representanteRepository.getRepresentante(dto.getRepresentanteId());
+		long idRepresentante = representante.getId();
 
-			if (representante != null) {
-				
-				if (representante.getIsAsignado()==false) {
-					
-				if (dto.getRepresentanteId() != 0 && dto.getCargo() != 0) {
-					
-					long tipoRepresentante = representante.getTipo().longValue();
-					
-					long idRepresentante = representante.getId();
-
-						if (Estatal && tipoRepresentante == PERFIL_FEDERAL) {
-							long asignacion = 1;
-							guardado(usuario, perfil, dto, asignacion, idRepresentante);
-						}
-
-						if (estatalFederal && tipoRepresentante == PERFIL_LOCAL) {
-							long asignacion = 2;
-							guardado(usuario, perfil, dto, asignacion, idRepresentante);
-						}
-
-						if (estatalFederal && tipoRepresentante == PERFIL_MUNICIPAL) {
-							long asignacion = 3;
-							guardado(usuario, perfil, dto, asignacion, idRepresentante);
-						}
-
-						if (estatalFederal && tipoRepresentante == PERFIL_CRG) {
-							long asignacion = 4;
-							guardado(usuario, perfil, dto, asignacion, idRepresentante);
-						}
-
-						if (estatalFederal && tipoRepresentante == PERFIL_RG) {
-							long asignacion = 5;
-							guardado(usuario, perfil, dto, asignacion, idRepresentante);
-						}
-
-					if ((estatalFederal || perfil == PERFIL_CRG) && tipoRepresentante == PERFIL_RC) {
-						long asignacion = 6;
-						guardado(usuario, perfil, dto, asignacion, idRepresentante);
-					}
-
-				} else {
-					throw new RepresentanteException("Ingrese  los campos obligatorios", 400);
-				}
-			}else {
-					throw new RepresentanteException("El representante ya esta asignado", 400);
-				}
-			} else {
-				throw new RepresentanteException("El representante solicitado no existe", 400);
-			}
-		} else {
-			throw new RepresentanteException("No cuenta con permisos suficientes para realizar la operacion", 401);
+		if (Estatal && tipoRepresentante == PERFIL_FEDERAL) {
+			long asignacion = 1;
+			guardado(usuario, perfil, dto, asignacion, idRepresentante);
 		}
+
+		if (estatalFederal && tipoRepresentante == PERFIL_LOCAL) {
+			long asignacion = 2;
+			guardado(usuario, perfil, dto, asignacion, idRepresentante);
+		}
+
+		if (estatalFederal && tipoRepresentante == PERFIL_MUNICIPAL) {
+			long asignacion = 3;
+			guardado(usuario, perfil, dto, asignacion, idRepresentante);
+		}
+
+		if (estatalFederal && tipoRepresentante == PERFIL_CRG) {
+			long asignacion = 4;
+			guardado(usuario, perfil, dto, asignacion, idRepresentante);
+		}
+
+		if (estatalFederal && tipoRepresentante == PERFIL_RG) {
+			long asignacion = 5;
+			guardado(usuario, perfil, dto, asignacion, idRepresentante);
+		}
+
+		if ((estatalFederal || perfil == PERFIL_CRG) && tipoRepresentante == PERFIL_RC) {
+			long asignacion = 6;
+			guardado(usuario, perfil, dto, asignacion, idRepresentante);
+		}
+
 		return representanteRepository.getIdMaxAsignados();
 	}
 
-	public void guardado(long usuario, long perfil, AsignacionRepresentantesDTO dto, long asignacion, long idRepresentante) {
+	public void guardado(long usuario, long perfil, AsignacionRepresentantesDTO dto, long asignacion,
+			long idRepresentante) {
 
 		RepresentantesAsignados representante = new RepresentantesAsignados();
 
@@ -274,9 +252,51 @@ public class RepresentanteServiceImpl extends MasterService implements IRepresen
 		representanteRepository.asignaRepresentante(representante);
 
 		representanteRepository.updateRepresentante(perfil, representante, asignacion);
-		
-		representanteRepository.updateStatusRepresentantes(idRepresentante);
+
+	    representanteRepository.updateStatusRepresentantes(idRepresentante);
 
 	}
+
+	@Override
+	public Long asignaRepresentante(long usuario, long perfil, AsignacionRepresentantesDTO dto)
+			throws RepresentanteException {
+
+		boolean estatalFederal = perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL;
+
+		Long resp = null;
+		if (estatalFederal || perfil == PERFIL_CRG) {
+
+			Representantes representante = representanteRepository.getRepresentante(dto.getRepresentanteId());
+
+			if (representante != null) {
+
+				if (representante.getIsAsignado() == false) {
+
+					if (dto.getRepresentanteId() != 0 && dto.getCargo() != 0) {
+
+						Map<Integer, String> rep = getTipoRepresentante(perfil);
+
+						if (rep.containsKey(representante.getTipo())) {
+
+							resp = sRepresentante(usuario, perfil, dto, representante);
+
+						} else {
+							throw new RepresentanteException("Permisos insuficientes para dar de alta el tipo de representante", 401);
+						}
+					} else {
+						throw new RepresentanteException("Ingrese  los campos obligatorios", 400);
+					}
+				} else {
+					throw new RepresentanteException("El representante ya esta asignado", 400);
+				}
+			} else {
+				throw new RepresentanteException("El representante solicitado no existe", 400);
+			}
+		} else {
+			throw new RepresentanteException("No cuenta con permisos suficientes para realizar la operacion", 401);
+		}
+		return resp;
+	}
+	
 
 }
