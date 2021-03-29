@@ -40,7 +40,7 @@ public class CotServiceImpl extends MasterService implements ICotService {
 				
 				Convencidos existeCurp = cotRepository.getByCurp(cotDto.getCurp());
 				
-				List<Convencidos> existeClave = cotRepository.findByClaveElector(cotDto.getClaveElector());
+				List<Convencidos> existeClave = cotRepository.findByClaveElectorVal(cotDto.getClaveElector());
 
 				if (existeClave != null) {
 					throw new CotException("La clave de elector ya esta en uso, intente con otra", 400);
