@@ -31,7 +31,7 @@ public class RepresentantesRepository implements IRepresentanteRepository {
 			+ "ine_img_lado1, ine_img_lado2, ine_pdf, nombre, numero_exterior, "
 			+ "numero_interior, propuesto, ruta, telefono_casa, telefono_celular, "
 			+ "tipo_representante, distrito_federal_id, estado_id, municipio_id, seccion_electoral_id, "
-			+ "usuario_id";
+			+ "usuario_id, is_asignado";
 
 	@Override
 	public Representantes findByClaveElector(String claveElector) {
