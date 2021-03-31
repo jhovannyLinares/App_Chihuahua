@@ -104,6 +104,20 @@ public class CatalogoController extends MasterController {
 		return federal;
 
 	}
+	
+	@GetMapping("/entidades/{id}/distritosLocales")
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	private List<DistritoFederalDTO> getLocalByEntidad(HttpServletRequest request,
+			@PathVariable("id") Long idEntidad) {
+
+		long usuario = getUsuario(request);
+		long perfil = getPerfil(request);
+
+		List<DistritoFederalDTO> federal = ICatService.getLocalByEntidad(usuario, perfil, idEntidad);
+
+		return federal;
+
+	}
 
 	@GetMapping("/distritosFederales/{id}/municipios")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))

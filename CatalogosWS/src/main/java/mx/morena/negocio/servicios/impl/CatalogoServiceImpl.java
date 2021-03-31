@@ -30,6 +30,7 @@ import mx.morena.persistencia.entidad.Usuario;
 import mx.morena.persistencia.repository.ICargosRepository;
 import mx.morena.persistencia.repository.ICasillaRepository;
 import mx.morena.persistencia.repository.IDistritoFederalRepository;
+import mx.morena.persistencia.repository.IDistritoLocalRepository;
 import mx.morena.persistencia.repository.IEntidadRepository;
 import mx.morena.persistencia.repository.IMunicipioRepository;
 import mx.morena.persistencia.repository.ISeccionElectoralRepository;
@@ -41,6 +42,9 @@ public class CatalogoServiceImpl extends MasterService implements ICatalogoServi
 
 	@Autowired
 	private IDistritoFederalRepository federalRepocitory;
+	
+	@Autowired
+	private IDistritoLocalRepository localRepository;
 
 	@Autowired
 	private IMunicipioRepository municipioRepository;
@@ -336,6 +340,32 @@ public class CatalogoServiceImpl extends MasterService implements ICatalogoServi
 		}
 
 		return cargoDTOs;
+	}
+
+	@Override
+	public List<DistritoFederalDTO> getLocalByEntidad(long idUsuario, long perfil, Long idEntidad) {
+		Usuario usuario = usuarioRepository.findById(idUsuario);
+
+		List<DistritoFederalDTO> distritoFederalDTOs = null;
+
+		if (usuario.getPerfil() > PERFIL_ESTATAL) {
+
+			DistritoFederal distritoFederal = localRepository.findById(usuario.getFederal());
+			DistritoFederalDTO dto = new DistritoFederalDTO();
+			MapperUtil.map(distritoFederal, dto);
+
+			distritoFederalDTOs = new ArrayList<DistritoFederalDTO>();
+			distritoFederalDTOs.add(dto);
+
+		} else {
+
+			List<DistritoFederal> distritoFederals = localRepository.findByEntidad(idEntidad);
+
+			distritoFederalDTOs = MapperUtil.mapAll(distritoFederals, DistritoFederalDTO.class);
+
+		}
+
+		return distritoFederalDTOs;
 	}
 
 //	@Override

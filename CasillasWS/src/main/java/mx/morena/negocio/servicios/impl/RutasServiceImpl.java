@@ -43,7 +43,7 @@ public class RutasServiceImpl extends MasterService implements IRutasService {
 	@Override
 	public List<CatalogoCrgDTO> getCatalogo(Long tipoRepresentante, Long perfil) throws RutasException {
 
-		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL) {
+//		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL) {
 
 			List<CatalogoCrgDTO> crgDto = null;
 			List<Representantes> crg = null;
@@ -59,15 +59,15 @@ public class RutasServiceImpl extends MasterService implements IRutasService {
 				throw new RutasException("El Representante no fue Encontrado.", 401);
 			}
 
-		} else {
-			throw new RutasException("Permisos Insuficientes.", 401);
-		}
+//		} else {
+//			throw new RutasException("Permisos Insuficientes.", 401);
+//		}
 	}
 
 	@Override
 	@Transactional(rollbackFor = { RutasException.class })
 	public String asignarRutas(List<Long> idRutas, Long idCrg, long perfil) throws RutasException {
-		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL) {
+//		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL) {
 
 			Representantes crg = crgRepository.getById(idCrg);
 
@@ -92,9 +92,9 @@ public class RutasServiceImpl extends MasterService implements IRutasService {
 				throw new RutasException("No se encontro el Crg ingresado", 404);
 			}
 
-		} else {
-			throw new RutasException("No cuenta con suficientes permisos", 401);
-		}
+//		} else {
+//			throw new RutasException("No cuenta con suficientes permisos", 401);
+//		}
 
 		return "Se asignaron rutas al Crg " + idCrg;
 	}
@@ -102,7 +102,7 @@ public class RutasServiceImpl extends MasterService implements IRutasService {
 	@Override
 	public List<RutaResponseDTO> getRutas(Long idFederal, Long zonaCRG, Long ruta, Long casilla, Long perfil)
 			throws RutasException {
-		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL) {
+//		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL) {
 
 			List<Rutas> lstRutas = rutasRepository.getZonasByWhere(idFederal, zonaCRG, ruta, casilla);
 
@@ -123,10 +123,13 @@ public class RutasServiceImpl extends MasterService implements IRutasService {
 					lstRutas = rutasRepository.getTipoCasilla(rutas.getIdRutaRg(), rutas.getSeccionId());
 
 					System.out.println(rutas.getIdRutaRg() + "  .   " + rutas.getSeccionId());
+					
+					if (lstRutas != null) {
 
-					lstRutasResponse = MapperUtil.mapAll(lstRutas, TipoCasillaDTO.class);
+						lstRutasResponse = MapperUtil.mapAll(lstRutas, TipoCasillaDTO.class);
 
-					rutas.setLstTipoCasilla(lstRutasResponse);
+						rutas.setLstTipoCasilla(lstRutasResponse);
+					}
 
 					SeccionElectoral se = seccionElectoralRepository.getById(rutas.getSeccionId());
 
@@ -141,9 +144,9 @@ public class RutasServiceImpl extends MasterService implements IRutasService {
 			} else {
 				throw new RutasException("No se encontraron resultados con los datos ingresados.", 404);
 			}
-		} else {
-			throw new RutasException("No cuenta con permisos suficientes.", 401);
-		}
+//		} else {
+//			throw new RutasException("No cuenta con permisos suficientes.", 401);
+//		}
 	}
 
 /////////////////////////////////////////////////////////     catalogos
@@ -152,7 +155,7 @@ public class RutasServiceImpl extends MasterService implements IRutasService {
 
 		List<ZonaCrgDTO> lstDto = new ArrayList<ZonaCrgDTO>();
 
-		if (idPerfil == PERFIL_ESTATAL || idPerfil == PERFIL_FEDERAL) {
+//		if (idPerfil == PERFIL_ESTATAL || idPerfil == PERFIL_FEDERAL) {
 
 			List<Zona> lstRutas = rutasRepository.getZonasByDistrito(idDistrito);
 
@@ -168,8 +171,8 @@ public class RutasServiceImpl extends MasterService implements IRutasService {
 				lstDto.add(dto);
 			}
 			return lstDto;
-		}
-		return null;
+//		}
+//		return null;
 	}
 
 	@Override
@@ -177,7 +180,7 @@ public class RutasServiceImpl extends MasterService implements IRutasService {
 
 		List<RutaCatalogoDto> lstDto = null;
 
-		if (idPerfil == PERFIL_ESTATAL || idPerfil == PERFIL_FEDERAL) {
+//		if (idPerfil == PERFIL_ESTATAL || idPerfil == PERFIL_FEDERAL) {
 
 			Zona zona = rutasRepository.getZonasByid(zonaCrg);
 
@@ -185,14 +188,14 @@ public class RutasServiceImpl extends MasterService implements IRutasService {
 			lstDto = MapperUtil.mapAll(lstRutas, RutaCatalogoDto.class);
 			System.out.println("***  rutas by zona " + lstDto.size());
 			return lstDto;
-		}
-		return null;
+//		}
+//		return null;
 	}
 
 	@Override
 	public List<CasillasCatalogoDto> getCasillaByRuta(long idPerfil, Long rutaid) {
 		List<CasillasCatalogoDto> lstDto = null;
-		if (idPerfil == PERFIL_ESTATAL || idPerfil == PERFIL_FEDERAL) {
+//		if (idPerfil == PERFIL_ESTATAL || idPerfil == PERFIL_FEDERAL) {
 
 			Rutas ruta = rutasRepository.getRutaByid(rutaid);
 
@@ -200,14 +203,14 @@ public class RutasServiceImpl extends MasterService implements IRutasService {
 			lstDto = MapperUtil.mapAll(lstRutas, CasillasCatalogoDto.class);
 			System.out.println("***  casillas by ruta " + lstDto.size());
 			return lstDto;
-		}
-		return null;
+//		}
+//		return null;
 	}
 
 	@Override
 	@Transactional(rollbackFor = { RutasException.class })
 	public String asignarCasillas(long idPerfil, AsignarCasillasDTO casillaDto) throws RutasException {
-		if (idPerfil == PERFIL_ESTATAL || idPerfil == PERFIL_FEDERAL) {
+//		if (idPerfil == PERFIL_ESTATAL || idPerfil == PERFIL_FEDERAL) {
 			if (!casillaDto.getIdCasillas().isEmpty() && casillaDto.getIdRuta() != null && casillaDto.getIdRuta() > 0) {
 				// Se valida que exista la ruta
 				Rutas ruta = rutasRepository.getRutaById(casillaDto.getIdRuta());
@@ -240,15 +243,15 @@ public class RutasServiceImpl extends MasterService implements IRutasService {
 				throw new RutasException("Ingrese por lo menos una casilla o ruta", 400);
 			}
 
-		} else {
-			throw new RutasException("Permisos insuficientes", 401);
-		}
+//		} else {
+//			throw new RutasException("Permisos insuficientes", 401);
+//		}
 	}
 
 	@Override
 	@Transactional(rollbackFor = { RutasException.class })
 	public String desasignarCasillas(long idPerfil, DesasignarCasillasDTO casillas) throws RutasException {
-		if (idPerfil == PERFIL_ESTATAL || idPerfil == PERFIL_FEDERAL) {
+//		if (idPerfil == PERFIL_ESTATAL || idPerfil == PERFIL_FEDERAL) {
 
 			if (casillas.getIdCasillas() != null && !casillas.getIdCasillas().isEmpty()) {
 
@@ -272,9 +275,9 @@ public class RutasServiceImpl extends MasterService implements IRutasService {
 			} else {
 				throw new RutasException("Ingrese por lo menos una casilla", 400);
 			}
-		} else {
-			throw new RutasException("Permisos insuficientes", 401);
-		}
+//		} else {
+//			throw new RutasException("Permisos insuficientes", 401);
+//		}
 
 	}
 

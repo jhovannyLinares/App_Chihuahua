@@ -32,6 +32,8 @@ public interface ICatalogoService {
 
 	List<CargoDTO> getCargos(Long tipoRepresentante) throws CatalogoException;
 
+	List<DistritoFederalDTO> getLocalByEntidad(long usuario, long perfil, Long idEntidad);
+
 //	List<ZonaDTO> getZonas(long usuario, long idPerfil, Long idFederal) throws CatalogoException;
 
 }
