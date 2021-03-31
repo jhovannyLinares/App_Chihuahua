@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import mx.morena.negocio.dto.CotDTO;
 import mx.morena.negocio.dto.CotResponseDTO;
+import mx.morena.negocio.dto.ReporteCotDTO;
 import mx.morena.negocio.dto.SeccionDTO;
 import mx.morena.negocio.exception.CotException;
 import mx.morena.negocio.servicios.ICotService;
@@ -382,5 +383,11 @@ public class CotServiceImpl extends MasterService implements ICotService {
 			throw new CotException("El numero de caracteres ingresado en la curp es incorrecto",
 					400);
 		}
+	}
+
+	@Override
+	public List<ReporteCotDTO> getReporte() throws CotException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

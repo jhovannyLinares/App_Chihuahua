@@ -304,4 +304,11 @@ public List<Convencidos> getConvencidos(Long distritoFederalId, Long idMunicipio
 		}
 	}
 
+
+	@Override
+	public List<Convencidos> getReporteCots() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

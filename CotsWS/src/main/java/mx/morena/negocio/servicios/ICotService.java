@@ -4,6 +4,7 @@ import java.util.List;
 
 import mx.morena.negocio.dto.CotDTO;
 import mx.morena.negocio.dto.CotResponseDTO;
+import mx.morena.negocio.dto.ReporteCotDTO;
 import mx.morena.negocio.dto.SeccionDTO;
 import mx.morena.negocio.exception.CotException;
 
@@ -24,4 +25,6 @@ public interface ICotService {
 	public String update(CotDTO cot, long perfil, Long id) throws CotException;
 	
 	public boolean getByCurp(String curp) throws CotException;
+	
+	public List<ReporteCotDTO> getReporte() throws CotException;
 }
