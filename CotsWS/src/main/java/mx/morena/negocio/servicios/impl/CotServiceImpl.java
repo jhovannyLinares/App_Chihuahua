@@ -387,7 +387,122 @@ public class CotServiceImpl extends MasterService implements ICotService {
 
 	@Override
 	public List<ReporteCotDTO> getReporte() throws CotException {
-		// TODO Auto-generated method stub
-		return null;
+		
+		List<ReporteCotDTO> repDto= new ArrayList<ReporteCotDTO>();
+		ReporteCotDTO cot = new ReporteCotDTO();
+		
+		cot.setIdDistritoFederal(1L);
+		cot.setDistritoFederal("Chuhuahua");
+		cot.setSecciones("1,2,3,4,5");
+		cot.setCots("CLAVEELECTORAL1234");
+		cot.setMetaCots(10L);
+		cot.setPorcentajeCobertura(10l);
+		cot.setPorcetajeAvance(50L);
+		cot.setCubiertas(10L);
+		repDto.add(cot);
+		
+		cot = new ReporteCotDTO();
+		cot.setCots("Cot 1");
+        cot.setCubiertas(10L);
+        cot.setDistritoFederal("JUAREZ");
+        cot.setIdDistritoFederal(2L);
+        cot.setMetaCots(20L);
+        cot.setPorcentajeCobertura(30L);
+        cot.setPorcetajeAvance(50L);
+        cot.setSecciones("1,2,3");
+        repDto.add(cot);
+
+        cot = new ReporteCotDTO(); 
+        cot.setCots("Cot 2");
+        cot.setCubiertas(10L);
+        cot.setDistritoFederal("JUAREZ");
+        cot.setIdDistritoFederal(1L);
+        cot.setMetaCots(10L);
+        cot.setPorcentajeCobertura(20L);
+        cot.setPorcetajeAvance(30L);
+        cot.setSecciones("4,5,6");
+        repDto.add(cot);
+        
+        cot = new ReporteCotDTO(); 
+        cot.setCots("Cot 3");
+        cot.setCubiertas(10L);
+        cot.setDistritoFederal("JUAREZ");
+        cot.setIdDistritoFederal(1L);
+        cot.setMetaCots(10L);
+        cot.setPorcentajeCobertura(20L);
+        cot.setPorcetajeAvance(30L);
+        cot.setSecciones("4,5,6");
+        repDto.add(cot);
+        
+        cot = new ReporteCotDTO(); 
+        cot.setCots("Cot 4");
+        cot.setCubiertas(10L);
+        cot.setDistritoFederal("JUAREZ");
+        cot.setIdDistritoFederal(1L);
+        cot.setMetaCots(10L);
+        cot.setPorcentajeCobertura(20L);
+        cot.setPorcetajeAvance(30L);
+        cot.setSecciones("4,5,6");
+        repDto.add(cot);
+        
+        cot = new ReporteCotDTO(); 
+        cot.setCots("Cot 5");
+        cot.setCubiertas(10L);
+        cot.setDistritoFederal("JUAREZ");
+        cot.setIdDistritoFederal(1L);
+        cot.setMetaCots(10L);
+        cot.setPorcentajeCobertura(20L);
+        cot.setPorcetajeAvance(30L);
+        cot.setSecciones("4,5,6");
+        repDto.add(cot);
+        
+        cot = new ReporteCotDTO(); 
+        cot.setCots("Cot 6");
+        cot.setCubiertas(10L);
+        cot.setDistritoFederal("JUAREZ");
+        cot.setIdDistritoFederal(1L);
+        cot.setMetaCots(10L);
+        cot.setPorcentajeCobertura(20L);
+        cot.setPorcetajeAvance(30L);
+        cot.setSecciones("4,5,6");
+        repDto.add(cot);
+        
+        cot = new ReporteCotDTO(); 
+        cot.setCots("Cot 7");
+        cot.setCubiertas(10L);
+        cot.setDistritoFederal("JUAREZ");
+        cot.setIdDistritoFederal(1L);
+        cot.setMetaCots(10L);
+        cot.setPorcentajeCobertura(20L);
+        cot.setPorcetajeAvance(30L);
+        cot.setSecciones("4,5,6");
+        repDto.add(cot);
+        
+        cot = new ReporteCotDTO(); 
+        cot.setCots("Cot 8");
+        cot.setCubiertas(10L);
+        cot.setDistritoFederal("JUAREZ");
+        cot.setIdDistritoFederal(1L);
+        cot.setMetaCots(10L);
+        cot.setPorcentajeCobertura(20L);
+        cot.setPorcetajeAvance(30L);
+        cot.setSecciones("4,5,6");
+        repDto.add(cot);
+        
+        cot = new ReporteCotDTO(); 
+        cot.setCots("Cot 9");
+        cot.setCubiertas(10L);
+        cot.setDistritoFederal("JUAREZ");
+        cot.setIdDistritoFederal(1L);
+        cot.setMetaCots(10L);
+        cot.setPorcentajeCobertura(20L);
+        cot.setPorcetajeAvance(30L);
+        cot.setSecciones("4,5,6");
+        repDto.add(cot);
+        
+		
+		
+		
+		return repDto;
 	}
 }
