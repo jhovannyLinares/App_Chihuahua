@@ -24,7 +24,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import mx.morena.negocio.dto.AsignarSeccionesDTO;
 import mx.morena.negocio.dto.CotDTO;
 import mx.morena.negocio.dto.CotResponseDTO;
-import mx.morena.negocio.dto.ReporteCotDTO;
 import mx.morena.negocio.dto.SeccionDTO;
 import mx.morena.negocio.exception.CotException;
 import mx.morena.negocio.servicios.ICotService;
@@ -185,20 +184,6 @@ public class CotController extends MasterController {
 		}
 	}
 	
-	@GetMapping("/cots/reporte")
-	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	private List<ReporteCotDTO>getReporte(HttpServletResponse response) throws IOException {
-		try {
-			return cotService.getReporte();
-		} catch (CotException e) {
-			e.printStackTrace();
-			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
-			return null;
-		} catch (Exception e ) {
-			e.printStackTrace();
-			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
-			return null;
-		}
-	}
+	
 
 }

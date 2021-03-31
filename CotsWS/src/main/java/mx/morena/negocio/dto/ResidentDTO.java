@@ -1,13 +1,13 @@
-package mx.morena.presentacion.controlador;
+package mx.morena.negocio.dto;
 
-public class Resident {
+public class ResidentDTO {
 
 	String nombre;
-	String aMaterno;
+	String materno;
 
-	public Resident(String nombre, String aMaterno) {
+	public ResidentDTO(String nombre, String materno) {
 		this.nombre = nombre;
-		this.aMaterno = aMaterno;
+		this.materno = materno;
 	}
 
 	public String getNombre() {
@@ -18,12 +18,12 @@ public class Resident {
 		this.nombre = nombre;
 	}
 
-	public String getaMaterno() {
-		return aMaterno;
+	public String getMaterno() {
+		return materno;
 	}
 
-	public void setaMaterno(String aMaterno) {
-		this.aMaterno = aMaterno;
+	public void setMaterno(String materno) {
+		this.materno = materno;
 	}
 
 }
