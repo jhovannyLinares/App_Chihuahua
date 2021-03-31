@@ -36,6 +36,4 @@ public interface IConvencidosRepository {
 
 	List<Convencidos> findByClaveElectorVal(String claveElector);
 	
-	List<Convencidos> getReporteCots();
-	
 }

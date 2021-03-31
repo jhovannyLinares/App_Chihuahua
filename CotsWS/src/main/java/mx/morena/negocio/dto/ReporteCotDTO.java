@@ -2,11 +2,11 @@ package mx.morena.negocio.dto;
 
 public class ReporteCotDTO {
 	
-	private Long idDistritoFederal;
+	private Long distritoId;
 	
-	private String distritoFederal;
+	private String nombreDistrito;
 	
-	private String secciones;
+	private Long secciones;
 	
 	private Long cubiertas;
 	
@@ -18,27 +18,27 @@ public class ReporteCotDTO {
 	
 	private Long porcetajeAvance;
 
-	public Long getIdDistritoFederal() {
-		return idDistritoFederal;
+	public Long getDistritoId() {
+		return distritoId;
 	}
 
-	public void setIdDistritoFederal(Long idDistritoFederal) {
-		this.idDistritoFederal = idDistritoFederal;
+	public void setDistritoId(Long distritoId) {
+		this.distritoId = distritoId;
 	}
 
-	public String getDistritoFederal() {
-		return distritoFederal;
+	public String getNombreDistrito() {
+		return nombreDistrito;
 	}
 
-	public void setDistritoFederal(String distritoFederal) {
-		this.distritoFederal = distritoFederal;
+	public void setNombreDistrito(String nombreDistrito) {
+		this.nombreDistrito = nombreDistrito;
 	}
 
-	public String getSecciones() {
+	public Long getSecciones() {
 		return secciones;
 	}
 
-	public void setSecciones(String secciones) {
+	public void setSecciones(Long secciones) {
 		this.secciones = secciones;
 	}
 

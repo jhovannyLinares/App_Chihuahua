@@ -388,12 +388,31 @@ public class CotServiceImpl extends MasterService implements ICotService {
 	@Override
 	public List<ReporteCotDTO> getReporte() throws CotException {
 		
+//		List<ReporteCotDTO> lstDto = new ArrayList<ReporteCotDTO>();
+//		List <SeccionElectoral> lstSeccion = null;
+//		ReporteCotDTO dto = null;
+//		
+//		lstSeccion = seccionRepository.getDistritos();
+//		
+//		for (SeccionElectoral seccion : lstSeccion) {
+//			dto = new ReporteCotDTO();
+//			
+//			Long countSecciones = seccionRepository.getSecciones(seccion.getDistritoId());
+//			
+//			dto.setDistritoId(seccion.getDistritoId());
+//			dto.setNombreDistrito(seccion.getNombreDistrito());
+//			dto.setSecciones(countSecciones);
+//			
+//			lstDto.add(dto);
+//		}
+//		return lstDto;
+		
 		List<ReporteCotDTO> repDto= new ArrayList<ReporteCotDTO>();
 		ReporteCotDTO cot = new ReporteCotDTO();
 		
-		cot.setIdDistritoFederal(1L);
-		cot.setDistritoFederal("Chuhuahua");
-		cot.setSecciones("1,2,3,4,5");
+		cot.setDistritoId(1L);
+		cot.setNombreDistrito("Chuhuahua");
+		cot.setSecciones(17L);
 		cot.setCots("CLAVEELECTORAL1234");
 		cot.setMetaCots(10L);
 		cot.setPorcentajeCobertura(10l);
@@ -404,100 +423,100 @@ public class CotServiceImpl extends MasterService implements ICotService {
 		cot = new ReporteCotDTO();
 		cot.setCots("Cot 1");
         cot.setCubiertas(10L);
-        cot.setDistritoFederal("JUAREZ");
-        cot.setIdDistritoFederal(2L);
+        cot.setNombreDistrito("JUAREZ");
+        cot.setDistritoId(2L);
         cot.setMetaCots(20L);
         cot.setPorcentajeCobertura(30L);
         cot.setPorcetajeAvance(50L);
-        cot.setSecciones("1,2,3");
+        cot.setSecciones(29L);
         repDto.add(cot);
 
         cot = new ReporteCotDTO(); 
         cot.setCots("Cot 2");
         cot.setCubiertas(10L);
-        cot.setDistritoFederal("JUAREZ");
-        cot.setIdDistritoFederal(1L);
+        cot.setNombreDistrito("JUAREZ");
+        cot.setDistritoId(1L);
         cot.setMetaCots(10L);
         cot.setPorcentajeCobertura(20L);
         cot.setPorcetajeAvance(30L);
-        cot.setSecciones("4,5,6");
+        cot.setSecciones(23L);
         repDto.add(cot);
         
         cot = new ReporteCotDTO(); 
         cot.setCots("Cot 3");
         cot.setCubiertas(10L);
-        cot.setDistritoFederal("JUAREZ");
-        cot.setIdDistritoFederal(1L);
+        cot.setNombreDistrito("JUAREZ");
+        cot.setDistritoId(1L);
         cot.setMetaCots(10L);
         cot.setPorcentajeCobertura(20L);
         cot.setPorcetajeAvance(30L);
-        cot.setSecciones("4,5,6");
+        cot.setSecciones(40L);
         repDto.add(cot);
         
         cot = new ReporteCotDTO(); 
         cot.setCots("Cot 4");
         cot.setCubiertas(10L);
-        cot.setDistritoFederal("JUAREZ");
-        cot.setIdDistritoFederal(1L);
+        cot.setNombreDistrito("JUAREZ");
+        cot.setDistritoId(1L);
         cot.setMetaCots(10L);
         cot.setPorcentajeCobertura(20L);
         cot.setPorcetajeAvance(30L);
-        cot.setSecciones("4,5,6");
+        cot.setSecciones(82L);
         repDto.add(cot);
         
         cot = new ReporteCotDTO(); 
         cot.setCots("Cot 5");
         cot.setCubiertas(10L);
-        cot.setDistritoFederal("JUAREZ");
-        cot.setIdDistritoFederal(1L);
+        cot.setNombreDistrito("JUAREZ");
+        cot.setDistritoId(1L);
         cot.setMetaCots(10L);
         cot.setPorcentajeCobertura(20L);
         cot.setPorcetajeAvance(30L);
-        cot.setSecciones("4,5,6");
+        cot.setSecciones(31L);
         repDto.add(cot);
         
         cot = new ReporteCotDTO(); 
         cot.setCots("Cot 6");
         cot.setCubiertas(10L);
-        cot.setDistritoFederal("JUAREZ");
-        cot.setIdDistritoFederal(1L);
+        cot.setNombreDistrito("JUAREZ");
+        cot.setDistritoId(1L);
         cot.setMetaCots(10L);
         cot.setPorcentajeCobertura(20L);
         cot.setPorcetajeAvance(30L);
-        cot.setSecciones("4,5,6");
+        cot.setSecciones(16L);
         repDto.add(cot);
         
         cot = new ReporteCotDTO(); 
         cot.setCots("Cot 7");
         cot.setCubiertas(10L);
-        cot.setDistritoFederal("JUAREZ");
-        cot.setIdDistritoFederal(1L);
+        cot.setNombreDistrito("JUAREZ");
+        cot.setDistritoId(1L);
         cot.setMetaCots(10L);
         cot.setPorcentajeCobertura(20L);
         cot.setPorcetajeAvance(30L);
-        cot.setSecciones("4,5,6");
+        cot.setSecciones(26L);
         repDto.add(cot);
         
         cot = new ReporteCotDTO(); 
         cot.setCots("Cot 8");
         cot.setCubiertas(10L);
-        cot.setDistritoFederal("JUAREZ");
-        cot.setIdDistritoFederal(1L);
+        cot.setNombreDistrito("JUAREZ");
+        cot.setDistritoId(1L);
         cot.setMetaCots(10L);
         cot.setPorcentajeCobertura(20L);
         cot.setPorcetajeAvance(30L);
-        cot.setSecciones("4,5,6");
+        cot.setSecciones(20L);
         repDto.add(cot);
         
         cot = new ReporteCotDTO(); 
         cot.setCots("Cot 9");
         cot.setCubiertas(10L);
-        cot.setDistritoFederal("JUAREZ");
-        cot.setIdDistritoFederal(1L);
+        cot.setNombreDistrito("JUAREZ");
+        cot.setDistritoId(1L);
         cot.setMetaCots(10L);
         cot.setPorcentajeCobertura(20L);
         cot.setPorcetajeAvance(30L);
-        cot.setSecciones("4,5,6");
+        cot.setSecciones(10L);
         repDto.add(cot);
         
 		

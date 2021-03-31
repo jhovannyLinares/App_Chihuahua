@@ -13,6 +13,10 @@ public class SeccionElectoral {
 	private String municipio;
 
 	private Long cot;
+	
+	private Long distritoId;
+	
+	private String nombreDistrito;
 
 	public Long getId() {
 		return id;
@@ -60,6 +64,22 @@ public class SeccionElectoral {
 
 	public void setCot(Long cot) {
 		this.cot = cot;
+	}
+
+	public Long getDistritoId() {
+		return distritoId;
+	}
+
+	public void setDistritoId(Long distritoId) {
+		this.distritoId = distritoId;
+	}
+
+	public String getNombreDistrito() {
+		return nombreDistrito;
+	}
+
+	public void setNombreDistrito(String nombreDistrito) {
+		this.nombreDistrito = nombreDistrito;
 	}
 
 	

@@ -10,6 +10,9 @@ import org.springframework.stereotype.Repository;
 
 import mx.morena.persistencia.entidad.SeccionElectoral;
 import mx.morena.persistencia.repository.ISeccionElectoralRepository;
+import mx.morena.persistencia.rowmapper.CountSeccionesRowMapper;
+import mx.morena.persistencia.rowmapper.IdMaxConvencidos;
+import mx.morena.persistencia.rowmapper.SeccionCotsRowMapper;
 import mx.morena.persistencia.rowmapper.SeccionRowMapper;
 import mx.morena.persistencia.rowmapper.SeccionesRowMapper;
 
@@ -82,6 +85,26 @@ public class SeccionElectoralRepository implements ISeccionElectoralRepository {
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}
+	}
+
+
+
+	@Override
+	public List<SeccionElectoral> getDistritos() {
+		String sql = "select  distrito_id, federal from app_secciones as2 group by distrito_id, federal order by distrito_id asc";
+		try {
+			return template.queryForObject(sql,	new SeccionCotsRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+
+
+
+	@Override
+	public Long getSecciones(Long id) {
+		String sql = "select count(*) from app_secciones as2 where distrito_id = ? ";
+		return template.queryForObject(sql, new Object[] { id }, new int[] { Types.NUMERIC }, new CountSeccionesRowMapper());
 	}
 
 
