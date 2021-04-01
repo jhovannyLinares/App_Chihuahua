@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import mx.morena.persistencia.entidad.Casilla;
 import mx.morena.persistencia.repository.ICasillaRepository;
 import mx.morena.persistencia.rowmapper.CasillasRowMapper;
+import mx.morena.persistencia.rowmapper.CountCasillasRowMapper;
 
 @Repository
 public class CasillaRepository implements ICasillaRepository {
@@ -70,6 +71,13 @@ public class CasillaRepository implements ICasillaRepository {
 
 		return template.queryForObject(sql, new Object[] { seccionId }, new int[] { Types.NUMERIC },
 				new CasillasRowMapper());
+	}
+
+	@Override
+	public Long countByDistritoAndTipologia(Long distritoId, String tipologia) {
+		String sql = "select count(*) from app_casilla ac where federal_id = ? and tipologia = ?";
+		return template.queryForObject(sql, new Object[] {distritoId, tipologia}, new int[] {Types.NUMERIC, Types.VARCHAR},
+				new CountCasillasRowMapper());
 	}
 
 }

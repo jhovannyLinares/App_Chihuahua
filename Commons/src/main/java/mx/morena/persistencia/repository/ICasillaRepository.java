@@ -18,4 +18,6 @@ public interface ICasillaRepository {
 
 	public List<Casilla> getCasillasSeccion(Long seccionId);
 
+	public Long countByDistritoAndTipologia(Long distritoId, String tipologia);
+
 }

@@ -316,4 +316,16 @@ public List<Convencidos> getConvencidos(Long distritoFederalId, Long idMunicipio
 		}
 	}
 
+
+	@Override
+	public Long countByDistAndTipo(Long distritoId, Long tipo) {
+		String sql = "select count(*) from app_convencidos ac where distrito_federal_id = ? and tipo = ?  ";
+		try {
+			return template.queryForObject(sql, new Object[] { distritoId, tipo}, new int[] { Types.NUMERIC, Types.NUMERIC },
+					new IdMaxConvencidos());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+
 }

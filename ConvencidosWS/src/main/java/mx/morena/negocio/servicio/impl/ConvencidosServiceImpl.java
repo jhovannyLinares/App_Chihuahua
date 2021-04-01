@@ -10,13 +10,16 @@ import org.springframework.stereotype.Service;
 
 import mx.morena.negocio.dto.ConvencidosDTO;
 import mx.morena.negocio.dto.ConvencidosResponseDTO;
-import mx.morena.negocio.dto.ReporteConvencidosDTO;
+import mx.morena.negocio.dto.ReporteDistritalDTO;
 import mx.morena.negocio.dto.ReporteMunicipalDTO;
 import mx.morena.negocio.exception.ConvencidosException;
 import mx.morena.negocio.servicio.IConvencidosService;
 import mx.morena.negocio.util.MapperUtil;
 import mx.morena.persistencia.entidad.Convencidos;
+import mx.morena.persistencia.entidad.SeccionElectoral;
+import mx.morena.persistencia.repository.ICasillaRepository;
 import mx.morena.persistencia.repository.IConvencidosRepository;
+import mx.morena.persistencia.repository.ISeccionElectoralRepository;
 import mx.morena.security.servicio.MasterService;
 
 @Service
@@ -24,6 +27,12 @@ public class ConvencidosServiceImpl extends MasterService implements IConvencido
 
 	@Autowired
 	private IConvencidosRepository convencidosRepository;
+	
+	@Autowired
+	private ISeccionElectoralRepository seccionRepository;
+	
+	@Autowired
+	private ICasillaRepository casillasRepository;
 
 	private static final char ESTATUS_ALTA = 'A';
 	private static String sinClave = "No cuenta con Clave Elector";
@@ -111,9 +120,44 @@ public class ConvencidosServiceImpl extends MasterService implements IConvencido
 	}
 
 	@Override
-	public List<ReporteConvencidosDTO> getReporteDistrital() throws ConvencidosException {
-		// TODO Auto-generated method stub
-		return null;
+	public List<ReporteDistritalDTO> getReporteDistrital(Long usuario) throws ConvencidosException {
+		
+		if(usuario == PERFIL_ESTATAL) {
+			
+			List<ReporteDistritalDTO> lstDistrito = new ArrayList<ReporteDistritalDTO>();
+			List <SeccionElectoral> lstSeccion = null;
+			ReporteDistritalDTO dto = null;
+			
+			lstSeccion = seccionRepository.getDistritos();
+			
+			for(SeccionElectoral seccion : lstSeccion) {
+				Long countSecciones = seccionRepository.getSecciones(seccion.getDistritoId());
+				Long cots = convencidosRepository.countByDistAndTipo(seccion.getDistritoId(), COT);
+				Long urbanas = casillasRepository.countByDistritoAndTipologia(seccion.getDistritoId(), URBANAS);
+				Long noUrbanas = casillasRepository.countByDistritoAndTipologia(seccion.getDistritoId(), NO_URBANAS);
+				Long convencidos = convencidosRepository.countByDistAndTipo(seccion.getDistritoId(), CONVENCIDO);
+				dto = new ReporteDistritalDTO();
+				
+				dto.setIdDistrito(seccion.getDistritoId());
+				dto.setDistrito(seccion.getDistritoId() + "-" +seccion.getNombreDistrito());
+				dto.setSecciones(countSecciones);
+				dto.setUrbanas(urbanas);
+				dto.setNoUrbanas(noUrbanas);
+				dto.setMetaCots(80L);
+				dto.setCots(cots);
+//				dto.setAvanceConvencidos(avanceConvencidos);
+				dto.setConvencidos(convencidos);
+//				dto.setMetaConvencidos(metaConvencidos);
+//				dto.setAvanceConvencidos(avanceConvencidos);
+				
+				lstDistrito.add(dto);
+			}
+			
+			return lstDistrito;
+		}else {
+			throw new ConvencidosException("No cuenta con los permisos suficientes para consultar el reporte", 401);
+		}
+		
 	}
 
 	@Override
