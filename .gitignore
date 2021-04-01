@@ -48,5 +48,3 @@ hs_err_pid*
 
 */application.properties
 
-
-CommonSecurity/src/main/java/mx/morena/security/dto/User.java
