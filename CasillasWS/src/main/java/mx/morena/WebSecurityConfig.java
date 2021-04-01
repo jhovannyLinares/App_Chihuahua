@@ -22,10 +22,6 @@ import mx.morena.security.servicio.JWTAuthorizationFilter;
 @SecurityScheme(name = "bearerAuth", type = SecuritySchemeType.HTTP, bearerFormat = "JWT", scheme = "bearer")
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
-	 @Override
-	    public void configure(WebSecurity webSecurity) throws Exception {
-	        webSecurity.ignoring().antMatchers("/swagger-ui");
-	    }
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {

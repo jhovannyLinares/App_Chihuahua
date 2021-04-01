@@ -16,7 +16,7 @@ public class ReporteCotDTO {
 	
 	private Long cots;
 	
-	private Long porcetajeAvance;
+	private Double porcetajeAvance;
 	
 	private Long total;
 
@@ -76,11 +76,11 @@ public class ReporteCotDTO {
 		this.cots = cots;
 	}
 
-	public Long getPorcetajeAvance() {
+	public Double getPorcetajeAvance() {
 		return porcetajeAvance;
 	}
 
-	public void setPorcetajeAvance(Long porcetajeAvance) {
+	public void setPorcetajeAvance(Double porcetajeAvance) {
 		this.porcetajeAvance = porcetajeAvance;
 	}
 
