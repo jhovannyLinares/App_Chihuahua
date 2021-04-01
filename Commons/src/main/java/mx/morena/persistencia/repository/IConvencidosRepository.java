@@ -36,6 +36,6 @@ public interface IConvencidosRepository {
 
 	List<Convencidos> findByClaveElectorVal(String claveElector);
 
-	Long countByDistritoAndTipo(Long distritoId, Long tipo);
+	Long countByDistritoAndTipo(Long distritoId, Long tipo, char estatus);
 	
 }

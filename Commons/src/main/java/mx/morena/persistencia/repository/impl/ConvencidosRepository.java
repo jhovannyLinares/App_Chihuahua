@@ -306,10 +306,10 @@ public List<Convencidos> getConvencidos(Long distritoFederalId, Long idMunicipio
 
 
 	@Override
-	public Long countByDistritoAndTipo(Long distritoId, Long tipo) {
-		String sql = "select count(*) from app_convencidos ac where distrito_federal_id = ? and tipo = ? ";
+	public Long countByDistritoAndTipo(Long distritoId, Long tipo, char estatus) {
+		String sql = "select count(*) from app_convencidos ac where distrito_federal_id = ? and tipo = ? and estatus = ? ";
 		try {
-			return template.queryForObject(sql, new Object[] { distritoId, tipo }, new int[] { Types.NUMERIC, Types.NUMERIC },
+			return template.queryForObject(sql, new Object[] { distritoId, tipo, estatus }, new int[] { Types.NUMERIC, Types.NUMERIC, Types.VARCHAR },
 					new IdMaxConvencidos());
 		} catch (EmptyResultDataAccessException e) {
 			return null;

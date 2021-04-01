@@ -393,6 +393,8 @@ public class CotServiceImpl extends MasterService implements ICotService {
 //		List <SeccionElectoral> lstSeccion = null;
 //		ReporteCotDTO dto = null;
 //		ReporteCotDTO totales = null;
+//		Long totalSecciones = 0L;
+//		Long totalCots = 0L;
 //		
 //		lstSeccion = seccionRepository.getDistritos();
 //		
@@ -401,7 +403,7 @@ public class CotServiceImpl extends MasterService implements ICotService {
 //			totales = new ReporteCotDTO();
 //			
 //			Long countSecciones = seccionRepository.getSecciones(seccion.getDistritoId());
-//			Long cots = cotRepository.countByDistritoAndTipo(seccion.getDistritoId(), COT);
+//			Long cots = cotRepository.countByDistritoAndTipo(seccion.getDistritoId(), COT, ESTATUS_ALTA);
 //			
 //			dto.setDistritoId(seccion.getDistritoId());
 //			dto.setNombreDistrito(seccion.getNombreDistrito());
@@ -412,9 +414,13 @@ public class CotServiceImpl extends MasterService implements ICotService {
 //			dto.setMetaCots(30L);
 //			dto.setCots(cots);
 //			dto.setPorcetajeAvance(19L);
+//			totalSecciones += countSecciones;
+//			totalCots += cots;
 //			
 //			lstDto.add(dto);
 //		}
+//		System.out.println(totalSecciones);
+//		System.out.println(totalCots);
 //		return lstDto;
 		
 		List<ReporteCotDTO> repDto= new ArrayList<ReporteCotDTO>();
@@ -528,9 +534,6 @@ public class CotServiceImpl extends MasterService implements ICotService {
         cot.setPorcetajeAvance(30L);
         cot.setSecciones(10L);
         repDto.add(cot);
-        
-		
-		
 		
 		return repDto;
 	}
