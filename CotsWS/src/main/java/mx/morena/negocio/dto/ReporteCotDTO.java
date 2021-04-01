@@ -10,13 +10,15 @@ public class ReporteCotDTO {
 	
 	private Long cubiertas;
 	
-	private Long porcentajeCobertura;
+	private Double porcentajeCobertura;
 	
 	private Long metaCots;
 	
-	private String cots;
+	private Long cots;
 	
 	private Long porcetajeAvance;
+	
+	private Long total;
 
 	public Long getDistritoId() {
 		return distritoId;
@@ -50,11 +52,11 @@ public class ReporteCotDTO {
 		this.cubiertas = cubiertas;
 	}
 
-	public Long getPorcentajeCobertura() {
+	public Double getPorcentajeCobertura() {
 		return porcentajeCobertura;
 	}
 
-	public void setPorcentajeCobertura(Long porcentajeCobertura) {
+	public void setPorcentajeCobertura(Double porcentajeCobertura) {
 		this.porcentajeCobertura = porcentajeCobertura;
 	}
 
@@ -66,11 +68,11 @@ public class ReporteCotDTO {
 		this.metaCots = metaCots;
 	}
 
-	public String getCots() {
+	public Long getCots() {
 		return cots;
 	}
 
-	public void setCots(String cots) {
+	public void setCots(Long cots) {
 		this.cots = cots;
 	}
 
@@ -80,5 +82,13 @@ public class ReporteCotDTO {
 
 	public void setPorcetajeAvance(Long porcetajeAvance) {
 		this.porcetajeAvance = porcetajeAvance;
+	}
+
+	public Long getTotal() {
+		return total;
+	}
+
+	public void setTotal(Long total) {
+		this.total = total;
 	}
 }
