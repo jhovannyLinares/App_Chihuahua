@@ -407,7 +407,7 @@ public class CotServiceImpl extends MasterService implements ICotService {
 			totales = new ReporteCotDTO();
 			
 			Long countSecciones = seccionRepository.getSecciones(seccion.getDistritoId());
-			Long cots = cotRepository.countByDistritoAndTipo(seccion.getDistritoId(), COT);
+			Long cots = cotRepository.countByDistritoAndTipo(seccion.getDistritoId(), COT, ESTATUS_ALTA);
 			
 			dto.setDistritoId(seccion.getDistritoId());
 			dto.setNombreDistrito(seccion.getDistritoId() + "-" +seccion.getNombreDistrito());
