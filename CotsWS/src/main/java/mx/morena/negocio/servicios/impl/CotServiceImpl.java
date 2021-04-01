@@ -1,5 +1,7 @@
 package mx.morena.negocio.servicios.impl;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -413,13 +415,15 @@ public class CotServiceImpl extends MasterService implements ICotService {
 			dto.setNombreDistrito(seccion.getDistritoId() + "-" +seccion.getNombreDistrito());
 			dto.setSecciones(countSecciones);
 			dto.setCubiertas(145L);
+			
 			double cobertura = (dto.getCubiertas()*100.0)/countSecciones;
-			dto.setPorcentajeCobertura((cobertura));
+			dto.setPorcentajeCobertura(dosDecimales(cobertura).doubleValue());
+
 			dto.setMetaCots(90L);
 			dto.setCots(cots);
 			double avance = (cots*100.0)/dto.getMetaCots();
 			dto.setPorcetajeAvance(avance);
-			
+
 			
 			totales.setSecciones(totales.getSecciones()+countSecciones );
 			totales.setCubiertas(totales.getCubiertas()+dto.getCubiertas() );
@@ -436,5 +440,13 @@ public class CotServiceImpl extends MasterService implements ICotService {
 		
 		return lstDto;
 
+	}
+	
+	public BigDecimal dosDecimales(double numero) {
+		
+		BigDecimal bd = new BigDecimal(numero);
+		bd = bd.setScale(2, RoundingMode.HALF_UP);
+		return bd;
+		
 	}
 }
