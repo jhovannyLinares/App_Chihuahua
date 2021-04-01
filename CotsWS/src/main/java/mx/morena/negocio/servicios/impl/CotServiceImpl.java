@@ -1,11 +1,10 @@
 package mx.morena.negocio.servicios.impl;
 
 import java.sql.Timestamp;
-import java.text.DecimalFormat;
-import java.util.List;
-import java.util.stream.Collectors;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -389,22 +388,23 @@ public class CotServiceImpl extends MasterService implements ICotService {
 	@Override
 	public List<ReporteCotDTO> getReporte() throws CotException {
 		
-//		List<ReporteCotDTO> lstDto = new ArrayList<ReporteCotDTO>();
-//		List <SeccionElectoral> lstSeccion = null;
-//		ReporteCotDTO dto = null;
-//		ReporteCotDTO totales = null;
-//		Long totalSecciones = 0L;
-//		Long totalCots = 0L;
+
 		List<ReporteCotDTO> lstDto = new ArrayList<ReporteCotDTO>();
 		List <SeccionElectoral> lstSeccion = null;
 		ReporteCotDTO dto = null;
-		ReporteCotDTO totales = null;
+		ReporteCotDTO totales = new ReporteCotDTO();
+		totales.setDistritoId(0L);
+		totales.setNombreDistrito("Totales");
+		totales.setSecciones(0l);
+		totales.setCubiertas(0l);
+		totales.setMetaCots(0l);
+		totales.setCots(0l);
 		
 		lstSeccion = seccionRepository.getDistritos();
 		
 		for (SeccionElectoral seccion : lstSeccion) {
 			dto = new ReporteCotDTO();
-			totales = new ReporteCotDTO();
+//			totales = new ReporteCotDTO();
 			
 			Long countSecciones = seccionRepository.getSecciones(seccion.getDistritoId());
 			Long cots = cotRepository.countByDistritoAndTipo(seccion.getDistritoId(), COT, ESTATUS_ALTA);
@@ -420,125 +420,21 @@ public class CotServiceImpl extends MasterService implements ICotService {
 			double avance = (cots*100.0)/dto.getMetaCots();
 			dto.setPorcetajeAvance(avance);
 			
+			
+			totales.setSecciones(totales.getSecciones()+countSecciones );
+			totales.setCubiertas(totales.getCubiertas()+dto.getCubiertas() );
+			
+			totales.setMetaCots(totales.getMetaCots()+dto.getMetaCots() );
+			totales.setCots(totales.getCots()+dto.getCots() );
+			
 			lstDto.add(dto);
+			
 		}
+		
+		lstDto.add(totales);
+		
+		
 		return lstDto;
-//		
-//		List<ReporteCotDTO> repDto= new ArrayList<ReporteCotDTO>();
-//		ReporteCotDTO cot = new ReporteCotDTO();
-//		
-//		cot.setDistritoId(1L);
-//		cot.setNombreDistrito("Chuhuahua");
-//		cot.setSecciones(17L);
-//		cot.setCots(100L);
-//		cot.setMetaCots(10L);
-//		cot.setPorcentajeCobertura(10.2);
-//		cot.setPorcetajeAvance(50L);
-//		cot.setCubiertas(10L);
-//		repDto.add(cot);
-//		
-//		cot = new ReporteCotDTO();
-//		cot.setCots(50L);
-//        cot.setCubiertas(10L);
-//        cot.setNombreDistrito("JUAREZ");
-//        cot.setDistritoId(2L);
-//        cot.setMetaCots(20L);
-//        cot.setPorcentajeCobertura(30.0);
-//        cot.setPorcetajeAvance(50L);
-//        cot.setSecciones(29L);
-//        repDto.add(cot);
-//
-//        cot = new ReporteCotDTO(); 
-//        cot.setCots(40L);
-//        cot.setCubiertas(10L);
-//        cot.setNombreDistrito("JUAREZ");
-//        cot.setDistritoId(1L);
-//        cot.setMetaCots(10L);
-//        cot.setPorcentajeCobertura(20.0);
-//        cot.setPorcetajeAvance(30L);
-//        cot.setSecciones(23L);
-//        repDto.add(cot);
-//        
-//        cot = new ReporteCotDTO(); 
-//        cot.setCots(10L);
-//        cot.setCubiertas(10L);
-//        cot.setNombreDistrito("JUAREZ");
-//        cot.setDistritoId(1L);
-//        cot.setMetaCots(10L);
-//        cot.setPorcentajeCobertura(20.0);
-//        cot.setPorcetajeAvance(30L);
-//        cot.setSecciones(40L);
-//        repDto.add(cot);
-//        
-//        cot = new ReporteCotDTO(); 
-//        cot.setCots(35L);
-//        cot.setCubiertas(10L);
-//        cot.setNombreDistrito("JUAREZ");
-//        cot.setDistritoId(1L);
-//        cot.setMetaCots(10L);
-//        cot.setPorcentajeCobertura(20.0);
-//        cot.setPorcetajeAvance(30L);
-//        cot.setSecciones(82L);
-//        repDto.add(cot);
-//        
-//        cot = new ReporteCotDTO(); 
-//        cot.setCots(14L);
-//        cot.setCubiertas(10L);
-//        cot.setNombreDistrito("JUAREZ");
-//        cot.setDistritoId(1L);
-//        cot.setMetaCots(10L);
-//        cot.setPorcentajeCobertura(20.0);
-//        cot.setPorcetajeAvance(30L);
-//        cot.setSecciones(31L);
-//        repDto.add(cot);
-//        
-//        cot = new ReporteCotDTO(); 
-//        cot.setCots(42L);
-//        cot.setCubiertas(10L);
-//        cot.setNombreDistrito("JUAREZ");
-//        cot.setDistritoId(1L);
-//        cot.setMetaCots(10L);
-//        cot.setPorcentajeCobertura(20.0);
-//        cot.setPorcetajeAvance(30L);
-//        cot.setSecciones(16L);
-//        repDto.add(cot);
-//        
-//        cot = new ReporteCotDTO(); 
-//        cot.setCots(54L);
-//        cot.setCubiertas(10L);
-//        cot.setNombreDistrito("JUAREZ");
-//        cot.setDistritoId(1L);
-//        cot.setMetaCots(10L);
-//        cot.setPorcentajeCobertura(20.0);
-//        cot.setPorcetajeAvance(30L);
-//        cot.setSecciones(26L);
-//        repDto.add(cot);
-//        
-//        cot = new ReporteCotDTO(); 
-//        cot.setCots(51L);
-//        cot.setCubiertas(10L);
-//        cot.setNombreDistrito("JUAREZ");
-//        cot.setDistritoId(1L);
-//        cot.setMetaCots(10L);
-//        cot.setPorcentajeCobertura(20.0);
-//        cot.setPorcetajeAvance(30L);
-//        cot.setSecciones(20L);
-//        repDto.add(cot);
-//        
-//        cot = new ReporteCotDTO(); 
-//        cot.setCots(45L);
-//        cot.setCubiertas(10L);
-//        cot.setNombreDistrito("JUAREZ");
-//        cot.setDistritoId(1L);
-//        cot.setMetaCots(10L);
-//        cot.setPorcentajeCobertura(20.0);
-//        cot.setPorcetajeAvance(30L);
-//        cot.setSecciones(10L);
-//        repDto.add(cot);
-//        
-//		
-//		
-//		
-//		return repDto;
+
 	}
 }

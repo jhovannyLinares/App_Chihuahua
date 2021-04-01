@@ -30,66 +30,64 @@ public class ReportesController extends MasterController {
 
 	@Autowired
 	private ICotService cotService;
-	
+
 //	@Autowired
 //	private CsvService csvService;
-	
+
 	@GetMapping("/cots")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	private List<ReporteCotDTO>getReporte(HttpServletResponse response) throws IOException {
+	private List<ReporteCotDTO> getReporte(HttpServletResponse response) throws IOException {
 		try {
 			return cotService.getReporte();
 		} catch (CotException e) {
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
 			return null;
-		} catch (Exception e ) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 			return null;
 		}
 	}
-	
-	
+
 	@GetMapping("/cots/download")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-    public void downloadCSV(HttpServletResponse response) throws IOException {
- 
-        String csvFileName = "books.csv";
- 
-        response.setContentType("text/csv");
- 
-        // creates mock data
-        String headerKey = "Content-Disposition";
-        
-        String headerValue = String.format("attachment; filename=\"%s\"",
-                csvFileName);
-        response.setHeader(headerKey, headerValue);
- 
-        ResidentDTO book1 = new ResidentDTO("Effective Java", "Java Best Practices");
- 
-        ResidentDTO book2 = new ResidentDTO("Head First Java", "Java for Beginners");
- 
-        ResidentDTO book3 = new ResidentDTO("Thinking in Java", "Java Core ,In-depth");
- 
-        ResidentDTO book4 = new ResidentDTO("Java Generics and Collections",
-                "Comprehensive guide to generics and collections");
- 
-        List<ResidentDTO> listBooks = Arrays.asList(book1, book2, book3, book4);
- 
-        // uses the Super CSV API to generate CSV data from the model data
-        ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(),
-                CsvPreference.STANDARD_PREFERENCE);
- 
-        String[] header = { "Nombre", "Materno" };
- 
-        csvWriter.writeHeader(header);
- 
-        for (ResidentDTO aBook : listBooks) {
-            csvWriter.write(aBook, header);
-        }
- 
-        csvWriter.close();
-    }
+	public void downloadCSV(HttpServletResponse response) throws IOException {
+
+		String csvFileName = "ReporteCots.csv";
+
+		response.setContentType("text/csv");
+
+		// creates mock data
+		String headerKey = "Content-Disposition";
+
+		String headerValue = String.format("attachment; filename=\"%s\"", csvFileName);
+
+		response.setHeader(headerKey, headerValue);
+
+		try {
+
+			List<ReporteCotDTO> cotDTOs = cotService.getReporte();
+
+			ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
+
+			String[] header = { "distritoId", "nombreDistrito","secciones", "cubiertas","porcentajeCobertura", "metaCots","cots", "porcetajeAvance" };
+
+			csvWriter.writeHeader(header);
+
+			for (ReporteCotDTO aBook : cotDTOs) {
+				csvWriter.write(aBook, header);
+			}
+
+			csvWriter.close();
+
+		} catch (CotException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+		}
+	}
 
 }

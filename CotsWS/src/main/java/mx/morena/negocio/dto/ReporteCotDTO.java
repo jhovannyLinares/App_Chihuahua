@@ -18,8 +18,6 @@ public class ReporteCotDTO {
 	
 	private Double porcetajeAvance;
 	
-	private Long total;
-
 	public Long getDistritoId() {
 		return distritoId;
 	}
@@ -84,11 +82,5 @@ public class ReporteCotDTO {
 		this.porcetajeAvance = porcetajeAvance;
 	}
 
-	public Long getTotal() {
-		return total;
-	}
-
-	public void setTotal(Long total) {
-		this.total = total;
-	}
+	
 }
