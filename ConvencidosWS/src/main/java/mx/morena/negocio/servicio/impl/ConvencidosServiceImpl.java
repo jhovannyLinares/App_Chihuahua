@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import mx.morena.negocio.dto.ConvencidosDTO;
 import mx.morena.negocio.dto.ConvencidosResponseDTO;
+import mx.morena.negocio.dto.ReporteConvencidosDTO;
+import mx.morena.negocio.dto.ReporteMunicipalDTO;
 import mx.morena.negocio.exception.ConvencidosException;
 import mx.morena.negocio.servicio.IConvencidosService;
 import mx.morena.negocio.util.MapperUtil;
@@ -106,6 +108,18 @@ public class ConvencidosServiceImpl extends MasterService implements IConvencido
 			throw new ConvencidosException("El numero de caracteres ingresado en la clave de elector es incorrecto",
 					400);
 		}
+	}
+
+	@Override
+	public List<ReporteConvencidosDTO> getReporteDistrital() throws ConvencidosException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<ReporteMunicipalDTO> getReporteMunicipal() throws ConvencidosException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

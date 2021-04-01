@@ -428,12 +428,22 @@ public class CotServiceImpl extends MasterService implements ICotService {
 			totales.setSecciones(totales.getSecciones()+countSecciones );
 			totales.setCubiertas(totales.getCubiertas()+dto.getCubiertas() );
 			
+			
+			
+			
 			totales.setMetaCots(totales.getMetaCots()+dto.getMetaCots() );
 			totales.setCots(totales.getCots()+dto.getCots() );
+
+			
+			
 			
 			lstDto.add(dto);
 			
 		}
+		totales.setPorcentajeCobertura(dosDecimales((totales.getCubiertas()*100.00)/totales.getSecciones()).doubleValue());
+		
+		totales.setPorcetajeAvance(dosDecimales((totales.getCots()*100.00)/totales.getMetaCots()).doubleValue());
+		
 		
 		lstDto.add(totales);
 		
