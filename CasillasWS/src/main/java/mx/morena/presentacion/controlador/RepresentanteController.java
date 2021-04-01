@@ -92,19 +92,19 @@ public class RepresentanteController extends MasterController {
 		
 		try {
 			long usuario = getUsuario(request);
-		long perfil = getPerfil(request);
-		
-		return representanteService.asignaRepresentante(usuario, perfil, dto);
-		
-	} catch (RepresentanteException e) { 
-		e.printStackTrace();
-		((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
-		return null;
-	} catch (Exception e ) {
-		e.printStackTrace();
-		((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
-		return null;
-	}
+			long perfil = getPerfil(request);
+
+			return representanteService.asignaRepresentante(usuario, perfil, dto);
+
+		} catch (RepresentanteException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+			return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			return null;
+		}
 	}
 	
 }
