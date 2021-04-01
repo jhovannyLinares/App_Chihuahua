@@ -422,7 +422,7 @@ public class CotServiceImpl extends MasterService implements ICotService {
 			dto.setMetaCots(90L);
 			dto.setCots(cots);
 			double avance = (cots*100.0)/dto.getMetaCots();
-			dto.setPorcetajeAvance(avance);
+			dto.setPorcetajeAvance(dosDecimales(avance).doubleValue());
 
 			
 			totales.setSecciones(totales.getSecciones()+countSecciones );
