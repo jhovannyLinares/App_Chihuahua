@@ -2,9 +2,9 @@ package mx.morena.negocio.dto;
 
 public class ReporteDistritalDTO {
 	
-	private Long idDistrito;
+	private Long distritoId;
 	
-	private String distrito;
+	private String nombreDistrito;
 	
 	private Long secciones;
 	
@@ -24,20 +24,20 @@ public class ReporteDistritalDTO {
 		
 	private Double AvanceConvencidos;
 
-	public Long getIdDistrito() {
-		return idDistrito;
+	public Long getDistritoId() {
+		return distritoId;
 	}
 
-	public void setIdDistrito(Long idDistrito) {
-		this.idDistrito = idDistrito;
+	public void setDistritoId(Long distritoId) {
+		this.distritoId = distritoId;
 	}
 
-	public String getDistrito() {
-		return distrito;
+	public String getNombreDistrito() {
+		return nombreDistrito;
 	}
 
-	public void setDistrito(String distrito) {
-		this.distrito = distrito;
+	public void setNombreDistrito(String nombreDistrito) {
+		this.nombreDistrito = nombreDistrito;
 	}
 
 	public Long getSecciones() {

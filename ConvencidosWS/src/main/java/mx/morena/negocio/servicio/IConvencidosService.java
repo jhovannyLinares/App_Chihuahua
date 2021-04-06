@@ -18,7 +18,7 @@ public interface IConvencidosService {
 
 	boolean findByClaveElector(String claveElector) throws ConvencidosException;
 	
-	List<ReporteDistritalDTO> getReporteDistrital(Long usuario) throws ConvencidosException;
+	List<ReporteDistritalDTO> getReporteDistrital(Long perfil) throws ConvencidosException;
 	
 	List<ReporteMunicipalDTO> getReporteMunicipal()throws ConvencidosException;
 
