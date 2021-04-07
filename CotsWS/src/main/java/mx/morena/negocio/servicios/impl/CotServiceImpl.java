@@ -471,6 +471,7 @@ public class CotServiceImpl extends MasterService implements ICotService {
 
 		List<ReporteCotDTO> cotDTOs = getReporte();
 
+		//Nombre y orden de los encabezados en el excel
 		String[] header = { "distritoId", "nombreDistrito", "secciones", "cubiertas", "porcentajeCobertura", "metaCots",
 				"cots", "porcetajeAvance" };
 
