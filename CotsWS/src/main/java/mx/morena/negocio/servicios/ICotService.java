@@ -1,6 +1,9 @@
 package mx.morena.negocio.servicios;
 
+import java.io.IOException;
 import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
 
 import mx.morena.negocio.dto.CotDTO;
 import mx.morena.negocio.dto.CotResponseDTO;
@@ -27,4 +30,6 @@ public interface ICotService {
 	public boolean getByCurp(String curp) throws CotException;
 	
 	public List<ReporteCotDTO> getReporte() throws CotException;
+
+	public void getReporteDownload(HttpServletResponse response) throws CotException, IOException;
 }

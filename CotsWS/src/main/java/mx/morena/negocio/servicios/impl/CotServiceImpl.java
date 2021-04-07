@@ -1,5 +1,6 @@
 package mx.morena.negocio.servicios.impl;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Timestamp;
@@ -7,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -459,4 +462,23 @@ public class CotServiceImpl extends MasterService implements ICotService {
 		return bd;
 		
 	}
+
+	@Override
+	public void getReporteDownload(HttpServletResponse response) throws CotException, IOException {
+
+		// Asignacion de nombre al archivo CSV
+		setNameFile(response, CSV_COTS);
+
+		List<ReporteCotDTO> cotDTOs = getReporte();
+
+		String[] header = { "distritoId", "nombreDistrito", "secciones", "cubiertas", "porcentajeCobertura", "metaCots",
+				"cots", "porcetajeAvance" };
+
+		setWriterFile(response, cotDTOs, header);
+
+	}
+
+	
+
+	
 }

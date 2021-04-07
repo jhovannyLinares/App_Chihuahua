@@ -59,7 +59,7 @@ public class RepresentanteController extends MasterController {
 	@CrossOrigin
 	public List<TipoRepDTO> getTipoRep(HttpServletResponse response,HttpServletRequest request) throws IOException{
 		
-		long perfil = getPerfil(request);
+//		long perfil = getPerfil(request);
 			
 			return representanteService.getAllTipo();
 			

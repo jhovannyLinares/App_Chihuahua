@@ -1,6 +1,14 @@
 package mx.morena.security.servicio;
 
+import java.io.IOException;
+import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.log4j.Logger;
+import org.supercsv.io.CsvBeanWriter;
+import org.supercsv.io.ICsvBeanWriter;
+import org.supercsv.prefs.CsvPreference;
 
 public class MasterService {
 	
@@ -36,5 +44,35 @@ public class MasterService {
 	
 	protected static final String URBANAS = "Urbana";
 	protected static final String NO_URBANAS = "No urbana";
+	
+	
+	protected static final String CSV_COTS = "ReporteCots.csv";
+	
+	private static final String HEADER_KEY = "Content-Disposition";
+	private static final String CONTENT_TYPE = "text/csv";
+	private static final String ATTACHMENT = "attachment; filename=\"%s\"";
 
+	protected void setNameFile(HttpServletResponse response, String nameReport) {
+
+		String headerValue = String.format(ATTACHMENT, nameReport);
+		response.setHeader(HEADER_KEY, headerValue);
+		response.setContentType(CONTENT_TYPE);
+
+	}
+	
+	
+	protected void setWriterFile(HttpServletResponse response, List<?> objects,String[] header) throws IOException {
+
+		ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
+
+		csvWriter.writeHeader(header);
+
+		for (Object object : objects) {
+			csvWriter.write(object, header);
+		}
+
+		csvWriter.close();
+
+	}
+	
 }
