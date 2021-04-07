@@ -217,7 +217,7 @@ public class ConvencidosServiceImpl extends MasterService implements IConvencido
 			totales.setCots(0L);
 			totales.setPorcentajeAvanceCots(0.00);
 			totales.setMetaConvencidos(0L);
-			totales.setConvencidos(0L);
+			totales.setTotalConvencidos(0L);
 			totales.setPorcentajeAvanceConvencidos(0.00);
 			totales.setSecciones(0L);
 			
@@ -240,7 +240,7 @@ public class ConvencidosServiceImpl extends MasterService implements IConvencido
 				reporteDto.setCots(cots);
 				reporteDto.setPorcentajeAvanceCots(null);
 				reporteDto.setMetaConvencidos(90L);
-				reporteDto.setConvencidos(convencidos);
+				reporteDto.setTotalConvencidos(convencidos);
 				reporteDto.setPorcentajeAvanceConvencidos(null);
 				reporteDto.setSecciones(countSecciones);
 				
@@ -255,13 +255,13 @@ public class ConvencidosServiceImpl extends MasterService implements IConvencido
 				totales.setMetaCots(totales.getMetaCots() + reporteDto.getMetaCots() );
 				totales.setCots(totales.getCots() + reporteDto.getCots() );
 				totales.setMetaConvencidos(totales.getMetaConvencidos() + reporteDto.getMetaConvencidos());
-				totales.setConvencidos(totales.getConvencidos() + reporteDto.getConvencidos());
+				totales.setTotalConvencidos(totales.getTotalConvencidos() + reporteDto.getTotalConvencidos());
 				totales.setSecciones(totales.getSecciones() + reporteDto.getSecciones());
 				
 				lstDto.add(reporteDto);
 			}
 			totales.setPorcentajeAvanceCots(dosDecimales((totales.getCots() * 100.0) / totales.getMetaCots()).doubleValue());
-			totales.setPorcentajeAvanceConvencidos(dosDecimales((totales.getConvencidos() * 100.0) / totales.getMetaConvencidos()).doubleValue());
+			totales.setPorcentajeAvanceConvencidos(dosDecimales((totales.getTotalConvencidos() * 100.0) / totales.getMetaConvencidos()).doubleValue());
 			
 			lstDto.add(totales);
 			
@@ -381,4 +381,17 @@ public class ConvencidosServiceImpl extends MasterService implements IConvencido
 		}
 	}
 
+	@Override
+	public void getReporteConvMunicipalDownload(HttpServletResponse response, Long perfil) throws ConvencidosException, IOException {
+		// Asignacion de nombre al archivo CSV
+		setNameFile(response, CSV_CONV_MUNICIPAL);
+		
+		List<ReporteMunicipalDTO> convMunicipalDTOs = getReporteMunicipal(perfil);
+
+		//Nombre y orden de los encabezados en el excel
+		String[] header = { "idMunicipio", "municipio","secciones", "urbanas","noUrbanas", "metaCots","cots", "porcentajeAvanceCots",
+							"metaConvencidos", "totalConvencidos", "porcentajeAvanceConvencidos" };
+
+		setWriterFile(response, convMunicipalDTOs, header);
+	}
 }

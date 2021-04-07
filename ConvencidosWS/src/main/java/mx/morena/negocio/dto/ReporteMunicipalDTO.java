@@ -20,7 +20,7 @@ public class ReporteMunicipalDTO {
 	
 	private Long metaConvencidos;
 	
-	private Long convencidos;
+	private Long totalConvencidos;
 	
 	private Double porcentajeAvanceConvencidos;
 
@@ -88,14 +88,6 @@ public class ReporteMunicipalDTO {
 		this.metaConvencidos = metaConvencidos;
 	}
 
-	public Long getConvencidos() {
-		return convencidos;
-	}
-
-	public void setConvencidos(Long totalConvencidos) {
-		this.convencidos = totalConvencidos;
-	}
-
 	public Double getPorcentajeAvanceConvencidos() {
 		return porcentajeAvanceConvencidos;
 	}
@@ -110,6 +102,14 @@ public class ReporteMunicipalDTO {
 
 	public void setSecciones(Long secciones) {
 		this.secciones = secciones;
+	}
+
+	public Long getTotalConvencidos() {
+		return totalConvencidos;
+	}
+
+	public void setTotalConvencidos(Long totalConvencidos) {
+		this.totalConvencidos = totalConvencidos;
 	}
 
 }

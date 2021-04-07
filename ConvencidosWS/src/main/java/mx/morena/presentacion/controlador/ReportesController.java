@@ -125,4 +125,18 @@ public class ReportesController extends MasterController {
 		}
 	}
 	
+	@GetMapping("/convencidosMunicipal/download")
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	public void downloadMunicipalCSV(HttpServletResponse response,  HttpServletRequest request) throws IOException {
+		try {
+			long perfil = getPerfil(request);
+			convencidosService.getReporteConvMunicipalDownload(response, perfil);
+		} catch (ConvencidosException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+		}
+	}
 }

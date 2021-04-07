@@ -49,6 +49,7 @@ public class MasterService {
 	protected static final String CSV_COTS = "ReporteCots.csv";
 	protected static final String CSV_CONV_DIST = "ReporteConvencidosDistrital.csv";
 	protected static final String CSV_CONV_LOCAL = "ReporteConvencidosLocal.csv";
+	protected static final String CSV_CONV_MUNICIPAL = "ReporteConvencidosMunicipal.csv";
 	
 	private static final String HEADER_KEY = "Content-Disposition";
 	private static final String CONTENT_TYPE = "text/csv";

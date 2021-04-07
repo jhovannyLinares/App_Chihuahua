@@ -28,7 +28,8 @@ public interface IConvencidosService {
 	List<ReporteMunicipalDTO> getReporteMunicipal(long perfil)throws ConvencidosException;
 
 	void getReporteDownload(HttpServletResponse response, long perfil) throws ConvencidosException, IOException;
-
 	
 	public void getReporteLocalDownload(HttpServletResponse response, Long perfil) throws ConvencidosException, IOException;
+	
+	public void getReporteConvMunicipalDownload(HttpServletResponse response, Long perfil) throws ConvencidosException, IOException;
 }
