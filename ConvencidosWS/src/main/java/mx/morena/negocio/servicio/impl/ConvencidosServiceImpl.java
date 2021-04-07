@@ -1,6 +1,6 @@
 package mx.morena.negocio.servicio.impl;
 
-import java.io.IOException;
+//import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Timestamp;
@@ -8,20 +8,21 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.servlet.http.HttpServletResponse;
+//import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.supercsv.io.CsvBeanWriter;
-import org.supercsv.io.ICsvBeanWriter;
-import org.supercsv.prefs.CsvPreference;
+//import org.springframework.web.bind.annotation.GetMapping;
+//import org.supercsv.io.CsvBeanWriter;
+//import org.supercsv.io.ICsvBeanWriter;
+//import org.supercsv.prefs.CsvPreference;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+//import io.swagger.v3.oas.annotations.Operation;
+//import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import mx.morena.negocio.dto.ConvencidosDTO;
 import mx.morena.negocio.dto.ConvencidosResponseDTO;
 import mx.morena.negocio.dto.ReporteDistritalDTO;
+import mx.morena.negocio.dto.ReporteLocalDTO;
 import mx.morena.negocio.dto.ReporteMunicipalDTO;
 import mx.morena.negocio.exception.ConvencidosException;
 import mx.morena.negocio.servicio.IConvencidosService;
@@ -204,14 +205,79 @@ public class ConvencidosServiceImpl extends MasterService implements IConvencido
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public List<ReporteLocalDTO> getReporteLocal(Long perfil) throws ConvencidosException {
+		if(perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL || perfil == PERFIL_LOCAL) {
+			
+			List<ReporteLocalDTO> lstLocal = new ArrayList<ReporteLocalDTO>();
+			List <SeccionElectoral> lstSeccion = null;
+			ReporteLocalDTO dto = null;
+			ReporteLocalDTO totales = new ReporteLocalDTO();
+			totales.setIdDistrito(0L);
+			totales.setDistrito("Totales");
+			totales.setSecciones(0L);
+			totales.setUrbanas(0L);
+			totales.setNoUrbanas(0L);
+			totales.setMetaCots(0L);
+			totales.setCots(0L);
+			totales.setPorcentajeAvanceCots(0.00);
+			totales.setMetaConvencidos(0L);
+			totales.setTotalConvencidos(0L);
+			totales.setPorcentajeAvanceConvencidos(0.00);
+			
+			lstSeccion = seccionRepository.getLocal();
+			
+			for(SeccionElectoral seccion : lstSeccion) {
+				Long countSecciones = seccionRepository.getSeccionesLocal(seccion.getLocalId());
+				Long cots = convencidosRepository.countByLocalAndTipo(seccion.getLocalId(), COT);
+				Long urbanas = casillasRepository.countByLocalAndTipologia(seccion.getLocalId(), URBANAS);
+				Long noUrbanas = casillasRepository.countByLocalAndTipologia(seccion.getLocalId(), NO_URBANAS);
+				Long convencidos = convencidosRepository.countByLocalAndTipo(seccion.getLocalId(), CONVENCIDO);
+				dto = new ReporteLocalDTO();
+				
+				dto.setIdDistrito(seccion.getLocalId());
+				dto.setDistrito(seccion.getLocalId() + "-" +seccion.getLocal());
+				dto.setSecciones(countSecciones);
+				dto.setUrbanas(urbanas);
+				dto.setNoUrbanas(noUrbanas);
+				dto.setMetaCots(55L);
+				dto.setCots(cots);
+				double sub1 = (cots * 100.00)/ dto.getMetaCots();
+				dto.setPorcentajeAvanceCots(dosDecimales(sub1).doubleValue());
+				dto.setMetaConvencidos(45L);
+				dto.setTotalConvencidos(convencidos);
+				double sub2 = (convencidos * 100.00)/ dto.getMetaConvencidos();
+				dto.setPorcentajeAvanceConvencidos(dosDecimales(sub2).doubleValue());
+				
+				totales.setSecciones(totales.getSecciones() + countSecciones);
+				totales.setUrbanas(totales.getUrbanas() + urbanas);
+				totales.setNoUrbanas(totales.getNoUrbanas() + noUrbanas);
+				totales.setMetaCots(totales.getMetaCots() + dto.getMetaCots());
+				totales.setCots(totales.getCots() + cots);
+				totales.setMetaConvencidos(totales.getMetaConvencidos() + dto.getMetaConvencidos());
+				totales.setTotalConvencidos(totales.getTotalConvencidos() + convencidos);
+				
+				lstLocal.add(dto);
+			}
+			
+			totales.setPorcentajeAvanceCots(dosDecimales((totales.getCots() * 100.00)/ totales.getMetaCots()).doubleValue());
+			totales.setPorcentajeAvanceConvencidos(dosDecimales((totales.getTotalConvencidos() * 100.00)/totales.getMetaConvencidos()).doubleValue());
+			
+			lstLocal.add(totales);
+			
+			return lstLocal;
+		}else {
+			throw new ConvencidosException("No cuenta con los permisos suficientes para consultar el reporte", 401);
+		}
+	}
 	
 	public BigDecimal dosDecimales(double numero) {
-
+		
 		BigDecimal bd = new BigDecimal(numero);
 		bd = bd.setScale(2, RoundingMode.HALF_UP);
 		return bd;
-
+		
 	}
-
 
 }

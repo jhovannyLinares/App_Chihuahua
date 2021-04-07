@@ -80,4 +80,10 @@ public class CasillaRepository implements ICasillaRepository {
 				new CountCasillasRowMapper());
 	}
 
+	@Override
+	public Long countByLocalAndTipologia(Long localId, String tipologia) {
+		String sql = "select count(*) from app_casilla ac where local_id = ? and tipologia = ?";
+		return template.queryForObject(sql, new Object[] {localId, tipologia}, new int[] {Types.NUMERIC, Types.VARCHAR},new CountCasillasRowMapper());
+	}
+
 }

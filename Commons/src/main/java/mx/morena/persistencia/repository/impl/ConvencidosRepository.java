@@ -328,4 +328,19 @@ public List<Convencidos> getConvencidos(Long distritoFederalId, Long idMunicipio
 		}
 	}
 
+
+	@Override
+	public Long countByLocalAndTipo(Long localId, Long tipo) {
+		String sql = "select count(*) from app_convencidos ac "
+				+ "inner join app_secciones as2 "
+				+ "on ac.seccion_id = as2.id "
+				+ "where as2.local_id = ? and tipo = ? ";
+		try {
+			return template.queryForObject(sql, new Object[] { localId, tipo}, new int[] { Types.NUMERIC, Types.NUMERIC },
+					new IdMaxConvencidos());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+
 }

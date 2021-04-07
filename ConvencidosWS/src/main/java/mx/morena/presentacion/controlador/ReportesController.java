@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import mx.morena.negocio.dto.ReporteLocalDTO;
 import mx.morena.negocio.dto.ReporteDistritalDTO;
 import mx.morena.negocio.dto.ReporteMunicipalDTO;
 import mx.morena.negocio.exception.ConvencidosException;
@@ -50,10 +51,12 @@ public class ReportesController extends MasterController {
 	
 	@GetMapping("/convencidosLocal")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	private java.util.List<ReporteConvencidosDTO>getReporteLocal(HttpServletResponse response) throws IOException{
+	private List<ReporteLocalDTO>getReporteLocal(HttpServletResponse response, HttpServletRequest request) throws IOException{
+		
+		long perfil = getPerfil(request);
 		
 		try {
-			return convencidosService.getReporteDistrital();
+			return convencidosService.getReporteLocal(perfil);
 		} catch (ConvencidosException e) {
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());

@@ -1,6 +1,6 @@
 package mx.morena.negocio.dto;
 
-public class ReporteConvencidosDTO {
+public class ReporteLocalDTO {
 	
 	private Long idDistrito;
 	
@@ -17,6 +17,8 @@ public class ReporteConvencidosDTO {
 	private Long cots;
 	
 	private Double porcentajeAvanceCots;
+	
+	private Long metaConvencidos;
 	
 	private Long totalConvencidos;
 	
@@ -84,6 +86,14 @@ public class ReporteConvencidosDTO {
 
 	public void setPorcentajeAvanceCots(Double porcentajeAvanceCots) {
 		this.porcentajeAvanceCots = porcentajeAvanceCots;
+	}
+
+	public Long getMetaConvencidos() {
+		return metaConvencidos;
+	}
+
+	public void setMetaConvencidos(Long metaConvencidos) {
+		this.metaConvencidos = metaConvencidos;
 	}
 
 	public Long getTotalConvencidos() {

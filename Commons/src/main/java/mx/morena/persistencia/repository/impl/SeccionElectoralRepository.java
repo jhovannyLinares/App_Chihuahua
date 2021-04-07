@@ -12,6 +12,7 @@ import mx.morena.persistencia.entidad.SeccionElectoral;
 import mx.morena.persistencia.repository.ISeccionElectoralRepository;
 import mx.morena.persistencia.rowmapper.CountSeccionesRowMapper;
 import mx.morena.persistencia.rowmapper.IdMaxConvencidos;
+import mx.morena.persistencia.rowmapper.SeccionConvencidosRowMapper;
 import mx.morena.persistencia.rowmapper.SeccionCotsRowMapper;
 import mx.morena.persistencia.rowmapper.SeccionRowMapper;
 import mx.morena.persistencia.rowmapper.SeccionesRowMapper;
@@ -105,6 +106,26 @@ public class SeccionElectoralRepository implements ISeccionElectoralRepository {
 	public Long getSecciones(Long id) {
 		String sql = "select count(*) from app_secciones as2 where distrito_id = ? ";
 		return template.queryForObject(sql, new Object[] { id }, new int[] { Types.NUMERIC }, new CountSeccionesRowMapper());
+	}
+
+
+
+	@Override
+	public Long getSeccionesLocal(Long id) {
+		String sql = "select count(*) from app_secciones as2 where local_id = ? ";
+		return template.queryForObject(sql, new Object[] { id }, new int[] { Types.NUMERIC }, new CountSeccionesRowMapper());
+	}
+
+
+
+	@Override
+	public List<SeccionElectoral> getLocal() {
+		String sql = "select  local_id, local from app_secciones as2 group by local_id, local order by local_id asc";
+		try {
+			return template.queryForObject(sql,	new SeccionConvencidosRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
 	}
 
 

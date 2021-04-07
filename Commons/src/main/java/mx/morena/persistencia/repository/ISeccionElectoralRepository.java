@@ -21,6 +21,10 @@ public interface ISeccionElectoralRepository {
 	List<SeccionElectoral> getSeccionesLibresByMpo(Long idMunicipio);
 
 	List<SeccionElectoral> getDistritos();
+	
+	List<SeccionElectoral> getLocal();
 
 	Long getSecciones(Long id);
+	
+	Long getSeccionesLocal(Long id);
 }

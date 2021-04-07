@@ -17,6 +17,10 @@ public class SeccionElectoral {
 	private Long distritoId;
 	
 	private String nombreDistrito;
+	
+	private Long localId;
+	
+	private String local;
 
 	public Long getId() {
 		return id;
@@ -82,6 +86,19 @@ public class SeccionElectoral {
 		this.nombreDistrito = nombreDistrito;
 	}
 
-	
+	public Long getLocalId() {
+		return localId;
+	}
 
+	public void setLocalId(Long localId) {
+		this.localId = localId;
+	}
+
+	public String getLocal() {
+		return local;
+	}
+
+	public void setLocal(String local) {
+		this.local = local;
+	}
 }
