@@ -1,7 +1,6 @@
 package mx.morena.negocio.servicio.impl;
 
 import java.io.IOException;
-//import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Timestamp;
@@ -11,17 +10,9 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
-//import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-//import org.springframework.web.bind.annotation.GetMapping;
-//import org.supercsv.io.CsvBeanWriter;
-//import org.supercsv.io.ICsvBeanWriter;
-//import org.supercsv.prefs.CsvPreference;
 
-//import io.swagger.v3.oas.annotations.Operation;
-//import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import mx.morena.negocio.dto.ConvencidosDTO;
 import mx.morena.negocio.dto.ConvencidosResponseDTO;
 import mx.morena.negocio.dto.ReporteDistritalDTO;
@@ -369,4 +360,25 @@ public class ConvencidosServiceImpl extends MasterService implements IConvencido
 		setWriterFile(response, convDTOs, header);
 
 	}
+	
+	@Override
+	public void getReporteLocalDownload(HttpServletResponse response, Long perfil)
+			throws ConvencidosException, IOException {
+		if(perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL || perfil == PERFIL_LOCAL) {
+			// Asignacion de nombre al archivo CSV
+			setNameFile(response, CSV_CONV_LOCAL);
+
+			List<ReporteLocalDTO> localDTOs = getReporteLocal(perfil);
+
+			//Nombre y orden de los encabezados en el excel
+			String[] header = { "idDistrito", "distrito", "secciones", "urbanas", "noUrbanas", "metaCots",
+					"cots", "porcentajeAvanceCots", "metaConvencidos", "totalConvencidos", "porcentajeAvanceConvencidos" };
+
+			setWriterFile(response, localDTOs, header);
+			
+		} else {
+			throw new ConvencidosException("No cuenta con permisos suficientes para descargar el reporte", 401);
+		}
+	}
+
 }

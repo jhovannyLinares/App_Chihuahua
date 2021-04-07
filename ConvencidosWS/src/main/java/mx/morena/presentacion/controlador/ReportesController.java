@@ -106,4 +106,23 @@ public class ReportesController extends MasterController {
 			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 	}
+	
+	@GetMapping("/convencidosLocal/download")	
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	public void downloadLocalCSV(HttpServletResponse response,  HttpServletRequest request) throws IOException {
+		
+		long perfil = getPerfil(request);
+		try {
+
+			convencidosService.getReporteLocalDownload(response, perfil);
+
+		} catch (ConvencidosException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+		}
+	}
+	
 }

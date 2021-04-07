@@ -29,4 +29,6 @@ public interface IConvencidosService {
 
 	void getReporteDownload(HttpServletResponse response, long perfil) throws ConvencidosException, IOException;
 
+	
+	public void getReporteLocalDownload(HttpServletResponse response, Long perfil) throws ConvencidosException, IOException;
 }
