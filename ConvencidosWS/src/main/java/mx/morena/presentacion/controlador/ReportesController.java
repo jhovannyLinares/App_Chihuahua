@@ -22,7 +22,7 @@ import mx.morena.negocio.servicio.IConvencidosService;
 import mx.morena.security.controller.MasterController;
 
 @RestController
-@RequestMapping(value = "reportes")
+@RequestMapping(value = "/reporte")
 @CrossOrigin
 public class ReportesController extends MasterController {
 	
@@ -89,4 +89,21 @@ public class ReportesController extends MasterController {
 
 	}
 	
+	@GetMapping("/convencidosDistrital/download")	
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	public void downloadCSV(HttpServletResponse response, HttpServletRequest request) throws IOException {
+		
+		try {
+
+			long perfil = getPerfil(request);
+			convencidosService.getReporteDownload(response, perfil);
+
+		} catch (ConvencidosException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+		}
+	}
 }

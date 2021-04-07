@@ -1,5 +1,6 @@
 package mx.morena.negocio.servicio.impl;
 
+import java.io.IOException;
 //import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -7,6 +8,8 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
 
 //import javax.servlet.http.HttpServletResponse;
 
@@ -351,4 +354,19 @@ public class ConvencidosServiceImpl extends MasterService implements IConvencido
 		
 	}
 
+	@Override
+	public void getReporteDownload(HttpServletResponse response, long perfil) throws ConvencidosException, IOException {
+
+		// Asignacion de nombre al archivo CSV
+		setNameFile(response, CSV_CONV_DIST);
+
+		List<ReporteDistritalDTO> convDTOs = getReporteDistrital(perfil);
+
+		//Nombre y orden de los encabezados en el excel
+		String[] header = { "idDistrito", "Distrito", "secciones", "urbanas", "noUrbanas", "metaCots",
+				"cots", "porcentajeAvanceCots", "metaConvencidos", "totalConvencidos", "porcentajeAvanceConvencidos" };
+
+		setWriterFile(response, convDTOs, header);
+
+	}
 }

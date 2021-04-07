@@ -1,6 +1,9 @@
 package mx.morena.negocio.servicio;
 
+import java.io.IOException;
 import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
 
 import mx.morena.negocio.dto.ConvencidosDTO;
 import mx.morena.negocio.dto.ConvencidosResponseDTO;
@@ -23,5 +26,7 @@ public interface IConvencidosService {
 	List<ReporteLocalDTO> getReporteLocal(Long perfil) throws ConvencidosException;
 	
 	List<ReporteMunicipalDTO> getReporteMunicipal(long perfil)throws ConvencidosException;
-	
+
+	void getReporteDownload(HttpServletResponse response, long perfil) throws ConvencidosException, IOException;
+
 }
