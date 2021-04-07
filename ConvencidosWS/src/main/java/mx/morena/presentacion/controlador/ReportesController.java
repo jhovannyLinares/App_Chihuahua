@@ -22,7 +22,7 @@ import mx.morena.negocio.servicio.IConvencidosService;
 import mx.morena.security.controller.MasterController;
 
 @RestController
-@RequestMapping(value = "/reporte")
+@RequestMapping(value = "reportes")
 @CrossOrigin
 public class ReportesController extends MasterController {
 	
