@@ -145,14 +145,14 @@ public class ConvencidosServiceImpl extends MasterService implements IConvencido
 			List<SeccionElectoral> lstSeccion = null;
 			ReporteDistritalDTO dto = null;
 			ReporteDistritalDTO totales = new ReporteDistritalDTO();
-			totales.setDistritoId(0L);
-			totales.setNombreDistrito("Totales");
+			totales.setIdDistrito(0L);
+			totales.setDistrito("Totales");
 			totales.setSecciones(0l);
 			totales.setUrbanas(0L);
 			totales.setNoUrbanas(0L);
 			totales.setMetaCots(0l);
 			totales.setCots(0l);
-			totales.setConvencidos(0L);
+			totales.setTotalConvencidos(0L);
 			totales.setMetaConvencidos(0L);
 
 			lstSeccion = seccionRepository.getDistritos();
@@ -165,8 +165,8 @@ public class ConvencidosServiceImpl extends MasterService implements IConvencido
 				Long convencidos = convencidosRepository.countByDistAndTipo(seccion.getDistritoId(), CONVENCIDO);
 				dto = new ReporteDistritalDTO();
 
-				dto.setDistritoId(seccion.getDistritoId());
-				dto.setNombreDistrito(seccion.getDistritoId() + "-" + seccion.getNombreDistrito());
+				dto.setIdDistrito(seccion.getDistritoId());
+				dto.setDistrito(seccion.getDistritoId() + "-" + seccion.getNombreDistrito());
 				dto.setSecciones(countSecciones);
 				dto.setUrbanas(urbanas);
 				dto.setNoUrbanas(noUrbanas);
@@ -174,13 +174,13 @@ public class ConvencidosServiceImpl extends MasterService implements IConvencido
 				dto.setCots(cots);
 				
 				double avanceCots = (cots*100.0)/dto.getMetaCots();
-     			dto.setAvanceCots(dosDecimales(avanceCots).doubleValue());
+     			dto.setPorcentajeAvanceCots(dosDecimales(avanceCots).doubleValue());
      			
-				dto.setConvencidos(convencidos);
+				dto.setTotalConvencidos(convencidos);
 				dto.setMetaConvencidos(83L);
 				
 				double avanceConvencidos = (convencidos*100.0)/dto.getMetaConvencidos();
-				dto.setAvanceConvencidos(dosDecimales(avanceConvencidos).doubleValue());
+				dto.setPorcentajeAvanceConvencidos(dosDecimales(avanceConvencidos).doubleValue());
 				
 				totales.setSecciones(totales.getSecciones()+countSecciones );
 				totales.setUrbanas(totales.getUrbanas()+dto.getUrbanas());
@@ -188,13 +188,13 @@ public class ConvencidosServiceImpl extends MasterService implements IConvencido
 				totales.setMetaCots(totales.getMetaCots()+dto.getMetaCots() );
 				totales.setCots(totales.getCots()+dto.getCots() );	
 				totales.setMetaConvencidos(totales.getMetaConvencidos()+dto.getMetaConvencidos());
-				totales.setConvencidos(totales.getConvencidos()+dto.getConvencidos());				
+				totales.setTotalConvencidos(totales.getTotalConvencidos()+dto.getTotalConvencidos());				
 
 				lstDistrito.add(dto);
 			}
 
-			totales.setAvanceCots(dosDecimales((totales.getCots()*100.0)/ totales.getMetaCots()).doubleValue());
-			totales.setAvanceConvencidos(dosDecimales((totales.getConvencidos()*100.0)/totales.getMetaConvencidos()).doubleValue());
+			totales.setPorcentajeAvanceCots(dosDecimales((totales.getCots()*100.0)/ totales.getMetaCots()).doubleValue());
+			totales.setPorcentajeAvanceConvencidos(dosDecimales((totales.getTotalConvencidos()*100.0)/totales.getMetaConvencidos()).doubleValue());
 			
 			lstDistrito.add(totales);
 			

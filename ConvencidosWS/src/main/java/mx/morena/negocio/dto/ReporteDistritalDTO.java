@@ -2,9 +2,9 @@ package mx.morena.negocio.dto;
 
 public class ReporteDistritalDTO {
 	
-	private Long distritoId;
+	private Long idDistrito;
 	
-	private String nombreDistrito;
+	private String distrito;
 	
 	private Long secciones;
 	
@@ -16,28 +16,28 @@ public class ReporteDistritalDTO {
 	
 	private Long cots;
 	
-	private Double AvanceCots;
+	private Double porcentajeAvanceCots;
 	
 	private Long metaConvencidos;
 	
-	private Long convencidos;
+	private Long totalConvencidos;
 		
-	private Double AvanceConvencidos;
+	private Double porcentajeAvanceConvencidos;
 
-	public Long getDistritoId() {
-		return distritoId;
+	public Long getIdDistrito() {
+		return idDistrito;
 	}
 
-	public void setDistritoId(Long distritoId) {
-		this.distritoId = distritoId;
+	public void setIdDistrito(Long idDistrito) {
+		this.idDistrito = idDistrito;
 	}
 
-	public String getNombreDistrito() {
-		return nombreDistrito;
+	public String getDistrito() {
+		return distrito;
 	}
 
-	public void setNombreDistrito(String nombreDistrito) {
-		this.nombreDistrito = nombreDistrito;
+	public void setDistrito(String distrito) {
+		this.distrito = distrito;
 	}
 
 	public Long getSecciones() {
@@ -80,12 +80,12 @@ public class ReporteDistritalDTO {
 		this.cots = cots;
 	}
 
-	public Double getAvanceCots() {
-		return AvanceCots;
+	public Double getPorcentajeAvanceCots() {
+		return porcentajeAvanceCots;
 	}
 
-	public void setAvanceCots(Double avanceCots) {
-		AvanceCots = avanceCots;
+	public void setPorcentajeAvanceCots(Double porcentajeAvanceCots) {
+		this.porcentajeAvanceCots = porcentajeAvanceCots;
 	}
 
 	public Long getMetaConvencidos() {
@@ -96,20 +96,20 @@ public class ReporteDistritalDTO {
 		this.metaConvencidos = metaConvencidos;
 	}
 
-	public Long getConvencidos() {
-		return convencidos;
+	public Long getTotalConvencidos() {
+		return totalConvencidos;
 	}
 
-	public void setConvencidos(Long convencidos) {
-		this.convencidos = convencidos;
+	public void setTotalConvencidos(Long totalConvencidos) {
+		this.totalConvencidos = totalConvencidos;
 	}
 
-	public Double getAvanceConvencidos() {
-		return AvanceConvencidos;
+	public Double getPorcentajeAvanceConvencidos() {
+		return porcentajeAvanceConvencidos;
 	}
 
-	public void setAvanceConvencidos(Double avanceConvencidos) {
-		AvanceConvencidos = avanceConvencidos;
+	public void setPorcentajeAvanceConvencidos(Double porcentajeAvanceConvencidos) {
+		this.porcentajeAvanceConvencidos = porcentajeAvanceConvencidos;
 	}
-
+	
 }
