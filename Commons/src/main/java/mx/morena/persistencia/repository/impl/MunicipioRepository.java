@@ -46,4 +46,14 @@ public class MunicipioRepository implements IMunicipioRepository {
 				new MunicipiosRowMapper());
 	}
 
+	@Override
+	public List<Municipio> getAll() {
+		String sql = "select id, nombre from app_municipio group by id, nombre order by id";
+		try {
+			return template.queryForObject(sql,	new MunicipiosRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+
 }

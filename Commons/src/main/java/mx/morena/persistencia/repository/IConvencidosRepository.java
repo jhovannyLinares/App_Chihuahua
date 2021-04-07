@@ -42,4 +42,6 @@ public interface IConvencidosRepository {
 	
 	Long countByLocalAndTipo(Long localId, Long tipo);
 	
+	Long countByMunicipioAndTipo(Long idMunicipio, Long tipo, char estatus);
+	
 }

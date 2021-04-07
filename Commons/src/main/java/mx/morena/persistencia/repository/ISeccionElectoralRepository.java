@@ -27,4 +27,6 @@ public interface ISeccionElectoralRepository {
 	Long getSecciones(Long id);
 	
 	Long getSeccionesLocal(Long id);
+	
+	Long getSeccionesByMunicipio(Long id);
 }

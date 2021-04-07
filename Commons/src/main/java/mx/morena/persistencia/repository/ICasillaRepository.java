@@ -21,5 +21,7 @@ public interface ICasillaRepository {
 	public Long countByDistritoAndTipologia(Long distritoId, String tipologia);
 	
 	public Long countByLocalAndTipologia(Long localId, String tipologia);
+	
+	public Long countByMunicipioAndTipologia(Long idMunicipio, String tipologia);
 
 }

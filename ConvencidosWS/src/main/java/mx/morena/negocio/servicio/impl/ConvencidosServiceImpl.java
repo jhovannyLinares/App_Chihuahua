@@ -28,9 +28,11 @@ import mx.morena.negocio.exception.ConvencidosException;
 import mx.morena.negocio.servicio.IConvencidosService;
 import mx.morena.negocio.util.MapperUtil;
 import mx.morena.persistencia.entidad.Convencidos;
+import mx.morena.persistencia.entidad.Municipio;
 import mx.morena.persistencia.entidad.SeccionElectoral;
 import mx.morena.persistencia.repository.ICasillaRepository;
 import mx.morena.persistencia.repository.IConvencidosRepository;
+import mx.morena.persistencia.repository.IMunicipioRepository;
 import mx.morena.persistencia.repository.ISeccionElectoralRepository;
 import mx.morena.security.servicio.MasterService;
 
@@ -45,6 +47,9 @@ public class ConvencidosServiceImpl extends MasterService implements IConvencido
 	
 	@Autowired
 	private ICasillaRepository casillasRepository;
+	
+	@Autowired
+	private IMunicipioRepository municipioRepository;
 
 	private static final char ESTATUS_ALTA = 'A';
 	private static String sinClave = "No cuenta con Clave Elector";
@@ -201,9 +206,75 @@ public class ConvencidosServiceImpl extends MasterService implements IConvencido
 	}
 
 	@Override
-	public List<ReporteMunicipalDTO> getReporteMunicipal() throws ConvencidosException {
-		// TODO Auto-generated method stub
-		return null;
+	public List<ReporteMunicipalDTO> getReporteMunicipal(long perfil) throws ConvencidosException {
+		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL || perfil == PERFIL_LOCAL || perfil == PERFIL_MUNICIPAL) {
+			List<ReporteMunicipalDTO> lstDto = new ArrayList<ReporteMunicipalDTO>();
+			
+			List <Municipio> municipios = municipioRepository.getAll();
+			
+			ReporteMunicipalDTO reporteDto = null;
+			ReporteMunicipalDTO totales = new ReporteMunicipalDTO();
+			
+			totales.setIdMunicipio(null);
+			totales.setMunicipio("Totales");
+			totales.setUrbanas(0L);
+			totales.setNoUrbanas(0L);
+			totales.setMetaCots(0L);
+			totales.setCots(0L);
+			totales.setPorcentajeAvanceCots(0.00);
+			totales.setMetaConvencidos(0L);
+			totales.setConvencidos(0L);
+			totales.setPorcentajeAvanceConvencidos(0.00);
+			totales.setSecciones(0L);
+			
+			for (Municipio municipio : municipios) {
+				System.out.println(municipio.getId() + " " + municipio.getDescripcion());
+				
+				Long cots = convencidosRepository.countByMunicipioAndTipo(municipio.getId(), COT, ESTATUS_ALTA);
+				Long urbanas = casillasRepository.countByMunicipioAndTipologia(municipio.getId(), URBANAS);
+				Long noUrbanas = casillasRepository.countByMunicipioAndTipologia(municipio.getId(), NO_URBANAS);
+				Long convencidos = convencidosRepository.countByMunicipioAndTipo(municipio.getId(), CONVENCIDO, ESTATUS_ALTA);
+				Long countSecciones = seccionRepository.getSeccionesByMunicipio(municipio.getId());
+				
+				reporteDto = new ReporteMunicipalDTO();
+				
+				reporteDto.setIdMunicipio(municipio.getId());
+				reporteDto.setMunicipio(municipio.getDescripcion());
+				reporteDto.setUrbanas(urbanas);
+				reporteDto.setNoUrbanas(noUrbanas);
+				reporteDto.setMetaCots(54L);
+				reporteDto.setCots(cots);
+				reporteDto.setPorcentajeAvanceCots(null);
+				reporteDto.setMetaConvencidos(90L);
+				reporteDto.setConvencidos(convencidos);
+				reporteDto.setPorcentajeAvanceConvencidos(null);
+				reporteDto.setSecciones(countSecciones);
+				
+				double porcAvanceCots = (cots * 100.0)/reporteDto.getMetaCots();
+				reporteDto.setPorcentajeAvanceCots(dosDecimales(porcAvanceCots).doubleValue());
+				
+				double porcAvanceConvencidos = (convencidos * 100.0)/reporteDto.getMetaConvencidos();
+				reporteDto.setPorcentajeAvanceConvencidos(dosDecimales(porcAvanceConvencidos).doubleValue());
+				
+				totales.setUrbanas(totales.getUrbanas() + reporteDto.getUrbanas());
+				totales.setNoUrbanas(totales.getNoUrbanas() + reporteDto.getNoUrbanas());
+				totales.setMetaCots(totales.getMetaCots() + reporteDto.getMetaCots() );
+				totales.setCots(totales.getCots() + reporteDto.getCots() );
+				totales.setMetaConvencidos(totales.getMetaConvencidos() + reporteDto.getMetaConvencidos());
+				totales.setConvencidos(totales.getConvencidos() + reporteDto.getConvencidos());
+				totales.setSecciones(totales.getSecciones() + reporteDto.getSecciones());
+				
+				lstDto.add(reporteDto);
+			}
+			totales.setPorcentajeAvanceCots(dosDecimales((totales.getCots() * 100.0) / totales.getMetaCots()).doubleValue());
+			totales.setPorcentajeAvanceConvencidos(dosDecimales((totales.getConvencidos() * 100.0) / totales.getMetaConvencidos()).doubleValue());
+			
+			lstDto.add(totales);
+			
+			return lstDto;
+		} else {
+			throw new ConvencidosException("No cuenta con permisos suficientes", 401);
+		}
 	}
 
 	@Override

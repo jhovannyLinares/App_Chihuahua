@@ -22,6 +22,6 @@ public interface IConvencidosService {
 	
 	List<ReporteLocalDTO> getReporteLocal(Long perfil) throws ConvencidosException;
 	
-	List<ReporteMunicipalDTO> getReporteMunicipal()throws ConvencidosException;
-
+	List<ReporteMunicipalDTO> getReporteMunicipal(long perfil)throws ConvencidosException;
+	
 }

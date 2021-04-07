@@ -11,5 +11,6 @@ public interface IMunicipioRepository {
 	List<Municipio> findAll();
 
 	List<Municipio> getByFederal(Long idFederal);
-
+	
+	List<Municipio> getAll();
 }

@@ -71,10 +71,12 @@ public class ReportesController extends MasterController {
 	
 	@GetMapping("/convencidosMunicipal")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	private java.util.List<ReporteMunicipalDTO>getReporteMunicipal(HttpServletResponse response) throws IOException{
+	private List<ReporteMunicipalDTO> getReporteMunicipal(HttpServletResponse response, HttpServletRequest request) throws IOException{
 		
 		try {
-			return convencidosService.getReporteMunicipal();
+			long perfil = getPerfil(request);
+			
+			return convencidosService.getReporteMunicipal(perfil);
 		} catch (ConvencidosException e) {
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
@@ -86,4 +88,5 @@ public class ReportesController extends MasterController {
 		}
 
 	}
+	
 }

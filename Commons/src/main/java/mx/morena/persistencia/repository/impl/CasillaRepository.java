@@ -4,6 +4,7 @@ import java.sql.Types;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -84,6 +85,18 @@ public class CasillaRepository implements ICasillaRepository {
 	public Long countByLocalAndTipologia(Long localId, String tipologia) {
 		String sql = "select count(*) from app_casilla ac where local_id = ? and tipologia = ?";
 		return template.queryForObject(sql, new Object[] {localId, tipologia}, new int[] {Types.NUMERIC, Types.VARCHAR},new CountCasillasRowMapper());
+	}
+	
+	@Override
+	public Long countByMunicipioAndTipologia(Long idMunicipio, String tipologia) {
+		String sql = "select count(*) from app_casilla ac where ac.municpio_id = ? and ac.tipologia = ? ";
+		try {
+			return template.queryForObject(sql, new Object[] { idMunicipio, tipologia}, new int[] { Types.NUMERIC, Types.VARCHAR },
+					new CountCasillasRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		
+		}
 	}
 
 }
