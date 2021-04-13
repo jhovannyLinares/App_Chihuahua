@@ -271,14 +271,14 @@ public class RepresentantesRepository implements IRepresentanteRepository {
 	}
 
 	@Override
-	public Long getByDistritoAndTipo(Long id, Long perfil) {
-		String sql = "select count(*) from app_representantes where distrito_federal_id = ? and tipo_representante = ?";
-		return template.queryForObject(sql, new Object[] { id, perfil }, new int[] { Types.NUMERIC, Types.NUMERIC }, new LongRowMapper());
+	public Long getByDistritoAndTipo(Long perfil) {
+		String sql = "select count(*) from app_representantes where tipo_representante = ?";
+		return template.queryForObject(sql, new Object[] {perfil }, new int[] {Types.NUMERIC }, new LongRowMapper());
 	}
 
 	@Override
-	public Long getRepAsignadoByDistrito(Long id, Long perfil) {
-		String sql = "select count(*) from app_representantes where distrito_federal_id = ? and tipo_representante = ? and is_asignado = true";
-		return template.queryForObject(sql, new Object[] { id, perfil }, new int[] { Types.NUMERIC, Types.NUMERIC }, new LongRowMapper());
+	public Long getRepAsignadoByDistrito(Long perfil) {
+		String sql = "select count(*) from app_representantes where tipo_representante = ? and is_asignado = true";
+		return template.queryForObject(sql, new Object[] {perfil }, new int[] {Types.NUMERIC }, new LongRowMapper());
 	}
 }

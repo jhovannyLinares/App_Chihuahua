@@ -34,7 +34,7 @@ public class ReportesAsignacionController extends MasterController{
 		long perfil = getPerfil(request);
 		
 		try {
-			return reportesService.getRepAsignacion(perfil);
+			return reportesService.getRepAsignacionDistrital(perfil);
 		} catch (RepresentanteException e) {
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
@@ -45,6 +45,24 @@ public class ReportesAsignacionController extends MasterController{
 			return null;
 		}
 
+	}
+
+	@GetMapping("/asignacionDistrital/download")	
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	public void downloadCSV(HttpServletResponse response, HttpServletRequest request) throws IOException {
+		
+		try {
+
+			long perfil = getPerfil(request);
+			reportesService.getReporteDistritalDownload(response, perfil);
+
+		} catch (RepresentanteException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+		}
 	}
 
 }
