@@ -33,6 +33,10 @@ public interface IRepresentanteRepository {
 	Representantes getRepresentante(Long representanteId);
 
 	void updateStatusRepresentantes(Long id);
+	
+	Long getRcCaptura(Long perfil);
+	
+	Long getRcAsignados(Long perfil);
 
 	Long getByTipo(Long perfil);
 

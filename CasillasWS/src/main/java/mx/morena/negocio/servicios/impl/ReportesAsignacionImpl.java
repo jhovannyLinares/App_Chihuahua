@@ -12,8 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import mx.morena.negocio.dto.ReporteAsignacionDistritalDTO;
-import mx.morena.negocio.dto.ReporteAsignacionEstatalDTO;
 import mx.morena.negocio.exception.RepresentanteException;
+import mx.morena.negocio.dto.ReporteRCDTO;
 import mx.morena.negocio.servicios.IReportesAsignacionService;
 import mx.morena.persistencia.entidad.DistritoFederal;
 import mx.morena.persistencia.repository.IDistritoFederalRepository;
@@ -22,12 +22,13 @@ import mx.morena.security.servicio.MasterService;
 
 @Service
 public class ReportesAsignacionImpl extends MasterService implements IReportesAsignacionService{
+	
+	@Autowired
+	private IRepresentanteRepository representanteRepository;
 
 	@Autowired
 	private IDistritoFederalRepository distritoRepository;
 	
-	@Autowired
-	private IRepresentanteRepository representanteRepository;
 
 	@Override
 	public List<ReporteAsignacionDistritalDTO> getRepAsignacionDistrital(long perfil) throws RepresentanteException {
@@ -135,6 +136,53 @@ public class ReportesAsignacionImpl extends MasterService implements IReportesAs
 		bd = bd.setScale(2, RoundingMode.HALF_UP);
 		return bd;
 
+	}
+
+	@Override
+	public List<ReporteRCDTO> getReporteRc(Long perfil) throws RepresentanteException {
+if(perfil == PERFIL_ESTATAL) {
+			
+			List<ReporteRCDTO> lstRc = new ArrayList<ReporteRCDTO>();
+			ReporteRCDTO dto = null;
+			
+			Long countRcCapturados = representanteRepository.getRcCaptura(PERFIL_RC);
+			Long countRcAsigndos = representanteRepository.getRcAsignados(PERFIL_RC);
+			
+				dto = new ReporteRCDTO();
+				
+				dto.setMetaRc(45L);;
+				dto.setAvanceCapturadoRc(countRcCapturados);
+				dto.setAvanceAsignadoRc(countRcAsigndos);
+				dto.setAvance(100L);
+				double sub1 = (dto.getAvanceAsignadoRc() * 100.00)/ dto.getMetaRc();
+				dto.setPorcentajeAvanceRc(dosDecimales(sub1).doubleValue());
+				
+				lstRc.add(dto);
+
+			return lstRc;
+		}else {
+			throw new RepresentanteException("No cuenta con los permisos suficientes para consultar el reporte", 401);
+		}
+	}
+
+	@Override
+	public void getReporteRcDownload(HttpServletResponse response, Long perfil)
+			throws RepresentanteException, IOException {
+		if(perfil == PERFIL_ESTATAL ) {
+			// Asignacion de nombre al archivo CSV
+			setNameFile(response, CSV_ASIGN_RC);
+
+			List<ReporteRCDTO> rcDTOs = getReporteRc(perfil);
+
+			//Nombre y orden de los encabezados en el excel
+			String[] header = { "metaRc", "avanceCapturadoRc", "avanceAsignadoRc", "avance", "porcentajeAvanceRc"};
+
+			setWriterFile(response, rcDTOs, header);
+			
+		} else {
+			throw new RepresentanteException("No cuenta con permisos suficientes para descargar el reporte", 401);
+		}
+		
 	}
 
 }

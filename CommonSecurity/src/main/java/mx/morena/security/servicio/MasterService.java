@@ -53,6 +53,7 @@ public class MasterService {
 	
 	//Reportes asignacion
 	protected static final String CSV_ASIGN_DISTRITAL =  "ReporteAsignacionDistrital.csv";
+	protected static final String CSV_ASIGN_RC = "ReporteAsignacionRc.csv";
 	
 	private static final String HEADER_KEY = "Content-Disposition";
 	private static final String CONTENT_TYPE = "text/csv";
