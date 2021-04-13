@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import mx.morena.negocio.dto.ReporteAsignacionDistritalDTO;
+import mx.morena.negocio.dto.ReporteCrgDTO;
 import mx.morena.negocio.exception.RepresentanteException;
 import mx.morena.negocio.servicios.IReportesAsignacionService;
 import mx.morena.negocio.dto.ReporteRCDTO;
@@ -67,7 +68,7 @@ public class ReportesAsignacionController extends MasterController{
 	}
 
 	
-	@GetMapping("/rc")
+	@GetMapping("/asignacionRc")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
 	private List<ReporteRCDTO>getReporteRc(HttpServletResponse response, HttpServletRequest request) throws IOException{
 		
@@ -86,7 +87,7 @@ public class ReportesAsignacionController extends MasterController{
 
 	}
 	
-	@GetMapping("/asignadosRc/download")	
+	@GetMapping("/asignacionRc/download")	
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
 	public void downloadLocalCSV(HttpServletResponse response,  HttpServletRequest request) throws IOException {
 		
@@ -103,6 +104,43 @@ public class ReportesAsignacionController extends MasterController{
 			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 	}
+	
+	@GetMapping("/asignacionCrg")
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	private List<ReporteCrgDTO> getReporteAsignacionCrg(HttpServletResponse response, HttpServletRequest request) throws IOException {
+		
+		try {
+			long perfil = getPerfil(request);
+			
+			return reportesService.getReporteCrgDv(perfil);
+		} catch (RepresentanteException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+			return null;
+		} catch (Exception e ) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			return null;
+		}
+
+	}
+	
+	@GetMapping("/asignacionCrg/download")
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	public void downloadAsignacionCrgCSV(HttpServletResponse response,  HttpServletRequest request) throws IOException {
+		
+		try {
+			long perfil = getPerfil(request);
+			reportesService.getReporteCrgDownload(response, perfil);
+		} catch (RepresentanteException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+		}
+	}
+
 }
 
 

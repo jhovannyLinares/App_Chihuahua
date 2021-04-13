@@ -1,10 +1,6 @@
 package mx.morena.negocio.dto;
 
 public class ReporteCrgDTO {
-	private Long id;
-	
-	//private String metaRg;
-	
 	private Long metaRg;
 	
 	private Long avanceCapturadoRg;
@@ -22,14 +18,6 @@ public class ReporteCrgDTO {
 	private Long avance;
 	
 	private Double porcentajeAvanceRc;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	public Long getMetaRg() {
 		return metaRg;

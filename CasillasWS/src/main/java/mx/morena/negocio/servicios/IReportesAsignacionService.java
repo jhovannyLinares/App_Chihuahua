@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import mx.morena.negocio.dto.ReporteAsignacionDistritalDTO;
+import mx.morena.negocio.dto.ReporteCrgDTO;
 import mx.morena.negocio.exception.RepresentanteException;
 
 import mx.morena.negocio.dto.ReporteRCDTO;
@@ -18,5 +19,8 @@ public interface IReportesAsignacionService {
 	public void getReporteRcDownload(HttpServletResponse response, Long perfil) throws RepresentanteException, IOException;
 
 	void getReporteDistritalDownload(HttpServletResponse response, long perfil) throws RepresentanteException, IOException;
+	
+	List<ReporteCrgDTO> getReporteCrgDv(Long perfil) throws RepresentanteException;
 
+	void getReporteCrgDownload(HttpServletResponse response, long perfil) throws RepresentanteException, IOException;
 }

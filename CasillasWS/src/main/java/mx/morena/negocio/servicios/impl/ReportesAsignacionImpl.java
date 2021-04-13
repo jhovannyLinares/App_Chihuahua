@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import mx.morena.negocio.dto.ReporteAsignacionDistritalDTO;
+import mx.morena.negocio.dto.ReporteCrgDTO;
 import mx.morena.negocio.exception.RepresentanteException;
 import mx.morena.negocio.dto.ReporteRCDTO;
 import mx.morena.negocio.servicios.IReportesAsignacionService;
@@ -185,4 +186,43 @@ if(perfil == PERFIL_ESTATAL) {
 		
 	}
 
+	@Override
+	public List<ReporteCrgDTO> getReporteCrgDv(Long perfil) throws RepresentanteException {
+		List<ReporteCrgDTO> lstDto = new ArrayList<ReporteCrgDTO>();
+		ReporteCrgDTO dto = new ReporteCrgDTO();
+
+		Long countRepRgCapturado = representanteRepository.getByTipo(PERFIL_RG);
+		Long countRepRgAsignado = representanteRepository.getRepAsignadoByTipo(PERFIL_RG);
+		Long countRepRcCapturado = representanteRepository.getByTipo(PERFIL_RC);
+		Long countRepRcAsignado = representanteRepository.getRepAsignadoByTipo(PERFIL_RC);
+
+		dto.setMetaRg(63L);
+		dto.setAvanceCapturadoRg(countRepRgCapturado);
+		dto.setAvanceAsignadoRg(countRepRgAsignado);
+		double porAvanceRg = (double) dto.getAvanceAsignadoRg() / dto.getMetaRg() * 100.00;
+		dto.setPorcentajeAvanceRg(dosDecimales(porAvanceRg).doubleValue());
+
+		dto.setMetaRc(30L);
+		dto.setAvanceCapturadoRc(countRepRcCapturado);
+		dto.setAvanceAsignadoRc(countRepRcAsignado);
+		double porAvanceRc = (double) dto.getAvanceAsignadoRc() / dto.getMetaRc() * 100.00;
+		dto.setPorcentajeAvanceRc(dosDecimales(porAvanceRc).doubleValue());
+		dto.setAvance(0L);
+
+		lstDto.add(dto);
+
+		return lstDto;
+	}
+
+	@Override
+	public void getReporteCrgDownload(HttpServletResponse response, long perfil) throws RepresentanteException, IOException {
+		setNameFile(response, CSV_ASIGN_CRG);
+
+		List<ReporteCrgDTO> crgDTOs = getReporteCrgDv(perfil);
+
+		String[] header = { "metaRg", "avanceCapturadoRg", "avanceAsignadoRg", "porcentajeAvanceRg", "metaRc",
+							"avanceCapturadoRc", "avanceAsignadoRc", "avance", "porcentajeAvanceRc" };
+
+		setWriterFile(response, crgDTOs, header);
+	}
 }
