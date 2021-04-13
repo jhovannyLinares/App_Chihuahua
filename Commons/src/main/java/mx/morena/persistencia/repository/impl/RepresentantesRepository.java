@@ -15,6 +15,7 @@ import mx.morena.persistencia.entidad.Representantes;
 import mx.morena.persistencia.entidad.RepresentantesAsignados;
 import mx.morena.persistencia.repository.IRepresentanteRepository;
 import mx.morena.persistencia.rowmapper.IdMaxConvencidos;
+import mx.morena.persistencia.rowmapper.LongRowMapper;
 import mx.morena.persistencia.rowmapper.RepresentanteClaveRowMapper;
 import mx.morena.persistencia.rowmapper.RepresentanteRowMapper;
 import mx.morena.persistencia.rowmapper.RepresentantesCrgRowMapper;
@@ -267,5 +268,17 @@ public class RepresentantesRepository implements IRepresentanteRepository {
 		template.update(sql, new Object[] {id},
 				new int[] {Types.NUMERIC });
 		
+	}
+
+	@Override
+	public Long getByDistritoAndTipo(Long id, Long perfil) {
+		String sql = "select count(*) from app_representantes where distrito_federal_id = ? and tipo_representante = ?";
+		return template.queryForObject(sql, new Object[] { id, perfil }, new int[] { Types.NUMERIC, Types.NUMERIC }, new LongRowMapper());
+	}
+
+	@Override
+	public Long getRepAsignadoByDistrito(Long id, Long perfil) {
+		String sql = "select count(*) from app_representantes where distrito_federal_id = ? and tipo_representante = ? and is_asignado = true";
+		return template.queryForObject(sql, new Object[] { id, perfil }, new int[] { Types.NUMERIC, Types.NUMERIC }, new LongRowMapper());
 	}
 }
