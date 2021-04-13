@@ -34,8 +34,8 @@ public interface IRepresentanteRepository {
 
 	void updateStatusRepresentantes(Long id);
 
-	Long getByDistritoAndTipo(Long perfilCrg);
+	Long getByTipo(Long perfil);
 
-	Long getRepAsignadoByDistrito(Long perfil);
+	Long getRepAsignadoByTipo(Long perfil);
 
 }

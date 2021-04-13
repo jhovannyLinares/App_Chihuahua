@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import mx.morena.negocio.dto.ReporteAsignacionDistritalDTO;
+import mx.morena.negocio.dto.ReporteAsignacionEstatalDTO;
 import mx.morena.negocio.exception.RepresentanteException;
 import mx.morena.negocio.servicios.IReportesAsignacionService;
 import mx.morena.persistencia.entidad.DistritoFederal;
@@ -32,7 +33,7 @@ public class ReportesAsignacionImpl extends MasterService implements IReportesAs
 	public List<ReporteAsignacionDistritalDTO> getRepAsignacionDistrital(long perfil) throws RepresentanteException {
 		
 		List<ReporteAsignacionDistritalDTO> lstDto = new ArrayList<ReporteAsignacionDistritalDTO>();
-		List<DistritoFederal> lstSeccion = null;
+//		List<DistritoFederal> lstSeccion = null;
 		ReporteAsignacionDistritalDTO dto = null;
 		
 		ReporteAsignacionDistritalDTO total = new ReporteAsignacionDistritalDTO();
@@ -50,16 +51,16 @@ public class ReportesAsignacionImpl extends MasterService implements IReportesAs
 		total.setAvanceAsignadoRc(0L);
 		total.setPorcentajeAvanceRc(0.0);
 
-		lstSeccion = distritoRepository.findAll();
+//		lstSeccion = distritoRepository.findAll();
 
 		dto = new ReporteAsignacionDistritalDTO();
-		Long crgCapturado = representanteRepository.getByDistritoAndTipo(PERFIL_CRG);
-		Long rgCapturado = representanteRepository.getByDistritoAndTipo(PERFIL_RG);
-		Long rcCapturado = representanteRepository.getByDistritoAndTipo(PERFIL_RC);
+		Long crgCapturado = representanteRepository.getByTipo(PERFIL_CRG);
+		Long rgCapturado = representanteRepository.getByTipo(PERFIL_RG);
+		Long rcCapturado = representanteRepository.getByTipo(PERFIL_RC);
 
-		Long crgAsignado = representanteRepository.getRepAsignadoByDistrito(PERFIL_CRG);
-		Long rgAsignado = representanteRepository.getRepAsignadoByDistrito(PERFIL_RG);
-		Long rcAsignado = representanteRepository.getRepAsignadoByDistrito(PERFIL_RC);
+		Long crgAsignado = representanteRepository.getRepAsignadoByTipo(PERFIL_CRG);
+		Long rgAsignado = representanteRepository.getRepAsignadoByTipo(PERFIL_RG);
+		Long rcAsignado = representanteRepository.getRepAsignadoByTipo(PERFIL_RC);
 
 //			dto.setNombreDistrito(df.getCabeceraFederal());
 
