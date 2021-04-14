@@ -2,25 +2,14 @@ package mx.morena.negocio.dto;
 
 public class ReporteRCDTO {
 	
-//	private Long id;
-	
 	private Long metaRc;
 	
 	private Long avanceCapturadoRc;
 	
 	private Long avanceAsignadoRc;
 	
-	private Long avance;
-	
 	private Double porcentajeAvanceRc;
 
-//	public Long getId() {
-//		return id;
-//	}
-//
-//	public void setId(Long id) {
-//		this.id = id;
-//	}
 
 	public Long getMetaRc() {
 		return metaRc;
@@ -45,15 +34,7 @@ public class ReporteRCDTO {
 	public void setAvanceAsignadoRc(Long avanceAsignadoRc) {
 		this.avanceAsignadoRc = avanceAsignadoRc;
 	}
-
-	public Long getAvance() {
-		return avance;
-	}
-
-	public void setAvance(Long avance) {
-		this.avance = avance;
-	}
-
+	
 	public Double getPorcentajeAvanceRc() {
 		return porcentajeAvanceRc;
 	}

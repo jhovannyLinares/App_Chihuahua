@@ -20,6 +20,7 @@ import mx.morena.negocio.dto.ReporteAsignacionEstatalDTO;
 import mx.morena.negocio.exception.RepresentanteException;
 import mx.morena.negocio.servicios.IReportesAsignacionService;
 import mx.morena.negocio.dto.ReporteRCDTO;
+import mx.morena.negocio.dto.ReporteRgDTO;
 import mx.morena.security.controller.MasterController;
 
 @RestController
@@ -74,9 +75,10 @@ public class ReportesAsignacionController extends MasterController{
 	private List<ReporteRCDTO>getReporteRc(HttpServletResponse response, HttpServletRequest request) throws IOException{
 		
 		long perfil = getPerfil(request);
+		long idUsuario = getUsuario(request);
 		
 		try {
-			return reportesService.getReporteRc(perfil);
+			return reportesService.getReporteRc(perfil, idUsuario);
 		} catch (RepresentanteException e) {
 			e.printStackTrace();
 			return null;
@@ -93,9 +95,10 @@ public class ReportesAsignacionController extends MasterController{
 	public void downloadLocalCSV(HttpServletResponse response,  HttpServletRequest request) throws IOException {
 		
 		long perfil = getPerfil(request);
+		long usuario = getUsuario(request);
 		try {
 
-			reportesService.getReporteRcDownload(response, perfil);
+			reportesService.getReporteRcDownload(response, perfil, usuario);
 
 		} catch (RepresentanteException e) {
 			e.printStackTrace();
@@ -161,6 +164,26 @@ public class ReportesAsignacionController extends MasterController{
 			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 			return null;
 		}
+	}
+	
+	@GetMapping("/rg")
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	private List<ReporteRgDTO> getReporteAsignacionRg(HttpServletResponse response, HttpServletRequest request) throws IOException {
+		
+		try {
+			long perfil = getPerfil(request);
+			long usuario = getUsuario(request);
+			
+			return reportesService.getReporteRg(perfil, usuario);
+		} catch (RepresentanteException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+			return null;
+		} catch (Exception e ) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			return null;
+		}
 
 	}
 	
@@ -171,8 +194,28 @@ public class ReportesAsignacionController extends MasterController{
 		try {
 
 			long perfil = getPerfil(request);
+			
 			reportesService.getReporteEstatalDownload(response, perfil);
 
+		} catch (RepresentanteException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+		}
+	}
+
+	
+	@GetMapping("/rg/download")
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	public void downloadAsignacionRgCSV(HttpServletResponse response,  HttpServletRequest request) throws IOException {
+		
+		try {
+			long perfil = getPerfil(request);
+			long usuario = getUsuario(request);
+			
+			reportesService.getReporteRgDownload(response, perfil, usuario);
 		} catch (RepresentanteException e) {
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());

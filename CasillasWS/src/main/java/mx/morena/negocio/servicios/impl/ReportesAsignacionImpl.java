@@ -16,6 +16,7 @@ import mx.morena.negocio.dto.ReporteCrgDTO;
 import mx.morena.negocio.dto.ReporteAsignacionEstatalDTO;
 import mx.morena.negocio.exception.RepresentanteException;
 import mx.morena.negocio.dto.ReporteRCDTO;
+import mx.morena.negocio.dto.ReporteRgDTO;
 import mx.morena.negocio.servicios.IReportesAsignacionService;
 import mx.morena.persistencia.entidad.DistritoFederal;
 import mx.morena.persistencia.entidad.Usuario;
@@ -125,21 +126,25 @@ public class ReportesAsignacionImpl extends MasterService implements IReportesAs
 	}
 
 	@Override
-	public List<ReporteRCDTO> getReporteRc(Long perfil) throws RepresentanteException {
+	public List<ReporteRCDTO> getReporteRc(Long perfil, Long idUsuario) throws RepresentanteException {
 if(perfil == PERFIL_ESTATAL) {
 			
 			List<ReporteRCDTO> lstRc = new ArrayList<ReporteRCDTO>();
 			ReporteRCDTO dto = null;
 			
-			Long countRcCapturados = representanteRepository.getRcCaptura(PERFIL_RC);
-			Long countRcAsigndos = representanteRepository.getRcAsignados(PERFIL_RC);
+			Usuario usuario = usuarioRepository.findById(idUsuario);
+			long idDistrito = usuario.getFederal();
+			long perfilUsuario = usuario.getPerfil();
+			
+			
+			Long countRcCapturados = representanteRepository.getByTipo(PERFIL_RC, idDistrito, perfilUsuario);
+			Long countRcAsigndos = representanteRepository.getRepAsignadoByTipo(PERFIL_RC, idDistrito, perfilUsuario);
 			
 				dto = new ReporteRCDTO();
 				
 				dto.setMetaRc(45L);;
 				dto.setAvanceCapturadoRc(countRcCapturados);
 				dto.setAvanceAsignadoRc(countRcAsigndos);
-				dto.setAvance(100L);
 				double sub1 = (dto.getAvanceAsignadoRc() * 100.00)/ dto.getMetaRc();
 				dto.setPorcentajeAvanceRc(dosDecimales(sub1).doubleValue());
 				
@@ -152,16 +157,16 @@ if(perfil == PERFIL_ESTATAL) {
 	}
 
 	@Override
-	public void getReporteRcDownload(HttpServletResponse response, Long perfil)
+	public void getReporteRcDownload(HttpServletResponse response, Long perfil, Long idUsuario)
 			throws RepresentanteException, IOException {
 		if(perfil == PERFIL_ESTATAL ) {
 			// Asignacion de nombre al archivo CSV
 			setNameFile(response, CSV_ASIGN_RC);
 
-			List<ReporteRCDTO> rcDTOs = getReporteRc(perfil);
+			List<ReporteRCDTO> rcDTOs = getReporteRc(perfil, idUsuario);
 
 			//Nombre y orden de los encabezados en el excel
-			String[] header = { "metaRc", "avanceCapturadoRc", "avanceAsignadoRc", "avance", "porcentajeAvanceRc"};
+			String[] header = { "metaRc", "avanceCapturadoRc", "avanceAsignadoRc", "porcentajeAvanceRc"};
 
 			setWriterFile(response, rcDTOs, header);
 			
@@ -336,6 +341,44 @@ if(perfil == PERFIL_ESTATAL) {
 				"metaRc", "avanceCapturadoRc", "avanceAsignadoRc", "porcentajeAvanceRc" };
 
 		setWriterFile(response, asignacionDTOs, header);
+	}
+
+	@Override
+	public List<ReporteRgDTO> getReporteRg(Long perfil, Long idUsuario) throws RepresentanteException {
+		List<ReporteRgDTO> lstRgDto = new ArrayList<ReporteRgDTO>();
+		ReporteRgDTO dto = new ReporteRgDTO();
+		
+		Usuario usuario = usuarioRepository.findById(idUsuario);
+		long idDistrito = usuario.getFederal();
+		long perfilUsuario = usuario.getPerfil();
+
+		Long countRgCapturado = representanteRepository.getByTipo(PERFIL_RG, idDistrito, perfilUsuario);
+		Long countRgAsignado = representanteRepository.getRepAsignadoByTipo(PERFIL_RG, idDistrito, perfilUsuario);
+		
+		dto = new ReporteRgDTO();
+		
+		dto.setMetaRg(45L);;
+		dto.setAvanceCapturadoRg(countRgCapturado);
+		dto.setAvanceAsignadoRg(countRgAsignado);
+		double sub1 = (dto.getAvanceAsignadoRg() * 100.00)/ dto.getMetaRg();
+		dto.setPorcentajeAvanceRg(dosDecimales(sub1).doubleValue());
+		
+		lstRgDto.add(dto);
+
+	return lstRgDto;
+	
+	}
+
+	@Override
+	public void getReporteRgDownload(HttpServletResponse response, Long perfil, Long idUsuario)
+			throws RepresentanteException, IOException {
+		setNameFile(response, CSV_ASIGN_RG);
+		List<ReporteCrgDTO> crgDTOs = getReporteCrgDv(perfil);
+
+		String[] header = { "metaRg", "avanceCapturadoRg", "avanceAsignadoRg", "porcentajeAvanceRg"};
+
+		setWriterFile(response, crgDTOs, header);
+		
 	}
 
 }
