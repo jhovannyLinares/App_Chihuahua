@@ -271,15 +271,81 @@ public class RepresentantesRepository implements IRepresentanteRepository {
 	}
 
 	@Override
-	public Long getByTipo(Long perfil) {
-		String sql = "select count(*) from app_representantes where tipo_representante = ?";
-		return template.queryForObject(sql, new Object[] {perfil }, new int[] {Types.NUMERIC }, new LongRowMapper());
+	public Long getByTipo(Long perfil, Long idDistrito, Long perfilUsuario) {
+		String select = "select count(*) from app_representantes"; // where tipo_representante = ?";
+		
+		String sql = null;
+		String where = " where tipo_representante = ?";
+		List<Object> para = new ArrayList<Object>();
+		List<Integer> type = new ArrayList<Integer>();
+		
+		if (perfilUsuario == 1) {
+			where = where;
+			para.add(perfil);
+			type.add(Types.NUMERIC);
+		}
+		else if ( perfilUsuario == 2) {
+			where = where.concat(" and distrito_federal_id = ? ");
+			para.add(perfil);
+			type.add(Types.NUMERIC);
+			para.add(idDistrito);
+			type.add(Types.NUMERIC);
+		}
+		
+		Object[] parametros = new Object[para.size()];
+		int[] types = new int[para.size()];
+
+		for (int i = 0; i < para.size(); i++) {
+			parametros[i] = para.get(i);
+			types[i] = type.get(i);
+		}
+		
+		try {			
+			 sql = select.concat(where);
+			return template.queryForObject(sql, parametros, types, new LongRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+
 	}
 
 	@Override
-	public Long getRepAsignadoByTipo(Long perfil) {
-		String sql = "select count(*) from app_representantes where tipo_representante = ? and is_asignado = true";
-		return template.queryForObject(sql, new Object[] {perfil }, new int[] {Types.NUMERIC }, new LongRowMapper());
+	public Long getRepAsignadoByTipo(Long perfil, Long idDistrito, Long perfilUsuario) {
+		String select = "select count(*) from app_representantes"; // where tipo_representante = ? and is_asignado = true";
+		
+		
+		String sql = null;
+		String where = " where tipo_representante = ? and is_asignado = true ";
+		List<Object> para = new ArrayList<Object>();
+		List<Integer> type = new ArrayList<Integer>();
+		
+		if (perfilUsuario == 1) {
+			where = where;
+			para.add(perfil);
+			type.add(Types.NUMERIC);
+		}
+		else if ( perfilUsuario == 2) {
+			where = where.concat(" and distrito_federal_id = ? ");
+			para.add(perfil);
+			type.add(Types.NUMERIC);
+			para.add(idDistrito);
+			type.add(Types.NUMERIC);
+		}
+		
+		Object[] parametros = new Object[para.size()];
+		int[] types = new int[para.size()];
+
+		for (int i = 0; i < para.size(); i++) {
+			parametros[i] = para.get(i);
+			types[i] = type.get(i);
+		}
+		
+		try {			
+			 sql = select.concat(where);
+			return template.queryForObject(sql, parametros, types, new LongRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
 	}
 
 	@Override
