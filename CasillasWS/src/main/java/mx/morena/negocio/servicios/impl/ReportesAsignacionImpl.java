@@ -110,7 +110,7 @@ public class ReportesAsignacionImpl extends MasterService implements IReportesAs
 
 		// Nombre y orden de los encabezados en el excel
 		String[] header = {"metaCrg", "avanceCapturadoCrg", "avanceAsignadoCrg", "porcentajeAvanceCrg", "metaRg", "avanceCapturadoRg", "avanceAsignadoRg", "porcentajeAvanceRg", "metaRc", "avanceCapturadoRc",
-				"avanceAsignadoRc", "porcentajeAvanceRc", "avance" };
+				"avanceAsignadoRc", "porcentajeAvanceRc"};
 
 		setWriterFile(response, asignacionDTOs, header);
 
@@ -327,13 +327,13 @@ if(perfil == PERFIL_ESTATAL) {
 		// Asignacion de nombre al archivo CSV
 		setNameFile(response, CSV_ASIGN_ESTATAL);
 
-		List<ReporteAsignacionEstatalDTO> asignacionDTOs = getReporteAsignacionEstatal(perfil);
+		List<ReporteAsignacionEstatalDTO> asignacionDTOs = getReporteAsignacionEstatal(perfil); 
 
 		// Nombre y orden de los encabezados en el excel
 		String[] header = {"numero", "idDistrito", "metaRFederal", "avanceCapturadoRFederal", "avanceAsignadoRfederal", "porcentajeAvanceRFederal", 
 				"metaCrg", "avanceCapturadoCrg", "avanceAsignadoCrg", "porcentajeAvanceCrg", 
 				"metaRg", "avanceCapturadoRg", "avanceAsignadoRg", "porcentajeAvanceRg",
-				"metaRc", "avanceCapturadoRc", "avanceAsignadoRc", "porcentajeAvanceRc", "avance" };
+				"metaRc", "avanceCapturadoRc", "avanceAsignadoRc", "porcentajeAvanceRc" };
 
 		setWriterFile(response, asignacionDTOs, header);
 	}
