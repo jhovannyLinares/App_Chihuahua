@@ -1,30 +1,90 @@
 package mx.morena.negocio.dto;
 
-public class ReporteAsignacionDistritalDTO {
+public class ReporteAsignacionEstatalDTO {
 	
+	private String numero;
+
+	private Long idDistrito;
+
+	private Long metaRFederal;
+
+	private Long avanceCapturadoRFederal;
+
+	private Long avanceAsignadoRfederal;
+	
+	private Double porcentajeAvanceRFederal;
+
 	private Long metaCrg;
-	
+
 	private Long avanceCapturadoCrg;
-	
+
 	private Long avanceAsignadoCrg;
-	
+
 	private Double porcentajeAvanceCrg;
-	
+
 	private Long metaRg;
-	
+
 	private Long avanceCapturadoRg;
-	
+
 	private Long avanceAsignadoRg;
-	
+
 	private Double porcentajeAvanceRg;
-	
+
 	private Long metaRc;
-	
+
 	private Long avanceCapturadoRc;
-	
+
 	private Long avanceAsignadoRc;
-	
+
 	private Double porcentajeAvanceRc;
+
+	public String getNumero() {
+		return numero;
+	}
+
+	public void setNumero(String numero) {
+		this.numero = numero;
+	}
+
+	public Long getIdDistrito() {
+		return idDistrito;
+	}
+
+	public void setIdDistrito(Long idDistrito) {
+		this.idDistrito = idDistrito;
+	}
+
+	public Long getMetaRFederal() {
+		return metaRFederal;
+	}
+
+	public void setMetaRFederal(Long metaRFederal) {
+		this.metaRFederal = metaRFederal;
+	}
+
+	public Long getAvanceCapturadoRFederal() {
+		return avanceCapturadoRFederal;
+	}
+
+	public void setAvanceCapturadoRFederal(Long avanceCapturadoRFederal) {
+		this.avanceCapturadoRFederal = avanceCapturadoRFederal;
+	}
+
+	public Long getAvanceAsignadoRfederal() {
+		return avanceAsignadoRfederal;
+	}
+
+	public void setAvanceAsignadoRfederal(Long avanceAsignadoRfederal) {
+		this.avanceAsignadoRfederal = avanceAsignadoRfederal;
+	}
+
+	public Double getPorcentajeAvanceRFederal() {
+		return porcentajeAvanceRFederal;
+	}
+
+	public void setPorcentajeAvanceRFederal(Double porcentajeAvanceRFederal) {
+		this.porcentajeAvanceRFederal = porcentajeAvanceRFederal;
+	}
 
 	public Long getMetaCrg() {
 		return metaCrg;

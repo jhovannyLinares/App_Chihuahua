@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import mx.morena.negocio.dto.ReporteAsignacionDistritalDTO;
 import mx.morena.negocio.dto.ReporteCrgDTO;
+import mx.morena.negocio.dto.ReporteAsignacionEstatalDTO;
 import mx.morena.negocio.exception.RepresentanteException;
 import mx.morena.negocio.servicios.IReportesAsignacionService;
 import mx.morena.negocio.dto.ReporteRCDTO;
@@ -51,7 +52,7 @@ public class ReportesAsignacionController extends MasterController{
 
 	@GetMapping("/asignacionDistrital/download")	
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	public void downloadCSV(HttpServletResponse response, HttpServletRequest request) throws IOException {
+	public void downloadCSVDistrital(HttpServletResponse response, HttpServletRequest request) throws IOException {
 		
 		try {
 
@@ -132,6 +133,45 @@ public class ReportesAsignacionController extends MasterController{
 		try {
 			long perfil = getPerfil(request);
 			reportesService.getReporteCrgDownload(response, perfil);
+		} catch (RepresentanteException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+		}
+	}
+	
+	
+	@GetMapping("/asignacionEstatal")
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	private List<ReporteAsignacionEstatalDTO>getReporteEstatal(HttpServletResponse response, HttpServletRequest request) throws IOException{
+	
+		long idUsuario = getUsuario(request);
+		
+		try {
+			return reportesService.getReporteAsignacionEstatal(idUsuario);
+		} catch (RepresentanteException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+			return null;
+		} catch (Exception e ) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			return null;
+		}
+
+	}
+	
+	@GetMapping("/asignacionEstatal/download")	
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	public void downloadCSVEstatal(HttpServletResponse response, HttpServletRequest request) throws IOException {
+		
+		try {
+
+			long perfil = getPerfil(request);
+			reportesService.getReporteEstatalDownload(response, perfil);
+
 		} catch (RepresentanteException e) {
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());

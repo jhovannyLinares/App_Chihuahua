@@ -42,4 +42,8 @@ public interface IRepresentanteRepository {
 
 	Long getRepAsignadoByTipo(Long perfil);
 
+	Long getByDistritoAndTipo(Long id, Long perfil);
+
+	Long getRepAsignadoByDistrito(Long id, Long perfil);
+
 }
