@@ -15,13 +15,13 @@ public interface IReportesAsignacionService {
 	
 	List<ReporteRCDTO> getReporteRc(Long perfil) throws RepresentanteException;
 
-	List<ReporteAsignacionDistritalDTO> getRepAsignacionDistrital(long perfil) throws RepresentanteException ;
+	List<ReporteAsignacionDistritalDTO> getRepAsignacionDistrital(long idUsuario) throws RepresentanteException ;
 	
 	public void getReporteRcDownload(HttpServletResponse response, Long perfil) throws RepresentanteException, IOException;
 
 	void getReporteDistritalDownload(HttpServletResponse response, long perfil) throws RepresentanteException, IOException;
 	
-	List<ReporteCrgDTO> getReporteCrgDv(Long perfil) throws RepresentanteException;
+	List<ReporteCrgDTO> getReporteCrgDv(Long idUsuario) throws RepresentanteException;
 
 	void getReporteCrgDownload(HttpServletResponse response, long perfil) throws RepresentanteException, IOException;
 	

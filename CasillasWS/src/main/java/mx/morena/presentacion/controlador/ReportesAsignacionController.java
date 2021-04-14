@@ -34,10 +34,10 @@ public class ReportesAsignacionController extends MasterController{
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
 	private List<ReporteAsignacionDistritalDTO>getReporteFederal(HttpServletResponse response, HttpServletRequest request) throws IOException{
 		
-		long perfil = getPerfil(request);
+		long idUsuario = getUsuario(request);
 		
 		try {
-			return reportesService.getRepAsignacionDistrital(perfil);
+			return reportesService.getRepAsignacionDistrital(idUsuario);
 		} catch (RepresentanteException e) {
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
@@ -112,8 +112,9 @@ public class ReportesAsignacionController extends MasterController{
 		
 		try {
 			long perfil = getPerfil(request);
+			long idUsuario = getUsuario(request);
 			
-			return reportesService.getReporteCrgDv(perfil);
+			return reportesService.getReporteCrgDv(idUsuario);
 		} catch (RepresentanteException e) {
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());

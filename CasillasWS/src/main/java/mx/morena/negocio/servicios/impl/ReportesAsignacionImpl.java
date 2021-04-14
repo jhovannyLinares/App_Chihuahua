@@ -38,7 +38,7 @@ public class ReportesAsignacionImpl extends MasterService implements IReportesAs
 	
 
 	@Override
-	public List<ReporteAsignacionDistritalDTO> getRepAsignacionDistrital(long perfil) throws RepresentanteException {
+	public List<ReporteAsignacionDistritalDTO> getRepAsignacionDistrital(long idUsuario) throws RepresentanteException {
 		
 		List<ReporteAsignacionDistritalDTO> lstDto = new ArrayList<ReporteAsignacionDistritalDTO>();
 		ReporteAsignacionDistritalDTO dto = null;
@@ -57,15 +57,23 @@ public class ReportesAsignacionImpl extends MasterService implements IReportesAs
 		total.setAvanceAsignadoRc(0L);
 		total.setPorcentajeAvanceRc(0.0);
 
+		Usuario usuario = usuarioRepository.findById(idUsuario);
+		long idDistrito = usuario.getFederal();
+		long perfilUsuario = usuario.getPerfil();
+		
+		System.out.println("distrito " + idDistrito);
+		System.out.println("perfil " + perfilUsuario);
+		
+		
 		dto = new ReporteAsignacionDistritalDTO();
 		
-		Long crgCapturado = representanteRepository.getByTipo(PERFIL_CRG);
-		Long rgCapturado = representanteRepository.getByTipo(PERFIL_RG);
-		Long rcCapturado = representanteRepository.getByTipo(PERFIL_RC);
+		Long crgCapturado = representanteRepository.getByTipo(PERFIL_CRG, idDistrito, perfilUsuario);
+		Long rgCapturado = representanteRepository.getByTipo(PERFIL_RG, idDistrito, perfilUsuario);
+		Long rcCapturado = representanteRepository.getByTipo(PERFIL_RC, idDistrito, perfilUsuario);
 
-		Long crgAsignado = representanteRepository.getRepAsignadoByTipo(PERFIL_CRG);
-		Long rgAsignado = representanteRepository.getRepAsignadoByTipo(PERFIL_RG);
-		Long rcAsignado = representanteRepository.getRepAsignadoByTipo(PERFIL_RC);
+		Long crgAsignado = representanteRepository.getRepAsignadoByTipo(PERFIL_CRG, idDistrito, perfilUsuario);
+		Long rgAsignado = representanteRepository.getRepAsignadoByTipo(PERFIL_RG, idDistrito, perfilUsuario);
+		Long rcAsignado = representanteRepository.getRepAsignadoByTipo(PERFIL_RC, idDistrito, perfilUsuario);
 
 		// CRG
 		dto.setMetaCrg(50L);
@@ -164,14 +172,19 @@ if(perfil == PERFIL_ESTATAL) {
 	}
 
 	@Override
-	public List<ReporteCrgDTO> getReporteCrgDv(Long perfil) throws RepresentanteException {
+	public List<ReporteCrgDTO> getReporteCrgDv(Long idUsuario) throws RepresentanteException {
 		List<ReporteCrgDTO> lstDto = new ArrayList<ReporteCrgDTO>();
 		ReporteCrgDTO dto = new ReporteCrgDTO();
+		
+		Usuario usuario = usuarioRepository.findById(idUsuario);
+		long idDistrito = usuario.getFederal();
+		long perfilUsuario = usuario.getPerfil();
+		
 
-		Long countRepRgCapturado = representanteRepository.getByTipo(PERFIL_RG);
-		Long countRepRgAsignado = representanteRepository.getRepAsignadoByTipo(PERFIL_RG);
-		Long countRepRcCapturado = representanteRepository.getByTipo(PERFIL_RC);
-		Long countRepRcAsignado = representanteRepository.getRepAsignadoByTipo(PERFIL_RC);
+		Long countRepRgCapturado = representanteRepository.getByTipo(PERFIL_RG, idDistrito, perfilUsuario);
+		Long countRepRgAsignado = representanteRepository.getRepAsignadoByTipo(PERFIL_RG, idDistrito, perfilUsuario);
+		Long countRepRcCapturado = representanteRepository.getByTipo(PERFIL_RC, idDistrito, perfilUsuario);
+		Long countRepRcAsignado = representanteRepository.getRepAsignadoByTipo(PERFIL_RC, idDistrito, perfilUsuario);
 
 		dto.setMetaRg(63L);
 		dto.setAvanceCapturadoRg(countRepRgCapturado);

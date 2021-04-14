@@ -38,9 +38,9 @@ public interface IRepresentanteRepository {
 	
 	Long getRcAsignados(Long perfil);
 
-	Long getByTipo(Long perfil);
+	Long getByTipo(Long perfil, Long idDistrito, Long perfilUsuario);
 
-	Long getRepAsignadoByTipo(Long perfil);
+	Long getRepAsignadoByTipo(Long perfil, Long idDistrito, Long perfilUsuario);
 
 	Long getByDistritoAndTipo(Long id, Long perfil);
 
