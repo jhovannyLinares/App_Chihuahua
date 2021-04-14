@@ -290,6 +290,12 @@ public class RepresentantesRepository implements IRepresentanteRepository {
 			type.add(Types.NUMERIC);
 			para.add(idDistrito);
 			type.add(Types.NUMERIC);
+		} else if (perfilUsuario == 7) {
+			where = where.concat(" and distrito_federal_id = ? ");
+			para.add(perfil);
+			type.add(Types.NUMERIC);
+			para.add(idDistrito);
+			type.add(Types.NUMERIC);
 		}
 		
 		Object[] parametros = new Object[para.size()];
@@ -325,6 +331,12 @@ public class RepresentantesRepository implements IRepresentanteRepository {
 			type.add(Types.NUMERIC);
 		}
 		else if ( perfilUsuario == 2) {
+			where = where.concat(" and distrito_federal_id = ? ");
+			para.add(perfil);
+			type.add(Types.NUMERIC);
+			para.add(idDistrito);
+			type.add(Types.NUMERIC);
+		} else if (perfilUsuario == 7) {
 			where = where.concat(" and distrito_federal_id = ? ");
 			para.add(perfil);
 			type.add(Types.NUMERIC);

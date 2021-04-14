@@ -22,9 +22,9 @@ public interface IReportesAsignacionService {
 
 	void getReporteDistritalDownload(HttpServletResponse response, long perfil) throws RepresentanteException, IOException;
 	
-	List<ReporteCrgDTO> getReporteCrgDv(Long idUsuario) throws RepresentanteException;
+	List<ReporteCrgDTO> getReporteCrgDv(Long idUsuario, Long perfil) throws RepresentanteException;
 
-	void getReporteCrgDownload(HttpServletResponse response, long perfil) throws RepresentanteException, IOException;
+	void getReporteCrgDownload(HttpServletResponse response, long perfil, long idUsuario) throws RepresentanteException, IOException;
 	
 	List<ReporteAsignacionEstatalDTO> getReporteAsignacionEstatal(long idUsuario) throws RepresentanteException, IOException;
 

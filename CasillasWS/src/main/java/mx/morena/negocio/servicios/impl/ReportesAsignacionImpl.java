@@ -177,45 +177,48 @@ if(perfil == PERFIL_ESTATAL) {
 	}
 
 	@Override
-	public List<ReporteCrgDTO> getReporteCrgDv(Long idUsuario) throws RepresentanteException {
-		List<ReporteCrgDTO> lstDto = new ArrayList<ReporteCrgDTO>();
-		ReporteCrgDTO dto = new ReporteCrgDTO();
-		
-		Usuario usuario = usuarioRepository.findById(idUsuario);
-		long idDistrito = usuario.getFederal();
-		long perfilUsuario = usuario.getPerfil();
-		
-
-		Long countRepRgCapturado = representanteRepository.getByTipo(PERFIL_RG, idDistrito, perfilUsuario);
-		Long countRepRgAsignado = representanteRepository.getRepAsignadoByTipo(PERFIL_RG, idDistrito, perfilUsuario);
-		Long countRepRcCapturado = representanteRepository.getByTipo(PERFIL_RC, idDistrito, perfilUsuario);
-		Long countRepRcAsignado = representanteRepository.getRepAsignadoByTipo(PERFIL_RC, idDistrito, perfilUsuario);
-
-		dto.setMetaRg(63L);
-		dto.setAvanceCapturadoRg(countRepRgCapturado);
-		dto.setAvanceAsignadoRg(countRepRgAsignado);
-		double porAvanceRg = (double) dto.getAvanceAsignadoRg() / dto.getMetaRg() * 100.00;
-		dto.setPorcentajeAvanceRg(dosDecimales(porAvanceRg).doubleValue());
-
-		dto.setMetaRc(30L);
-		dto.setAvanceCapturadoRc(countRepRcCapturado);
-		dto.setAvanceAsignadoRc(countRepRcAsignado);
-		double porAvanceRc = (double) dto.getAvanceAsignadoRc() / dto.getMetaRc() * 100.00;
-		dto.setPorcentajeAvanceRc(dosDecimales(porAvanceRc).doubleValue());
-
-		lstDto.add(dto);
-
-		return lstDto;
+	public List<ReporteCrgDTO> getReporteCrgDv(Long idUsuario, Long perfil) throws RepresentanteException {
+		if(perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL || perfil == PERFIL_CRG ) {
+			List<ReporteCrgDTO> lstDto = new ArrayList<ReporteCrgDTO>();
+			ReporteCrgDTO dto = new ReporteCrgDTO();
+			
+			Usuario usuario = usuarioRepository.findById(idUsuario);
+			long idDistrito = usuario.getFederal();
+			long perfilUsuario = usuario.getPerfil();
+	
+			Long countRepRgCapturado = representanteRepository.getByTipo(PERFIL_RG, idDistrito, perfilUsuario);
+			Long countRepRgAsignado = representanteRepository.getRepAsignadoByTipo(PERFIL_RG, idDistrito, perfilUsuario);
+			Long countRepRcCapturado = representanteRepository.getByTipo(PERFIL_RC, idDistrito, perfilUsuario);
+			Long countRepRcAsignado = representanteRepository.getRepAsignadoByTipo(PERFIL_RC, idDistrito, perfilUsuario);
+	
+			dto.setMetaRg(63L);
+			dto.setAvanceCapturadoRg(countRepRgCapturado);
+			dto.setAvanceAsignadoRg(countRepRgAsignado);
+			double porAvanceRg = (double) dto.getAvanceAsignadoRg() / dto.getMetaRg() * 100.00;
+			dto.setPorcentajeAvanceRg(dosDecimales(porAvanceRg).doubleValue());
+	
+			dto.setMetaRc(30L);
+			dto.setAvanceCapturadoRc(countRepRcCapturado);
+			dto.setAvanceAsignadoRc(countRepRcAsignado);
+			double porAvanceRc = (double) dto.getAvanceAsignadoRc() / dto.getMetaRc() * 100.00;
+			dto.setPorcentajeAvanceRc(dosDecimales(porAvanceRc).doubleValue());
+	
+			lstDto.add(dto);
+	
+			return lstDto;
+		} else {
+			throw new RepresentanteException("No cuenta con permisos suficientes", 401);
+		}
 	}
 
 	@Override
-	public void getReporteCrgDownload(HttpServletResponse response, long perfil) throws RepresentanteException, IOException {
+	public void getReporteCrgDownload(HttpServletResponse response, long perfil, long idUsuario) throws RepresentanteException, IOException {
 		setNameFile(response, CSV_ASIGN_CRG);
 
-		List<ReporteCrgDTO> crgDTOs = getReporteCrgDv(perfil);
+		List<ReporteCrgDTO> crgDTOs = getReporteCrgDv(idUsuario, perfil);
 
 		String[] header = { "metaRg", "avanceCapturadoRg", "avanceAsignadoRg", "porcentajeAvanceRg", "metaRc",
-							"avanceCapturadoRc", "avanceAsignadoRc", "avance", "porcentajeAvanceRc" };
+							"avanceCapturadoRc", "avanceAsignadoRc", "porcentajeAvanceRc" };
 
 		setWriterFile(response, crgDTOs, header);
 	}
@@ -373,7 +376,7 @@ if(perfil == PERFIL_ESTATAL) {
 	public void getReporteRgDownload(HttpServletResponse response, Long perfil, Long idUsuario)
 			throws RepresentanteException, IOException {
 		setNameFile(response, CSV_ASIGN_RG);
-		List<ReporteCrgDTO> crgDTOs = getReporteCrgDv(perfil);
+		List<ReporteCrgDTO> crgDTOs = getReporteCrgDv(perfil, idUsuario);
 
 		String[] header = { "metaRg", "avanceCapturadoRg", "avanceAsignadoRg", "porcentajeAvanceRg"};
 

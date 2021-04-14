@@ -117,7 +117,7 @@ public class ReportesAsignacionController extends MasterController{
 			long perfil = getPerfil(request);
 			long idUsuario = getUsuario(request);
 			
-			return reportesService.getReporteCrgDv(idUsuario);
+			return reportesService.getReporteCrgDv(idUsuario, perfil);
 		} catch (RepresentanteException e) {
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
@@ -136,7 +136,9 @@ public class ReportesAsignacionController extends MasterController{
 		
 		try {
 			long perfil = getPerfil(request);
-			reportesService.getReporteCrgDownload(response, perfil);
+			long idUsuario = getUsuario(request);
+			
+			reportesService.getReporteCrgDownload(response, perfil, idUsuario);
 		} catch (RepresentanteException e) {
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
