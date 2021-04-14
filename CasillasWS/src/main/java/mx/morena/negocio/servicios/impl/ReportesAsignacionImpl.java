@@ -197,7 +197,6 @@ if(perfil == PERFIL_ESTATAL) {
 		dto.setAvanceAsignadoRc(countRepRcAsignado);
 		double porAvanceRc = (double) dto.getAvanceAsignadoRc() / dto.getMetaRc() * 100.00;
 		dto.setPorcentajeAvanceRc(dosDecimales(porAvanceRc).doubleValue());
-		dto.setAvance(0L);
 
 		lstDto.add(dto);
 

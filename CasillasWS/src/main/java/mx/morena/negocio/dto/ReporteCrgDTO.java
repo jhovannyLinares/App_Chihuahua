@@ -15,8 +15,6 @@ public class ReporteCrgDTO {
 	
 	private Long avanceAsignadoRc;
 	
-	private Long avance;
-	
 	private Double porcentajeAvanceRc;
 
 	public Long getMetaRg() {
@@ -73,14 +71,6 @@ public class ReporteCrgDTO {
 
 	public void setAvanceAsignadoRc(Long avanceAsignadoRc) {
 		this.avanceAsignadoRc = avanceAsignadoRc;
-	}
-
-	public Long getAvance() {
-		return avance;
-	}
-
-	public void setAvance(Long avance) {
-		this.avance = avance;
 	}
 
 	public Double getPorcentajeAvanceRc() {
