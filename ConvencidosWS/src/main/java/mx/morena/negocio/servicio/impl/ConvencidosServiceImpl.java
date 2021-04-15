@@ -80,7 +80,7 @@ public class ConvencidosServiceImpl extends MasterService implements IConvencido
 			List<Convencidos> convencidoEx = convencidosRepository.findByClaveElectorVal(dto.getClaveElector());
 
 			if (convencidoEx != null) {
-				throw new ConvencidosException("La clave de elector ya se encuentra registrada", 400);
+				throw new ConvencidosException("La clave de elector ya se encuentra registrada. Favor de validar", 400);
 			} else {
 
 				Convencidos convencido = new Convencidos();

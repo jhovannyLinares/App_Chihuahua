@@ -91,7 +91,7 @@ public class RepresentanteServiceImpl extends MasterService implements IRepresen
 			Representantes existeClave = representanteRepository.findByClaveElector(representanteDTO.getClaveElector());
 
 			if (existeClave != null) {
-				throw new RepresentanteException("La clave de elector ya se encuentra registrada", 400);
+				throw new RepresentanteException("La clave de elector ya se encuentra registrada. Favor de validar", 400);
 			} else {
 
 				if (representanteDTO.getIdDistritoFederal() != null && representanteDTO.getIdMunicipio() != null

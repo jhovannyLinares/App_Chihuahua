@@ -49,9 +49,9 @@ public class CotServiceImpl extends MasterService implements ICotService {
 				List<Convencidos> existeClave = cotRepository.findByClaveElectorVal(cotDto.getClaveElector());
 
 				if (existeClave != null) {
-					throw new CotException("La clave de elector ya esta en uso, intente con otra", 400);
+					throw new CotException("La clave de elector ya se encuentra registrada. Favor de validar", 400);
 				} else if (existeCurp != null) {
-					throw new CotException("La CURP ya esta en uso, intente con otra", 400);
+					throw new CotException("La CURP ya se encuentra registrada. Favor de validar", 400);
 				} else {
 					Convencidos personaCot = new Convencidos();
 
@@ -344,9 +344,9 @@ public class CotServiceImpl extends MasterService implements ICotService {
 							return "Cot editado correctamente " + cotDto.getNombre();
 
 						} else if (existeCurp) {
-							throw new CotException("Curp duplicada, favor de validar", 400);
+							throw new CotException("La CURP ya se encuentra registrada. Favor de validar", 400);
 						} else {
-							throw new CotException("Clave de elector duplicada, favor de validar", 400);
+							throw new CotException("La clave de elector ya se encuentra registrada. Favor de validar", 400);
 						}
 
 					} else {
