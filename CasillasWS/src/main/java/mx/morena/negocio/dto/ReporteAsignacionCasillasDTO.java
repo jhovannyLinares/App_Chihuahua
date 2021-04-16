@@ -6,7 +6,7 @@ public class ReporteAsignacionCasillasDTO {
 	
 	private Long idLocal;
 	
-	private Long idMunicipio;
+	private String municipio;
 	
 	private Long crg;
 	
@@ -40,12 +40,12 @@ public class ReporteAsignacionCasillasDTO {
 		this.idLocal = idLocal;
 	}
 
-	public Long getIdMunicipio() {
-		return idMunicipio;
+	public String getMunicipio() {
+		return municipio;
 	}
 
-	public void setIdMunicipio(Long idMunicipio) {
-		this.idMunicipio = idMunicipio;
+	public void setMunicipio(String municipio) {
+		this.municipio = municipio;
 	}
 
 	public Long getCrg() {

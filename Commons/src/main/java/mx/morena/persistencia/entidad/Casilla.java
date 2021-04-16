@@ -22,6 +22,7 @@ public class Casilla {
 
 	private boolean asignado;
 
+	private Long local;
 	public Long getId() {
 		return id;
 	}
@@ -132,6 +133,14 @@ public class Casilla {
 
 	public void setAsignado(boolean asignado) {
 		this.asignado = asignado;
+	}
+
+	public Long getLocal() {
+		return local;
+	}
+
+	public void setLocal(Long local) {
+		this.local = local;
 	}
 
 }
