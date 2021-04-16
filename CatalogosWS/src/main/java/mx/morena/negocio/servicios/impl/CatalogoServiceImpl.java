@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import mx.morena.negocio.dto.CasillaDTO;
 import mx.morena.negocio.dto.DistritoFederalDTO;
 import mx.morena.negocio.dto.EntidadDTO;
+import mx.morena.negocio.dto.IncidenciaDTO;
 import mx.morena.negocio.dto.MunicipioDTO;
 import mx.morena.negocio.dto.RepresentanteDTO;
 import mx.morena.negocio.dto.SeccionDTO;
@@ -24,6 +25,7 @@ import mx.morena.persistencia.entidad.Cargo;
 import mx.morena.persistencia.entidad.Casilla;
 import mx.morena.persistencia.entidad.DistritoFederal;
 import mx.morena.persistencia.entidad.Entidad;
+import mx.morena.persistencia.entidad.Incidencias;
 import mx.morena.persistencia.entidad.Municipio;
 import mx.morena.persistencia.entidad.SeccionElectoral;
 import mx.morena.persistencia.entidad.Usuario;
@@ -32,6 +34,7 @@ import mx.morena.persistencia.repository.ICasillaRepository;
 import mx.morena.persistencia.repository.IDistritoFederalRepository;
 import mx.morena.persistencia.repository.IDistritoLocalRepository;
 import mx.morena.persistencia.repository.IEntidadRepository;
+import mx.morena.persistencia.repository.IIncidenciasRepository;
 import mx.morena.persistencia.repository.IMunicipioRepository;
 import mx.morena.persistencia.repository.ISeccionElectoralRepository;
 import mx.morena.persistencia.repository.IUsuarioRepository;
@@ -63,6 +66,9 @@ public class CatalogoServiceImpl extends MasterService implements ICatalogoServi
 
 	@Autowired
 	private ICasillaRepository casillaRepository;
+	
+	@Autowired
+	private IIncidenciasRepository incidenciaRepository;
 
 	@Override
 	public List<EntidadDTO> getEntidades() {
@@ -366,6 +372,18 @@ public class CatalogoServiceImpl extends MasterService implements ICatalogoServi
 		}
 
 		return distritoFederalDTOs;
+	}
+
+	@Override
+	public List<IncidenciaDTO> getIncidencias() throws CatalogoException {
+		
+		List<Incidencias> incidencias = incidenciaRepository.findAll();
+
+		List<IncidenciaDTO> dtos = new ArrayList<IncidenciaDTO>();
+
+		dtos = MapperUtil.mapAll(incidencias, IncidenciaDTO.class);
+
+		return dtos;
 	}
 
 //	@Override

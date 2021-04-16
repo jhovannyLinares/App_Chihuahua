@@ -19,6 +19,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import mx.morena.negocio.dto.CasillaDTO;
 import mx.morena.negocio.dto.DistritoFederalDTO;
 import mx.morena.negocio.dto.EntidadDTO;
+import mx.morena.negocio.dto.IncidenciaDTO;
 import mx.morena.negocio.dto.MunicipioDTO;
 import mx.morena.negocio.dto.RepresentanteDTO;
 import mx.morena.negocio.dto.SeccionDTO;
@@ -157,4 +158,20 @@ public class CatalogoController extends MasterController {
 //		return dto;
 //	}
 
+	@GetMapping("/incidencias")
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	private List<IncidenciaDTO> getIncidencias(HttpServletResponse response, HttpServletRequest request) throws IOException{
+		
+		try {
+			return ICatService.getIncidencias();
+		} catch (CatalogoException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+			return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			return null;
+		}
+	}
 }
