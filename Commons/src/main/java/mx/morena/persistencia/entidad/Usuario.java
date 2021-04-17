@@ -27,6 +27,8 @@ public class Usuario {
 	private Long seccionElectoral;
 
 	private Long perfil;
+	
+	private Long representante;
 
 	public long getId() {
 		return id;
@@ -132,4 +134,12 @@ public class Usuario {
 		this.perfil = perfil;
 	}
 
+	public Long getRepresentante() {
+		return representante;
+	}
+
+	public void setRepresentante(Long representante) {
+		this.representante = representante;
+	}
+	
 }
