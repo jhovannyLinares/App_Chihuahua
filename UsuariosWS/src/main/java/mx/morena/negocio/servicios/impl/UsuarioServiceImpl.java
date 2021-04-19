@@ -15,10 +15,11 @@ import mx.morena.persistencia.entidad.Usuario;
 import mx.morena.persistencia.repository.IUsuarioRepository;
 import mx.morena.security.dto.ModuloDTO;
 import mx.morena.security.dto.UsuarioDTO;
+import mx.morena.security.servicio.MasterService;
 import mx.morena.security.servicio.Token;
 
 @Service
-public class UsuarioServiceImpl implements IUsuarioService {
+public class UsuarioServiceImpl extends MasterService implements IUsuarioService {
 
 	@Autowired
 	private IUsuarioRepository usuarioRepository;
@@ -114,6 +115,24 @@ public class UsuarioServiceImpl implements IUsuarioService {
 
 		return true;
 
+	}
+
+	@Override
+	public Boolean getRepresentante(Long idPerfil, Long idUsuario, String claveElector) throws UsuarioException {
+		
+		if (idPerfil == PERFIL_RC || idPerfil == PERFIL_RG) {
+			
+			String clave = usuarioRepository.getClaveElector(idUsuario);
+				
+			if(clave.equals(claveElector)) {
+				return true;
+			}else {
+				return false;
+			}
+				
+			}else {
+				throw new UsuarioException("No cuenta con permisos suficientes para realizar la consulta", 401);
+			}
 	}
 
 }

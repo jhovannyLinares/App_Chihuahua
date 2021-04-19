@@ -1,5 +1,6 @@
 package mx.morena.persistencia.repository.impl;
 
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +15,7 @@ import mx.morena.persistencia.entidad.Usuario;
 import mx.morena.persistencia.repository.IUsuarioRepository;
 import mx.morena.persistencia.rowmapper.ModulosRowMapper;
 import mx.morena.persistencia.rowmapper.PerfilRowMapper;
+import mx.morena.persistencia.rowmapper.StringRowMapper;
 import mx.morena.persistencia.rowmapper.UsuarioRowMapper;
 
 @Repository
@@ -86,6 +88,22 @@ public class UsuarioRepository implements IUsuarioRepository {
 			return new ArrayList<Modulo>();
 		}
 
+	}
+
+	@Override
+	public String getClaveElector(Long usuario) {
+		String sql = "select clave_elector from app_representantes ar "
+				+ "inner join app_usuario au "
+				+ "on ar.id = au.id_representante "
+				+ "where au.id = ?";
+		
+		System.out.println(sql);
+		try {
+			return template.queryForObject(sql, new Object[] { usuario }, new int[] { Types.NUMERIC },
+					new StringRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
 	}
 
 }

@@ -17,5 +17,7 @@ public interface IUsuarioRepository {
 	Perfil findPerfilById(long perfil);
 
 	List<Modulo> findModulosByPerfil(Long perfil);
+	
+	String getClaveElector(Long usuario);
 
 }
