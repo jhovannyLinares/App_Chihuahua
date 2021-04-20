@@ -164,7 +164,7 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 								throw new CotException("No se encontraron casillas asignadas", 404);
 							}
 						} else {
-							throw new CotException("La casilla no puede ser nula", 401);
+							throw new CotException("El no. de casilla no puede ser nula", 400);
 						}
 					}
 					
@@ -194,6 +194,8 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 							} else {
 								throw new CotException("No se encontraron casillas", 404);
 							}
+						} else {
+							throw new CotException("La ruta no puede ser nula", 400);
 						}
 					}
 					
@@ -206,7 +208,7 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 				throw new CotException("No se encontro el representante", 404);
 			}
 		} else {
-			throw new CotException("Permisos insuficientes", 401);
+			throw new CotException("No cuenta con los permisos suficientes para realizar la operacion.", 401);
 		}
 	}
 
