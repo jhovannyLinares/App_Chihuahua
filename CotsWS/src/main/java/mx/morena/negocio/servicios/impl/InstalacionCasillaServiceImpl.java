@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import mx.morena.negocio.dto.CasillasDTO;
+import mx.morena.negocio.dto.CierreCasillaDTO;
 import mx.morena.negocio.dto.IncidenciasCasillasDTO;
 import mx.morena.negocio.dto.InstalacionCasillasDTO;
 import mx.morena.negocio.dto.listIncidenciasDTO;
@@ -223,6 +224,32 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 		casillaDto.setIdZonaCrg(asignacioncasillas.getIdZonaCrg());
 		
 		return casillaDto;
+	}
+
+	@Override
+	public String horaCierre(long usuario, CierreCasillaDTO dto, long perfil) throws CotException, IOException {
+
+		if (perfil == PERFIL_RG) {
+
+			Long reporte = reporteRepository.getReporteByCAsilla(dto.getIdCasilla());
+
+			if (reporte != null) {
+				ReporteCasilla rc = new ReporteCasilla();
+
+				rc.setIdCasilla(dto.getIdCasilla());
+				rc.setHoraCierre(dto.getHoraCierre());
+
+				if (reporteRepository.updateHoraCierre(rc) == 0) {
+					throw new CotException("No se actualizo la hora de cierre", 409);
+				}
+			} else {
+				throw new CotException("La casilla seleccionada no esta registrada", 404);
+			}
+
+		} else {
+			throw new CotException("No cuenta con los permisos suficientes para realizar la operacion.", 401);
+		}
+		return "Se guardo la hora de cierre de la casilla " + dto.getIdCasilla();
 	}
 
 }

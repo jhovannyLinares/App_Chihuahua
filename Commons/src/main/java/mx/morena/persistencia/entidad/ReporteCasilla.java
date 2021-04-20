@@ -13,6 +13,8 @@ public class ReporteCasilla {
 	private Long idRg;
 	
 	private Long numeroVotos;
+	
+	private Timestamp horaCierre;
 
 	public Long getId() {
 		return id;
@@ -52,6 +54,14 @@ public class ReporteCasilla {
 
 	public void setNumeroVotos(Long numeroVotos) {
 		this.numeroVotos = numeroVotos;
+	}
+
+	public Timestamp getHoraCierre() {
+		return horaCierre;
+	}
+
+	public void setHoraCierre(Timestamp horaCierre) {
+		this.horaCierre = horaCierre;
 	}
 
 }
