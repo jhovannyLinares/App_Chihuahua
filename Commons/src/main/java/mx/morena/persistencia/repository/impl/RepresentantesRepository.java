@@ -385,4 +385,15 @@ public class RepresentantesRepository implements IRepresentanteRepository {
 		String sql = "select count(*) from app_representantes where distrito_federal_id = ? and tipo_representante = ? and is_asignado = true";
 		return template.queryForObject(sql, new Object[] { id, perfil }, new int[] { Types.NUMERIC, Types.NUMERIC }, new LongRowMapper());
 	}
+	
+	@Override
+	public Representantes getRepresentanteByIdAndTipo(Long representanteId, Long tipoRepresentante) {
+		String sql = " SELECT * FROM app_representantes where id = ? and tipo_representante = ? ";
+		try {
+			return template.queryForObject(sql, new Object[] { representanteId, tipoRepresentante }, new int[] { Types.NUMERIC, Types.NUMERIC },
+					new RepresentanteRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
 }

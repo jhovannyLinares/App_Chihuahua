@@ -8,8 +8,10 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import mx.morena.persistencia.entidad.AsignacionCasillas;
 import mx.morena.persistencia.entidad.Casilla;
 import mx.morena.persistencia.repository.ICasillaRepository;
+import mx.morena.persistencia.rowmapper.AsignacionCasillasRowMapper;
 import mx.morena.persistencia.rowmapper.CasillasRowMapper;
 import mx.morena.persistencia.rowmapper.CountCasillasRowMapper;
 
@@ -93,6 +95,32 @@ public class CasillaRepository implements ICasillaRepository {
 		try {
 			return template.queryForObject(sql, new Object[] { idMunicipio, tipologia}, new int[] { Types.NUMERIC, Types.VARCHAR },
 					new CountCasillasRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		
+		}
+	}
+
+	@Override
+	public List<AsignacionCasillas> getCasillasByRuta(Long entidad, Long idDistritoF, Long idRuta) {
+		String sql = " SELECT id, distrito_federal_id, nombre_distrito, zona_crg, id_zona_crg, ruta, id_casilla, tipo_casilla,"
+				+ " seccion_id, status, id_ruta_rg, id_crg FROM app_asignacion_casillas where ruta = ? and ruta != 0 ";
+		try {
+			return template.queryForObject(sql, new Object[] { idRuta }, new int[] { Types.NUMERIC },
+				new AsignacionCasillasRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		
+		}
+	}
+
+	@Override
+	public List<AsignacionCasillas> getCasillasById(Long entidad, Long idCasilla) {
+		String sql = " SELECT id, distrito_federal_id, nombre_distrito, zona_crg, id_zona_crg, ruta, id_casilla, tipo_casilla, "
+				+ "seccion_id, status, id_ruta_rg, id_crg FROM app_asignacion_casillas where id_casilla = ? and ruta != 0 ";
+		try {
+			return template.queryForObject(sql, new Object[] { idCasilla }, new int[] { Types.NUMERIC },
+				new AsignacionCasillasRowMapper());
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		

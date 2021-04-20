@@ -2,6 +2,7 @@ package mx.morena.persistencia.repository;
 
 import java.util.List;
 
+import mx.morena.persistencia.entidad.AsignacionCasillas;
 import mx.morena.persistencia.entidad.Casilla;
 
 public interface ICasillaRepository {
@@ -23,5 +24,9 @@ public interface ICasillaRepository {
 	public Long countByLocalAndTipologia(Long localId, String tipologia);
 	
 	public Long countByMunicipioAndTipologia(Long idMunicipio, String tipologia);
+	
+	public List<AsignacionCasillas> getCasillasById(Long entidad, Long idCasilla);
+	
+	public List<AsignacionCasillas> getCasillasByRuta(Long entidad, Long idDistritoF, Long idRuta);
 
 }
