@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import mx.morena.negocio.dto.IncidenciasCasillasDTO;
 import mx.morena.negocio.dto.InstalacionCasillasDTO;
 import mx.morena.negocio.exception.CotException;
 import mx.morena.negocio.servicios.IInstalacionCasillaService;
@@ -27,7 +28,7 @@ public class InstalacionCasillaController extends MasterController {
 	@Autowired
 	private IInstalacionCasillaService IService;
 	
-	@PostMapping("/Casillas")
+	@PostMapping("/instalacionCasillas")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
 	public Long saveIstalacionCasilla(HttpServletResponse response, HttpServletRequest request, @RequestBody InstalacionCasillasDTO dto) throws IOException {
 		long perfil = getPerfil(request);
@@ -46,4 +47,22 @@ public class InstalacionCasillaController extends MasterController {
 		}
 	}
 
+	@PostMapping("/reporteCasillas")
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	public Long saveIncidenciaCasilla(HttpServletResponse response, HttpServletRequest request, @RequestBody IncidenciasCasillasDTO dto) throws IOException {
+		long perfil = getPerfil(request);
+		long usuario = getUsuario(request);
+
+		try {
+			return IService.saveIncidenciasCasilla(dto, perfil, usuario);
+		} catch (CotException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+			return null;
+		} catch (Exception e ) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			return null;
+		}
+	}
 }
