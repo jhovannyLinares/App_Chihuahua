@@ -75,41 +75,47 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 	public Long saveIncidenciasCasilla(IncidenciasCasillasDTO dto, long perfil, long usuario) throws CotException {
 
 		if (perfil == PERFIL_RG) {
+			
+			if (dto.getNumero() <= 750) {
 
-			List<listIncidenciasDTO> lstIn = dto.getIncidencia();
-			System.out.println(" numero incidencias " + lstIn.size());
-			IncidenciasCasillas ic = null;
+				List<listIncidenciasDTO> lstIn = dto.getIncidencia();
+				System.out.println(" numero incidencias " + lstIn.size());
+				IncidenciasCasillas ic = null;
 
-			Usuario usr = usuarioRepository.findById(usuario);
+				Usuario usr = usuarioRepository.findById(usuario);
 
-			System.out.println("SSSS " + dto.getPresentaIncidencias());
-			if (dto.getPresentaIncidencias().equals("si")) {
-				for (listIncidenciasDTO incidencia : lstIn) {
-					ic = new IncidenciasCasillas();
+				System.out.println("SSSS " + dto.getPresentaIncidencias());
+				
+				if (dto.getPresentaIncidencias().equals("si")) {
+					for (listIncidenciasDTO incidencia : lstIn) {
+						ic = new IncidenciasCasillas();
 
-					ic.setIdCasilla(dto.getIdCasilla());
-					ic.setIdIncidencia(incidencia.getId());
+						ic.setIdCasilla(dto.getIdCasilla());
+						ic.setIdIncidencia(incidencia.getId());
 
-					if (incidenciasRepository.save(ic) == 0) {
-						throw new CotException("No se guardo la incidencia con éxito.", 409);
+						if (incidenciasRepository.save(ic) == 0) {
+							throw new CotException("No se guardo la incidencia con éxito.", 409);
+						}
+					}
+
+				}
+				
+				if (dto.getPresentaIncidencias().equals("no")) {
+
+					ReporteCasilla rc = new ReporteCasilla();
+
+					rc.setIdCasilla(dto.getIdCasilla());
+					rc.setHoraReporte(dto.getHoraReporte());
+					rc.setIdRg(usr.getId());
+					rc.setNumeroVotos(dto.getNumero());
+
+					if (reporteRepository.save(rc) == 0) {
+						throw new CotException("No se guardo el reporte con éxito.", 409);
 					}
 				}
-
-			} if (dto.getPresentaIncidencias().equals("no")) {
-
-				ReporteCasilla rc = new ReporteCasilla();
-
-				rc.setIdCasilla(dto.getIdCasilla());
-				rc.setHoraReporte(dto.getHoraReporte());
-				rc.setIdRg(usr.getId());
-				rc.setNumeroVotos(dto.getNumero());
-				
-				if (reporteRepository.save(rc) == 0) {
-					throw new CotException("No se guardo el reporte con éxito.", 409);
-				};
-
+			} else {
+				throw new CotException("El numero de votos excede el numero permitido", 400);
 			}
-
 		} else {
 			throw new CotException("No cuenta con los permisos suficientes para realizar la operacion.", 401);
 		}
