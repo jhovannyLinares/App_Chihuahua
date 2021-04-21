@@ -14,11 +14,13 @@ import mx.morena.persistencia.entidad.RepresentanteClaveElectoral;
 import mx.morena.persistencia.entidad.Representantes;
 import mx.morena.persistencia.entidad.RepresentantesAsignados;
 import mx.morena.persistencia.repository.IRepresentanteRepository;
+import mx.morena.persistencia.rowmapper.ConvencidosValRowMapper;
 import mx.morena.persistencia.rowmapper.IdMaxConvencidos;
 import mx.morena.persistencia.rowmapper.LongRowMapper;
 import mx.morena.persistencia.rowmapper.RepresentanteClaveRowMapper;
 import mx.morena.persistencia.rowmapper.RepresentanteRowMapper;
 import mx.morena.persistencia.rowmapper.RepresentantesCrgRowMapper;
+import mx.morena.persistencia.rowmapper.StringRowMapper;
 import mx.morena.persistencia.rowmapper.TipoRepresentanteRowMapper;
 
 @Repository
@@ -296,6 +298,18 @@ public class RepresentantesRepository implements IRepresentanteRepository {
 			type.add(Types.NUMERIC);
 			para.add(idDistrito);
 			type.add(Types.NUMERIC);
+		}else if (perfilUsuario == 8) {
+			where = where.concat(" and distrito_federal_id = ? ");
+			para.add(perfil);
+			type.add(Types.NUMERIC);
+			para.add(idDistrito);
+			type.add(Types.NUMERIC);
+		}else if (perfilUsuario == 9) {
+			where = where.concat(" and distrito_federal_id = ? ");
+			para.add(perfil);
+			type.add(Types.NUMERIC);
+			para.add(idDistrito);
+			type.add(Types.NUMERIC);
 		}
 		
 		Object[] parametros = new Object[para.size()];
@@ -337,6 +351,18 @@ public class RepresentantesRepository implements IRepresentanteRepository {
 			para.add(idDistrito);
 			type.add(Types.NUMERIC);
 		} else if (perfilUsuario == 7) {
+			where = where.concat(" and distrito_federal_id = ? ");
+			para.add(perfil);
+			type.add(Types.NUMERIC);
+			para.add(idDistrito);
+			type.add(Types.NUMERIC);
+		}else if (perfilUsuario == 8) {
+			where = where.concat(" and distrito_federal_id = ? ");
+			para.add(perfil);
+			type.add(Types.NUMERIC);
+			para.add(idDistrito);
+			type.add(Types.NUMERIC);
+		}else if (perfilUsuario == 9) {
 			where = where.concat(" and distrito_federal_id = ? ");
 			para.add(perfil);
 			type.add(Types.NUMERIC);
