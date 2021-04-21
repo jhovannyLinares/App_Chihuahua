@@ -6,6 +6,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,5 +47,26 @@ public class ConfiguracionController extends MasterController {
 			return null;
 		}
 
+	}
+	
+	@GetMapping("/claveElectoral/{claveElector}")
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	public boolean getRepresentante(HttpServletResponse response,HttpServletRequest request, @PathVariable("claveElector") String claveElector) throws IOException {//@RequestBody UserLogin user
+		
+		long usuario = getUsuario(request);
+		long idPerfil = getPerfil(request);
+		
+		try {
+			return usuarioService.getRepresentante(idPerfil, usuario, claveElector);
+		}catch (UsuarioException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+			return false;
+		} catch (Exception e ) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			return false;
+		}
+		
 	}
 }
