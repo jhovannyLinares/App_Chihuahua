@@ -112,7 +112,7 @@ public class JornadaServiceImpl extends MasterService implements IJornadaService
 			rc = new RegistroCapacitacion();
 			
 			rc.setIdRepresentante(cDto.getIdRepresentante());
-			rc.setIsNombramiento(cDto.isNombramiento());
+			rc.setIsNombramiento(cDto.getIsNombramiento());
 			
 			if (capacitacionRepository.updateNombramiento(rc) ==0) {
 				throw new JornadaException("No se guardo la informacion con exito", 409);
