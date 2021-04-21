@@ -25,7 +25,7 @@ public class CapacitacionRowMapper implements RowMapper<List<Capacitacion>>{
 			rep.setTipoRepresentante(rs.getString("representante"));
 			rep.setAsignado(rs.getLong("asignado"));
 			rep.setCargo(rs.getString("cargo"));
-			rep.setNombramiento(rs.getBoolean("nombramiento"));
+			rep.setIsNombramiento(rs.getBoolean("nombramiento"));
 			
 			lstCap.add(rep);
 			
