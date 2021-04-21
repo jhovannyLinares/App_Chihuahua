@@ -125,7 +125,7 @@ public class CapacitacionRepository implements ICapacitacionRepository{
 		try {
 			template.update(sql, new Object[] {rc.getIdRepresentante(), rc.getTomoCapacitacion(), rc.getFechaCapacitaion(), rc.getHoraCapacitacion(), 
 					rc.getLugarCapacitacion(), rc.getCalle(), rc.getNumInt(), rc.getNumExt(), rc.getColonia(), rc.getMunicipio()});
-			return 0;
+			return 1;
 		} catch (Exception e) {
 			return 0;
 		}
