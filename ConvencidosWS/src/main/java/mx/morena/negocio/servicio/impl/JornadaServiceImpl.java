@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import mx.morena.negocio.dto.CapacitacionDTO;
 import mx.morena.negocio.dto.RegistroCapacitacionDTO;
-import mx.morena.negocio.exception.CotException;
 import mx.morena.negocio.exception.JornadaException;
 import mx.morena.negocio.servicio.IJornadaService;
 import mx.morena.negocio.util.MapperUtil;
