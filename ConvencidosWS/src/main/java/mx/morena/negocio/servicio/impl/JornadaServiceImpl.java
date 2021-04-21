@@ -97,8 +97,29 @@ public class JornadaServiceImpl extends MasterService implements IJornadaService
 		 throw new JornadaException("No se guardo la informacion con exito", 409);	
 		}
 		
-		
 		return "Se registro la capacitacion del representante con id " + dto.getIdRepresentante();
+	}
+
+	@Override
+	@Transactional(rollbackFor={JornadaException.class})
+	public String updateNombramiento(long usuario, List<CapacitacionDTO> dto, long perfil)
+			throws JornadaException, IOException {
+
+		System.out.println("****** " + dto.size());
+		RegistroCapacitacion rc = null;
+		
+		for (CapacitacionDTO cDto: dto) {
+			rc = new RegistroCapacitacion();
+			
+			rc.setIdRepresentante(cDto.getIdRepresentante());
+			rc.setIsNombramiento(cDto.isNombramiento());
+			
+			if (capacitacionRepository.updateNombramiento(rc) ==0) {
+				throw new JornadaException("No se guardo la informacion con exito", 409);
+			}
+		}
+
+		return "Se actualizo la informacion con exito";
 	}
 
 }

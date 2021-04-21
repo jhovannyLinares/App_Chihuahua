@@ -19,4 +19,6 @@ public interface ICapacitacionRepository {
 
 	long saveCapacitacion(RegistroCapacitacion rc);
 
+	long updateNombramiento(RegistroCapacitacion rc);
+
 }

@@ -139,4 +139,17 @@ public class CapacitacionRepository implements ICapacitacionRepository{
 		}
 	}
 
+	@Override
+	public long updateNombramiento(RegistroCapacitacion rc) {
+		String sql = "update app_registro_capacitacion set is_nombramiento = ? where id_representante = ?";
+
+		try {
+			template.update(sql, new Object[] { rc.getIsNombramiento(), rc.getIdRepresentante() },
+					new int[] { Types.BOOLEAN, Types.NUMERIC });
+			return 1;
+		} catch (Exception e) {
+			return 0;
+		}
+	}
+
 }

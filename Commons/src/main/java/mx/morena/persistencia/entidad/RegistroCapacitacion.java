@@ -116,15 +116,12 @@ public class RegistroCapacitacion {
 		this.municipio = municipio;
 	}
 
-	public boolean isNombramiento() {
+	public boolean getIsNombramiento() {
 		return isNombramiento;
 	}
 
-	public void setNombramiento(boolean isNombramiento) {
+	public void setIsNombramiento(boolean isNombramiento) {
 		this.isNombramiento = isNombramiento;
 	}
-	
-	
-	
-	
+
 }

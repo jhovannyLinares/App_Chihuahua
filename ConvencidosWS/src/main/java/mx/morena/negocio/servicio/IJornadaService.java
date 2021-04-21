@@ -13,4 +13,6 @@ public interface IJornadaService {
 
 	String saveCapacitacion(RegistroCapacitacionDTO dto, long perfil, long usuario) throws JornadaException, IOException;
 
+	String updateNombramiento(long usuario, List<CapacitacionDTO> dto, long perfil) throws JornadaException, IOException;
+
 }
