@@ -12,6 +12,7 @@ import mx.morena.persistencia.entidad.Capacitacion;
 import mx.morena.persistencia.entidad.RegistroCapacitacion;
 import mx.morena.persistencia.repository.ICapacitacionRepository;
 import mx.morena.persistencia.rowmapper.CapacitacionRowMapper;
+import mx.morena.persistencia.rowmapper.LongRowMapper;
 
 @Repository
 public class CapacitacionRepository implements ICapacitacionRepository{
@@ -20,7 +21,7 @@ public class CapacitacionRepository implements ICapacitacionRepository{
 	private JdbcTemplate template;
 	
 	@Override
-	public List<Capacitacion> getRepresentanteByClave(String claveElector) {
+	public List<Capacitacion> getRepresentanteRcByClave(String claveElector) {
 		String sql = "SELECT ar.id, ar.clave_elector as clave, atr.tipo_representante as representante, "
 				+ "ara.casilla_id as asignado, ac.descripcion as cargo FROM app_representantes ar "
 				+ "inner join app_representantes_asignados ara "
@@ -35,6 +36,81 @@ public class CapacitacionRepository implements ICapacitacionRepository{
 		
 		try {
 			return template.queryForObject(sql,new Object[] { claveElector }, new int[] { Types.VARCHAR }, new CapacitacionRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+	
+	@Override
+	public List<Capacitacion> getRepresentanteRgByClave(String claveElector) {
+		String sql = "SELECT ar.id, ar.clave_elector as clave, atr.tipo_representante as representante, "
+				+ "ara.ruta_id as asignado, ac.descripcion as cargo FROM app_representantes ar "
+				+ "inner join app_representantes_asignados ara "
+				+ "on ar.id = ara.representante_id "
+				+ "inner join app_tipo_representantes atr "
+				+ "on ar.tipo_representante = atr.id "
+				+ "left join app_representante_cargo arc "
+				+ "on ar.id = arc.id_representante "
+				+ "left join app_cargos ac "
+				+ "on arc.id_cargo = ac.id "
+				+ "where ar.clave_elector = ?";
+		
+		try {
+			return template.queryForObject(sql,new Object[] { claveElector }, new int[] { Types.VARCHAR }, new CapacitacionRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+
+	@Override
+	public List<Capacitacion> getRepresentanteByRc(Long tipo) {
+		String sql = "SELECT ar.id, ar.clave_elector as clave, atr.tipo_representante as representante, "
+				+ "ara.casilla_id as asignado, ac.descripcion as cargo FROM app_representantes ar "
+				+ "inner join app_representantes_asignados ara "
+				+ "on ar.id = ara.representante_id "
+				+ "inner join app_tipo_representantes atr "
+				+ "on ar.tipo_representante = atr.id "
+				+ "left join app_representante_cargo arc "
+				+ "on ar.id = arc.id_representante "
+				+ "left join app_cargos ac "
+				+ "on arc.id_cargo = ac.id "
+				+ "where ar.tipo_representante = ?";
+		
+		try {
+			return template.queryForObject(sql,new Object[] { tipo }, new int[] { Types.INTEGER }, new CapacitacionRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+
+	@Override
+	public List<Capacitacion> getRepresentanteByRg(Long tipo) {
+		String sql = "SELECT ar.id, ar.clave_elector as clave, atr.tipo_representante as representante, "
+				+ "ara.ruta_id as asignado, ac.descripcion as cargo FROM app_representantes ar "
+				+ "inner join app_representantes_asignados ara "
+				+ "on ar.id = ara.representante_id "
+				+ "inner join app_tipo_representantes atr "
+				+ "on ar.tipo_representante = atr.id "
+				+ "left join app_representante_cargo arc "
+				+ "on ar.id = arc.id_representante "
+				+ "left join app_cargos ac "
+				+ "on arc.id_cargo = ac.id "
+				+ "where ar.tipo_representante = ?";
+		
+		try {
+			return template.queryForObject(sql,new Object[] { tipo }, new int[] { Types.INTEGER }, new CapacitacionRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+
+	@Override
+	public Long getTipoRepresentante(String claveElector) {
+		String sql = "select tipo_representante from app_representantes ar "
+				+ "where clave_elector = ?";
+		
+		try {
+			return template.queryForObject(sql,new Object[] { claveElector }, new int[] { Types.VARCHAR }, new LongRowMapper());
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}

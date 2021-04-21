@@ -30,24 +30,58 @@ public class JornadaServiceImpl extends MasterService implements IJornadaService
 		List<CapacitacionDTO> lstCapDTO = null;
 		List<Capacitacion> lstCap = null;
 		
-		if(claveElector.length() == 18) {
-			rc = false;
-			rg = false;
+		if (claveElector != null) {
+			if(claveElector.length() == 18) {
+				
+				Long tipo = capacitacionRepository.getTipoRepresentante(claveElector);
+				
+				if(tipo == PERFIL_RC) {
+					lstCap = capacitacionRepository.getRepresentanteRcByClave(claveElector);
+				}else if(tipo == PERFIL_RG) {
+					lstCap = capacitacionRepository.getRepresentanteRgByClave(claveElector);
+				}else {
+					throw new JornadaException("La clave de elector ingresada no pertenece a los perfiles establecidos", 400);
+				}
+					lstCapDTO = MapperUtil.mapAll(lstCap, CapacitacionDTO.class);	
+				
+				return lstCapDTO;
+			}else {
+				throw new JornadaException("El numero de caracteres ingresado en la clave de elector es incorrecto", 400);
+			}
+		}
+		if(rc == false && rg == false) {
+			throw new JornadaException("Debe ingresar la clave de elector", 400);
+		}
+		
+		if (rc == true) {
+
+				lstCap = capacitacionRepository.getRepresentanteByRc(PERFIL_RC);
+				
+				if(lstCap != null) {
+					
+					lstCapDTO = MapperUtil.mapAll(lstCap, CapacitacionDTO.class);	
+					
+				}else {
+						throw new JornadaException("No se encontraron Registros para mostrar", 400);
+					}
+				
+				return lstCapDTO;
+		}
 			
-			lstCap = capacitacionRepository.getRepresentanteByClave(claveElector);
+		
+		if (rg == true) {
+			
+			lstCap = capacitacionRepository.getRepresentanteByRg(PERFIL_RG);
 			
 			if(lstCap != null) {
 				
 				lstCapDTO = MapperUtil.mapAll(lstCap, CapacitacionDTO.class);	
 				
 			}else {
-					throw new JornadaException("La clave de elector ingresada no esta registrada", 400);
+					throw new JornadaException("No se encontraron Registros para mostrar", 400);
 				}
-			
-			return lstCapDTO;
 		}
-		
-		return null;
+		return lstCapDTO;
 	}
 
 	@Override
