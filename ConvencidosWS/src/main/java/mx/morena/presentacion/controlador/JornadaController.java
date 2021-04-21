@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import mx.morena.negocio.dto.CapacitacionDTO;
+import mx.morena.negocio.dto.RegistroCapacitacionDTO;
 import mx.morena.negocio.exception.JornadaException;
 import mx.morena.negocio.servicio.IJornadaService;
 import mx.morena.security.controller.MasterController;
@@ -47,6 +50,25 @@ public class JornadaController extends MasterController{
 			return null;
 		}
 		
+	}
+	
+	@PostMapping("/capacitacion")
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	public String saveCapacitacion(HttpServletResponse response, HttpServletRequest request, @RequestBody RegistroCapacitacionDTO dto) throws IOException {
+		long perfil = getPerfil(request);
+		long usuario = getUsuario(request);
+
+		try {
+			return jornadaService.saveCapacitacion(dto, perfil, usuario);
+		} catch (JornadaException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+			return null;
+		} catch (Exception e ) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			return null;
+		}
 	}
 	
 }

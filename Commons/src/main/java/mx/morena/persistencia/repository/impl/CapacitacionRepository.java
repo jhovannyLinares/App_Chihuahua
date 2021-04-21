@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import mx.morena.persistencia.entidad.Capacitacion;
+import mx.morena.persistencia.entidad.RegistroCapacitacion;
 import mx.morena.persistencia.repository.ICapacitacionRepository;
 import mx.morena.persistencia.rowmapper.CapacitacionRowMapper;
 
@@ -36,6 +37,21 @@ public class CapacitacionRepository implements ICapacitacionRepository{
 			return template.queryForObject(sql,new Object[] { claveElector }, new int[] { Types.VARCHAR }, new CapacitacionRowMapper());
 		} catch (EmptyResultDataAccessException e) {
 			return null;
+		}
+	}
+
+	@Override
+	public long saveCapacitacion(RegistroCapacitacion rc) {
+		String sql = "INSERT INTO app_registro_capacitacion "  
+				+ "(id, id_representante, tomo_capacitacion, fecha_capacitacion, hora_capacitacion, lugar_capacitacion, calle, numero_interior, numero_exterior, colonia, municipio)"
+				+ "VALUES ((SELECT MAX(id)+1 FROM app_registro_capacitacion), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		
+		try {
+			template.update(sql, new Object[] {rc.getIdRepresentante(), rc.getTomoCapacitacion(), rc.getFechaCapacitaion(), rc.getHoraCapacitacion(), 
+					rc.getLugarCapacitacion(), rc.getCalle(), rc.getNumInt(), rc.getNumExt(), rc.getColonia(), rc.getMunicipio()});
+			return 0;
+		} catch (Exception e) {
+			return 0;
 		}
 	}
 
