@@ -23,11 +23,13 @@ public class CapacitacionRepository implements ICapacitacionRepository{
 	@Override
 	public List<Capacitacion> getRepresentanteRcByClave(String claveElector) {
 		String sql = "SELECT ar.id, ar.clave_elector as clave, atr.tipo_representante as representante, "
-				+ "ara.casilla_id as asignado, ac.descripcion as cargo FROM app_representantes ar "
+				+ "ara.casilla_id as asignado, ac.descripcion as cargo, arc3.is_nombramiento as nombramiento FROM app_representantes ar "
 				+ "inner join app_representantes_asignados ara "
 				+ "on ar.id = ara.representante_id "
 				+ "inner join app_tipo_representantes atr "
 				+ "on ar.tipo_representante = atr.id "
+				+ "left join app_registro_capacitacion arc3 " 
+				+ "on ar.id = arc3.id_representante "
 				+ "left join app_representante_cargo arc "
 				+ "on ar.id = arc.id_representante "
 				+ "left join app_cargos ac "
@@ -44,11 +46,13 @@ public class CapacitacionRepository implements ICapacitacionRepository{
 	@Override
 	public List<Capacitacion> getRepresentanteRgByClave(String claveElector) {
 		String sql = "SELECT ar.id, ar.clave_elector as clave, atr.tipo_representante as representante, "
-				+ "ara.ruta_id as asignado, ac.descripcion as cargo FROM app_representantes ar "
+				+ "ara.ruta_id as asignado, ac.descripcion as cargo, arc3.is_nombramiento as nombramiento FROM app_representantes ar "
 				+ "inner join app_representantes_asignados ara "
 				+ "on ar.id = ara.representante_id "
 				+ "inner join app_tipo_representantes atr "
 				+ "on ar.tipo_representante = atr.id "
+				+ "left join app_registro_capacitacion arc3 " 
+				+ "on ar.id = arc3.id_representante "
 				+ "left join app_representante_cargo arc "
 				+ "on ar.id = arc.id_representante "
 				+ "left join app_cargos ac "
@@ -65,16 +69,18 @@ public class CapacitacionRepository implements ICapacitacionRepository{
 	@Override
 	public List<Capacitacion> getRepresentanteByRc(Long tipo) {
 		String sql = "SELECT ar.id, ar.clave_elector as clave, atr.tipo_representante as representante, "
-				+ "ara.casilla_id as asignado, ac.descripcion as cargo FROM app_representantes ar "
+				+ "ara.casilla_id as asignado, ac.descripcion as cargo, arc3.is_nombramiento as nombramiento FROM app_representantes ar "
 				+ "inner join app_representantes_asignados ara "
 				+ "on ar.id = ara.representante_id "
 				+ "inner join app_tipo_representantes atr "
 				+ "on ar.tipo_representante = atr.id "
+				+ "left join app_registro_capacitacion arc3 " 
+				+ "on ar.id = arc3.id_representante "
 				+ "left join app_representante_cargo arc "
 				+ "on ar.id = arc.id_representante "
 				+ "left join app_cargos ac "
 				+ "on arc.id_cargo = ac.id "
-				+ "where ar.tipo_representante = ?";
+				+ "where ar.tipo_representante = ? group by atr.tipo_representante, ar.id, ara.casilla_id, ac.descripcion, arc3.is_nombramiento";
 		
 		try {
 			return template.queryForObject(sql,new Object[] { tipo }, new int[] { Types.INTEGER }, new CapacitacionRowMapper());
@@ -86,16 +92,18 @@ public class CapacitacionRepository implements ICapacitacionRepository{
 	@Override
 	public List<Capacitacion> getRepresentanteByRg(Long tipo) {
 		String sql = "SELECT ar.id, ar.clave_elector as clave, atr.tipo_representante as representante, "
-				+ "ara.ruta_id as asignado, ac.descripcion as cargo FROM app_representantes ar "
+				+ "ara.ruta_id as asignado, ac.descripcion as cargo, arc3.is_nombramiento as nombramiento FROM app_representantes ar "
 				+ "inner join app_representantes_asignados ara "
 				+ "on ar.id = ara.representante_id "
 				+ "inner join app_tipo_representantes atr "
 				+ "on ar.tipo_representante = atr.id "
+				+ "left join app_registro_capacitacion arc3 " 
+				+ "on ar.id = arc3.id_representante "
 				+ "left join app_representante_cargo arc "
 				+ "on ar.id = arc.id_representante "
 				+ "left join app_cargos ac "
 				+ "on arc.id_cargo = ac.id "
-				+ "where ar.tipo_representante = ?";
+				+ "where ar.tipo_representante = ? group by atr.tipo_representante, ar.id, ara.ruta_id, ac.descripcion, arc3.is_nombramiento";
 		
 		try {
 			return template.queryForObject(sql,new Object[] { tipo }, new int[] { Types.INTEGER }, new CapacitacionRowMapper());

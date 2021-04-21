@@ -11,6 +11,8 @@ public class Capacitacion {
 	private Long asignado;
 	
 	private String cargo;
+	
+	private boolean isNombramiento;
 
 	public Long getIdRepresentante() {
 		return idRepresentante;
@@ -50,5 +52,13 @@ public class Capacitacion {
 
 	public void setCargo(String cargo) {
 		this.cargo = cargo;
+	}
+
+	public boolean isNombramiento() {
+		return isNombramiento;
+	}
+
+	public void setNombramiento(boolean isNombramiento) {
+		this.isNombramiento = isNombramiento;
 	}
 }
