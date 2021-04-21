@@ -12,7 +12,7 @@ public class CapacitacionDTO {
 	
 	private String cargo;
 	
-	private boolean isNombramiento;
+	private Boolean isNombramiento;
 
 	public Long getIdRepresentante() {
 		return idRepresentante;
@@ -54,11 +54,12 @@ public class CapacitacionDTO {
 		this.cargo = cargo;
 	}
 
-	public boolean isNombramiento() {
+	public Boolean getIsNombramiento() {
 		return isNombramiento;
 	}
 
-	public void setNombramiento(boolean isNombramiento) {
+	public void setIsNombramiento(Boolean isNombramiento) {
 		this.isNombramiento = isNombramiento;
 	}
+
 }
