@@ -20,5 +20,8 @@ public interface ICapacitacionRepository {
 	long saveCapacitacion(RegistroCapacitacion rc);
 
 	long updateNombramiento(RegistroCapacitacion rc);
-
+	
+	Long getCapacitacionByDfAndRepresentante(Long idEntidad, Long idFederal, Long tipoRepresentante, String tomoCapacitacion);
+	
+	Long getNombramientoByDfAndRepresentante(Long idEntidad, Long idFederal, Long tipoRepresentante, String tomoCapacitacion, Boolean isNombramiento);
 }
