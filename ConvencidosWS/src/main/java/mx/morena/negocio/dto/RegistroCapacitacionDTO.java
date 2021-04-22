@@ -1,5 +1,6 @@
 package mx.morena.negocio.dto;
 
+import java.sql.Time;
 import java.sql.Timestamp;
 
 public class RegistroCapacitacionDTO {
@@ -10,7 +11,7 @@ public class RegistroCapacitacionDTO {
 	
 	private Timestamp fechaCapacitaion;
 	
-	private Timestamp horaCapacitacion;
+	private Time horaCapacitacion;
 	
 	private String lugarCapacitacion;
 	
@@ -48,11 +49,11 @@ public class RegistroCapacitacionDTO {
 		this.fechaCapacitaion = fechaCapacitaion;
 	}
 
-	public Timestamp getHoraCapacitacion() {
+	public Time getHoraCapacitacion() {
 		return horaCapacitacion;
 	}
 
-	public void setHoraCapacitacion(Timestamp horaCapacitacion) {
+	public void setHoraCapacitacion(Time horaCapacitacion) {
 		this.horaCapacitacion = horaCapacitacion;
 	}
 
