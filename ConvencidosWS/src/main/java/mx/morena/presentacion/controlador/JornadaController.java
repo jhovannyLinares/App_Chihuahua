@@ -74,7 +74,7 @@ public class JornadaController extends MasterController{
 	
 	@PutMapping("/nombramiento")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	public String entregaNombramiento(HttpServletResponse response, HttpServletRequest request, @RequestBody List<CapacitacionDTO> dto) throws IOException {
+	public String entregaNombramiento(HttpServletResponse response, HttpServletRequest request, @RequestBody CapacitacionDTO dto) throws IOException {
 		long usuario = getUsuario(request);
 		long perfil = getPerfil(request);
 
