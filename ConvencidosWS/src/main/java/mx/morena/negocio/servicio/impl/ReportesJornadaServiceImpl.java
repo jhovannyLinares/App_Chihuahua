@@ -134,9 +134,9 @@ public class ReportesJornadaServiceImpl extends MasterService implements IReport
 		ReporteCapacitacionEstatalDTO dto = new ReporteCapacitacionEstatalDTO();
 		
 		Long capacitacionRg = capacitacionRepository.getCapacitacionByDfAndRepresentante(idEstado, idDf, PERFIL_RG, SI_TOMO_CAPACITACION);
-		Long nombramientoRg = capacitacionRepository.getNombramientoByDfAndRepresentante(idEstado, idDf, PERFIL_RG, SI_TOMO_CAPACITACION, true);
+		Long nombramientoRg = capacitacionRepository.getNombramientoByDfAndRepresentante(idEstado, idDf, PERFIL_RG, true);
 		Long capacitacionRc = capacitacionRepository.getCapacitacionByDfAndRepresentante(idEstado, idDf, PERFIL_RC, SI_TOMO_CAPACITACION);
-		Long nombramientoRc = capacitacionRepository.getNombramientoByDfAndRepresentante(idEstado, idDf, PERFIL_RC, SI_TOMO_CAPACITACION, true);
+		Long nombramientoRc = capacitacionRepository.getNombramientoByDfAndRepresentante(idEstado, idDf, PERFIL_RC, true);
 
 		dto.setNumero(idDf);
 		dto.setDistritoFederal(df);
@@ -236,9 +236,9 @@ public class ReportesJornadaServiceImpl extends MasterService implements IReport
 					String dist = distritoRepository.findDstritoFederal(idFederal);
 					
 					Long capacitacionRg = capacitacionRepository.getCapacitacionByDfAndRepresentante(idEstatal, idFederal, PERFIL_RG, SI_TOMO_CAPACITACION);
-					Long nombramientoRg = capacitacionRepository.getNombramientoByDfAndRepresentante(idEstatal, idFederal, PERFIL_RG, SI_TOMO_CAPACITACION, true);
+					Long nombramientoRg = capacitacionRepository.getNombramientoByDfAndRepresentante(idEstatal, idFederal, PERFIL_RG, true);
 					Long capacitacionRc = capacitacionRepository.getCapacitacionByDfAndRepresentante(idEstatal, idFederal, PERFIL_RC, SI_TOMO_CAPACITACION);
-					Long nombramientoRc = capacitacionRepository.getNombramientoByDfAndRepresentante(idEstatal, idFederal, PERFIL_RC, SI_TOMO_CAPACITACION, true);
+					Long nombramientoRc = capacitacionRepository.getNombramientoByDfAndRepresentante(idEstatal, idFederal, PERFIL_RC, true);
 					Long metaRg = 30L;
 					Long metaRc = 40L;
 	
@@ -265,9 +265,9 @@ public class ReportesJornadaServiceImpl extends MasterService implements IReport
 					String dist = distritoRepository.findDstritoFederal(df);
 					
 					Long capacitacionRg = capacitacionRepository.getCapacitacionByDfAndRepresentante(idEstado, df, PERFIL_RG, SI_TOMO_CAPACITACION);
-					Long nombramientoRg = capacitacionRepository.getNombramientoByDfAndRepresentante(idEstado, df, PERFIL_RG, SI_TOMO_CAPACITACION, true);
+					Long nombramientoRg = capacitacionRepository.getNombramientoByDfAndRepresentante(idEstado, df, PERFIL_RG, true);
 					Long capacitacionRc = capacitacionRepository.getCapacitacionByDfAndRepresentante(idEstado, df, PERFIL_RC, SI_TOMO_CAPACITACION);
-					Long nombramientoRc = capacitacionRepository.getNombramientoByDfAndRepresentante(idEstado, df, PERFIL_RC, SI_TOMO_CAPACITACION, true);
+					Long nombramientoRc = capacitacionRepository.getNombramientoByDfAndRepresentante(idEstado, df, PERFIL_RC, true);
 					Long metaRg = 30L;
 					Long metaRc = 40L;
 	
@@ -344,11 +344,11 @@ public class ReportesJornadaServiceImpl extends MasterService implements IReport
 			Long capacitacionRg = capacitacionRepository.getCapacitacionByDfAndRepresentante(idEstado, idDistrito,
 					PERFIL_CRG, SI_TOMO_CAPACITACION);
 			Long nombramientoRg = capacitacionRepository.getNombramientoByDfAndRepresentante(idEstado, idDistrito,
-					PERFIL_CRG, SI_TOMO_CAPACITACION, true);
+					PERFIL_CRG, true);
 			Long capacitacionRc = capacitacionRepository.getCapacitacionByDfAndRepresentante(idEstado, idDistrito,
 					PERFIL_CRG, SI_TOMO_CAPACITACION);
 			Long nombramientoRc = capacitacionRepository.getNombramientoByDfAndRepresentante(idEstado, idDistrito,
-					PERFIL_CRG, SI_TOMO_CAPACITACION, true);
+					PERFIL_CRG, true);
 
 			dto.setMetaRG(30L);
 			dto.setAvanceCapacitacionRG(capacitacionRg);
