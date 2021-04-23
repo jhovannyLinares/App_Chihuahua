@@ -31,12 +31,13 @@ public class ReportesJornadaController extends MasterController {
 	
 	@GetMapping("/estatal")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	public List<ReporteCapacitacionEstatalDTO> getReporteCapacitacionEst(HttpServletResponse response, HttpServletRequest request) throws IOException {
+	public List<ReporteCapacitacionEstatalDTO> getReporteCapacitacionEst(HttpServletResponse response, HttpServletRequest request,
+									@RequestParam(value = "idDisitritoFederal", required = false) Long idDisitritoFederal) throws IOException {
 		
 		try {
 			Long idUsuario = getUsuario(request);
-			return reportesJornadaService.getReporteCapEstatal(idUsuario);
-		}catch (JornadaException e) {
+			return reportesJornadaService.getReporteCapEstatal(idUsuario, idDisitritoFederal);
+		} catch (JornadaException e) {
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
 			return null;
@@ -46,6 +47,22 @@ public class ReportesJornadaController extends MasterController {
 			return null;
 		}
 		
+	}
+	
+	@GetMapping("/estatal/download")	
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	public void downloadReporteEstatalCSV(HttpServletResponse response, HttpServletRequest request,
+								@RequestParam(value = "idDisitritoFederal", required = false) Long idDisitritoFederal) throws IOException {
+		try {
+			Long idUsuario = getUsuario(request);
+			reportesJornadaService.getReporteCapEstatalDownload(response, idUsuario, idDisitritoFederal);
+		} catch (JornadaException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+		}
 	}
 	
 	@GetMapping("/rg")

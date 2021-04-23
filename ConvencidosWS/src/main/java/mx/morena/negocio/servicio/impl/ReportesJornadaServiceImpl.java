@@ -1,9 +1,12 @@
 package mx.morena.negocio.servicio.impl;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,7 +35,7 @@ public class ReportesJornadaServiceImpl extends MasterService implements IReport
 	private ICapacitacionRepository capacitacionRepository;
 	
 	@Override
-	public List<ReporteCapacitacionEstatalDTO> getReporteCapEstatal(Long idUsuario) throws JornadaException {
+	public List<ReporteCapacitacionEstatalDTO> getReporteCapEstatal(Long idUsuario, Long idDistritoFederal) throws JornadaException {
 		Usuario usuario = usuarioRepository.findById(idUsuario);
 		Long perfil = usuario.getPerfil();
 		Long idEstado = usuario.getEntidad();
@@ -54,34 +57,58 @@ public class ReportesJornadaServiceImpl extends MasterService implements IReport
 			totales.setPorcentajeCapacitacionRC(0.0);
 			totales.setAvanceEntregaNombramientoRC(0L);
 			totales.setPorcentajeAvanceEntregaRC(0.0);
-
-			List<DistritoFederal> distritos = distritoRepository.findByEntidad(idEstado);
-
-			for (DistritoFederal df : distritos) {
+			
+			if (idDistritoFederal != null && idDistritoFederal > 0) {
+				DistritoFederal distrito = distritoRepository.findById(idDistritoFederal);
 				dto = new ReporteCapacitacionEstatalDTO();
-				Long capacitacionRg = capacitacionRepository.getCapacitacionByDfAndRepresentante(idEstado, df.getId(), PERFIL_RG, SI_TOMO_CAPACITACION);
-				Long nombramientoRg = capacitacionRepository.getNombramientoByDfAndRepresentante(idEstado, df.getId(), PERFIL_RG, SI_TOMO_CAPACITACION, true);
-				Long capacitacionRc = capacitacionRepository.getCapacitacionByDfAndRepresentante(idEstado, df.getId(), PERFIL_RC, SI_TOMO_CAPACITACION);
-				Long nombramientoRc = capacitacionRepository.getNombramientoByDfAndRepresentante(idEstado, df.getId(), PERFIL_RC, SI_TOMO_CAPACITACION, true);
+				dto = calculosReporteCapEstatal(idEstado, idDistritoFederal, distrito.getCabeceraFederal());
 
-				dto.setNumero(df.getId());
-				dto.setDistritoFederal(df.getCabeceraFederal());
-				dto.setMetaRG(30L);
-				dto.setAvanceCapacitacionRG(capacitacionRg);
-				dto.setPorcentajeCapacitacionRG(null);
-				dto.setAvanceEntregaNombramientoRG(nombramientoRg);
-				dto.setPorcentajeAvanceEntregaRG(null);
-				dto.setMetaRC(40L);
-				dto.setAvanceCapacitacionRC(capacitacionRc);
-				dto.setPorcentajeCapacitacionRG(null);
-				dto.setAvanceEntregaNombramientoRC(nombramientoRc);
-				dto.setPorcentajeAvanceEntregaRC(null);
-				//double avanceFederal = (fedAsignado * 100.0) / dto.getMetaRFederal();
-				//dto.setPorcentajeAvanceRFederal(dosDecimales(avanceFederal).doubleValue());*/
 				reporteDto.add(dto);
+				
+				totales.setMetaRG(totales.getMetaRG() + dto.getMetaRG());
+				totales.setAvanceCapacitacionRG(totales.getAvanceCapacitacionRG() + dto.getAvanceCapacitacionRG());
+				totales.setAvanceEntregaNombramientoRG(totales.getAvanceEntregaNombramientoRG() + dto.getAvanceEntregaNombramientoRG());
+
+				totales.setMetaRC(totales.getMetaRC() + dto.getMetaRC());
+				totales.setAvanceCapacitacionRC(totales.getAvanceCapacitacionRC() + dto.getAvanceCapacitacionRC());
+				totales.setAvanceEntregaNombramientoRC(totales.getAvanceEntregaNombramientoRC() + dto.getAvanceEntregaNombramientoRC());
+							
+			} else if (idDistritoFederal == null) {
+				List<DistritoFederal> distritos = distritoRepository.findByEntidad(idEstado);
+				
+				for (DistritoFederal df : distritos) {
+					dto = new ReporteCapacitacionEstatalDTO();
+					
+					dto = calculosReporteCapEstatal(idEstado, df.getId(), df.getCabeceraFederal());
+					
+					reporteDto.add(dto);
+					
+					totales.setMetaRG(totales.getMetaRG() + dto.getMetaRG());
+					totales.setAvanceCapacitacionRG(totales.getAvanceCapacitacionRG() + dto.getAvanceCapacitacionRG());
+					totales.setAvanceEntregaNombramientoRG(totales.getAvanceEntregaNombramientoRG() + dto.getAvanceEntregaNombramientoRG());
+
+					totales.setMetaRC(totales.getMetaRC() + dto.getMetaRC());
+					totales.setAvanceCapacitacionRC(totales.getAvanceCapacitacionRC() + dto.getAvanceCapacitacionRC());
+					totales.setAvanceEntregaNombramientoRC(totales.getAvanceEntregaNombramientoRC() + dto.getAvanceEntregaNombramientoRC());
+				}
+				
+				totales.setPorcentajeCapacitacionRG(
+						dosDecimales((totales.getAvanceCapacitacionRG() * 100.0) / totales.getMetaRG()).doubleValue());
+				totales.setPorcentajeAvanceEntregaRG(
+						dosDecimales((totales.getAvanceEntregaNombramientoRG()* 100.0) / totales.getMetaRG()).doubleValue());
+				totales.setPorcentajeCapacitacionRC(
+						dosDecimales((totales.getAvanceCapacitacionRC() * 100.0) / totales.getMetaRC()).doubleValue());
+				totales.setPorcentajeAvanceEntregaRC(
+						dosDecimales((totales.getAvanceEntregaNombramientoRC() * 100.0) / totales.getMetaRC()).doubleValue());
+
+				reporteDto.add(totales);
+				
+			} else {
+				throw new JornadaException("Ingrese un distrito valido", 400);
 			}
 			
 			return reporteDto;
+			
 		} else {
 			throw new JornadaException("No cuenta con los permisos suficientes para consultar el reporte", 401);
 		}
@@ -93,6 +120,46 @@ public class ReportesJornadaServiceImpl extends MasterService implements IReport
 		bd = bd.setScale(2, RoundingMode.HALF_UP);
 		return bd;
 
+	}
+	
+	public ReporteCapacitacionEstatalDTO calculosReporteCapEstatal(Long idEstado, Long idDf, String df) {
+		ReporteCapacitacionEstatalDTO dto = new ReporteCapacitacionEstatalDTO();
+		
+		Long capacitacionRg = capacitacionRepository.getCapacitacionByDfAndRepresentante(idEstado, idDf, PERFIL_RG, SI_TOMO_CAPACITACION);
+		Long nombramientoRg = capacitacionRepository.getNombramientoByDfAndRepresentante(idEstado, idDf, PERFIL_RG, SI_TOMO_CAPACITACION, true);
+		Long capacitacionRc = capacitacionRepository.getCapacitacionByDfAndRepresentante(idEstado, idDf, PERFIL_RC, SI_TOMO_CAPACITACION);
+		Long nombramientoRc = capacitacionRepository.getNombramientoByDfAndRepresentante(idEstado, idDf, PERFIL_RC, SI_TOMO_CAPACITACION, true);
+
+		dto.setNumero(idDf);
+		dto.setDistritoFederal(df);
+		dto.setMetaRG(30L);
+		dto.setAvanceCapacitacionRG(capacitacionRg);
+		double porcentajeCapRG = (dto.getAvanceCapacitacionRG() * 100.0) / dto.getMetaRG();
+		dto.setPorcentajeCapacitacionRG(dosDecimales(porcentajeCapRG).doubleValue());
+		dto.setAvanceEntregaNombramientoRG(nombramientoRg);
+		double porcentajeEntregaRG = (dto.getAvanceEntregaNombramientoRG() * 100.0) / dto.getMetaRG();
+		dto.setPorcentajeAvanceEntregaRG(dosDecimales(porcentajeEntregaRG).doubleValue());
+		dto.setMetaRC(40L);
+		dto.setAvanceCapacitacionRC(capacitacionRc);
+		double porcentajeCapRC = (dto.getAvanceCapacitacionRC() * 100.0) / dto.getMetaRC();
+		dto.setPorcentajeCapacitacionRC(dosDecimales(porcentajeCapRC).doubleValue());
+		dto.setAvanceEntregaNombramientoRC(nombramientoRc);
+		double porcentajeEntregaRC = (dto.getAvanceEntregaNombramientoRC() * 100.0) / dto.getMetaRC();
+		dto.setPorcentajeAvanceEntregaRC(dosDecimales(porcentajeEntregaRC).doubleValue());
+		
+		return dto;
+	}
+
+	@Override
+	public void getReporteCapEstatalDownload(HttpServletResponse response, Long idUsuario, Long idDistritoFederal) throws JornadaException, IOException {
+		setNameFile(response, CSV_CAPACITACION_NOMB_ESTATAL);
+
+		List<ReporteCapacitacionEstatalDTO> reporteDTOs = getReporteCapEstatal(idUsuario, idDistritoFederal);
+
+		String[] header = { "numero", "distritoFederal", "metaRG", "avanceCapacitacionRG", "porcentajeCapacitacionRG", "avanceEntregaNombramientoRG",
+				"porcentajeAvanceEntregaRG", "metaRC", "avanceCapacitacionRC", "porcentajeCapacitacionRC", "avanceEntregaNombramientoRC", "porcentajeAvanceEntregaRC" };
+
+		setWriterFile(response, reporteDTOs, header);
 	}
 
 	@Override

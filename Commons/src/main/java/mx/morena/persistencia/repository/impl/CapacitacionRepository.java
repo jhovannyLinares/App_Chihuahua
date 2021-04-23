@@ -155,8 +155,7 @@ public class CapacitacionRepository implements ICapacitacionRepository{
 	@Override
 	public Long getCapacitacionByDfAndRepresentante(Long idEntidad, Long idFederal, Long tipoRepresentante, String tomoCapacitacion) {
 		String sql = " select count(*) from app_representantes ar inner join app_registro_capacitacion arc on arc.id_representante = ar.id "
-				+ "inner join app_representantes_asignados ara on ar.id = ara.representante_id "
-				+ "where ara.entidad_id = ? and ara.distrito_federal_id = ? and ar.tipo_representante = ? and arc.tomo_capacitacion = ? ";
+				+ "where ar.estado_id = ? and ar.distrito_federal_id = ? and ar.tipo_representante = ? and arc.tomo_capacitacion = ? ";
 		try {
 			return template.queryForObject(sql, new Object[] { idEntidad, idFederal, tipoRepresentante, tomoCapacitacion }, 
 					new int[] { Types.NUMERIC, Types.NUMERIC, Types.NUMERIC, Types.VARCHAR }, new LongRowMapper());
@@ -168,8 +167,7 @@ public class CapacitacionRepository implements ICapacitacionRepository{
 	@Override
 	public Long getNombramientoByDfAndRepresentante(Long idEntidad, Long idFederal, Long tipoRepresentante, String tomoCapacitacion, Boolean isNombramiento) {
 		String sql = " select count(*) from app_representantes ar inner join app_registro_capacitacion arc on arc.id_representante = ar.id "
-				+ "inner join app_representantes_asignados ara on ar.id = ara.representante_id "
-				+ "where ara.entidad_id = ? and ara.distrito_federal_id = ? and ar.tipo_representante = ? "
+				+ "where ar.estado_id = ? and ar.distrito_federal_id = ? and ar.tipo_representante = ? "
 				+ "and arc.tomo_capacitacion = ? and arc.is_nombramiento = ? ";
 		try {
 			return template.queryForObject(sql, new Object[] { idEntidad, idFederal, tipoRepresentante, tomoCapacitacion, isNombramiento }, 
