@@ -161,13 +161,11 @@ public class ReportesJornadaController extends MasterController {
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
 	public List<ReporteCapacitacionCrgDTO> getReporteCapacitacionCrg(HttpServletResponse response, HttpServletRequest request,
 			@RequestParam(value = "idEntidad", required = false) Long idEntidad,
-			@RequestParam(value = "idFederal", required = false) Long idFederal,
-			@RequestParam(value = "idCrg", required = false) Long idCrg,
-			@RequestParam(value = "idRg", required = false) Long idRg) throws IOException{
+			@RequestParam(value = "idFederal", required = false) Long idFederal) throws IOException{
 		
 		try {
 			Long idUsuario = getUsuario(request);
-			return reportesJornadaService.getReporteCapCrg(idUsuario, idEntidad, idFederal, idCrg, idRg);
+			return reportesJornadaService.getReporteCapCrg(idUsuario, idEntidad, idFederal);
 		}catch (JornadaException e) {
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
@@ -186,13 +184,11 @@ public class ReportesJornadaController extends MasterController {
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
 	public void downloadCSV(HttpServletResponse response, HttpServletRequest request,
 			@RequestParam(value = "idEntidad", required = false) Long idEntidad,
-			@RequestParam(value = "idFederal", required = false) Long idFederal,
-			@RequestParam(value = "idCrg", required = false) Long idCrg,
-			@RequestParam(value = "idRg", required = false) Long idRg) throws IOException {
+			@RequestParam(value = "idFederal", required = false) Long idFederal) throws IOException {
 		
 		try {
 			long usuario = getUsuario(request);
-			reportesJornadaService.getReporteDownload(response, usuario, idEntidad, idFederal, idCrg, idRg );
+			reportesJornadaService.getReporteDownload(response, usuario, idEntidad, idFederal);
 
 		} catch (JornadaException e) {
 			e.printStackTrace();

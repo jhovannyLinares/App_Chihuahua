@@ -26,8 +26,8 @@ public interface IReportesJornadaService {
 	
 	public void getReporteDistritalDownload(HttpServletResponse response, Long idUsuario, Long idEstatal, Long idFederal) throws JornadaException, IOException;
 	
-	List<ReporteCapacitacionCrgDTO> getReporteCapCrg(Long idUsuario, Long idEntidad, Long idFederal, Long idCrg, Long idRg) throws JornadaException;
+	List<ReporteCapacitacionCrgDTO> getReporteCapCrg(Long idUsuario, Long idEntidad, Long idFederal) throws JornadaException;
 	
-	public void getReporteDownload(HttpServletResponse response, Long idUsuario, Long idEntidad, Long idFederal, Long idCrg, Long idRg) throws JornadaException, IOException;
+	public void getReporteDownload(HttpServletResponse response, Long idUsuario, Long idEntidad, Long idFederal) throws JornadaException, IOException;
 	
 }

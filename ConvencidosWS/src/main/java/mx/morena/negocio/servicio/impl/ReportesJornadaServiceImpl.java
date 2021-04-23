@@ -317,7 +317,7 @@ public class ReportesJornadaServiceImpl extends MasterService implements IReport
 	}
 	
 	@Override
-	public List<ReporteCapacitacionCrgDTO> getReporteCapCrg(Long idUsuario, Long idEntidad, Long idFederal, Long idCrg, Long idRg) throws JornadaException {
+	public List<ReporteCapacitacionCrgDTO> getReporteCapCrg(Long idUsuario, Long idEntidad, Long idFederal) throws JornadaException {
 		Usuario usuario = usuarioRepository.findById(idUsuario);
 		Long idDistrito = usuario.getFederal(); 
 		Long perfil = usuario.getPerfil();
@@ -377,12 +377,12 @@ public class ReportesJornadaServiceImpl extends MasterService implements IReport
 
 	/* ICJ- Metodo encargado de descagar el reporte en excel */
 	@Override
-	public void getReporteDownload(HttpServletResponse response, Long idUsuario, Long idEntidad, Long idFederal, Long idCrg, Long idRg) throws JornadaException, IOException {
+	public void getReporteDownload(HttpServletResponse response, Long idUsuario, Long idEntidad, Long idFederal) throws JornadaException, IOException {
 
 		// Asignacion de nombre al archivo CSV
 		setNameFile(response, CSV_CAPACITACION_CRG);
 
-		List<ReporteCapacitacionCrgDTO> capacitacionCrgDTOs = getReporteCapCrg(idUsuario, idEntidad, idFederal, idCrg, idRg);
+		List<ReporteCapacitacionCrgDTO> capacitacionCrgDTOs = getReporteCapCrg(idUsuario, idEntidad, idFederal);
 
 		// Nombre y orden de los encabezados en el excel
 		String[] header = { "metaRG", "avanceCapacitacionRG", "porcentajeCapacitacionRG", "avanceEntregaNombramientoRG",
