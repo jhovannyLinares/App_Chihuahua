@@ -81,8 +81,8 @@ public class ReportesJornadaController extends MasterController {
 			@RequestParam(value = "idRg", required = false) Long idRg) throws IOException {
 		
 		try {
-			Long idUsuario = getUsuario(request);
-			return reportesJornadaService.getReporteRg(idEntidad, idFederal);
+			Long usuario = getUsuario(request);
+			return reportesJornadaService.getReporteRg(usuario, idEntidad, idFederal, idCrg, idRg);
 		}catch (JornadaException e) {
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
@@ -92,7 +92,28 @@ public class ReportesJornadaController extends MasterController {
 			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 			return null;
 		}
+	}
+	
+	@GetMapping("/rg/download")	
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	public void downloadCSVRg(HttpServletResponse response, HttpServletRequest request,
+			@RequestParam(value = "idEntidad", required = false) Long idEntidad,
+			@RequestParam(value = "idFederal", required = false) Long idFederal,
+			@RequestParam(value = "idCrg", required = false) Long idCrg,
+			@RequestParam(value = "idRg", required = false) Long idRg) throws IOException {
 		
+		try {
+
+			long usuario = getUsuario(request);
+			reportesJornadaService.getReporteRgDownload(response, usuario, idEntidad, idFederal, idCrg, idRg);
+
+		} catch (JornadaException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+		}
 	}
 	
 	//-------------------------------------------------------------------------------------------------------------------

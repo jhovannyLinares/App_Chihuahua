@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import mx.morena.negocio.dto.ReporteCapacitacionDistritalDTO;
 import mx.morena.negocio.dto.ReporteCapacitacionEstatalDTO;
 import mx.morena.negocio.dto.ReporteCapacitacionRgDTO;
+import mx.morena.negocio.dto.ReporteDistritalDTO;
 import mx.morena.negocio.exception.JornadaException;
 import mx.morena.negocio.servicio.IReportesJornadaService;
 import mx.morena.persistencia.entidad.DistritoFederal;
@@ -164,7 +165,7 @@ public class ReportesJornadaServiceImpl extends MasterService implements IReport
 	}
 
 	@Override
-	public List<ReporteCapacitacionRgDTO> getReporteRg(Long idEntidad, Long idFederal) throws JornadaException {
+	public List<ReporteCapacitacionRgDTO> getReporteRg(Long usuario, Long idEntidad, Long idFederal, Long idCrg, Long idRg) throws JornadaException {
 
 		ReporteCapacitacionRgDTO dto = new ReporteCapacitacionRgDTO();
 		List<ReporteCapacitacionRgDTO> lstDto = new ArrayList<ReporteCapacitacionRgDTO>();
@@ -190,6 +191,24 @@ public class ReportesJornadaServiceImpl extends MasterService implements IReport
 
 		return lstDto;
 	}
+
+	@Override
+	public void getReporteRgDownload(HttpServletResponse response, long usuario, Long idEntidad, Long idFederal,
+			Long idCrg, Long idRg) throws JornadaException, IOException {
+		
+		// Asignacion de nombre al archivo CSV
+				setNameFile(response, CSV_CONV_DIST);
+
+				List<ReporteCapacitacionRgDTO> convDTOs = getReporteRg(usuario, idEntidad, idFederal, idCrg, idRg);
+
+				//Nombre y orden de los encabezados en el excel
+				String[] header = { "metaRC", "avanceCapacitacionRC", "porcentajeCapacitacionRC", "avanceEntregaNombramientoRC", "porcentajeAvanceEntregaRC" };
+
+				setWriterFile(response, convDTOs, header);
+		
+	}
+
+
 
 
 	@Override
