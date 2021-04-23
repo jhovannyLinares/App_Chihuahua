@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import mx.morena.negocio.dto.ReporteCapacitacionDistritalDTO;
 import mx.morena.negocio.dto.ReporteCapacitacionEstatalDTO;
 import mx.morena.negocio.dto.ReporteCapacitacionRgDTO;
 import mx.morena.negocio.exception.JornadaException;
@@ -190,4 +191,72 @@ public class ReportesJornadaServiceImpl extends MasterService implements IReport
 		return lstDto;
 	}
 
+
+	@Override
+	public List<ReporteCapacitacionDistritalDTO> getReporteCapDistrital(Long idUsuario, Long idEstatal, Long idFederal) throws JornadaException {
+		
+		Usuario usuario = usuarioRepository.findById(idUsuario);
+		Long perfil = usuario.getPerfil();
+		Long idEstado = usuario.getEntidad();
+		Long df = usuario.getFederal();
+		
+		if (perfil != PERFIL_RC) {
+			List<ReporteCapacitacionDistritalDTO> reporteDistDto = new ArrayList<ReporteCapacitacionDistritalDTO>();
+			ReporteCapacitacionDistritalDTO dto = null;
+
+				dto = new ReporteCapacitacionDistritalDTO();
+				String dist = distritoRepository.findDstritoFederal(idFederal);
+				
+				Long capacitacionRg = capacitacionRepository.getCapacitacionByDfAndRepresentante(idEstatal, idFederal, PERFIL_RG, SI_TOMO_CAPACITACION);
+				Long nombramientoRg = capacitacionRepository.getNombramientoByDfAndRepresentante(idEstatal, idFederal, PERFIL_RG, SI_TOMO_CAPACITACION, true);
+				Long capacitacionRc = capacitacionRepository.getCapacitacionByDfAndRepresentante(idEstatal, idFederal, PERFIL_RC, SI_TOMO_CAPACITACION);
+				Long nombramientoRc = capacitacionRepository.getNombramientoByDfAndRepresentante(idEstatal, idFederal, PERFIL_RC, SI_TOMO_CAPACITACION, true);
+				Long metaRg = 30L;
+				Long metaRc = 40L;
+
+				dto.setNumero(idFederal);
+				dto.setDistritoFederal(idFederal+"-"+dist);
+				dto.setMetaRG(metaRg);
+				dto.setAvanceCapacitacionRG(capacitacionRg);
+				dto.setPorcentajeCapacitacionRG(dosDecimales((capacitacionRg * 100.00)/ metaRg).doubleValue());
+				dto.setAvanceEntregaNombramientoRG(nombramientoRg);
+				dto.setPorcentajeAvanceEntregaRG(dosDecimales((nombramientoRg * 100.00)/ metaRg).doubleValue());
+				dto.setMetaRC(metaRc);
+				dto.setAvanceCapacitacionRC(capacitacionRc);
+				dto.setPorcentajeCapacitacionRC(dosDecimales((capacitacionRc * 100.00)/ metaRc).doubleValue());
+				dto.setAvanceEntregaNombramientoRC(nombramientoRc);
+				dto.setPorcentajeAvanceEntregaRC(dosDecimales((nombramientoRc * 100.00)/ metaRc).doubleValue());
+				reporteDistDto.add(dto);
+//			}
+			
+			return reporteDistDto;
+		} else {
+			throw new JornadaException("No cuenta con los permisos suficientes para consultar el reporte", 401);
+		}
+	}
+
+	@Override
+	public void getReporteDistritalDownload(HttpServletResponse response, Long idUsuario, Long idEstatal, Long idFederal) throws JornadaException, IOException {
+
+		Usuario usuario = usuarioRepository.findById(idUsuario);
+		Long perfil = usuario.getPerfil();
+		
+		if(perfil != PERFIL_RC) {
+			// Asignacion de nombre al archivo CSV
+			setNameFile(response, CSV_CAP_DISTRITAL);
+
+			List<ReporteCapacitacionDistritalDTO> distritalDTOs = getReporteCapDistrital(idUsuario, idEstatal, idFederal);
+
+			//Nombre y orden de los encabezados en el excel
+			String[] header = { "numero", "distritoFederal", "metaRG", "avanceCapacitacionRG", "porcentajeCapacitacionRG", "avanceEntregaNombramientoRG",
+					"porcentajeAvanceEntregaRG", "metaRC", "avanceCapacitacionRC", "porcentajeCapacitacionRC", "avanceEntregaNombramientoRC", "porcentajeAvanceEntregaRC"};
+
+			setWriterFile(response, distritalDTOs, header);
+			
+		} else {
+			throw new JornadaException("No cuenta con permisos suficientes para descargar el reporte", 401); 
+		}
+		
+	}
+	
 }
