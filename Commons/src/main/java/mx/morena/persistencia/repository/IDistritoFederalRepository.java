@@ -11,5 +11,9 @@ public interface IDistritoFederalRepository {
 	List<DistritoFederal> findAll();
 
 	List<DistritoFederal> findByEntidad(Long idEntidad);
+	
+	Long findDstFederal(Long idUsuario);
+	
+	String findDstritoFederal(Long idDistrito);
 
 }
