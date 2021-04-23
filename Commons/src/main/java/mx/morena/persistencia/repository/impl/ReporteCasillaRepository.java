@@ -8,12 +8,12 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import mx.morena.persistencia.entidad.ReporteCasilla;
-import mx.morena.persistencia.repository.IReporteCasillas;
+import mx.morena.persistencia.repository.IReporteCasillasRepository;
 import mx.morena.persistencia.rowmapper.ConvencidosRowMapper;
 import mx.morena.persistencia.rowmapper.LongRowMapper;
 
 @Repository
-public class ReporteCasillaRepository implements IReporteCasillas {
+public class ReporteCasillaRepository implements IReporteCasillasRepository {
 	
 	@Autowired
 	private JdbcTemplate template;

@@ -28,7 +28,7 @@ import mx.morena.persistencia.entidad.Usuario;
 import mx.morena.persistencia.repository.ICasillaRepository;
 import mx.morena.persistencia.repository.IIncidenciasCasillasRepository;
 import mx.morena.persistencia.repository.IInstalacionCasillasRepository;
-import mx.morena.persistencia.repository.IReporteCasillas;
+import mx.morena.persistencia.repository.IReporteCasillasRepository;
 import mx.morena.persistencia.repository.IRepresentanteRepository;
 import mx.morena.persistencia.repository.IRepresentantesAsignadosRepository;
 import mx.morena.persistencia.repository.IUsuarioRepository;
@@ -44,7 +44,7 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 	private IIncidenciasCasillasRepository incidenciasRepository;
 	
 	@Autowired
-	private IReporteCasillas reporteRepository;
+	private IReporteCasillasRepository reporteRepository;
 	
 	@Autowired
 	private IUsuarioRepository usuarioRepository;

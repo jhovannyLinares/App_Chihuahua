@@ -2,7 +2,7 @@ package mx.morena.persistencia.repository;
 
 import mx.morena.persistencia.entidad.ReporteCasilla;
 
-public interface IReporteCasillas {
+public interface IReporteCasillasRepository {
 
 	int save(ReporteCasilla rc);
 
