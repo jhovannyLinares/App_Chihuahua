@@ -155,23 +155,22 @@ public class CapacitacionRepository implements ICapacitacionRepository{
 	@Override
 	public Long getCapacitacionByDfAndRepresentante(Long idEntidad, Long idFederal, Long tipoRepresentante, String tomoCapacitacion) {
 		String sql = " select count(*) from app_representantes ar inner join app_registro_capacitacion arc on arc.id_representante = ar.id "
-				+ "where ar.estado_id = ? and ar.distrito_federal_id = ? and ar.tipo_representante = ? ";
+				+ "where ar.estado_id = ? and ar.distrito_federal_id = ? and ar.tipo_representante = ? and arc.tomo_capacitacion = ? ";
 		try {
-			return template.queryForObject(sql, new Object[] { idEntidad, idFederal, tipoRepresentante }, 
-					new int[] { Types.NUMERIC, Types.NUMERIC, Types.NUMERIC }, new LongRowMapper());
+			return template.queryForObject(sql, new Object[] { idEntidad, idFederal, tipoRepresentante, tomoCapacitacion }, 
+					new int[] { Types.NUMERIC, Types.NUMERIC, Types.NUMERIC, Types.VARCHAR }, new LongRowMapper());
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}
 	}
 
 	@Override
-	public Long getNombramientoByDfAndRepresentante(Long idEntidad, Long idFederal, Long tipoRepresentante, String tomoCapacitacion, Boolean isNombramiento) {
+	public Long getNombramientoByDfAndRepresentante(Long idEntidad, Long idFederal, Long tipoRepresentante, Boolean isNombramiento) {
 		String sql = " select count(*) from app_representantes ar inner join app_registro_capacitacion arc on arc.id_representante = ar.id "
-				+ "where ar.estado_id = ? and ar.distrito_federal_id = ? and ar.tipo_representante = ? "
-				+ "and arc.tomo_capacitacion = ? and arc.is_nombramiento = ? ";
+				+ "where ar.estado_id = ? and ar.distrito_federal_id = ? and ar.tipo_representante = ? and arc.is_nombramiento = ? ";
 		try {
-			return template.queryForObject(sql, new Object[] { idEntidad, idFederal, tipoRepresentante, tomoCapacitacion, isNombramiento }, 
-					new int[] { Types.NUMERIC, Types.NUMERIC, Types.NUMERIC, Types.VARCHAR, Types.BOOLEAN }, new LongRowMapper());
+			return template.queryForObject(sql, new Object[] { idEntidad, idFederal, tipoRepresentante, isNombramiento }, 
+					new int[] { Types.NUMERIC, Types.NUMERIC, Types.NUMERIC, Types.BOOLEAN }, new LongRowMapper());
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}

@@ -51,6 +51,7 @@ public class MasterService {
 	protected static final String CSV_CONV_DIST = "ReporteConvencidosDistrital.csv";
 	protected static final String CSV_CONV_LOCAL = "ReporteConvencidosLocal.csv";
 	protected static final String CSV_CONV_MUNICIPAL = "ReporteConvencidosMunicipal.csv";
+	protected static final String CSV_CAPACITACION_CRG = "ReporteCapacitacionCRG.csv";
 	
 	protected static final String CSV_CAP_DISTRITAL = "ReporteCapacitacionNombramientoDistrial.csv";
 	
