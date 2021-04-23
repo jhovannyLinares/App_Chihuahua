@@ -32,11 +32,14 @@ public class ReportesJornadaController extends MasterController {
 	@GetMapping("/estatal")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
 	public List<ReporteCapacitacionEstatalDTO> getReporteCapacitacionEst(HttpServletResponse response, HttpServletRequest request,
-									@RequestParam(value = "idDisitritoFederal", required = false) Long idDisitritoFederal) throws IOException {
+									@RequestParam(value = "idEntidad", required = true) Long idEntidad,						
+									@RequestParam(value = "idDisitritoFederal", required = false) Long idDisitritoFederal,
+									@RequestParam(value = "idCrg", required = false) Long idCrg,
+									@RequestParam(value = "idRg", required = false) Long idRg) throws IOException {
 		
 		try {
 			Long idUsuario = getUsuario(request);
-			return reportesJornadaService.getReporteCapEstatal(idUsuario, idDisitritoFederal);
+			return reportesJornadaService.getReporteCapEstatal(idUsuario, idEntidad, idDisitritoFederal);
 		} catch (JornadaException e) {
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
@@ -52,10 +55,13 @@ public class ReportesJornadaController extends MasterController {
 	@GetMapping("/estatal/download")	
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
 	public void downloadReporteEstatalCSV(HttpServletResponse response, HttpServletRequest request,
-								@RequestParam(value = "idDisitritoFederal", required = false) Long idDisitritoFederal) throws IOException {
+								@RequestParam(value = "idEntidad", required = true) Long idEntidad,
+								@RequestParam(value = "idDisitritoFederal", required = false) Long idDisitritoFederal,
+								@RequestParam(value = "idCrg", required = false) Long idCrg,
+								@RequestParam(value = "idRg", required = false) Long idRg) throws IOException {
 		try {
 			Long idUsuario = getUsuario(request);
-			reportesJornadaService.getReporteCapEstatalDownload(response, idUsuario, idDisitritoFederal);
+			reportesJornadaService.getReporteCapEstatalDownload(response, idUsuario, idEntidad, idDisitritoFederal);
 		} catch (JornadaException e) {
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());

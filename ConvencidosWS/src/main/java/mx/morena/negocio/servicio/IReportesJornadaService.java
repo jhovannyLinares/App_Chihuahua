@@ -11,9 +11,9 @@ import mx.morena.negocio.exception.JornadaException;
 
 public interface IReportesJornadaService {
 	
-	List<ReporteCapacitacionEstatalDTO> getReporteCapEstatal(Long idUsuario, Long idDistritoFederal) throws JornadaException;
+	List<ReporteCapacitacionEstatalDTO> getReporteCapEstatal(Long idUsuario, Long idEntidad, Long idDistritoFederal) throws JornadaException;
 	
-	public void getReporteCapEstatalDownload(HttpServletResponse response, Long idUsuario, Long idDistritoFederal) throws JornadaException, IOException;
+	public void getReporteCapEstatalDownload(HttpServletResponse response, Long idUsuario, Long idEntidad, Long idDistritoFederal) throws JornadaException, IOException;
 
 	List<ReporteCapacitacionRgDTO> getReporteRg(Long idEntidad, Long idFederal) throws JornadaException;
 	

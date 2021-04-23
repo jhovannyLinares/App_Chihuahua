@@ -35,10 +35,10 @@ public class ReportesJornadaServiceImpl extends MasterService implements IReport
 	private ICapacitacionRepository capacitacionRepository;
 	
 	@Override
-	public List<ReporteCapacitacionEstatalDTO> getReporteCapEstatal(Long idUsuario, Long idDistritoFederal) throws JornadaException {
+	public List<ReporteCapacitacionEstatalDTO> getReporteCapEstatal(Long idUsuario, Long idEntidad, Long idDistritoFederal) throws JornadaException {
 		Usuario usuario = usuarioRepository.findById(idUsuario);
 		Long perfil = usuario.getPerfil();
-		Long idEstado = usuario.getEntidad();
+		Long idEstado = idEntidad;
 		
 		if (perfil == PERFIL_ESTATAL) {
 			List<ReporteCapacitacionEstatalDTO> reporteDto = new ArrayList<ReporteCapacitacionEstatalDTO>();
@@ -151,10 +151,10 @@ public class ReportesJornadaServiceImpl extends MasterService implements IReport
 	}
 
 	@Override
-	public void getReporteCapEstatalDownload(HttpServletResponse response, Long idUsuario, Long idDistritoFederal) throws JornadaException, IOException {
+	public void getReporteCapEstatalDownload(HttpServletResponse response, Long idUsuario, Long idEntidad, Long idDistritoFederal) throws JornadaException, IOException {
 		setNameFile(response, CSV_CAPACITACION_NOMB_ESTATAL);
 
-		List<ReporteCapacitacionEstatalDTO> reporteDTOs = getReporteCapEstatal(idUsuario, idDistritoFederal);
+		List<ReporteCapacitacionEstatalDTO> reporteDTOs = getReporteCapEstatal(idUsuario, idEntidad, idDistritoFederal);
 
 		String[] header = { "numero", "distritoFederal", "metaRG", "avanceCapacitacionRG", "porcentajeCapacitacionRG", "avanceEntregaNombramientoRG",
 				"porcentajeAvanceEntregaRG", "metaRC", "avanceCapacitacionRC", "porcentajeCapacitacionRC", "avanceEntregaNombramientoRC", "porcentajeAvanceEntregaRC" };
