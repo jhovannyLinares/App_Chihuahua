@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import mx.morena.negocio.dto.ReporteCapacitacionEstatalDTO;
+import mx.morena.negocio.dto.ReporteCapacitacionRgDTO;
 import mx.morena.negocio.exception.JornadaException;
 import mx.morena.negocio.servicio.IReportesJornadaService;
 import mx.morena.persistencia.entidad.DistritoFederal;
@@ -93,5 +94,33 @@ public class ReportesJornadaServiceImpl extends MasterService implements IReport
 		return bd;
 
 	}
-	
+
+	@Override
+	public List<ReporteCapacitacionRgDTO> getReporteRg(Long idEntidad, Long idFederal) throws JornadaException {
+
+		ReporteCapacitacionRgDTO dto = new ReporteCapacitacionRgDTO();
+		List<ReporteCapacitacionRgDTO> lstDto = new ArrayList<ReporteCapacitacionRgDTO>();
+
+		dto.setMetaRC(45L);
+		long avanceCapacitacion = capacitacionRepository.getCountCapacitacionRC(idEntidad, idFederal, PERFIL_RC);
+		dto.setAvanceCapacitacionRC(avanceCapacitacion);
+
+		double porcentajeCapacitacion = (avanceCapacitacion * 100.0) / dto.getMetaRC();
+		dto.setPorcentajeCapacitacionRC(dosDecimales(porcentajeCapacitacion).doubleValue());
+
+		long avanceNombramiento = capacitacionRepository.getCountRcNombramiento(idEntidad, idFederal, PERFIL_RC, true);
+		dto.setAvanceEntregaNombramientoRC(avanceNombramiento);
+
+		if (avanceCapacitacion != 0) {
+			double porcentajeNombramiento = (avanceNombramiento * 100.0) / avanceCapacitacion;
+			dto.setPorcentajeAvanceEntregaRC(dosDecimales(porcentajeNombramiento).doubleValue());
+		} else {
+			dto.setPorcentajeAvanceEntregaRC(0.0);
+		}
+
+		lstDto.add(dto);
+
+		return lstDto;
+	}
+
 }

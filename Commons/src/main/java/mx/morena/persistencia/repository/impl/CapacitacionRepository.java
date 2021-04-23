@@ -178,4 +178,32 @@ public class CapacitacionRepository implements ICapacitacionRepository{
 			return null;
 		}
 	}
+
+	@Override
+	public Long getCountCapacitacionRC(Long idEntidad, Long idFederal, Long perfilRc) {
+		String sql = "select count(*) from app_registro_capacitacion arc "  
+				+ "inner join app_representantes ara "  
+				+ " on arc.id_representante = ara.id where ara.tipo_representante = ?" //;
+				+ " and ara.estado_id = ? and ara.distrito_federal_id = ?";
+		try {
+			return template.queryForObject(sql, new Object[] {perfilRc, idEntidad, idFederal}, 
+					new int[] { Types.NUMERIC, Types.NUMERIC, Types.NUMERIC }, new LongRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+
+	@Override
+	public Long getCountRcNombramiento(Long idEntidad, Long idFederal, Long perfilRc, boolean b) {
+		String sql = "select count(*) from app_registro_capacitacion arc " 
+				+ "inner join app_representantes ara "  
+				+ "on arc.id_representante = ara.id where ara.tipo_representante = ? and arc.is_nombramiento = ?" //;
+				+ " and ara.estado_id = ? and ara.distrito_federal_id = ?";
+		try {
+			return template.queryForObject(sql, new Object[] {perfilRc, b, idEntidad, idFederal}, 
+					new int[] { Types.NUMERIC, Types.BOOLEAN, Types.NUMERIC, Types.NUMERIC }, new LongRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
 }

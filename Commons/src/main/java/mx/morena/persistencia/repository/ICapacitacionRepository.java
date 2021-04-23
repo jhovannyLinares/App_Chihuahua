@@ -24,4 +24,8 @@ public interface ICapacitacionRepository {
 	Long getCapacitacionByDfAndRepresentante(Long idEntidad, Long idFederal, Long tipoRepresentante, String tomoCapacitacion);
 	
 	Long getNombramientoByDfAndRepresentante(Long idEntidad, Long idFederal, Long tipoRepresentante, String tomoCapacitacion, Boolean isNombramiento);
+
+	Long getCountCapacitacionRC(Long idEntidad, Long idFederal, Long perfilRc);
+
+	Long getCountRcNombramiento(Long idEntidad, Long idFederal, Long perfilRc, boolean b);
 }

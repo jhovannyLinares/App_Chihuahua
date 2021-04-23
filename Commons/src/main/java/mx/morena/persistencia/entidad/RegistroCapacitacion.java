@@ -26,7 +26,7 @@ public class RegistroCapacitacion {
 	
 	private String municipio;
 	
-	private boolean isNombramiento;
+	private Boolean isNombramiento;
 
 	public Long getId() {
 		return id;
@@ -116,12 +116,11 @@ public class RegistroCapacitacion {
 		this.municipio = municipio;
 	}
 
-	public boolean getIsNombramiento() {
+	public Boolean getIsNombramiento() {
 		return isNombramiento;
 	}
 
-	public void setIsNombramiento(boolean isNombramiento) {
+	public void setIsNombramiento(Boolean isNombramiento) {
 		this.isNombramiento = isNombramiento;
 	}
-
 }
