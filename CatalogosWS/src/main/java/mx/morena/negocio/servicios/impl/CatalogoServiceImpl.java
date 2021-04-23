@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import mx.morena.negocio.dto.CasillaDTO;
 import mx.morena.negocio.dto.DistritoFederalDTO;
+import mx.morena.negocio.dto.EleccionDTO;
 import mx.morena.negocio.dto.EntidadDTO;
 import mx.morena.negocio.dto.IncidenciaDTO;
 import mx.morena.negocio.dto.MunicipioDTO;
@@ -24,6 +25,7 @@ import mx.morena.negocio.util.MapperUtil;
 import mx.morena.persistencia.entidad.Cargo;
 import mx.morena.persistencia.entidad.Casilla;
 import mx.morena.persistencia.entidad.DistritoFederal;
+import mx.morena.persistencia.entidad.Eleccion;
 import mx.morena.persistencia.entidad.Entidad;
 import mx.morena.persistencia.entidad.Incidencias;
 import mx.morena.persistencia.entidad.Municipio;
@@ -33,6 +35,7 @@ import mx.morena.persistencia.repository.ICargosRepository;
 import mx.morena.persistencia.repository.ICasillaRepository;
 import mx.morena.persistencia.repository.IDistritoFederalRepository;
 import mx.morena.persistencia.repository.IDistritoLocalRepository;
+import mx.morena.persistencia.repository.IEleccionRepository;
 import mx.morena.persistencia.repository.IEntidadRepository;
 import mx.morena.persistencia.repository.IIncidenciasRepository;
 import mx.morena.persistencia.repository.IMunicipioRepository;
@@ -69,6 +72,9 @@ public class CatalogoServiceImpl extends MasterService implements ICatalogoServi
 	
 	@Autowired
 	private IIncidenciasRepository incidenciaRepository;
+	
+	@Autowired
+	private IEleccionRepository eleccionRepository;
 
 	@Override
 	public List<EntidadDTO> getEntidades() {
@@ -382,6 +388,17 @@ public class CatalogoServiceImpl extends MasterService implements ICatalogoServi
 		List<IncidenciaDTO> dtos = new ArrayList<IncidenciaDTO>();
 
 		dtos = MapperUtil.mapAll(incidencias, IncidenciaDTO.class);
+
+		return dtos;
+	}
+
+	@Override
+	public List<EleccionDTO> getEleccion() throws CatalogoException {
+		List<Eleccion> eleccion = eleccionRepository.findAll();
+
+		List<EleccionDTO> dtos = new ArrayList<EleccionDTO>();
+
+		dtos = MapperUtil.mapAll(eleccion, EleccionDTO.class);
 
 		return dtos;
 	}

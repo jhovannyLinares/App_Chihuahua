@@ -4,6 +4,7 @@ import java.util.List;
 
 import mx.morena.negocio.dto.CasillaDTO;
 import mx.morena.negocio.dto.DistritoFederalDTO;
+import mx.morena.negocio.dto.EleccionDTO;
 import mx.morena.negocio.dto.EntidadDTO;
 import mx.morena.negocio.dto.IncidenciaDTO;
 import mx.morena.negocio.dto.MunicipioDTO;
@@ -38,5 +39,7 @@ public interface ICatalogoService {
 //	List<ZonaDTO> getZonas(long usuario, long idPerfil, Long idFederal) throws CatalogoException;
 	
 	List<IncidenciaDTO> getIncidencias()throws CatalogoException;
+	
+	List<EleccionDTO>getEleccion()throws CatalogoException;;
 
 }

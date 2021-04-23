@@ -18,6 +18,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import mx.morena.negocio.dto.CasillaDTO;
 import mx.morena.negocio.dto.DistritoFederalDTO;
+import mx.morena.negocio.dto.EleccionDTO;
 import mx.morena.negocio.dto.EntidadDTO;
 import mx.morena.negocio.dto.IncidenciaDTO;
 import mx.morena.negocio.dto.MunicipioDTO;
@@ -164,6 +165,23 @@ public class CatalogoController extends MasterController {
 		
 		try {
 			return ICatService.getIncidencias();
+		} catch (CatalogoException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+			return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			return null;
+		}
+	}
+	
+	@GetMapping("/eleccion")
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	private List<EleccionDTO> getEleccion(HttpServletResponse response, HttpServletRequest request) throws IOException{
+		
+		try {
+			return ICatService.getEleccion();
 		} catch (CatalogoException e) {
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
