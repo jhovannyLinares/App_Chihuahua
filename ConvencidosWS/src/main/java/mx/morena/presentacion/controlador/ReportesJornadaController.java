@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import mx.morena.negocio.dto.ReporteCapacitacionCrgDTO;
 import mx.morena.negocio.dto.ReporteCapacitacionDistritalDTO;
 import mx.morena.negocio.dto.ReporteCapacitacionEstatalDTO;
 import mx.morena.negocio.dto.ReporteCapacitacionRgDTO;
@@ -157,4 +158,53 @@ public class ReportesJornadaController extends MasterController {
 			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 	}
+	
+	/* Reporte de Capacitacion CRG*/
+	
+	@GetMapping("/crg")
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	public List<ReporteCapacitacionCrgDTO> getReporteCapacitacionCrg(HttpServletResponse response, HttpServletRequest request,
+			@RequestParam(value = "idEntidad", required = false) Long idEntidad,
+			@RequestParam(value = "idFederal", required = false) Long idFederal,
+			@RequestParam(value = "idCrg", required = false) Long idCrg,
+			@RequestParam(value = "idRg", required = false) Long idRg) throws IOException{
+		
+		try {
+			Long idUsuario = getUsuario(request);
+			return reportesJornadaService.getReporteCapCrg(idUsuario, idEntidad, idFederal, idCrg, idRg);
+		}catch (JornadaException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+			return null;
+		} catch (Exception e ) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			return null;
+		}
+		
+	}
+	
+	/* ICJ- Servicio encargado de la descarga del excel */
+	
+	@GetMapping("/crg/download")	
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	public void downloadCSV(HttpServletResponse response, HttpServletRequest request,
+			@RequestParam(value = "idEntidad", required = false) Long idEntidad,
+			@RequestParam(value = "idFederal", required = false) Long idFederal,
+			@RequestParam(value = "idCrg", required = false) Long idCrg,
+			@RequestParam(value = "idRg", required = false) Long idRg) throws IOException {
+		
+		try {
+			long usuario = getUsuario(request);
+			reportesJornadaService.getReporteDownload(response, usuario, idEntidad, idFederal, idCrg, idRg );
+
+		} catch (JornadaException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+		}
+	}
+
 }

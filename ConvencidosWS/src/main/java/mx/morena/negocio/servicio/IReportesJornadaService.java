@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
+import mx.morena.negocio.dto.ReporteCapacitacionCrgDTO;
 import mx.morena.negocio.dto.ReporteCapacitacionDistritalDTO;
 import mx.morena.negocio.dto.ReporteCapacitacionEstatalDTO;
 import mx.morena.negocio.dto.ReporteCapacitacionRgDTO;
@@ -24,5 +25,9 @@ public interface IReportesJornadaService {
 	List<ReporteCapacitacionDistritalDTO> getReporteCapDistrital(Long idUsuario, Long idEstatal, Long idFederal) throws JornadaException;
 	
 	public void getReporteDistritalDownload(HttpServletResponse response, Long idUsuario, Long idEstatal, Long idFederal) throws JornadaException, IOException;
+	
+	List<ReporteCapacitacionCrgDTO> getReporteCapCrg(Long idUsuario, Long idEntidad, Long idFederal, Long idCrg, Long idRg) throws JornadaException;
+	
+	public void getReporteDownload(HttpServletResponse response, Long idUsuario, Long idEntidad, Long idFederal, Long idCrg, Long idRg) throws JornadaException, IOException;
 	
 }
