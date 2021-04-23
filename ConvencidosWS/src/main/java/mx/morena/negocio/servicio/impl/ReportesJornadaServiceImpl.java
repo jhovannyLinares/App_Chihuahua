@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import mx.morena.negocio.dto.ReporteCapacitacionDistritalDTO;
 import mx.morena.negocio.dto.ReporteCapacitacionEstatalDTO;
 import mx.morena.negocio.dto.ReporteCapacitacionRgDTO;
-import mx.morena.negocio.dto.ReporteDistritalDTO;
 import mx.morena.negocio.exception.JornadaException;
 import mx.morena.negocio.servicio.IReportesJornadaService;
 import mx.morena.persistencia.entidad.DistritoFederal;
@@ -220,35 +219,67 @@ public class ReportesJornadaServiceImpl extends MasterService implements IReport
 		Long df = usuario.getFederal();
 		
 		if (perfil != PERFIL_RC) {
-			List<ReporteCapacitacionDistritalDTO> reporteDistDto = new ArrayList<ReporteCapacitacionDistritalDTO>();
-			ReporteCapacitacionDistritalDTO dto = null;
-
-				dto = new ReporteCapacitacionDistritalDTO();
-				String dist = distritoRepository.findDstritoFederal(idFederal);
-				
-				Long capacitacionRg = capacitacionRepository.getCapacitacionByDfAndRepresentante(idEstatal, idFederal, PERFIL_RG, SI_TOMO_CAPACITACION);
-				Long nombramientoRg = capacitacionRepository.getNombramientoByDfAndRepresentante(idEstatal, idFederal, PERFIL_RG, SI_TOMO_CAPACITACION, true);
-				Long capacitacionRc = capacitacionRepository.getCapacitacionByDfAndRepresentante(idEstatal, idFederal, PERFIL_RC, SI_TOMO_CAPACITACION);
-				Long nombramientoRc = capacitacionRepository.getNombramientoByDfAndRepresentante(idEstatal, idFederal, PERFIL_RC, SI_TOMO_CAPACITACION, true);
-				Long metaRg = 30L;
-				Long metaRc = 40L;
-
-				dto.setNumero(idFederal);
-				dto.setDistritoFederal(idFederal+"-"+dist);
-				dto.setMetaRG(metaRg);
-				dto.setAvanceCapacitacionRG(capacitacionRg);
-				dto.setPorcentajeCapacitacionRG(dosDecimales((capacitacionRg * 100.00)/ metaRg).doubleValue());
-				dto.setAvanceEntregaNombramientoRG(nombramientoRg);
-				dto.setPorcentajeAvanceEntregaRG(dosDecimales((nombramientoRg * 100.00)/ metaRg).doubleValue());
-				dto.setMetaRC(metaRc);
-				dto.setAvanceCapacitacionRC(capacitacionRc);
-				dto.setPorcentajeCapacitacionRC(dosDecimales((capacitacionRc * 100.00)/ metaRc).doubleValue());
-				dto.setAvanceEntregaNombramientoRC(nombramientoRc);
-				dto.setPorcentajeAvanceEntregaRC(dosDecimales((nombramientoRc * 100.00)/ metaRc).doubleValue());
-				reporteDistDto.add(dto);
-//			}
 			
-			return reporteDistDto;
+			if(idEstatal != null || idFederal != null) {
+			
+				List<ReporteCapacitacionDistritalDTO> reporteDistDto = new ArrayList<ReporteCapacitacionDistritalDTO>();
+				ReporteCapacitacionDistritalDTO dto = null;
+	
+					dto = new ReporteCapacitacionDistritalDTO();
+					String dist = distritoRepository.findDstritoFederal(idFederal);
+					
+					Long capacitacionRg = capacitacionRepository.getCapacitacionByDfAndRepresentante(idEstatal, idFederal, PERFIL_RG, SI_TOMO_CAPACITACION);
+					Long nombramientoRg = capacitacionRepository.getNombramientoByDfAndRepresentante(idEstatal, idFederal, PERFIL_RG, SI_TOMO_CAPACITACION, true);
+					Long capacitacionRc = capacitacionRepository.getCapacitacionByDfAndRepresentante(idEstatal, idFederal, PERFIL_RC, SI_TOMO_CAPACITACION);
+					Long nombramientoRc = capacitacionRepository.getNombramientoByDfAndRepresentante(idEstatal, idFederal, PERFIL_RC, SI_TOMO_CAPACITACION, true);
+					Long metaRg = 30L;
+					Long metaRc = 40L;
+	
+					dto.setNumero(idFederal);
+					dto.setDistritoFederal(idFederal+"-"+dist);
+					dto.setMetaRG(metaRg);
+					dto.setAvanceCapacitacionRG(capacitacionRg);
+					dto.setPorcentajeCapacitacionRG(dosDecimales((capacitacionRg * 100.00)/ metaRg).doubleValue());
+					dto.setAvanceEntregaNombramientoRG(nombramientoRg);
+					dto.setPorcentajeAvanceEntregaRG(dosDecimales((nombramientoRg * 100.00)/ metaRg).doubleValue());
+					dto.setMetaRC(metaRc);
+					dto.setAvanceCapacitacionRC(capacitacionRc);
+					dto.setPorcentajeCapacitacionRC(dosDecimales((capacitacionRc * 100.00)/ metaRc).doubleValue());
+					dto.setAvanceEntregaNombramientoRC(nombramientoRc);
+					dto.setPorcentajeAvanceEntregaRC(dosDecimales((nombramientoRc * 100.00)/ metaRc).doubleValue());
+					reporteDistDto.add(dto);
+				
+				return reporteDistDto;
+			}else {
+				List<ReporteCapacitacionDistritalDTO> reporteDistDto = new ArrayList<ReporteCapacitacionDistritalDTO>();
+				ReporteCapacitacionDistritalDTO dto = null;
+	
+					dto = new ReporteCapacitacionDistritalDTO();
+					String dist = distritoRepository.findDstritoFederal(df);
+					
+					Long capacitacionRg = capacitacionRepository.getCapacitacionByDfAndRepresentante(idEstado, df, PERFIL_RG, SI_TOMO_CAPACITACION);
+					Long nombramientoRg = capacitacionRepository.getNombramientoByDfAndRepresentante(idEstado, df, PERFIL_RG, SI_TOMO_CAPACITACION, true);
+					Long capacitacionRc = capacitacionRepository.getCapacitacionByDfAndRepresentante(idEstado, df, PERFIL_RC, SI_TOMO_CAPACITACION);
+					Long nombramientoRc = capacitacionRepository.getNombramientoByDfAndRepresentante(idEstado, df, PERFIL_RC, SI_TOMO_CAPACITACION, true);
+					Long metaRg = 30L;
+					Long metaRc = 40L;
+	
+					dto.setNumero(df);
+					dto.setDistritoFederal(df+"-"+dist);
+					dto.setMetaRG(metaRg);
+					dto.setAvanceCapacitacionRG(capacitacionRg);
+					dto.setPorcentajeCapacitacionRG(dosDecimales((capacitacionRg * 100.00)/ metaRg).doubleValue());
+					dto.setAvanceEntregaNombramientoRG(nombramientoRg);
+					dto.setPorcentajeAvanceEntregaRG(dosDecimales((nombramientoRg * 100.00)/ metaRg).doubleValue());
+					dto.setMetaRC(metaRc);
+					dto.setAvanceCapacitacionRC(capacitacionRc);
+					dto.setPorcentajeCapacitacionRC(dosDecimales((capacitacionRc * 100.00)/ metaRc).doubleValue());
+					dto.setAvanceEntregaNombramientoRC(nombramientoRc);
+					dto.setPorcentajeAvanceEntregaRC(dosDecimales((nombramientoRc * 100.00)/ metaRc).doubleValue());
+					reporteDistDto.add(dto);
+				
+				return reporteDistDto;
+			}
 		} else {
 			throw new JornadaException("No cuenta con los permisos suficientes para consultar el reporte", 401);
 		}
