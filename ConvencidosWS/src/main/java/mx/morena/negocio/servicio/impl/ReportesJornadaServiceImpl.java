@@ -39,7 +39,13 @@ public class ReportesJornadaServiceImpl extends MasterService implements IReport
 	public List<ReporteCapacitacionEstatalDTO> getReporteCapEstatal(Long idUsuario, Long idEntidad, Long idDistritoFederal) throws JornadaException {
 		Usuario usuario = usuarioRepository.findById(idUsuario);
 		Long perfil = usuario.getPerfil();
-		Long idEstado = idEntidad;
+		Long idEstado = 0L;
+		
+		if (idEntidad != null) {
+			idEstado = idEntidad;
+		} else {
+			idEstado = usuario.getEntidad();
+		}
 		
 		if (perfil == PERFIL_ESTATAL) {
 			List<ReporteCapacitacionEstatalDTO> reporteDto = new ArrayList<ReporteCapacitacionEstatalDTO>();

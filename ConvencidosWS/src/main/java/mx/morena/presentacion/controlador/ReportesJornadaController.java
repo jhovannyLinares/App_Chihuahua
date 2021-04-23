@@ -33,10 +33,8 @@ public class ReportesJornadaController extends MasterController {
 	@GetMapping("/estatal")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
 	public List<ReporteCapacitacionEstatalDTO> getReporteCapacitacionEst(HttpServletResponse response, HttpServletRequest request,
-									@RequestParam(value = "idEntidad", required = true) Long idEntidad,						
-									@RequestParam(value = "idDisitritoFederal", required = false) Long idDisitritoFederal,
-									@RequestParam(value = "idCrg", required = false) Long idCrg,
-									@RequestParam(value = "idRg", required = false) Long idRg) throws IOException {
+									@RequestParam(value = "idEntidad", required = false) Long idEntidad,						
+									@RequestParam(value = "idDisitritoFederal", required = false) Long idDisitritoFederal) throws IOException {
 		
 		try {
 			Long idUsuario = getUsuario(request);
@@ -56,10 +54,8 @@ public class ReportesJornadaController extends MasterController {
 	@GetMapping("/estatal/download")	
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
 	public void downloadReporteEstatalCSV(HttpServletResponse response, HttpServletRequest request,
-								@RequestParam(value = "idEntidad", required = true) Long idEntidad,
-								@RequestParam(value = "idDisitritoFederal", required = false) Long idDisitritoFederal,
-								@RequestParam(value = "idCrg", required = false) Long idCrg,
-								@RequestParam(value = "idRg", required = false) Long idRg) throws IOException {
+								@RequestParam(value = "idEntidad", required = false) Long idEntidad,
+								@RequestParam(value = "idDisitritoFederal", required = false) Long idDisitritoFederal) throws IOException {
 		try {
 			Long idUsuario = getUsuario(request);
 			reportesJornadaService.getReporteCapEstatalDownload(response, idUsuario, idEntidad, idDisitritoFederal);
