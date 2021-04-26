@@ -7,6 +7,8 @@ import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -107,6 +109,19 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 		bd = bd.setScale(2, RoundingMode.HALF_UP);
 		return bd;
 
+	}
+
+	@Override
+	public void getReporteVotacionDownload(HttpServletResponse response, Long usuario, long perfil, Long idReporte) throws CotException, IOException {
+		setNameFile(response, CSV_REPORTE_VOTACION);
+		
+				List<ReporteVotacionDTO> reporteDTOs = getReporteVotacion(usuario, perfil, idReporte);
+		
+				String[] header = {"idFederal", "ListaNominal", "votacion11hrs", "porcentajeVotacion11hrs", "votacion15hrs", "porcentajeVotacion15hrs",
+						"votacion18hrs", "porcentajeVotacion18hrs"};
+		
+				setWriterFile(response, reporteDTOs, header);
+		
 	}
 
 }

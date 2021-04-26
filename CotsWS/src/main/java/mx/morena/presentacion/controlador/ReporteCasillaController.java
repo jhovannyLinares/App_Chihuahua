@@ -50,5 +50,24 @@ public class ReporteCasillaController extends MasterController {
 		}
 
 	}
+	
+	@GetMapping("/votacion/download")	
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	public void downloadCSV(HttpServletResponse response, HttpServletRequest request,
+			@RequestParam(value = "idReporte", required = false) Long idReporte) throws IOException{ 
+		
+		try {
+			Long usuario = getUsuario(request);
+			long perfil = getPerfil(request);
+			reporteCasillaService.getReporteVotacionDownload(response, usuario, perfil, idReporte);
+
+		} catch (CotException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+		}
+	}
 
 }
