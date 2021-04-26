@@ -14,12 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import mx.morena.negocio.dto.ReporteAsignacionDistritalDTO;
 import mx.morena.negocio.dto.ReporteSeguimintoVotoDTO;
-import mx.morena.negocio.exception.RepresentanteException;
 import mx.morena.negocio.exception.SeguimientoVotoException;
 import mx.morena.negocio.servicios.IReporteSeguimientoVotoService;
-import mx.morena.negocio.servicios.IReportesAsignacionService;
 import mx.morena.security.controller.MasterController;
 
 @RestController
@@ -49,5 +46,24 @@ public class ReportesSeguimientoVotoController extends MasterController{
 			return null;
 		}
 
+	}
+	
+	@GetMapping("/seguimientoVoto/download")	
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	public void downloadSeguimientoVotoCSV(HttpServletResponse response,  HttpServletRequest request) throws IOException {
+		
+		long perfil = getPerfil(request);
+		long usuario = getUsuario(request);
+		try {
+
+			reportesService.getReporteSeguimientoVotoDownload(response, perfil, usuario);
+
+		} catch (SeguimientoVotoException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+		}
 	}
 }

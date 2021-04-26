@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import mx.morena.persistencia.entidad.SeccionElectoral;
 import mx.morena.persistencia.repository.ISeguimientoVotoRepository;
 import mx.morena.persistencia.rowmapper.IdMaxConvencidos;
+import mx.morena.persistencia.rowmapper.LongRowMapper;
 import mx.morena.persistencia.rowmapper.SeccionCotsRowMapper;
 
 @Repository
@@ -57,6 +58,17 @@ public class SeguimientoVotoRepository implements ISeguimientoVotoRepository{
 		try {
 			return template.queryForObject(sql, new Object[] { distrito, tipo}, new int[] { Types.NUMERIC, Types.NUMERIC },
 					new IdMaxConvencidos());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+
+	@Override
+	public Long countNotificados(Long distritoId) {
+		String sql = "select COUNT(*) from app_convencidos ac where distrito_federal_id = ? and is_notificado = true";
+		try {
+			return template.queryForObject(sql, new Object[] { distritoId}, new int[] { Types.NUMERIC },
+					new LongRowMapper());
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}

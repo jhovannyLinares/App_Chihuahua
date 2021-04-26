@@ -65,6 +65,8 @@ public class MasterService {
 	
 	protected static final String CSV_CAPACITACION_NOMB_ESTATAL = "ReporteCapacitacionNombramientoEstatal.csv";
 	
+	protected static final String CSV_SEGUIMIENTOVOTO = "ReporteSeguimientoVoto.csv";
+	
 	private static final String HEADER_KEY = "Content-Disposition";
 	private static final String CONTENT_TYPE = "text/csv";
 	private static final String ATTACHMENT = "attachment; filename=\"%s\"";

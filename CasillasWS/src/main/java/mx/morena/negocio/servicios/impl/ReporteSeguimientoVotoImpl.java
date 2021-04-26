@@ -1,9 +1,12 @@
 package mx.morena.negocio.servicios.impl;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,24 +55,27 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 			lstSeccion = seccionRepository.getDistritos();
 			
 			for(SeccionElectoral seccion : lstSeccion) {
+				
 				Long countSecciones = seccionRepository.getSecciones(seccion.getDistritoId());
 				Long urbanas = casillasRepository.countByDistritoAndTipologia(seccion.getDistritoId(), URBANAS);
 				Long noUrbanas = casillasRepository.countByDistritoAndTipologia(seccion.getDistritoId(), NO_URBANAS);
 				Long convencidos = seguimientoRepository.countByLocalAndTipo(seccion.getDistritoId(), CONVENCIDO);
-//				Long notificados = seguimientoRepository.countByNotificados(seccion.getDistritoId(), CONVENCIDO);
+				Long metaCon = 45L;
+				Long notificados = seguimientoRepository.countNotificados(seccion.getDistritoId());
 				dto = new ReporteSeguimintoVotoDTO();
 				
 				dto.setIdDistrito(seccion.getDistritoId());
-				dto.setDistrito(seccion.getDistritoId() + "-" +seccion.getDistritoId());
+				dto.setDistrito(seccion.getDistritoId()+"-"+seccion.getNombreDistrito());
 				dto.setSecciones(countSecciones);
 				dto.setUrbanas(urbanas);
 				dto.setNoUrbanas(noUrbanas);
-				dto.setMetaConvencidos(45L);
+				dto.setMetaConvencidos(metaCon);
 				dto.setTotalConvencidos(convencidos);
 				double sub2 = (convencidos * 100.00)/ dto.getMetaConvencidos();
 				dto.setPorcentajeAvanceConvencidos(dosDecimales(sub2).doubleValue());
-				dto.setNotificado(50L);
-				dto.setPorcentajeAvanceNotificado(dosDecimales((dto.getNotificado() * 100) / dto.getTotalConvencidos()).doubleValue());
+				dto.setNotificado(notificados);
+				double sub1 = ( notificados * 100.00) / dto.getTotalConvencidos();
+				dto.setPorcentajeAvanceNotificado(dosDecimales(sub1).doubleValue());
 				
 				
 				totales.setSecciones(totales.getSecciones() + countSecciones);
@@ -106,5 +112,18 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 		// TODO Auto-generated method stub
 		//Mensje
 		return null;
+	}
+
+	@Override
+	public void getReporteSeguimientoVotoDownload(HttpServletResponse response, Long perfil, Long usuario) throws SeguimientoVotoException, IOException {
+		setNameFile(response, CSV_SEGUIMIENTOVOTO);
+
+		List<ReporteSeguimintoVotoDTO> seguimientoDTOs = getSeguimeitoVoto(perfil, usuario);
+
+		String[] header = { "idDistrito", "distrito", "secciones", "urbanas", "noUrbanas",
+							"metaConvencidos", "totalConvencidos", "porcentajeAvanceConvencidos", "notificado", "porcentajeAvanceNotificado" };
+
+		setWriterFile(response, seguimientoDTOs, header);
+		
 	}
 }

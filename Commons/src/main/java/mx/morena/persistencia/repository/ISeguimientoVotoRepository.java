@@ -11,6 +11,8 @@ public interface ISeguimientoVotoRepository {
 	Long countByLocalAndTipo(Long perdil, Long tipo);
 	
 	Long countByNotificados(Long distrito, Long tipo);
+	
+	Long countNotificados(Long distritoId);
 
 	List<SeccionElectoral> getDistritos();
 
