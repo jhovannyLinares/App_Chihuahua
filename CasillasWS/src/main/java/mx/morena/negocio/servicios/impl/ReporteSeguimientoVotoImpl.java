@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import mx.morena.negocio.dto.ReporteSeguimintoVotoDTO;
+import mx.morena.negocio.dto.SeguimientoVotoDTO;
 import mx.morena.negocio.exception.SeguimientoVotoException;
 import mx.morena.negocio.servicios.IReporteSeguimientoVotoService;
 import mx.morena.persistencia.entidad.SeccionElectoral;
@@ -98,5 +99,11 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 		bd = bd.setScale(2, RoundingMode.HALF_UP);
 		return bd;
 		
+	}
+
+	@Override
+	public List<SeguimientoVotoDTO> getCasillaBySeccion(long idPerfil, Long idSeccion) throws SeguimientoVotoException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
