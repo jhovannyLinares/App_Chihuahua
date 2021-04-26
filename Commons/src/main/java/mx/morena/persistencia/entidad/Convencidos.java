@@ -71,6 +71,8 @@ public class Convencidos {
 	private String nombreMunicipio;
 	
 	private String nombreSeccion;
+	
+	private boolean isNotificado;
 
 	public Long getId() {
 		return id;
@@ -334,6 +336,14 @@ public class Convencidos {
 
 	public void setNombreSeccion(String nombreSeccion) {
 		this.nombreSeccion = nombreSeccion;
+	}
+
+	public boolean getIsNotificado() {
+		return isNotificado;
+	}
+
+	public void setIsNotificado(boolean isNotificado) {
+		this.isNotificado = isNotificado;
 	}
 
 }

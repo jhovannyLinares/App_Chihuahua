@@ -15,10 +15,14 @@ import mx.morena.negocio.dto.ReporteSeguimintoVotoDTO;
 import mx.morena.negocio.dto.SeguimientoVotoDTO;
 import mx.morena.negocio.exception.SeguimientoVotoException;
 import mx.morena.negocio.servicios.IReporteSeguimientoVotoService;
+import mx.morena.persistencia.entidad.Convencidos;
 import mx.morena.persistencia.entidad.SeccionElectoral;
+import mx.morena.persistencia.entidad.Usuario;
 import mx.morena.persistencia.repository.ICasillaRepository;
+import mx.morena.persistencia.repository.IConvencidosRepository;
 import mx.morena.persistencia.repository.ISeccionElectoralRepository;
 import mx.morena.persistencia.repository.ISeguimientoVotoRepository;
+import mx.morena.persistencia.repository.IUsuarioRepository;
 import mx.morena.security.servicio.MasterService;
 
 @Service
@@ -32,6 +36,12 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 	
 	@Autowired
 	private ICasillaRepository casillasRepository;
+	
+	@Autowired
+	private IUsuarioRepository usuarioRepository;
+		
+	@Autowired
+	private IConvencidosRepository convencidoRepository;
 
 	@Override
 	public List<ReporteSeguimintoVotoDTO> getSeguimeitoVoto(Long perfil, Long usuario) throws SeguimientoVotoException{
@@ -129,5 +139,20 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 		}else {
 		throw new SeguimientoVotoException("No cuenta con los permisos suficientes para descargr el reporte", 401);
 		}
+	}
+	
+	@Override
+	public String marcarConvencido(Long idUsuario, Long idConvencido, Boolean isNotificado) throws SeguimientoVotoException {
+		Usuario usuario = usuarioRepository.findById(idUsuario);
+		Long perfil = usuario.getPerfil();
+		if (perfil == PERFIL_BRIGADISTA) {
+			Convencidos convencido = convencidoRepository.getByIdAndTipoAndIsNotificado(idConvencido, CONVENCIDO, isNotificado);
+			if (convencido != null) {
+				System.out.println(convencido.getId());
+				System.out.println(convencido.getIsNotificado());
+			}
+		}
+		
+		return null;
 	}
 }

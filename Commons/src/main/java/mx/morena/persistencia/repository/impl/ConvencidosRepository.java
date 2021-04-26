@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import mx.morena.persistencia.entidad.Convencidos;
 import mx.morena.persistencia.repository.IConvencidosRepository;
+import mx.morena.persistencia.rowmapper.ConvencidoNotificadoRowMapper;
 import mx.morena.persistencia.rowmapper.ConvencidoRowMapper;
 import mx.morena.persistencia.rowmapper.ConvencidosRowMapper;
 import mx.morena.persistencia.rowmapper.ConvencidosValRowMapper;
@@ -349,6 +350,19 @@ public List<Convencidos> getConvencidos(Long distritoFederalId, Long idMunicipio
 		try {
 			return template.queryForObject(sql, new Object[] { idMunicipio, tipo, estatus}, new int[] { Types.NUMERIC, Types.NUMERIC, Types.CHAR },
 					new IdMaxConvencidos());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+
+
+	@Override
+	public Convencidos getByIdAndTipoAndIsNotificado(Long id, Long tipo, Boolean isNotificado) {
+		String sql = "SELECT ac.id, ac.nombre, ac.apellido_materno, ac.apellido_paterno, ac.is_notificado FROM app_convencidos ac "
+				+ "WHERE ac.id = ? AND ac.tipo = ? AND ac.is_notificado = ? ";
+		try {
+			return template.queryForObject(sql, new Object[] { id, tipo, isNotificado }, new int[] { Types.NUMERIC, Types.NUMERIC, Types.BOOLEAN },
+					new ConvencidoNotificadoRowMapper());
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}

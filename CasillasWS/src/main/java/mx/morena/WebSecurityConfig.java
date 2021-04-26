@@ -37,6 +37,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/zonaCrg").authenticated()
 				.antMatchers("/rutaCrg").authenticated()
 				.antMatchers("/rutas").authenticated()
+				.antMatchers("/seguimientoVoto/**").authenticated()
 				.anyRequest().authenticated()
 				.and().addFilterAfter(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
 	}

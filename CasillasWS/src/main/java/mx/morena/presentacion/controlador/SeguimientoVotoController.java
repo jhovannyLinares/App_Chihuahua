@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,14 +22,14 @@ import mx.morena.negocio.servicios.IReporteSeguimientoVotoService;
 import mx.morena.security.controller.MasterController;
 
 @RestController
-@RequestMapping(value = "/")
+@RequestMapping(value = "seguimientoVoto")
 @CrossOrigin
 public class SeguimientoVotoController extends MasterController {
 	
 	@Autowired
 	private IReporteSeguimientoVotoService seguimientoVotoService;
 	
-	@GetMapping("/seguimientoVoto")
+	@GetMapping("/")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
 	public List<SeguimientoVotoDTO> getCasillaBySeccion(HttpServletResponse response, HttpServletRequest request,
 			@RequestParam(value = "idSeccion", required = false) Long idSeccion) throws IOException {
@@ -36,6 +37,26 @@ public class SeguimientoVotoController extends MasterController {
 		try {
 			long perfil = getPerfil(request);
 			return seguimientoVotoService.getCasillaBySeccion( perfil, idSeccion );
+		} catch (SeguimientoVotoException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+			return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			return null;
+		}
+	}
+	
+	@PutMapping("/marcarDesmarcarConvencido")
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	public String marcarDesmarcarConvencido(HttpServletResponse response, HttpServletRequest request,
+						@RequestParam(value = "idConvencido", required = true) Long idConvencido,
+						@RequestParam(value = "isNotificado", required = true) Boolean isNotificado) throws IOException {
+
+		try {
+			long idUsuario = getUsuario(request);
+			return seguimientoVotoService.marcarConvencido(idUsuario, idConvencido, isNotificado);
 		} catch (SeguimientoVotoException e) {
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());

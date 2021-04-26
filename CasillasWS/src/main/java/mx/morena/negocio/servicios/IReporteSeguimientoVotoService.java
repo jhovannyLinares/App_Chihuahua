@@ -16,4 +16,6 @@ public interface IReporteSeguimientoVotoService {
 	public List<SeguimientoVotoDTO> getCasillaBySeccion(long idPerfil, Long idSeccion) throws SeguimientoVotoException;
 	
 	public void getReporteSeguimientoVotoDownload(HttpServletResponse response, Long perfil, Long usuario) throws SeguimientoVotoException, IOException;
+	
+	String marcarConvencido(Long idUsuario, Long idConvencido, Boolean isNotificado) throws SeguimientoVotoException;
 }
