@@ -35,7 +35,7 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 
 	@Override
 	public List<ReporteSeguimintoVotoDTO> getSeguimeitoVoto(Long perfil, Long usuario) throws SeguimientoVotoException{
-		if(perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL || perfil == PERFIL_LOCAL) {
+		if(perfil != PERFIL_RG) {
 			
 			List<ReporteSeguimintoVotoDTO> lstvoto = new ArrayList<ReporteSeguimintoVotoDTO>();
 			List <SeccionElectoral> lstSeccion = null;
@@ -116,14 +116,18 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 
 	@Override
 	public void getReporteSeguimientoVotoDownload(HttpServletResponse response, Long perfil, Long usuario) throws SeguimientoVotoException, IOException {
-		setNameFile(response, CSV_SEGUIMIENTOVOTO);
-
-		List<ReporteSeguimintoVotoDTO> seguimientoDTOs = getSeguimeitoVoto(perfil, usuario);
-
-		String[] header = { "idDistrito", "distrito", "secciones", "urbanas", "noUrbanas",
-							"metaConvencidos", "totalConvencidos", "porcentajeAvanceConvencidos", "notificado", "porcentajeAvanceNotificado" };
-
-		setWriterFile(response, seguimientoDTOs, header);
+		if(perfil != PERFIL_RG) {	
+			setNameFile(response, CSV_SEGUIMIENTOVOTO);
+			
+			List<ReporteSeguimintoVotoDTO> seguimientoDTOs = getSeguimeitoVoto(perfil, usuario);
+			
+			String[] header = { "idDistrito", "distrito", "secciones", "urbanas", "noUrbanas",
+								"metaConvencidos", "totalConvencidos", "porcentajeAvanceConvencidos", "notificado", "porcentajeAvanceNotificado" };
+			
+			setWriterFile(response, seguimientoDTOs, header);
 		
+		}else {
+		throw new SeguimientoVotoException("No cuenta con los permisos suficientes para descargr el reporte", 401);
+		}
 	}
 }
