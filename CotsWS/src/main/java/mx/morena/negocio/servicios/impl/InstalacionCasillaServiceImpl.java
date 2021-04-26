@@ -70,14 +70,14 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 			
 			ic.setIdCasilla(dto.getIdCasilla());
 			ic.setHoraInstalacion(dto.getHoraInstalacion());
-//			ic.setHoraInstalacion(df.format(dto.getHoraInstalacion()));
+			ic.setHoraInstalacion(dto.getHoraInstalacion());
 			ic.setLlegaronFuncionarios(dto.getLlegaronFuncionarios());
 			ic.setFuncionariosFila(dto.getFuncionariosFila());
 			ic.setPaqueteCompleto(dto.getPaqueteCompleto());
 			ic.setLlegoRg(dto.getLlegoRg());
 			ic.setDesayuno(dto.getDesayuno());
 			ic.setInicioVotacion(dto.getInicioVotacion());
-//			ic.setInicioVotacion(df.format(dto.getInicioVotacion()));
+			ic.setInicioVotacion(dto.getInicioVotacion());
 			  
 			if(casillasRepository.save(ic) ==0) {
 				throw new CotException("No se guardo la informacion con éxito.", 409);
