@@ -56,4 +56,18 @@ public class ReporteCasillaRepository implements IReporteCasillasRepository {
 		}
 	}
 
+	@Override
+	public Long getCountByDistritoAndTipoVotacion(Long idfederal, Long idReporte, String hora) {
+		String sql = "select count(*) from app_reporte_casillas arc "
+				+ "inner join app_casilla ac "
+				+ "on ac.id = arc.id_casilla "
+				+ "where  ac.federal_id = ? and arc.tipo_votacion = ? and arc.hora_reporte = ?";
+		try {
+			return template.queryForObject(sql, new Object[] { idfederal, idReporte, hora },
+					new int[] {Types.NUMERIC, Types.NUMERIC, Types.TIME}, new LongRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return 0L;
+		}
+	}
+
 }

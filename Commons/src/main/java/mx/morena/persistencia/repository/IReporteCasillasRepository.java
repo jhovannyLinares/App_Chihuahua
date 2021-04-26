@@ -10,4 +10,6 @@ public interface IReporteCasillasRepository {
 
 	Long getReporteByCAsilla(Long idCasilla);
 
+	Long getCountByDistritoAndTipoVotacion(Long idFederal, Long idReporte, String once);
+
 }
