@@ -104,6 +104,7 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 	@Override
 	public List<SeguimientoVotoDTO> getCasillaBySeccion(long idPerfil, Long idSeccion) throws SeguimientoVotoException {
 		// TODO Auto-generated method stub
+		//Mensje
 		return null;
 	}
 }
