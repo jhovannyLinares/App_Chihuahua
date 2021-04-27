@@ -53,7 +53,7 @@ public class DistritoFederalRepository implements IDistritoFederalRepository {
 
 	@Override
 	public String findDstritoFederal(Long idDistrito) {
-		String sql = "select cabecera from app_distrito_local adl where id = ?";
+		String sql = "select cabecera from app_distrito_federal adl where id = ?";
 
 		return template.queryForObject(sql, new Object[] { idDistrito }, new int[] { Types.NUMERIC }, new StringRowMapper());
 	}
