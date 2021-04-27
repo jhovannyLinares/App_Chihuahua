@@ -111,11 +111,11 @@ public class ConvencidosRepository implements IConvencidosRepository {
 				+ " fecha_registro, " + " fecha_sistema, " + " mov, " + " nombre, " + " numero_exterior, "
 				+ " numero_interior, " + " telefono_casa, " + " telefono_celular, " + " distrito_federal_id, "
 				+ " estado_id, " + " municipio_id, " + " usuario_id_usuario, " + "tipo, seccion_id) VALUES( "
-				+ " (SELECT MAX(id)+1 FROM app_convencidos), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
-
+				+ " COALESCE((SELECT MAX(id) FROM app_convencidos), 0)+1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
+//				+ " (SELECT MAX(id)+1 FROM app_convencidos), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
 		template.update(sql,
-				new Object[] { convencidos.getApellidoMaterno(), convencidos.getApellidoPaterno(),
-						convencidos.getBanco(), convencidos.getCalle(), convencidos.getClabeInterbancaria(),
+					new Object[] { convencidos.getApellidoMaterno(), convencidos.getApellidoPaterno(),
+							convencidos.getBanco(), convencidos.getCalle(), convencidos.getClabeInterbancaria(),
 						convencidos.getClaveElector(), convencidos.getColonia(), convencidos.getCorreo(),
 						convencidos.getCp(), convencidos.getCurp(), convencidos.isDv(), convencidos.getEstatus(),
 						convencidos.getFechaBaja(), convencidos.getFechaReactivacion(), convencidos.getFechaRegistro(),
@@ -193,94 +193,94 @@ public class ConvencidosRepository implements IConvencidosRepository {
 
 
 
-@Override
-public List<Convencidos> getConvencidos(Long distritoFederalId, Long idMunicipio, Long idSeccion, String claveElector,
-		Long convencido) {
+	@Override
+	public List<Convencidos> getConvencidos(Long distritoFederalId, Long idMunicipio, Long idSeccion,
+			String claveElector, Long convencido) {
 
-	
-	String select = "SELECT" + campos  + ", adf.nombre as nombre_distrito, al.entidad as nombre_estado , al.municipio as nombre_municipio"
-			+ " FROM app_convencidos ac "
-			+ " inner join app_distrito_federal adf on ac.distrito_federal_id = adf.id "
-			+ " inner join app_localidad al on ac.seccion_id = al.id ";
-	
-	String sql = null;
-	String where = "";
-	List<Object> para = new ArrayList<Object>();
-	List<Integer> type = new ArrayList<Integer>();
+		String select = "SELECT" + campos
+				+ ", adf.nombre as nombre_distrito, al.entidad as nombre_estado , al.municipio as nombre_municipio"
+				+ " FROM app_convencidos ac "
+				+ " inner join app_distrito_federal adf on ac.distrito_federal_id = adf.id "
+				+ " inner join app_localidad al on ac.seccion_id = al.id ";
 
-	if (distritoFederalId != null) {
-		where = " where ac.distrito_federal_id = ? ";
-		para.add(distritoFederalId);
-		type.add(Types.NUMERIC);
-	}
+		String sql = null;
+		String where = "";
+		List<Object> para = new ArrayList<Object>();
+		List<Integer> type = new ArrayList<Integer>();
 
-	if (idMunicipio != null) {
-
-		if (para.size() > 0) {
-			where = where.concat(" and ac.municipio_id = ? ");
-		} else {
-			where = " where ac.municipio_id = ? ";
+		if (distritoFederalId != null) {
+			where = " where ac.distrito_federal_id = ? ";
+			para.add(distritoFederalId);
+			type.add(Types.NUMERIC);
 		}
-		para.add(idMunicipio);
-		type.add(Types.NUMERIC);
-	}
 
-	if (idSeccion != null) {
-		if (para.size() > 0) {
-			where = where.concat(" and ac.seccion_id = ? ");
-		} else {
-			where = " where ac.seccion_id = ? ";
+		if (idMunicipio != null) {
+
+			if (para.size() > 0) {
+				where = where.concat(" and ac.municipio_id = ? ");
+			} else {
+				where = " where ac.municipio_id = ? ";
+			}
+			para.add(idMunicipio);
+			type.add(Types.NUMERIC);
 		}
-		para.add(idSeccion);
-		type.add(Types.NUMERIC);
-	}
-	
-	if (claveElector != null) {
 
-		if (para.size() > 0) {
-			where = where.concat(" and ac.clave_elector = ? ");
-		} else {
-			where = " where ac.clave_elector = ? ";
+		if (idSeccion != null) {
+			if (para.size() > 0) {
+				where = where.concat(" and ac.seccion_id = ? ");
+			} else {
+				where = " where ac.seccion_id = ? ";
+			}
+			para.add(idSeccion);
+			type.add(Types.NUMERIC);
 		}
-		para.add(claveElector);
-		type.add(Types.VARCHAR);
-	}
-	
-	if (convencido != null) {
 
-		if (para.size() > 0) {
-			where = where.concat(" and ac.tipo = ? ");
-		} else {
-			where = " where ac.tipo = ? ";
+		if (claveElector != null) {
+
+			if (para.size() > 0) {
+				where = where.concat(" and ac.clave_elector = ? ");
+			} else {
+				where = " where ac.clave_elector = ? ";
+			}
+			para.add(claveElector);
+			type.add(Types.VARCHAR);
 		}
-		para.add(convencido);
-		type.add(Types.NUMERIC);
+
+		if (convencido != null) {
+
+			if (para.size() > 0) {
+				where = where.concat(" and ac.tipo = ? ");
+			} else {
+				where = " where ac.tipo = ? ";
+			}
+			para.add(convencido);
+			type.add(Types.NUMERIC);
+		}
+
+		Object[] parametros = new Object[para.size()];
+		int[] types = new int[para.size()];
+
+		for (int i = 0; i < para.size(); i++) {
+			parametros[i] = para.get(i);
+			types[i] = type.get(i);
+		}
+
+		try {
+
+			System.out.println("\n");
+
+			sql = select.concat(where);
+			System.out.println(sql);
+
+			System.out.println("*************    convencidos ");
+			System.out.println("\n");
+
+			return template.queryForObject(sql, parametros, types, new ConvencidosRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+
 	}
-
-	Object[] parametros = new Object[para.size()];
-	int[] types = new int[para.size()];
-
-	for (int i = 0; i < para.size(); i++) {
-		parametros[i] = para.get(i);
-		types[i] = type.get(i);
-	}
-
-	try {
-		
-		System.out.println("\n");
-		
-		 sql = select.concat(where);
-		 System.out.println(sql);
-		 
-		 System.out.println("*************    convencidos ");
-		 System.out.println("\n");
-
-		return template.queryForObject(sql, parametros, types, new ConvencidosRowMapper());
-	} catch (EmptyResultDataAccessException e) {
-		return null;
-	}
-
-}
 
 	@Override
 	public Convencidos findByClaveOCurp(String nombreCampo, String valorCampo, Long id) {

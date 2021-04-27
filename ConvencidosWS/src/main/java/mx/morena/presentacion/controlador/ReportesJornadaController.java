@@ -35,11 +35,11 @@ public class ReportesJornadaController extends MasterController {
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
 	public List<ReporteCapacitacionEstatalDTO> getReporteCapacitacionEst(HttpServletResponse response, HttpServletRequest request,
 									@RequestParam(value = "idEntidad", required = false) Long idEntidad,						
-									@RequestParam(value = "idDisitritoFederal", required = false) Long idDisitritoFederal) throws IOException {
+									@RequestParam(value = "idFederal", required = false) Long idFederal) throws IOException {
 		
 		try {
 			Long idUsuario = getUsuario(request);
-			return reportesJornadaService.getReporteCapEstatal(idUsuario, idEntidad, idDisitritoFederal);
+			return reportesJornadaService.getReporteCapEstatal(idUsuario, idEntidad, idFederal);
 		} catch (JornadaException e) {
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
@@ -56,10 +56,10 @@ public class ReportesJornadaController extends MasterController {
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
 	public void downloadReporteEstatalCSV(HttpServletResponse response, HttpServletRequest request,
 								@RequestParam(value = "idEntidad", required = false) Long idEntidad,
-								@RequestParam(value = "idDisitritoFederal", required = false) Long idDisitritoFederal) throws IOException {
+								@RequestParam(value = "idFederal", required = false) Long idFederal) throws IOException {
 		try {
 			Long idUsuario = getUsuario(request);
-			reportesJornadaService.getReporteCapEstatalDownload(response, idUsuario, idEntidad, idDisitritoFederal);
+			reportesJornadaService.getReporteCapEstatalDownload(response, idUsuario, idEntidad, idFederal);
 		} catch (JornadaException e) {
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());

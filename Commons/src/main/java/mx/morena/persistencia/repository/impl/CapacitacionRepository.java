@@ -128,8 +128,8 @@ public class CapacitacionRepository implements ICapacitacionRepository{
 	public long saveCapacitacion(RegistroCapacitacion rc) {
 		String sql = "INSERT INTO app_registro_capacitacion "  
 				+ "(id, id_representante, tomo_capacitacion, fecha_capacitacion, hora_capacitacion, lugar_capacitacion, calle, numero_interior, numero_exterior, colonia, municipio)"
-				+ "VALUES ((SELECT MAX(id)+1 FROM app_registro_capacitacion), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-		
+				+ "VALUES (COALESCE((SELECT MAX(id) FROM app_registro_capacitacion), 0)+1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+//				+ "VALUES ((SELECT MAX(id)+1 FROM app_registro_capacitacion), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		try {
 			template.update(sql, new Object[] {rc.getIdRepresentante(), rc.getTomoCapacitacion(), rc.getFechaCapacitaion(), rc.getHoraCapacitacion(), 
 					rc.getLugarCapacitacion(), rc.getCalle(), rc.getNumInt(), rc.getNumExt(), rc.getColonia(), rc.getMunicipio()});
