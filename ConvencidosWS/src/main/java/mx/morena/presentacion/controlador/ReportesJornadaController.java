@@ -98,12 +98,14 @@ public class ReportesJornadaController extends MasterController {
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
 	public void downloadCSVRg(HttpServletResponse response, HttpServletRequest request,
 			@RequestParam(value = "idEntidad", required = false) Long idEntidad,
-			@RequestParam(value = "idFederal", required = false) Long idFederal,
-			@RequestParam(value = "idCrg", required = false) Long idCrg,
-			@RequestParam(value = "idRg", required = false) Long idRg) throws IOException {
+			@RequestParam(value = "idFederal", required = false) Long idFederal) throws IOException{
+//			@RequestParam(value = "idCrg", required = false) Long idCrg,
+//			@RequestParam(value = "idRg", required = false) Long idRg) throws IOException {
 		
 		try {
 
+			long idCrg = 0;
+			long idRg = 0 ;
 			long usuario = getUsuario(request);
 			reportesJornadaService.getReporteRgDownload(response, usuario, idEntidad, idFederal, idCrg, idRg);
 

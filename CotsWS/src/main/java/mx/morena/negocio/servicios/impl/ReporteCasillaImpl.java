@@ -41,7 +41,7 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 
 		if (perfil == PERFIL_RG) {
 
-			List<ReporteVotacionDTO> lstDto = new ArrayList<>();;
+			List<ReporteVotacionDTO> lstDto = new ArrayList<>();
 			List<DistritoFederal> lstSeccion = null;
 			ReporteVotacionDTO dto = null;
 			ReporteVotacionDTO total = new ReporteVotacionDTO();

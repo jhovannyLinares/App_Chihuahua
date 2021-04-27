@@ -203,7 +203,7 @@ public class ReportesJornadaServiceImpl extends MasterService implements IReport
 			Long idCrg, Long idRg) throws JornadaException, IOException {
 		
 		// Asignacion de nombre al archivo CSV
-				setNameFile(response, CSV_CONV_DIST);
+				setNameFile(response, CSV_CAPACITACION_RG);
 
 				List<ReporteCapacitacionRgDTO> convDTOs = getReporteRg(usuario, idEntidad, idFederal, idCrg, idRg);
 
