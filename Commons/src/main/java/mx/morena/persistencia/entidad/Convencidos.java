@@ -73,6 +73,11 @@ public class Convencidos {
 	private String nombreSeccion;
 	
 	private boolean isNotificado;
+	
+	// se agregan campos para notificacion de casillas por secciones
+	private String colonia_casilla;
+	
+	private String referencia_casilla;
 
 	public Long getId() {
 		return id;
@@ -345,5 +350,27 @@ public class Convencidos {
 	public void setIsNotificado(boolean isNotificado) {
 		this.isNotificado = isNotificado;
 	}
+
+	public String getColonia_casilla() {
+		return colonia_casilla;
+	}
+
+	public void setColonia_casilla(String colonia_casilla) {
+		this.colonia_casilla = colonia_casilla;
+	}
+
+	public void setNotificado(boolean isNotificado) {
+		this.isNotificado = isNotificado;
+	}
+
+	public String getReferencia_casilla() {
+		return referencia_casilla;
+	}
+
+	public void setReferencia_casilla(String referencia_casilla) {
+		this.referencia_casilla = referencia_casilla;
+	}
+	
+	
 
 }

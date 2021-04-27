@@ -2,6 +2,7 @@ package mx.morena.persistencia.repository;
 
 import java.util.List;
 
+import mx.morena.persistencia.entidad.Convencidos;
 import mx.morena.persistencia.entidad.SeccionElectoral;
 
 public interface ISeguimientoVotoRepository {
@@ -15,5 +16,7 @@ public interface ISeguimientoVotoRepository {
 	Long countNotificados(Long distritoId);
 
 	List<SeccionElectoral> getDistritos();
+	
+	List<Convencidos> getConvencidos(Long idSeccion);
 
 }

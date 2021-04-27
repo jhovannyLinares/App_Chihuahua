@@ -3,11 +3,11 @@ package mx.morena.negocio.dto;
 public class SeguimientoVotoDTO {
 	
 	private String nombre;
-	private String apellido_materno;
-	private String apellido_Paterno;
+	private String apellidoMaterno;
+	private String apellidoPaterno;
 	private String colonia;
 	private String referencia;
-	private String estatus;
+	private Boolean isNotificado;
 	
 	public String getNombre() {
 		return nombre;
@@ -15,17 +15,17 @@ public class SeguimientoVotoDTO {
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
-	public String getApellido_materno() {
-		return apellido_materno;
+	public String getApellidoMaterno() {
+		return apellidoMaterno;
 	}
-	public void setApellido_materno(String apellido_materno) {
-		this.apellido_materno = apellido_materno;
+	public void setApellidoMaterno(String apellidoMaterno) {
+		this.apellidoMaterno = apellidoMaterno;
 	}
-	public String getApellido_Paterno() {
-		return apellido_Paterno;
+	public String getApellidoPaterno() {
+		return apellidoPaterno;
 	}
-	public void setApellido_Paterno(String apellido_Paterno) {
-		this.apellido_Paterno = apellido_Paterno;
+	public void setApellidoPaterno(String apellidoPaterno) {
+		this.apellidoPaterno = apellidoPaterno;
 	}
 	public String getColonia() {
 		return colonia;
@@ -39,12 +39,16 @@ public class SeguimientoVotoDTO {
 	public void setReferencia(String referencia) {
 		this.referencia = referencia;
 	}
-	public String getEstatus() {
-		return estatus;
+	public Boolean getIsNotificado() {
+		return isNotificado;
 	}
-	public void setEstatus(String estatus) {
-		this.estatus = estatus;
+	public void setIsNotificado(Boolean isNotificado) {
+		this.isNotificado = isNotificado;
 	}
+	
+	
+	
+	
 	
 	
 
