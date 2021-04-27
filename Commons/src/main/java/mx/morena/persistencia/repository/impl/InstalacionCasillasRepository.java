@@ -17,11 +17,11 @@ public class InstalacionCasillasRepository implements IInstalacionCasillasReposi
 	@Override
 	public int save(InstalacionCasilla ic) {
 		String sql = "INSERT INTO app_instalacion_casilla (id, " + "id_casilla, " + "hora_instalacion, " + "llegaron_funcionarios, " + "funcionarios_de_fila, " 
-				+ " paquete_completo, " + "llego_rg, " + "desayuno, " + "inicio_votacion) "
-				+ " VALUES ((SELECT MAX(id)+1 FROM app_instalacion_casilla), ?, ?, ?, ?, ?, ?, ?, ? )";
+				+ " paquete_completo, " + "llego_rg, " + "desayuno, " + "inicio_votacion," + "llego_rc) "
+				+ " VALUES (COALESCE((SELECT MAX(id) FROM app_instalacion_casilla), 0)+1, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
 		try {
 		template.update(sql, new Object[] {ic.getIdCasilla(), ic.getHoraInstalacion(), ic.getLlegaronFuncionarios(), ic.getFuncionariosFila(),
-				 ic.getPaqueteCompleto(), ic.getLlegoRg(), ic.getDesayuno(), ic.getInicioVotacion()});
+				 ic.getPaqueteCompleto(), ic.getLlegoRg(), ic.getDesayuno(), ic.getInicioVotacion(), ic.getLlegoRc()});
 		return 1;
 		} catch (Exception e) {
 			return 0;

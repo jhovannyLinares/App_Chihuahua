@@ -19,6 +19,8 @@ public class InstalacionCasillasDTO {
 	private String desayuno;
 	
 	private Timestamp inicioVotacion;
+	
+	private String llegoRc;
 
 	public Long getIdCasilla() {
 		return idCasilla;
@@ -82,6 +84,14 @@ public class InstalacionCasillasDTO {
 
 	public void setInicioVotacion(Timestamp inicioVotacion) {
 		this.inicioVotacion = inicioVotacion;
+	}
+
+	public String getLlegoRc() {
+		return llegoRc;
+	}
+
+	public void setLlegoRc(String llegoRc) {
+		this.llegoRc = llegoRc;
 	}
 
 }

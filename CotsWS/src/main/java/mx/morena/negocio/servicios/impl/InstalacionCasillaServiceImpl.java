@@ -82,6 +82,7 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 			ic.setDesayuno(dto.getDesayuno());
 			ic.setInicioVotacion(dto.getInicioVotacion());
 			ic.setInicioVotacion(dto.getInicioVotacion());
+			ic.setLlegoRc(dto.getLlegoRc());
 			  
 			if(casillasRepository.save(ic) ==0) {
 				throw new CotException("No se guardo la informacion con éxito.", 409);
