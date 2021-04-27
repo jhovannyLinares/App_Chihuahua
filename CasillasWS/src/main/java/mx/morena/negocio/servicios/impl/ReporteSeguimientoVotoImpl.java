@@ -140,7 +140,12 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 			if (idSeccion != null) {
 
 				conven = seguimientoRepository.getConvencidos(idSeccion);
-				reporteDto = conven.stream().map(this::convertirADto).collect(Collectors.toList());
+				if (conven != null) {
+					reporteDto = conven.stream().map(this::convertirADto).collect(Collectors.toList());
+
+				}else {
+					throw new SeguimientoVotoException("No se encontraron datos", 404);
+				}
 				
 				return reporteDto;
 
@@ -152,7 +157,6 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 			throw new SeguimientoVotoException("No cuenta con los permisos suficientes", 401);
 		}
 
-		
 	}
 
 	public SeguimientoVotoDTO convertirADto(Convencidos con) {
