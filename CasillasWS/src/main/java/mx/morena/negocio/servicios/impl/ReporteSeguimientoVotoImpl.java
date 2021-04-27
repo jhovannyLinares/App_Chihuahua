@@ -128,7 +128,7 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 			List<Convencidos> conven = new ArrayList<Convencidos>();
 
 			List<SeguimientoVotoDTO> reporteDto = new ArrayList<SeguimientoVotoDTO>();
-			SeguimientoVotoDTO dto = null;
+//			SeguimientoVotoDTO dto = null;
 			SeguimientoVotoDTO totales = new SeguimientoVotoDTO();
 
 			totales.setNombre("");

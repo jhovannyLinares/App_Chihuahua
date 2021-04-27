@@ -1,5 +1,7 @@
 package mx.morena.persistencia.repository;
 
+import java.util.List;
+
 import mx.morena.persistencia.entidad.ReporteCasilla;
 
 public interface IReporteCasillasRepository {
@@ -8,7 +10,7 @@ public interface IReporteCasillasRepository {
 
 	int updateHoraCierre(ReporteCasilla rc);
 
-	Long getReporteByCAsilla(Long idCasilla);
+	List<ReporteCasilla> getReporteByIdCasilla(Long idCasilla);
 
 	Long getCountByDistritoAndTipoVotacion(Long idFederal, Long idReporte, String once);
 

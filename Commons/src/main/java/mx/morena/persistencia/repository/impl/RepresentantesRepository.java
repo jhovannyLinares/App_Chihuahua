@@ -14,13 +14,11 @@ import mx.morena.persistencia.entidad.RepresentanteClaveElectoral;
 import mx.morena.persistencia.entidad.Representantes;
 import mx.morena.persistencia.entidad.RepresentantesAsignados;
 import mx.morena.persistencia.repository.IRepresentanteRepository;
-import mx.morena.persistencia.rowmapper.ConvencidosValRowMapper;
 import mx.morena.persistencia.rowmapper.IdMaxConvencidos;
 import mx.morena.persistencia.rowmapper.LongRowMapper;
 import mx.morena.persistencia.rowmapper.RepresentanteClaveRowMapper;
 import mx.morena.persistencia.rowmapper.RepresentanteRowMapper;
 import mx.morena.persistencia.rowmapper.RepresentantesCrgRowMapper;
-import mx.morena.persistencia.rowmapper.StringRowMapper;
 import mx.morena.persistencia.rowmapper.TipoRepresentanteRowMapper;
 
 @Repository
@@ -282,7 +280,7 @@ public class RepresentantesRepository implements IRepresentanteRepository {
 		List<Integer> type = new ArrayList<Integer>();
 		
 		if (perfilUsuario == 1) {
-			where = where;
+//			where = where;
 			para.add(perfil);
 			type.add(Types.NUMERIC);
 		}
@@ -340,7 +338,7 @@ public class RepresentantesRepository implements IRepresentanteRepository {
 		List<Integer> type = new ArrayList<Integer>();
 		
 		if (perfilUsuario == 1) {
-			where = where;
+//			where = where;
 			para.add(perfil);
 			type.add(Types.NUMERIC);
 		}

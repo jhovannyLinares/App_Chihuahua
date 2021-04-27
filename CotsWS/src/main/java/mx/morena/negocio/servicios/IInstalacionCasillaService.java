@@ -7,6 +7,7 @@ import mx.morena.negocio.dto.CasillasDTO;
 import mx.morena.negocio.dto.CierreCasillaDTO;
 import mx.morena.negocio.dto.IncidenciasCasillasDTO;
 import mx.morena.negocio.dto.InstalacionCasillasDTO;
+import mx.morena.negocio.dto.ReporteCasillaDTO;
 import mx.morena.negocio.exception.CotException;
 
 public interface IInstalacionCasillaService {
@@ -19,5 +20,8 @@ public interface IInstalacionCasillaService {
 
 	String horaCierre(long usuario, CierreCasillaDTO dto, long perfil) throws CotException, IOException;
 
+	List<ReporteCasillaDTO> getInformeVotacion(Long idCasilla, long idUsuario) throws CotException;
+
 //	List<VotacionesDTO> getVotaciones(Long idCasilla) throws CotException;
+	
 }

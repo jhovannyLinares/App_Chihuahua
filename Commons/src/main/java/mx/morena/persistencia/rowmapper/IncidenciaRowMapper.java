@@ -13,6 +13,7 @@ public class IncidenciaRowMapper implements RowMapper<List<Incidencias>>  {
 
 	@Override
 	public List<Incidencias> mapRow(ResultSet rs, int rowNum) throws SQLException {
+		
 		List<Incidencias> incidencias = new ArrayList<Incidencias>();
 
 		Incidencias incidencia = null;

@@ -1,11 +1,15 @@
 package mx.morena.persistencia.repository.impl;
 
+import java.sql.Types;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import mx.morena.persistencia.entidad.InstalacionCasilla;
 import mx.morena.persistencia.repository.IInstalacionCasillasRepository;
+import mx.morena.persistencia.rowmapper.InstalacionRowMapper;
 import mx.morena.persistencia.rowmapper.LongRowMapper;
 
 @Repository
@@ -33,6 +37,23 @@ public class InstalacionCasillasRepository implements IInstalacionCasillasReposi
 	public Long getMaxId() {
 		String sql = "SELECT MAX(id) FROM app_instalacion_casilla";
 		return template.queryForObject(sql, new LongRowMapper());
+	}
+
+	@Override
+	public List<InstalacionCasilla> getById(Long idCasilla) {
+
+		String sql = " SELECT id, id_casilla, llegaron_funcionarios, funcionarios_de_fila, paquete_completo, llego_rg, desayuno, hora_instalacion, inicio_votacion, llego_rc "
+				+ " FROM public.app_instalacion_casilla "
+				+ " where id_casilla = ? ";
+		try {
+			
+			return template.queryForObject(sql, new Object[] { idCasilla }, new int[] { Types.NUMERIC },
+					new InstalacionRowMapper());
+
+		} catch (Exception e) {
+			return null;
+		}
+
 	}
 
 	

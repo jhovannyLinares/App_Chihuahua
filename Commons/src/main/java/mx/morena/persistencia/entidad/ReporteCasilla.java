@@ -3,18 +3,20 @@ package mx.morena.persistencia.entidad;
 import java.sql.Timestamp;
 
 public class ReporteCasilla {
-	
+
 	private Long id;
-	
+
 	private Long idCasilla;
-	
+
 	private Timestamp horaReporte;
-	
+
 	private Long idRg;
-	
+
 	private Long numeroVotos;
-	
+
 	private Timestamp horaCierre;
+
+	private Long tipoReporte;
 
 	public Long getId() {
 		return id;
@@ -62,6 +64,14 @@ public class ReporteCasilla {
 
 	public void setHoraCierre(Timestamp horaCierre) {
 		this.horaCierre = horaCierre;
+	}
+
+	public Long getTipoReporte() {
+		return tipoReporte;
+	}
+
+	public void setTipoReporte(Long tipoReporte) {
+		this.tipoReporte = tipoReporte;
 	}
 
 }

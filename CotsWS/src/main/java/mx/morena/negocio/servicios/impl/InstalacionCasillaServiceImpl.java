@@ -13,6 +13,7 @@ import mx.morena.negocio.dto.CasillasDTO;
 import mx.morena.negocio.dto.CierreCasillaDTO;
 import mx.morena.negocio.dto.IncidenciasCasillasDTO;
 import mx.morena.negocio.dto.InstalacionCasillasDTO;
+import mx.morena.negocio.dto.ReporteCasillaDTO;
 import mx.morena.negocio.dto.VotacionesDTO;
 import mx.morena.negocio.dto.listIncidenciasDTO;
 import mx.morena.negocio.exception.CotException;
@@ -37,19 +38,19 @@ import mx.morena.security.servicio.MasterService;
 
 @Service
 public class InstalacionCasillaServiceImpl extends MasterService implements IInstalacionCasillaService {
-	
+
 	@Autowired
-	private IInstalacionCasillasRepository  casillasRepository;
-	
+	private IInstalacionCasillasRepository casillasRepository;
+
 	@Autowired
 	private IIncidenciasCasillasRepository incidenciasRepository;
-	
+
 	@Autowired
 	private IReporteCasillasRepository reporteRepository;
-	
+
 	@Autowired
 	private IUsuarioRepository usuarioRepository;
-	
+
 	@Autowired
 	private IRepresentanteRepository representanteRepository;
 
@@ -58,39 +59,45 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 
 	@Autowired
 	private ICasillaRepository casillaRepository;
-	
+
 	@Autowired
 	private IPartidosRepository partidosRepository;
 
 	@Override
-	@Transactional(rollbackFor={CotException.class})
+	@Transactional(rollbackFor = { CotException.class })
 	public Long saveInstalacionCasilla(InstalacionCasillasDTO dto, long perfil, long usuario)
 			throws CotException, IOException {
-		
-		if(perfil == PERFIL_RG || perfil == PERFIL_RC ) {
-			
-			InstalacionCasilla ic = new InstalacionCasilla();
-//			DateFormat df = new SimpleDateFormat("HH:mm:ss");
-			
-			ic.setIdCasilla(dto.getIdCasilla());
-			ic.setHoraInstalacion(dto.getHoraInstalacion());
-			ic.setHoraInstalacion(dto.getHoraInstalacion());
-			ic.setLlegaronFuncionarios(dto.getLlegaronFuncionarios());
-			ic.setFuncionariosFila(dto.getFuncionariosFila());
-			ic.setPaqueteCompleto(dto.getPaqueteCompleto());
-			ic.setLlegoRg(dto.getLlegoRg());
-			ic.setDesayuno(dto.getDesayuno());
-			ic.setInicioVotacion(dto.getInicioVotacion());
-			ic.setInicioVotacion(dto.getInicioVotacion());
-			ic.setLlegoRc(dto.getLlegoRc());
-			  
-			if(casillasRepository.save(ic) ==0) {
-				throw new CotException("No se guardo la informacion con éxito.", 409);
+
+		if (perfil == PERFIL_RG || perfil == PERFIL_RC) {
+
+			List<InstalacionCasilla> casillas = casillasRepository.getById(dto.getIdCasilla());
+
+			if (casillas != null) {
+
+				InstalacionCasilla ic = new InstalacionCasilla();
+
+				ic.setIdCasilla(dto.getIdCasilla());
+				ic.setHoraInstalacion(dto.getHoraInstalacion());
+				ic.setHoraInstalacion(dto.getHoraInstalacion());
+				ic.setLlegaronFuncionarios(dto.getLlegaronFuncionarios());
+				ic.setFuncionariosFila(dto.getFuncionariosFila());
+				ic.setPaqueteCompleto(dto.getPaqueteCompleto());
+				ic.setLlegoRg(dto.getLlegoRg());
+				ic.setDesayuno(dto.getDesayuno());
+				ic.setInicioVotacion(dto.getInicioVotacion());
+				ic.setInicioVotacion(dto.getInicioVotacion());
+				ic.setLlegoRc(dto.getLlegoRc());
+
+				if (casillasRepository.save(ic) == 0) {
+					throw new CotException("No se guardo la informacion con éxito.", 409);
+				}
+			} else {
+				throw new CotException("Casilla actualmente instalada", 409);
 			}
-		}else {
+		} else {
 			throw new CotException("No cuenta con los permisos suficientes para realizar la operacion.", 401);
 		}
-		
+
 		return casillasRepository.getMaxId();
 	}
 
@@ -130,6 +137,7 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 				rc.setHoraReporte(dto.getHoraReporte());
 				rc.setIdRg(usr.getId());
 				rc.setNumeroVotos(dto.getNumero());
+				rc.setTipoReporte(dto.getTipoReporte());
 
 				if (reporteRepository.save(rc) == 0) {
 					throw new CotException("No se guardo el reporte con éxito.", 409);
@@ -150,25 +158,29 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 		Long perfil = usuario.getPerfil();
 		Long idRepresentante = usuario.getRepresentante();
 		Long idEntidad = usuario.getEntidad();
-		
+
 		if (perfil == PERFIL_RC) {
-			Representantes representante = representanteRepository.getRepresentanteByIdAndTipo(idRepresentante, PERFIL_RC);
+			Representantes representante = representanteRepository.getRepresentanteByIdAndTipo(idRepresentante,
+					PERFIL_RC);
 			if (representante != null) {
-				
-				List<RepresentantesAsignados> representantesAs = representanteAsignadoRepository.getByEntidadAndIdRepresentante(idEntidad, representante.getId());
+
+				List<RepresentantesAsignados> representantesAs = representanteAsignadoRepository
+						.getByEntidadAndIdRepresentante(idEntidad, representante.getId());
 				List<CasillasDTO> casillas = new ArrayList<CasillasDTO>();
 				List<AsignacionCasillas> casillasAsignadas = new ArrayList<AsignacionCasillas>();
-				
+
 				if (representantesAs != null && !representantesAs.isEmpty()) {
 					for (RepresentantesAsignados representanteAsignado : representantesAs) {
 						if (representanteAsignado.getCasillaId() != null) {
-							
-							casillasAsignadas = casillaRepository.getCasillasAsignadasById(representanteAsignado.getCasillaId());
-							
+
+							casillasAsignadas = casillaRepository
+									.getCasillasAsignadasById(representanteAsignado.getCasillaId());
+
 							if (casillasAsignadas != null) {
-								
-								casillas = casillasAsignadas.stream().map(this::convertirADto).collect(Collectors.toList());
-						
+
+								casillas = casillasAsignadas.stream().map(this::convertirADto)
+										.collect(Collectors.toList());
+
 								for (CasillasDTO dto : casillas) {
 									dto.setVotaciones(getVotaciones(dto.getIdCasilla()));
 								}
@@ -187,22 +199,26 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 			} else {
 				throw new CotException("No se encontro el representante", 404);
 			}
-			
-		} else if(perfil == PERFIL_RG) {
-			Representantes representante = representanteRepository.getRepresentanteByIdAndTipo(idRepresentante, PERFIL_RG);
+
+		} else if (perfil == PERFIL_RG) {
+			Representantes representante = representanteRepository.getRepresentanteByIdAndTipo(idRepresentante,
+					PERFIL_RG);
 			if (representante != null) {
-				
-				List<RepresentantesAsignados> rutasRepresentantes = representanteAsignadoRepository.getByEntidadAndIdRepresentante(idEntidad, representante.getId());
+
+				List<RepresentantesAsignados> rutasRepresentantes = representanteAsignadoRepository
+						.getByEntidadAndIdRepresentante(idEntidad, representante.getId());
 				List<CasillasDTO> casillas = new ArrayList<CasillasDTO>();
 				List<AsignacionCasillas> casillasAsignadas = new ArrayList<AsignacionCasillas>();
-				
+
 				if (rutasRepresentantes != null && !rutasRepresentantes.isEmpty()) {
 					for (RepresentantesAsignados rep : rutasRepresentantes) {
 						if (rep != null && rep.getRutaId() != null) {
-							casillasAsignadas = casillaRepository.getCasillasAsignadasByRuta(idEntidad, rep.getDistritoFederalId(), rep.getRutaId());
+							casillasAsignadas = casillaRepository.getCasillasAsignadasByRuta(idEntidad,
+									rep.getDistritoFederalId(), rep.getRutaId());
 
 							if (casillasAsignadas != null) {
-								casillas = casillasAsignadas.stream().map(this::convertirADto).collect(Collectors.toList());
+								casillas = casillasAsignadas.stream().map(this::convertirADto)
+										.collect(Collectors.toList());
 								for (CasillasDTO dto : casillas) {
 									dto.setVotaciones(getVotaciones(dto.getIdCasilla()));
 								}
@@ -253,7 +269,8 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 
 		if (perfil == PERFIL_RG) {
 
-			Long reporte = reporteRepository.getReporteByCAsilla(dto.getIdCasilla());
+			// TODO: ajuste no toma si ya se cerro
+			List<ReporteCasilla> reporte = reporteRepository.getReporteByIdCasilla(dto.getIdCasilla());
 
 			if (reporte != null) {
 				ReporteCasilla rc = new ReporteCasilla();
@@ -277,9 +294,9 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 	private List<VotacionesDTO> getVotaciones(Long idCasilla) throws CotException {
 
 		List<Casilla> casillas = casillaRepository.getCasillasById(idCasilla);
-		
+
 		List<VotacionesDTO> votacionesDTOs = new ArrayList<VotacionesDTO>();
-			
+
 		VotacionesDTO dto = null;
 
 		for (Casilla casilla : casillas) {
@@ -290,28 +307,28 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 				dto.setDescripcion("GOBERNADOR");
 				votacionesDTOs.add(dto);
 			}
-			
+
 			if (partidosRepository.getMunicipal(casilla.getMunicipio()).size() > 0) {
 				dto = new VotacionesDTO();
 				dto.setId(2L);
 				dto.setDescripcion("PRESIDENTE MUNICIPAL");
 				votacionesDTOs.add(dto);
 			}
-			
+
 			if (partidosRepository.getSindico(casilla.getMunicipio()).size() > 0) {
 				dto = new VotacionesDTO();
 				dto.setId(3L);
 				dto.setDescripcion("SINDICO");
 				votacionesDTOs.add(dto);
 			}
-			
+
 			if (partidosRepository.getDiputadoLocal(casilla.getFederal()).size() > 0) {
 				dto = new VotacionesDTO();
 				dto.setId(4L);
 				dto.setDescripcion("DIPUTADO LOCAL");
 				votacionesDTOs.add(dto);
 			}
-			
+
 			if (partidosRepository.getDiputadoFederal(casilla.getFederal()).size() > 0) {
 				dto = new VotacionesDTO();
 				dto.setId(5L);
@@ -322,6 +339,32 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 		}
 
 		return votacionesDTOs;
+
+	}
+
+	@Override
+	public List<ReporteCasillaDTO> getInformeVotacion(Long idCasilla, long idUsuario) throws CotException {
+
+		List<ReporteCasilla> reporteCasillas = reporteRepository.getReporteByIdCasilla(idCasilla);
+
+		List<ReporteCasillaDTO> reporteCasillaDTOs = new ArrayList<ReporteCasillaDTO>();
+
+		if (reporteCasillas != null) {
+
+			ReporteCasillaDTO dto;
+
+			for (ReporteCasilla reporteCasilla : reporteCasillas) {
+				dto = new ReporteCasillaDTO();
+
+				dto.setCapturado(true);
+				dto.setHoraReporte(reporteCasilla.getHoraReporte());
+				dto.setTipoReporte(reporteCasilla.getTipoReporte());
+
+				reporteCasillaDTOs.add(dto);
+			}
+		}
+
+		return reporteCasillaDTOs;
 
 	}
 
