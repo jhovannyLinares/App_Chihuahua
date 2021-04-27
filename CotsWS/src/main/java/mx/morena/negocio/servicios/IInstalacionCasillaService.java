@@ -17,5 +17,7 @@ public interface IInstalacionCasillaService {
 	
 	List<CasillasDTO> getCasillasAsignadas(Long idUsuario) throws CotException;
 
-	String horaCierre(long usuario, CierreCasillaDTO dto, long perfil)throws CotException, IOException;
+	String horaCierre(long usuario, CierreCasillaDTO dto, long perfil) throws CotException, IOException;
+
+//	List<VotacionesDTO> getVotaciones(Long idCasilla) throws CotException;
 }

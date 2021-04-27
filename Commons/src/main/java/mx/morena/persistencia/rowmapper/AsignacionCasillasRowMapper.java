@@ -30,6 +30,10 @@ public class AsignacionCasillasRowMapper implements RowMapper<List<AsignacionCas
 			casilla.setStatus(rs.getLong("status"));
 			casilla.setIdRutaRg(rs.getString("id_ruta_rg"));
 			casilla.setIdCrg(rs.getLong("id_crg"));
+			
+			if (rs.findColumn("isOpen") > 0) {
+				casilla.setOpen(rs.getLong("isOpen"));
+			}
 
 			casillas.add(casilla);
 

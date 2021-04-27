@@ -1,22 +1,22 @@
 package mx.morena.negocio.dto;
 
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.List;
 
-
 public class IncidenciasCasillasDTO {
-	
+
 	private Long idCasilla;
-	
+
 //	private Long idRg;
-	
+
+	private Long numeroReporte;
+
 	private Long numero;
-	
+
 	private String presentaIncidencias;
 
 	private List<listIncidenciasDTO> incidencia;
-	
+
 	private Timestamp horaReporte;
 
 	public Long getIdCasilla() {
@@ -26,7 +26,15 @@ public class IncidenciasCasillasDTO {
 	public void setIdCasilla(Long idCasilla) {
 		this.idCasilla = idCasilla;
 	}
-	
+
+	public Long getNumeroReporte() {
+		return numeroReporte;
+	}
+
+	public void setNumeroReporte(Long numeroReporte) {
+		this.numeroReporte = numeroReporte;
+	}
+
 	public Long getNumero() {
 		return numero;
 	}
@@ -58,4 +66,5 @@ public class IncidenciasCasillasDTO {
 	public void setHoraReporte(Timestamp horaReporte) {
 		this.horaReporte = horaReporte;
 	}
+
 }

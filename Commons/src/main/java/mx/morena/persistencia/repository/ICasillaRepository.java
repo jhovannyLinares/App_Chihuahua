@@ -25,8 +25,10 @@ public interface ICasillaRepository {
 	
 	public Long countByMunicipioAndTipologia(Long idMunicipio, String tipologia);
 	
-	public List<AsignacionCasillas> getCasillasById(Long entidad, Long idCasilla);
+	public List<AsignacionCasillas> getCasillasAsignadasById(Long idCasilla);
 	
-	public List<AsignacionCasillas> getCasillasByRuta(Long entidad, Long idDistritoF, Long idRuta);
+	public List<AsignacionCasillas> getCasillasAsignadasByRuta(Long entidad, Long idDistritoF, Long idRuta);
+
+	public List<Casilla> getCasillasById(Long idCasilla);
 
 }

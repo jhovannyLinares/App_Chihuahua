@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import mx.morena.persistencia.entidad.ReporteCasilla;
 import mx.morena.persistencia.repository.IReporteCasillasRepository;
-import mx.morena.persistencia.rowmapper.ConvencidosRowMapper;
 import mx.morena.persistencia.rowmapper.LongRowMapper;
 
 @Repository

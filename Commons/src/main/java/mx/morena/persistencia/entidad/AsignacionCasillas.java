@@ -1,30 +1,32 @@
 package mx.morena.persistencia.entidad;
 
 public class AsignacionCasillas {
-	
+
 	private Long id;
-	
+
 	private Long federalId;
-	
+
 	private String nombreDistrito;
-	
+
 	private Long zonaCrg;
-	
+
 	private String idZonaCrg;
-	
+
 	private Long ruta;
-	
+
 	private Long idCasilla;
-	
+
 	private String tipoCasilla;
-	
+
 	private Long seccionId;
-	
+
 	private Long status;
-	
+
 	private String idRutaRg;
-	
+
 	private Long idCrg;
+
+	private Long open;
 
 	public Long getId() {
 		return id;
@@ -121,6 +123,13 @@ public class AsignacionCasillas {
 	public void setIdCrg(Long idCrg) {
 		this.idCrg = idCrg;
 	}
-	
+
+	public Long getOpen() {
+		return open;
+	}
+
+	public void setOpen(Long open) {
+		this.open = open;
+	}
 
 }

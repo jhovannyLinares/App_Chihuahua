@@ -4,12 +4,11 @@ public class Casilla {
 
 	private Long id;
 
+	private Long entidad;
 	private Long federal;
-
+	private Long local;
 	private Long municipio;
-
 	private Long seccionElectoral;
-
 	private String tipo;
 	private String tipologia;
 	private String tipoDomicilio;
@@ -19,10 +18,8 @@ public class Casilla {
 	private String cp;
 	private String ubicacion;
 	private String referencia;
-
 	private boolean asignado;
 
-	private Long local;
 	public Long getId() {
 		return id;
 	}
@@ -31,12 +28,28 @@ public class Casilla {
 		this.id = id;
 	}
 
+	public Long getEntidad() {
+		return entidad;
+	}
+
+	public void setEntidad(Long entidad) {
+		this.entidad = entidad;
+	}
+
 	public Long getFederal() {
 		return federal;
 	}
 
 	public void setFederal(Long federal) {
 		this.federal = federal;
+	}
+
+	public Long getLocal() {
+		return local;
+	}
+
+	public void setLocal(Long local) {
+		this.local = local;
 	}
 
 	public Long getMunicipio() {
@@ -133,14 +146,6 @@ public class Casilla {
 
 	public void setAsignado(boolean asignado) {
 		this.asignado = asignado;
-	}
-
-	public Long getLocal() {
-		return local;
-	}
-
-	public void setLocal(Long local) {
-		this.local = local;
 	}
 
 }

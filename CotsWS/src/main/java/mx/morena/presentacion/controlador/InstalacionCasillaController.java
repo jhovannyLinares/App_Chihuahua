@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -107,4 +106,24 @@ public class InstalacionCasillaController extends MasterController {
 			return null;
 		}
 	}
+	
+//	@GetMapping("/casillas/votaciones")
+//	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+//	private List<VotacionesDTO> votacionesXCasilla(HttpServletResponse response, HttpServletRequest request, Long idCasilla) throws IOException {
+//		try {
+//
+//			return IService.getVotaciones(idCasilla);
+//			
+//		} catch (CotException e) {
+//			e.printStackTrace();
+//			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+//			return null;
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+//			return null;
+//		}
+//	}
+	
+	
 }

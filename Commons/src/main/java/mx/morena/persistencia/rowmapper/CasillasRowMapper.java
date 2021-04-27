@@ -21,7 +21,7 @@ public class CasillasRowMapper implements RowMapper<List<Casilla>> {
 			casilla = new Casilla();
 			casilla.setId(rs.getLong("id"));
 			casilla.setFederal(rs.getLong("federal_id"));
-//			casilla.setl("local_id"));
+			casilla.setEntidad(rs.getLong("entidad_id"));
 			casilla.setMunicipio(rs.getLong("municpio_id"));
 			casilla.setSeccionElectoral(rs.getLong("seccion_id"));
 			casilla.setTipo(rs.getString("tipo_casilla"));
