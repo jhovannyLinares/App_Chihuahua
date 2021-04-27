@@ -20,8 +20,8 @@ public class ReporteCasillaRowMapper implements RowMapper<List<ReporteCasilla>> 
 			
 			reporteCasilla = new ReporteCasilla();
 
-			reporteCasilla.setHoraCierre(rs.getTimestamp("hora_cierre"));
-			reporteCasilla.setHoraReporte(rs.getTimestamp("hora_reporte"));
+			reporteCasilla.setHoraCierre(rs.getTime("hora_cierre"));
+			reporteCasilla.setHoraReporte(rs.getTime("hora_reporte"));
 			reporteCasilla.setId(rs.getLong("id"));
 			reporteCasilla.setIdCasilla(rs.getLong("id_casilla"));
 			reporteCasilla.setIdRg(rs.getLong("id_rg"));

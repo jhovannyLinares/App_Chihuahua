@@ -1,8 +1,13 @@
 package mx.morena.negocio.servicios.impl;
 
 import java.io.IOException;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -134,7 +139,7 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 				ReporteCasilla rc = new ReporteCasilla();
 
 				rc.setIdCasilla(dto.getIdCasilla());
-				rc.setHoraReporte(dto.getHoraReporte());
+//				rc.setHoraReporte(dto.getHoraReporte());
 				rc.setIdRg(usr.getId());
 				rc.setNumeroVotos(dto.getNumero());
 				rc.setTipoReporte(dto.getTipoReporte());
@@ -276,7 +281,7 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 				ReporteCasilla rc = new ReporteCasilla();
 
 				rc.setIdCasilla(dto.getIdCasilla());
-				rc.setHoraCierre(dto.getHoraCierre());
+//				rc.setHoraCierre(dto.getHoraCierre());
 
 				if (reporteRepository.updateHoraCierre(rc) == 0) {
 					throw new CotException("No se actualizo la hora de cierre", 409);
@@ -357,7 +362,9 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 				dto = new ReporteCasillaDTO();
 
 				dto.setCapturado(true);
-				dto.setHoraReporte(reporteCasilla.getHoraReporte());
+
+				dto.setHoraReporte(reporteCasilla.getHoraReporte().toString());
+
 				dto.setTipoReporte(reporteCasilla.getTipoReporte());
 
 				reporteCasillaDTOs.add(dto);

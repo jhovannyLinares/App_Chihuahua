@@ -4,15 +4,15 @@ import java.sql.Timestamp;
 
 public class ReporteCasillaDTO {
 
-	private Timestamp horaReporte;
+	private String horaReporte;
 	private Long tipoReporte;
 	private Boolean capturado;
 
-	public Timestamp getHoraReporte() {
+	public String getHoraReporte() {
 		return horaReporte;
 	}
 
-	public void setHoraReporte(Timestamp horaReporte) {
+	public void setHoraReporte(String horaReporte) {
 		this.horaReporte = horaReporte;
 	}
 
