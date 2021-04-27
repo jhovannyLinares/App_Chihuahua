@@ -10,12 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import mx.morena.negocio.dto.MarcarDesmarcarConvencidoDTO;
 import mx.morena.negocio.dto.SeguimientoVotoDTO;
 import mx.morena.negocio.exception.SeguimientoVotoException;
 import mx.morena.negocio.servicios.IReporteSeguimientoVotoService;
@@ -48,15 +50,13 @@ public class SeguimientoVotoController extends MasterController {
 		}
 	}
 	
-	@PutMapping("/marcarDesmarcarConvencido")
+	@PutMapping("/convencidosNotificados")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	public String marcarDesmarcarConvencido(HttpServletResponse response, HttpServletRequest request,
-						@RequestParam(value = "idConvencido", required = true) Long idConvencido,
-						@RequestParam(value = "isNotificado", required = true) Boolean isNotificado) throws IOException {
+	public String marcarDesmarcarConvencido(HttpServletResponse response, HttpServletRequest request, @RequestBody MarcarDesmarcarConvencidoDTO dto) throws IOException {
 
 		try {
 			long idUsuario = getUsuario(request);
-			return seguimientoVotoService.marcarConvencido(idUsuario, idConvencido, isNotificado);
+			return seguimientoVotoService.marcarConvencido(idUsuario, dto.getIdConvencido(), dto.getIsNotificado());
 		} catch (SeguimientoVotoException e) {
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());

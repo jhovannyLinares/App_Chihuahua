@@ -17,5 +17,5 @@ public interface IReporteSeguimientoVotoService {
 	
 	public void getReporteSeguimientoVotoDownload(HttpServletResponse response, Long perfil, Long usuario) throws SeguimientoVotoException, IOException;
 	
-	String marcarConvencido(Long idUsuario, Long idConvencido, Boolean isNotificado) throws SeguimientoVotoException;
+	String marcarConvencido(Long idUsuario, Long idConvencido, boolean IsNotificado) throws SeguimientoVotoException;
 }

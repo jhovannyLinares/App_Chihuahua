@@ -44,5 +44,7 @@ public interface IConvencidosRepository {
 	
 	Long countByMunicipioAndTipo(Long idMunicipio, Long tipo, char estatus);
 	
-	Convencidos getByIdAndTipoAndIsNotificado(Long id, Long tipo, Boolean isNotificado);
+	Convencidos getByIdAndTipoAndIsNotificado(Long idEntidad, Long id, Long tipo, boolean isNotificado);
+	
+	Long updateMarcarOrDesmarcar(Long id, Long tipo, boolean isNotificado);
 }

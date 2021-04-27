@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import mx.morena.negocio.dto.ReporteSeguimintoVotoDTO;
 import mx.morena.negocio.dto.SeguimientoVotoDTO;
 import mx.morena.negocio.exception.SeguimientoVotoException;
@@ -191,19 +192,46 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 	}
 
 	@Override
-	public String marcarConvencido(Long idUsuario, Long idConvencido, Boolean isNotificado)
-			throws SeguimientoVotoException {
+	public String marcarConvencido(Long idUsuario, Long idConvencido, boolean IsNotificado) throws SeguimientoVotoException {
 		Usuario usuario = usuarioRepository.findById(idUsuario);
 		Long perfil = usuario.getPerfil();
+		Long idEstado = usuario.getEntidad();
+
 		if (perfil == PERFIL_BRIGADISTA) {
-			Convencidos convencido = convencidoRepository.getByIdAndTipoAndIsNotificado(idConvencido, CONVENCIDO,
-					isNotificado);
-			if (convencido != null) {
-				System.out.println(convencido.getId());
-				System.out.println(convencido.getIsNotificado());
+
+			Convencidos convencido = new Convencidos();
+			String notificar = null;
+
+			if (idConvencido != null && idConvencido > 0) {
+
+				if (IsNotificado == true) {
+					convencido = convencidoRepository.getByIdAndTipoAndIsNotificado(idEstado, idConvencido, CONVENCIDO, false);
+					notificar = "marcado";
+				} else {
+					convencido = convencidoRepository.getByIdAndTipoAndIsNotificado(idEstado, idConvencido, CONVENCIDO, true);
+					notificar = "desmarcado";
+				}
+
+				if (convencido != null) {
+					Long resultado = convencidoRepository.updateMarcarOrDesmarcar(idConvencido, CONVENCIDO, IsNotificado);
+
+					if (resultado == 1L) {
+						return "Se ha " + notificar + " el convencido";
+					} else {
+						throw new SeguimientoVotoException("No se pudo " + notificar + " al convencido", 409);
+					}
+
+				} else {
+					throw new SeguimientoVotoException("No se encontraron datos", 404);
+				}
+				
+			} else {
+				throw new SeguimientoVotoException("Ingrese datos validos", 400);
 			}
+
+		} else {
+			throw new SeguimientoVotoException("No cuenta con los permisos suficientes", 401);
 		}
 
-		return null;
 	}
 }

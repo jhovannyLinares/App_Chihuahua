@@ -357,14 +357,28 @@ public class ConvencidosRepository implements IConvencidosRepository {
 
 
 	@Override
-	public Convencidos getByIdAndTipoAndIsNotificado(Long id, Long tipo, Boolean isNotificado) {
+	public Convencidos getByIdAndTipoAndIsNotificado(Long idEntidad, Long id, Long tipo, boolean isNotificado) {
 		String sql = "SELECT ac.id, ac.nombre, ac.apellido_materno, ac.apellido_paterno, ac.is_notificado FROM app_convencidos ac "
-				+ "WHERE ac.id = ? AND ac.tipo = ? AND ac.is_notificado = ? ";
+				+ "WHERE ac.id = ? AND ac.tipo = ? AND ac.is_notificado = ? AND ac.estado_id = ? ";
 		try {
-			return template.queryForObject(sql, new Object[] { id, tipo, isNotificado }, new int[] { Types.NUMERIC, Types.NUMERIC, Types.BOOLEAN },
-					new ConvencidoNotificadoRowMapper());
+			return template.queryForObject(sql, new Object[] { id, tipo, isNotificado, idEntidad }, new int[]
+					{ Types.NUMERIC, Types.NUMERIC, Types.BOOLEAN, Types.NUMERIC }, new ConvencidoNotificadoRowMapper());
 		} catch (EmptyResultDataAccessException e) {
 			return null;
+		}
+	}
+
+
+	@Override
+	public Long updateMarcarOrDesmarcar(Long id, Long tipo, boolean isNotificado) {
+		String sql = " UPDATE app_convencidos SET is_notificado = ? WHERE id = ? and tipo = ? ";
+
+		try {
+			template.update(sql, new Object[] { isNotificado, id, tipo },
+					new int[] { Types.BOOLEAN, Types.NUMERIC, Types.NUMERIC });
+			return 1L;
+		} catch (Exception e) {
+			return 0L;
 		}
 	}
 
