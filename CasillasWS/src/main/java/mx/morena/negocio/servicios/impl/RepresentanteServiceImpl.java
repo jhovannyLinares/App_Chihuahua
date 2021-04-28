@@ -241,7 +241,7 @@ public class RepresentanteServiceImpl extends MasterService implements IRepresen
 	}
 
 	public void guardado(long usuario, long perfil, AsignacionRepresentantesDTO dto, long asignacion,
-			long idRepresentante) {
+			long idRepresentante) throws RepresentanteException {
 
 		RepresentantesAsignados representante = new RepresentantesAsignados();
 
@@ -249,11 +249,17 @@ public class RepresentanteServiceImpl extends MasterService implements IRepresen
 
 		representante.setUsuarioId(usuario);
 
-		representanteRepository.asignaRepresentante(representante);
+		if (representanteRepository.asignaRepresentante(representante) == 0){
+			throw new RepresentanteException("No se realizo el guardado de los datos con exito", 409);
+		}
 
-		representanteRepository.updateRepresentante(perfil, representante, asignacion);
+		if (representanteRepository.updateRepresentante(perfil, representante, asignacion) == 0) {
+			throw new RepresentanteException("No se realizo la actualizacion con exito", 409);
+		}
 
-	    representanteRepository.updateStatusRepresentantes(idRepresentante);
+	    if ( representanteRepository.updateStatusRepresentantes(idRepresentante) == 0) {
+	    	throw new RepresentanteException("No se realizo la actualizacion del status con exito", 409);
+	    }
 
 	}
 

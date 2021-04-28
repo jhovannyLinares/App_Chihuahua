@@ -109,13 +109,19 @@ public class RepresentantesRepository implements IRepresentanteRepository {
 	}
 	
 	@Override
-	public void asignaRepresentante(RepresentantesAsignados representante) {
+	public Long asignaRepresentante(RepresentantesAsignados representante) {
 		String sql = "INSERT INTO app_representantes_asignados "  
 				   + " (id, " + " representante_id," + " usuario_id," + " cargo)"  
-				   + " values ((SELECT MAX(id)+1 FROM app_representantes_asignados),?, ?, ? );";  
-		
+				   + " values (COALESCE((SELECT MAX(id) FROM app_representantes_asignados), 0)+1,?, ?, ? )"; 
+//				   + " values ((SELECT MAX(id)+1 FROM app_representantes_asignados),?, ?, ? )"; 
+//		COALESCE((SELECT MAX(id) FROM app_reporte_casillas), 0)+1
+		try {
 		template.update(sql,
 				new Object[] {representante.getRepresentanteId(), representante.getUsuarioId(), representante.getCargo()});
+		return 1L;
+		}catch (EmptyResultDataAccessException e) {
+			return 0L;
+		}
 	}
 
 	@Override
@@ -147,11 +153,12 @@ public class RepresentantesRepository implements IRepresentanteRepository {
 	}
 
 	@Override
-	public void updateRepresentante(long perfil, RepresentantesAsignados rep, long asignacion) {
+	public Long updateRepresentante(long perfil, RepresentantesAsignados rep, long asignacion) {
 		String update = "UPDATE app_representantes_asignados set ";
 		String sql = null;
 		String where = null;
 		String values = null;
+		try {
 
 		List<Object> para = new ArrayList<Object>();
 		List<Integer> type = new ArrayList<Integer>();
@@ -243,10 +250,11 @@ public class RepresentantesRepository implements IRepresentanteRepository {
 		sql = update.concat(values).concat(where);
 
 		template.update(sql, parametros, types);
-		try {
+		
+		return 1L;
 
 		} catch (EmptyResultDataAccessException e) {
-
+			return 0L;
 		}
 	}
 
@@ -262,11 +270,16 @@ public class RepresentantesRepository implements IRepresentanteRepository {
 	}
 
 	@Override
-	public void updateStatusRepresentantes(Long id) {
+	public Long updateStatusRepresentantes(Long id) {
 		String sql = "update app_representantes set is_asignado = true where id = ?";
 		
+		try {
 		template.update(sql, new Object[] {id},
 				new int[] {Types.NUMERIC });
+		return 1L;
+		}catch (EmptyResultDataAccessException e) {
+			return 0L;
+		}
 		
 	}
 

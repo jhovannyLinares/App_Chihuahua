@@ -24,15 +24,15 @@ public interface IRepresentanteRepository {
 	
 	List<RepresentanteClaveElectoral> getAllRepresentantes(String claveElector);
 
-	void asignaRepresentante(RepresentantesAsignados representante);
+	Long asignaRepresentante(RepresentantesAsignados representante);
 
 	Long getIdMaxAsignados();
 
-	void updateRepresentante(long perfil, RepresentantesAsignados representante, long asignacion);
+	Long updateRepresentante(long perfil, RepresentantesAsignados representante, long asignacion);
 
 	Representantes getRepresentante(Long representanteId);
 
-	void updateStatusRepresentantes(Long id);
+	Long updateStatusRepresentantes(Long id);
 	
 	Long getRcCaptura(Long perfil);
 	
