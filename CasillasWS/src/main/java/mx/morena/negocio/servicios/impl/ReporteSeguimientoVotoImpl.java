@@ -12,15 +12,21 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import mx.morena.negocio.dto.ReporteInstalacionCasillaCrgDTO;
+import mx.morena.negocio.dto.ReporteInstalacionCasillaDTO;
+import mx.morena.negocio.dto.ReporteInstalacionCasillaMuniDTO;
+import mx.morena.negocio.dto.ReporteInstalacionCasillaRgDTO;
 import mx.morena.negocio.dto.ReporteSeguimintoVotoDTO;
 import mx.morena.negocio.dto.SeguimientoVotoDTO;
 import mx.morena.negocio.exception.SeguimientoVotoException;
 import mx.morena.negocio.servicios.IReporteSeguimientoVotoService;
 import mx.morena.persistencia.entidad.Convencidos;
+import mx.morena.persistencia.entidad.DistritoFederal;
 import mx.morena.persistencia.entidad.SeccionElectoral;
 import mx.morena.persistencia.entidad.Usuario;
 import mx.morena.persistencia.repository.ICasillaRepository;
 import mx.morena.persistencia.repository.IConvencidosRepository;
+import mx.morena.persistencia.repository.IDistritoFederalRepository;
 import mx.morena.persistencia.repository.ISeccionElectoralRepository;
 import mx.morena.persistencia.repository.ISeguimientoVotoRepository;
 import mx.morena.persistencia.repository.IUsuarioRepository;
@@ -43,6 +49,9 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 
 	@Autowired
 	private IConvencidosRepository convencidoRepository;
+
+	@Autowired
+	private IDistritoFederalRepository distritoRepository;
 
 	@Override
 	public List<ReporteSeguimintoVotoDTO> getSeguimeitoVoto(Long perfil, Long usuario) throws SeguimientoVotoException {
@@ -144,10 +153,10 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 				if (conven != null) {
 					reporteDto = conven.stream().map(this::convertirADto).collect(Collectors.toList());
 
-				}else {
+				} else {
 					throw new SeguimientoVotoException("No se encontraron datos", 404);
 				}
-				
+
 				return reporteDto;
 
 			} else {
@@ -192,7 +201,8 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 	}
 
 	@Override
-	public String marcarConvencido(Long idUsuario, Long idConvencido, boolean IsNotificado) throws SeguimientoVotoException {
+	public String marcarConvencido(Long idUsuario, Long idConvencido, boolean IsNotificado)
+			throws SeguimientoVotoException {
 		Usuario usuario = usuarioRepository.findById(idUsuario);
 		Long perfil = usuario.getPerfil();
 		Long idEstado = usuario.getEntidad();
@@ -205,15 +215,18 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 			if (idConvencido != null && idConvencido > 0) {
 
 				if (IsNotificado == true) {
-					convencido = convencidoRepository.getByIdAndTipoAndIsNotificado(idEstado, idConvencido, CONVENCIDO, false);
+					convencido = convencidoRepository.getByIdAndTipoAndIsNotificado(idEstado, idConvencido, CONVENCIDO,
+							false);
 					notificar = "marcado";
 				} else {
-					convencido = convencidoRepository.getByIdAndTipoAndIsNotificado(idEstado, idConvencido, CONVENCIDO, true);
+					convencido = convencidoRepository.getByIdAndTipoAndIsNotificado(idEstado, idConvencido, CONVENCIDO,
+							true);
 					notificar = "desmarcado";
 				}
 
 				if (convencido != null) {
-					Long resultado = convencidoRepository.updateMarcarOrDesmarcar(idConvencido, CONVENCIDO, IsNotificado);
+					Long resultado = convencidoRepository.updateMarcarOrDesmarcar(idConvencido, CONVENCIDO,
+							IsNotificado);
 
 					if (resultado == 1L) {
 						return "Se ha " + notificar + " el convencido";
@@ -224,13 +237,546 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 				} else {
 					throw new SeguimientoVotoException("No se encontraron datos", 404);
 				}
-				
+
 			} else {
 				throw new SeguimientoVotoException("Ingrese datos validos", 400);
 			}
 
 		} else {
 			throw new SeguimientoVotoException("No cuenta con los permisos suficientes", 401);
+		}
+
+	}
+
+	// -------------------------Reportes--------------
+	@Override
+	public List<ReporteInstalacionCasillaDTO> getInstalacionCasillaEstatal(Long idUsuario, Long idDistritoFederal,
+			Long idDistritoLocal, Long idMunicipal, Long idRuta, Long idCasilla)
+			throws SeguimientoVotoException, IOException {
+
+		Usuario usuario = usuarioRepository.findById(idUsuario);
+		Long perfil = usuario.getPerfil();
+		Long idEstado = usuario.getEntidad();
+		Long df = usuario.getFederal();
+
+		if (perfil == PERFIL_ESTATAL) {
+			
+			List<ReporteInstalacionCasillaDTO> reporteDistDto = new ArrayList<ReporteInstalacionCasillaDTO>();
+			ReporteInstalacionCasillaDTO dto = null;
+
+			List<DistritoFederal> distritos = distritoRepository.findByEntidad(idEstado);
+			
+			if(idDistritoFederal == null && idDistritoLocal == null && idMunicipal == null && idRuta == null && idCasilla  == null) {
+	
+				for (DistritoFederal df1 : distritos) {
+					dto = new ReporteInstalacionCasillaDTO();
+	
+					Long countCasillas = seguimientoRepository.getCasillasByDistrito(df1.getId());
+					Long instaladas1 = seguimientoRepository.getCasillasInstaladas1(df1.getId());
+					Long instaladas2 = seguimientoRepository.getCasillasInstaladas2(df1.getId());
+					Long instaladas3 = seguimientoRepository.getCasillasInstaladas3(df1.getId());
+					Long instaladas4 = seguimientoRepository.getCasillasInstaladas4(df1.getId());
+					Long instaladas5 = seguimientoRepository.getCasillasInstaladas5(df1.getId());
+					Long instaladas6 = seguimientoRepository.getCasillasInstaladas6(df1.getId());
+					Long totalCasillas = seguimientoRepository.getTotalCasillasInstaladas(df1.getId());
+	
+					dto.setIdDistrito(df1.getId());
+					dto.setCasillas(countCasillas);
+					dto.setInstaladas7a730(instaladas1);
+					dto.setInstaladas731a8(instaladas2);
+					dto.setInstaladas8a830(instaladas3);
+					dto.setInstaladas831a9(instaladas4);
+					dto.setInstaladasDespues9(instaladas5);
+					dto.setInstaladasDespues10(instaladas6);
+					dto.setTotalInstaladas(totalCasillas);
+					dto.setNoInstaladas(countCasillas - totalCasillas);
+	
+					reporteDistDto.add(dto);
+	
+				}
+	
+				return reporteDistDto;
+			
+			}else {
+				
+				dto = new ReporteInstalacionCasillaDTO();
+				
+				Long countCasillas = seguimientoRepository.getCasillasByDistritoFederal(idDistritoFederal, idDistritoLocal,
+						idMunicipal, idRuta, idCasilla);
+				Long instaladas1 = seguimientoRepository.getCasillasInstaladas1Federal(idDistritoFederal, idDistritoLocal,
+						idMunicipal, idRuta, idCasilla);
+				Long instaladas2 = seguimientoRepository.getCasillasInstaladas2Federal(idDistritoFederal, idDistritoLocal,
+						idMunicipal, idRuta, idCasilla);
+				Long instaladas3 = seguimientoRepository.getCasillasInstaladas3Federal(idDistritoFederal, idDistritoLocal,
+						idMunicipal, idRuta, idCasilla);
+				Long instaladas4 = seguimientoRepository.getCasillasInstaladas4Federal(idDistritoFederal, idDistritoLocal,
+						idMunicipal, idRuta, idCasilla);
+				Long instaladas5 = seguimientoRepository.getCasillasInstaladas5Federal(idDistritoFederal, idDistritoLocal,
+						idMunicipal, idRuta, idCasilla);
+				Long instaladas6 = seguimientoRepository.getCasillasInstaladas6Federal(idDistritoFederal, idDistritoLocal,
+						idMunicipal, idRuta, idCasilla);
+				Long totalCasillas = seguimientoRepository.getTotalCasillasInstaladasFederal(idDistritoFederal,
+						idDistritoLocal, idMunicipal, idRuta, idCasilla);
+
+				dto.setIdDistrito(idDistritoFederal);
+				dto.setCasillas(countCasillas);
+				dto.setInstaladas7a730(instaladas1);
+				dto.setInstaladas731a8(instaladas2);
+				dto.setInstaladas8a830(instaladas3);
+				dto.setInstaladas831a9(instaladas4);
+				dto.setInstaladasDespues9(instaladas5);
+				dto.setInstaladasDespues10(instaladas6);
+				dto.setTotalInstaladas(totalCasillas);
+				dto.setNoInstaladas(countCasillas - totalCasillas);
+
+				reporteDistDto.add(dto);
+
+			return reporteDistDto;
+
+			}
+			
+		} else {
+			throw new SeguimientoVotoException("No cuenta con los permisos suficientes para consultar el reporte", 401);
+		}
+
+	}
+
+	@Override
+	public List<ReporteInstalacionCasillaDTO> getInstalacionCasillaFederal(Long idUsuario, Long idDistritoFederal,
+			Long idDistritoLocal, Long idMunicipal, Long idRuta, Long idCasilla)
+			throws SeguimientoVotoException, IOException {
+
+		Usuario usuario = usuarioRepository.findById(idUsuario);
+		Long perfil = usuario.getPerfil();
+		Long idEstado = usuario.getEntidad();
+		Long df = usuario.getFederal();
+
+		if (perfil == PERFIL_FEDERAL) {
+
+			List<ReporteInstalacionCasillaDTO> reporteDistDto = new ArrayList<ReporteInstalacionCasillaDTO>();
+			ReporteInstalacionCasillaDTO dto = null;
+			
+			if(idDistritoFederal == null && idDistritoLocal == null && idMunicipal == null && idRuta == null && idCasilla  == null) {
+
+				dto = new ReporteInstalacionCasillaDTO();
+				
+				Long countCasillas = seguimientoRepository.getCasillasByDistrito(df);
+				Long instaladas1 = seguimientoRepository.getCasillasInstaladas1(df);
+				Long instaladas2 = seguimientoRepository.getCasillasInstaladas2(df);
+				Long instaladas3 = seguimientoRepository.getCasillasInstaladas3(df);
+				Long instaladas4 = seguimientoRepository.getCasillasInstaladas4(df);
+				Long instaladas5 = seguimientoRepository.getCasillasInstaladas5(df);
+				Long instaladas6 = seguimientoRepository.getCasillasInstaladas6(df);
+				Long totalCasillas = seguimientoRepository.getTotalCasillasInstaladas(df);
+
+				dto.setIdDistrito(df);
+				dto.setCasillas(countCasillas);
+				dto.setInstaladas7a730(instaladas1);
+				dto.setInstaladas731a8(instaladas2);
+				dto.setInstaladas8a830(instaladas3);
+				dto.setInstaladas831a9(instaladas4);
+				dto.setInstaladasDespues9(instaladas5);
+				dto.setInstaladasDespues10(instaladas6);
+				dto.setTotalInstaladas(totalCasillas);
+				dto.setNoInstaladas(countCasillas - totalCasillas);
+		
+				reporteDistDto.add(dto);
+
+				return reporteDistDto;
+			}else {
+				
+				dto = new ReporteInstalacionCasillaDTO();
+				
+				Long countCasillas = seguimientoRepository.getCasillasByDistritoFederal(idDistritoFederal, idDistritoLocal,
+						idMunicipal, idRuta, idCasilla);
+				Long instaladas1 = seguimientoRepository.getCasillasInstaladas1Federal(idDistritoFederal, idDistritoLocal,
+						idMunicipal, idRuta, idCasilla);
+				Long instaladas2 = seguimientoRepository.getCasillasInstaladas2Federal(idDistritoFederal, idDistritoLocal,
+						idMunicipal, idRuta, idCasilla);
+				Long instaladas3 = seguimientoRepository.getCasillasInstaladas3Federal(idDistritoFederal, idDistritoLocal,
+						idMunicipal, idRuta, idCasilla);
+				Long instaladas4 = seguimientoRepository.getCasillasInstaladas4Federal(idDistritoFederal, idDistritoLocal,
+						idMunicipal, idRuta, idCasilla);
+				Long instaladas5 = seguimientoRepository.getCasillasInstaladas5Federal(idDistritoFederal, idDistritoLocal,
+						idMunicipal, idRuta, idCasilla);
+				Long instaladas6 = seguimientoRepository.getCasillasInstaladas6Federal(idDistritoFederal, idDistritoLocal,
+						idMunicipal, idRuta, idCasilla);
+				Long totalCasillas = seguimientoRepository.getTotalCasillasInstaladasFederal(idDistritoFederal,
+						idDistritoLocal, idMunicipal, idRuta, idCasilla);
+
+				dto.setIdDistrito(idDistritoFederal);
+				dto.setCasillas(countCasillas);
+				dto.setInstaladas7a730(instaladas1);
+				dto.setInstaladas731a8(instaladas2);
+				dto.setInstaladas8a830(instaladas3);
+				dto.setInstaladas831a9(instaladas4);
+				dto.setInstaladasDespues9(instaladas5);
+				dto.setInstaladasDespues10(instaladas6);
+				dto.setTotalInstaladas(totalCasillas);
+				dto.setNoInstaladas(countCasillas - totalCasillas);
+
+				reporteDistDto.add(dto);
+
+			return reporteDistDto;
+
+				
+			}
+			
+		} else {
+			throw new SeguimientoVotoException("No cuenta con los permisos suficientes para consultar el reporte", 401);
+		}
+	}
+
+	@Override
+	public List<ReporteInstalacionCasillaDTO> getInstalacionCasillaLocal(Long idUsuario, Long idDistritoFederal,
+			Long idDistritoLocal, Long idMunicipal, Long idRuta, Long idCasilla)
+			throws SeguimientoVotoException, IOException {
+
+		Usuario usuario = usuarioRepository.findById(idUsuario);
+		Long perfil = usuario.getPerfil();
+		Long idEstado = usuario.getEntidad();
+		Long df = usuario.getFederal();
+
+		if (perfil == PERFIL_LOCAL) {
+
+			List<ReporteInstalacionCasillaDTO> reporteDistDto = new ArrayList<ReporteInstalacionCasillaDTO>();
+			ReporteInstalacionCasillaDTO dto = null;
+
+			dto = new ReporteInstalacionCasillaDTO();
+
+			Long countCasillas = seguimientoRepository.getCasillasByLocal(idDistritoLocal);
+			Long instaladas1 = seguimientoRepository.getCasillasInstaladas1L(idDistritoLocal);
+			Long instaladas2 = seguimientoRepository.getCasillasInstaladas2L(idDistritoLocal);
+			Long instaladas3 = seguimientoRepository.getCasillasInstaladas3L(idDistritoLocal);
+			Long instaladas4 = seguimientoRepository.getCasillasInstaladas4L(idDistritoLocal);
+			Long instaladas5 = seguimientoRepository.getCasillasInstaladas5L(idDistritoLocal);
+			Long instaladas6 = seguimientoRepository.getCasillasInstaladas6L(idDistritoLocal);
+			Long totalCasillas = seguimientoRepository.getTotalCasillasInstaladasL(idDistritoLocal);
+
+			dto.setIdDistrito(idDistritoLocal);
+			dto.setCasillas(countCasillas);
+			dto.setInstaladas7a730(instaladas1);
+			dto.setInstaladas731a8(instaladas2);
+			dto.setInstaladas8a830(instaladas3);
+			dto.setInstaladas831a9(instaladas4);
+			dto.setInstaladasDespues9(instaladas5);
+			dto.setInstaladasDespues10(instaladas6);
+			dto.setTotalInstaladas(totalCasillas);
+			dto.setNoInstaladas(countCasillas - totalCasillas);
+	
+			reporteDistDto.add(dto);
+
+		
+			return reporteDistDto;
+		} else {
+			throw new SeguimientoVotoException("No cuenta con los permisos suficientes para consultar el reporte", 401);
+		}
+	}
+
+	@Override
+	public List<ReporteInstalacionCasillaMuniDTO> getInstalacionCasillaMunicipal(Long idUsuario, Long idDistritoFederal,
+			Long idDistritoLocal, Long idMunicipal, Long idRuta, Long idCasilla)
+			throws SeguimientoVotoException, IOException {
+
+		Usuario usuario = usuarioRepository.findById(idUsuario);
+		Long perfil = usuario.getPerfil();
+		Long idEstado = usuario.getEntidad();
+		Long df = usuario.getFederal();
+
+		if (perfil == PERFIL_MUNICIPAL) {
+
+			List<ReporteInstalacionCasillaMuniDTO> reporteMuntDto = new ArrayList<ReporteInstalacionCasillaMuniDTO>();
+			ReporteInstalacionCasillaMuniDTO dto = null;
+
+			dto = new ReporteInstalacionCasillaMuniDTO();
+
+				dto = new ReporteInstalacionCasillaMuniDTO();
+
+//				Long idMuni = 1L;
+			String muni = seguimientoRepository.getNombreMunicipio(idMunicipal);
+				
+			Long countCasillas = seguimientoRepository.getCasillasByMunicipal(idMunicipal);
+			Long instaladas1 = seguimientoRepository.getCasillasInstaladas1M(idMunicipal);
+			Long instaladas2 = seguimientoRepository.getCasillasInstaladas2M(idMunicipal);
+			Long instaladas3 = seguimientoRepository.getCasillasInstaladas3M(idMunicipal);
+			Long instaladas4 = seguimientoRepository.getCasillasInstaladas4M(idMunicipal);
+			Long instaladas5 = seguimientoRepository.getCasillasInstaladas5M(idMunicipal);
+			Long instaladas6 = seguimientoRepository.getCasillasInstaladas6M(idMunicipal);
+			Long totalCasillas = seguimientoRepository.getTotalCasillasInstaladasM(idMunicipal);
+				
+			dto.setIdMunicipio(idMunicipal);
+			dto.setMunicipio(muni);
+			dto.setCasillas(countCasillas);
+			dto.setInstaladas7a730(instaladas1);
+			dto.setInstaladas731a8(instaladas2);
+			dto.setInstaladas8a830(instaladas3);
+			dto.setInstaladas831a9(instaladas4);
+			dto.setInstaladasDespues9(instaladas5);
+			dto.setInstaladasDespues10(instaladas6);
+			dto.setTotalInstaladas(totalCasillas);
+			dto.setNoInstaladas(countCasillas - totalCasillas);
+	
+			reporteMuntDto.add(dto);
+
+			return reporteMuntDto;
+
+		} else {
+			throw new SeguimientoVotoException("No cuenta con los permisos suficientes para consultar el reporte", 401);
+		}
+	}
+
+	@Override
+	public List<ReporteInstalacionCasillaCrgDTO> getInstalacionCasillaCrg(Long idUsuario, Long idDistritoFederal,
+			Long idDistritoLocal, Long idMunicipal, Long idRuta, Long idCasilla)
+			throws SeguimientoVotoException, IOException {
+
+		Usuario usuario = usuarioRepository.findById(idUsuario);
+		Long perfil = usuario.getPerfil();
+		Long idEstado = usuario.getEntidad();
+		Long df = usuario.getFederal();
+
+		if (perfil == PERFIL_CRG) {
+
+			List<ReporteInstalacionCasillaCrgDTO> reporteCrgDto = new ArrayList<ReporteInstalacionCasillaCrgDTO>();
+			ReporteInstalacionCasillaCrgDTO dto = null;
+
+			dto = new ReporteInstalacionCasillaCrgDTO();
+
+			List<DistritoFederal> distritos = distritoRepository.findByEntidad(idEstado);
+
+			for (DistritoFederal df1 : distritos) {
+				dto = new ReporteInstalacionCasillaCrgDTO();
+
+				Long ruta = 1L;
+
+				dto.setIdDistrito(df1.getId());
+				dto.setRutas(ruta);
+				dto.setCasillas(0L);
+				dto.setInstaladas7a730(0L);
+				dto.setInstaladas731a8(0L);
+				dto.setInstaladas8a830(0L);
+				dto.setInstaladas831a9(0L);
+				dto.setInstaladasDespues9(0L);
+				dto.setInstaladasDespues10(0L);
+				dto.setTotalInstaladas(0L);
+				dto.setNoInstaladas(0L);
+
+				reporteCrgDto.add(dto);
+
+			}
+
+			return reporteCrgDto;
+
+		} else {
+			throw new SeguimientoVotoException("No cuenta con los permisos suficientes para consultar el reporte", 401);
+		}
+	}
+
+	@Override
+	public List<ReporteInstalacionCasillaRgDTO> getInstalacionCasillaRg(Long idUsuario, Long idDistritoFederal,
+			Long idDistritoLocal, Long idMunicipal, Long idRuta, Long idCasilla)
+			throws SeguimientoVotoException, IOException {
+
+		Usuario usuario = usuarioRepository.findById(idUsuario);
+		Long perfil = usuario.getPerfil();
+		Long idEstado = usuario.getEntidad();
+		Long df = usuario.getFederal();
+
+		if (perfil == PERFIL_RG) {
+
+			List<ReporteInstalacionCasillaRgDTO> reporteMuntDto = new ArrayList<ReporteInstalacionCasillaRgDTO>();
+			ReporteInstalacionCasillaRgDTO dto = null;
+
+			dto = new ReporteInstalacionCasillaRgDTO();
+
+			List<DistritoFederal> distritos = distritoRepository.findByEntidad(idEstado);
+
+			for (DistritoFederal df1 : distritos) {
+				dto = new ReporteInstalacionCasillaRgDTO();
+
+				Long seccion = 1L;
+				String tipoCasilla = "Basica";
+
+				dto.setIdDistrito(df1.getId());
+				dto.setSeccion(seccion);
+				dto.setCasillas(tipoCasilla);
+				dto.setInstaladas7a730(0L);
+				dto.setInstaladas731a8(0L);
+				dto.setInstaladas8a830(0L);
+				dto.setInstaladas831a9(0L);
+				dto.setInstaladasDespues9(0L);
+				dto.setInstaladasDespues10(0L);
+				dto.setTotalInstaladas(0L);
+				dto.setNoInstaladas(0L);
+
+				reporteMuntDto.add(dto);
+
+			}
+
+			return reporteMuntDto;
+
+		} else {
+			throw new SeguimientoVotoException("No cuenta con los permisos suficientes para consultar el reporte", 401);
+		}
+	}
+
+	// -------------------------Descarga--------------
+
+	@Override
+	public void getReporteInstalacionCasillaEstatalDownload(HttpServletResponse response, Long idUsuario,
+			Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal, Long idRuta, Long idCasilla)
+			throws SeguimientoVotoException, IOException {
+
+		Usuario usuario = usuarioRepository.findById(idUsuario);
+		Long perfil = usuario.getPerfil();
+
+		if (perfil == PERFIL_ESTATAL) {
+
+			setNameFile(response, CSV_INST_ESTATAL);
+
+			List<ReporteInstalacionCasillaDTO> estatalDTOs = getInstalacionCasillaEstatal(idUsuario, idDistritoFederal,
+					idDistritoLocal, idMunicipal, idRuta, idCasilla);
+
+			String[] header = { "idDistrito", "casillas", "instaladas7a730", "instaladas731a8", "instaladas8a830",
+					"instaladas831a9", "instaladasDespues9", "instaladasDespues10", "totalInstaladas", "noInstaladas" };
+
+			setWriterFile(response, estatalDTOs, header);
+
+		} else {
+			throw new SeguimientoVotoException("No cuenta con los permisos suficientes para descargar el reporte", 401);
+		}
+
+	}
+
+	@Override
+	public void getReporteInstalacionCasillaFederalDownload(HttpServletResponse response, Long idUsuario,
+			Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal, Long idRuta, Long idCasilla)
+			throws SeguimientoVotoException, IOException {
+
+		Usuario usuario = usuarioRepository.findById(idUsuario);
+		Long perfil = usuario.getPerfil();
+
+		if (perfil == PERFIL_FEDERAL) {
+
+			setNameFile(response, CSV_INST_FEDERAL);
+
+			List<ReporteInstalacionCasillaDTO> federalDTOs = getInstalacionCasillaFederal(idUsuario, idDistritoFederal,
+					idDistritoLocal, idMunicipal, idRuta, idCasilla);
+
+			String[] header = { "idDistrito", "casillas", "instaladas7a730", "instaladas731a8", "instaladas8a830",
+					"instaladas831a9", "instaladasDespues9", "instaladasDespues10", "totalInstaladas", "noInstaladas" };
+
+			setWriterFile(response, federalDTOs, header);
+
+		} else {
+			throw new SeguimientoVotoException("No cuenta con los permisos suficientes para descargar el reporte", 401);
+		}
+
+	}
+
+	@Override
+	public void getReporteInstalacionCasillaLocalDownload(HttpServletResponse response, Long idUsuario,
+			Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal, Long idRuta, Long idCasilla)
+			throws SeguimientoVotoException, IOException {
+
+		Usuario usuario = usuarioRepository.findById(idUsuario);
+		Long perfil = usuario.getPerfil();
+
+		if (perfil == PERFIL_LOCAL) {
+
+			setNameFile(response, CSV_INST_LOCAL);
+
+			List<ReporteInstalacionCasillaDTO> localDTOs = getInstalacionCasillaLocal(idUsuario, idDistritoFederal,
+					idDistritoLocal, idMunicipal, idRuta, idCasilla);
+
+			String[] header = { "idDistrito", "casillas", "instaladas7a730", "instaladas731a8", "instaladas8a830",
+					"instaladas831a9", "instaladasDespues9", "instaladasDespues10", "totalInstaladas", "noInstaladas" };
+
+			setWriterFile(response, localDTOs, header);
+
+		} else {
+			throw new SeguimientoVotoException("No cuenta con los permisos suficientes para descargar el reporte", 401);
+		}
+
+	}
+
+	@Override
+	public void getReporteInstalacionCasillaMunicipalDownload(HttpServletResponse response, Long idUsuario,
+			Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal, Long idRuta, Long idCasilla)
+			throws SeguimientoVotoException, IOException {
+
+		Usuario usuario = usuarioRepository.findById(idUsuario);
+		Long perfil = usuario.getPerfil();
+
+		if (perfil == PERFIL_MUNICIPAL) {
+
+			setNameFile(response, CSV_INST_MUNICIPAL);
+
+			List<ReporteInstalacionCasillaMuniDTO> municipalDTOs = getInstalacionCasillaMunicipal(idUsuario,
+					idDistritoFederal, idDistritoLocal, idMunicipal, idRuta, idCasilla);
+
+			String[] header = { "idMunicipio", "municipio", "casillas", "instaladas7a730", "instaladas731a8",
+					"instaladas8a830", "instaladas831a9", "instaladasDespues9", "instaladasDespues10",
+					"totalInstaladas", "noInstaladas" };
+
+			setWriterFile(response, municipalDTOs, header);
+
+		} else {
+			throw new SeguimientoVotoException("No cuenta con los permisos suficientes para descargar el reporte", 401);
+		}
+
+	}
+
+	@Override
+	public void getReporteInstalacionCasillaCrgDownload(HttpServletResponse response, Long idUsuario,
+			Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal, Long idRuta, Long idCasilla)
+			throws SeguimientoVotoException, IOException {
+
+		Usuario usuario = usuarioRepository.findById(idUsuario);
+		Long perfil = usuario.getPerfil();
+
+		if (perfil == PERFIL_CRG) {
+
+			setNameFile(response, CSV_INST_CRG);
+
+			List<ReporteInstalacionCasillaCrgDTO> crgDTOs = getInstalacionCasillaCrg(idUsuario, idDistritoFederal,
+					idDistritoLocal, idMunicipal, idRuta, idCasilla);
+
+			String[] header = { "idDistrito", "rutas", "casillas", "instaladas7a730", "instaladas731a8",
+					"instaladas8a830", "instaladas831a9", "instaladasDespues9", "instaladasDespues10",
+					"totalInstaladas", "noInstaladas" };
+
+			setWriterFile(response, crgDTOs, header);
+
+		} else {
+			throw new SeguimientoVotoException("No cuenta con los permisos suficientes para descargar el reporte", 401);
+		}
+
+	}
+
+	@Override
+	public void getReporteInstalacionCasillaRgDownload(HttpServletResponse response, Long idUsuario,
+			Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal, Long idRuta, Long idCasilla)
+			throws SeguimientoVotoException, IOException {
+
+		Usuario usuario = usuarioRepository.findById(idUsuario);
+		Long perfil = usuario.getPerfil();
+
+		if (perfil == PERFIL_RG) {
+
+			setNameFile(response, CSV_INST_RG);
+
+			List<ReporteInstalacionCasillaRgDTO> rgDTOs = getInstalacionCasillaRg(idUsuario, idDistritoFederal,
+					idDistritoLocal, idMunicipal, idRuta, idCasilla);
+
+			String[] header = { "idDistrito", "seccion", "casillas", "instaladas7a730", "instaladas731a8",
+					"instaladas8a830", "instaladas831a9", "instaladasDespues9", "instaladasDespues10",
+					"totalInstaladas", "noInstaladas" };
+
+			setWriterFile(response, rgDTOs, header);
+
+		} else {
+			throw new SeguimientoVotoException("No cuenta con los permisos suficientes para descargar el reporte", 401);
 		}
 
 	}

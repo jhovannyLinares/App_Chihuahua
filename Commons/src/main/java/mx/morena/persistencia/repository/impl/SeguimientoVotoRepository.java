@@ -1,6 +1,7 @@
 package mx.morena.persistencia.repository.impl;
 
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import mx.morena.persistencia.rowmapper.IdMaxConvencidos;
 import mx.morena.persistencia.rowmapper.LongRowMapper;
 import mx.morena.persistencia.rowmapper.SeccionCotsRowMapper;
 import mx.morena.persistencia.rowmapper.SeguimientosVotoRowMapper;
+import mx.morena.persistencia.rowmapper.StringRowMapper;
 
 @Repository
 public class SeguimientoVotoRepository implements ISeguimientoVotoRepository {
@@ -92,4 +94,910 @@ public class SeguimientoVotoRepository implements ISeguimientoVotoRepository {
 			return null;
 		}
 	}
+	
+	//-------------Reporte-----------------------------------------------
+
+	@Override
+	public Long getCasillasByDistrito(Long idDistritoFederal){
+		
+		String sql = "select COUNT(*) from app_casilla ac where ac.federal_id = ? ";
+		return template.queryForObject(sql, new Object[] { idDistritoFederal }, new int[] { Types.NUMERIC }, new LongRowMapper());
+
+	}
+
+	@Override
+	public Long getCasillasInstaladas1(Long idDistritoFederal) {
+		
+		String sql = "select count(*) from app_instalacion_casilla aic "
+				+ "inner join app_casilla ac "
+				+ "on aic.id_casilla = ac.id "
+				+ "where hora_instalacion Between '07:00:00' And '07:30:00' and ac.federal_id = ? ";
+		return template.queryForObject(sql, new Object[] { idDistritoFederal }, new int[] { Types.NUMERIC }, new LongRowMapper());
+	}
+
+	@Override
+	public Long getCasillasInstaladas2(Long idDistritoFederal) {
+		
+		String sql = "select count(*) from app_instalacion_casilla aic "
+				+ "inner join app_casilla ac "
+				+ "on aic.id_casilla = ac.id "
+				+ "where hora_instalacion Between '07:31:00' And '08:00:00' and ac.federal_id = ? ";
+		return template.queryForObject(sql, new Object[] { idDistritoFederal }, new int[] { Types.NUMERIC }, new LongRowMapper());
+	}
+
+	@Override
+	public Long getCasillasInstaladas3(Long idDistritoFederal) {
+		
+		String sql = "select count(*) from app_instalacion_casilla aic "
+				+ "inner join app_casilla ac "
+				+ "on aic.id_casilla = ac.id "
+				+ "where hora_instalacion Between '08:01:00' And '08:30:00' and ac.federal_id = ? ";
+		return template.queryForObject(sql, new Object[] { idDistritoFederal }, new int[] { Types.NUMERIC }, new LongRowMapper());
+	}
+
+	@Override
+	public Long getCasillasInstaladas4(Long idDistritoFederal) {
+		
+		String sql = "select count(*) from app_instalacion_casilla aic "
+				+ "inner join app_casilla ac "
+				+ "on aic.id_casilla = ac.id "
+				+ "where hora_instalacion Between '08:31:00' And '09:00:00' and ac.federal_id = ? ";
+		return template.queryForObject(sql, new Object[] { idDistritoFederal }, new int[] { Types.NUMERIC }, new LongRowMapper());
+	}
+
+	@Override
+	public Long getCasillasInstaladas5(Long idDistritoFederal) {
+		
+		String sql = "select count(*) from app_instalacion_casilla aic "
+				+ "inner join app_casilla ac "
+				+ "on aic.id_casilla = ac.id "
+				+ "where hora_instalacion Between '09:01:00' And '09:59:59' and ac.federal_id = ? ";
+		return template.queryForObject(sql, new Object[] { idDistritoFederal }, new int[] { Types.NUMERIC }, new LongRowMapper());
+	}
+
+	@Override
+	public Long getCasillasInstaladas6(Long idDistritoFederal) {
+		
+		String sql = "select count(*) from app_instalacion_casilla aic "
+				+ "inner join app_casilla ac "
+				+ "on aic.id_casilla = ac.id "
+				+ "where hora_instalacion Between '10:00:00' And '18:00:00' and ac.federal_id = ? ";
+		return template.queryForObject(sql, new Object[] { idDistritoFederal }, new int[] { Types.NUMERIC }, new LongRowMapper());
+	}
+
+	@Override
+	public Long getTotalCasillasInstaladas(Long idDistritoFederal) {
+		
+		String sql = "select count(*) from app_instalacion_casilla aic "
+				+ "inner join app_casilla ac "
+				+ "on aic.id_casilla = ac.id "
+				+ "where ac.federal_id = ?";
+		return template.queryForObject(sql, new Object[] { idDistritoFederal }, new int[] { Types.NUMERIC }, new LongRowMapper());
+	}
+
+	@Override
+	public Long getCasillasByLocal(Long idDistritoLocal) {
+
+		String sql = "select COUNT(*) from app_casilla ac where ac.local_id = ? ";
+		return template.queryForObject(sql, new Object[] { idDistritoLocal }, new int[] { Types.NUMERIC }, new LongRowMapper());
+	}
+
+	@Override
+	public Long getCasillasInstaladas1L(Long idDistritoFederal) {
+
+		String sql = "select count(*) from app_instalacion_casilla aic "
+				+ "inner join app_casilla ac "
+				+ "on aic.id_casilla = ac.id "
+				+ "where hora_instalacion Between '07:00:00' And '07:30:00' and ac.local_id = ? ";
+		return template.queryForObject(sql, new Object[] { idDistritoFederal }, new int[] { Types.NUMERIC }, new LongRowMapper());
+	}
+
+	@Override
+	public Long getCasillasInstaladas2L(Long idDistritoLocal) {
+		
+		String sql = "select count(*) from app_instalacion_casilla aic "
+				+ "inner join app_casilla ac "
+				+ "on aic.id_casilla = ac.id "
+				+ "where hora_instalacion Between '07:30:01' And '08:00:00' and ac.local_id = ? ";
+		return template.queryForObject(sql, new Object[] { idDistritoLocal }, new int[] { Types.NUMERIC }, new LongRowMapper());
+	}
+
+	@Override
+	public Long getCasillasInstaladas3L(Long idDistritoLocal) {
+		
+		String sql = "select count(*) from app_instalacion_casilla aic "
+				+ "inner join app_casilla ac "
+				+ "on aic.id_casilla = ac.id "
+				+ "where hora_instalacion Between '08:00:01' And '08:30:59' and ac.local_id = ? ";
+		return template.queryForObject(sql, new Object[] { idDistritoLocal }, new int[] { Types.NUMERIC }, new LongRowMapper());
+	}
+
+	@Override
+	public Long getCasillasInstaladas4L(Long idDistritoLocal) {
+		
+		String sql = "select count(*) from app_instalacion_casilla aic "
+				+ "inner join app_casilla ac "
+				+ "on aic.id_casilla = ac.id "
+				+ "where hora_instalacion Between '08:31:00' And '09:00:00' and ac.local_id = ? ";
+		return template.queryForObject(sql, new Object[] { idDistritoLocal }, new int[] { Types.NUMERIC }, new LongRowMapper());
+	}
+
+	@Override
+	public Long getCasillasInstaladas5L(Long idDistritoLocal) {
+		
+		String sql = "select count(*) from app_instalacion_casilla aic "
+				+ "inner join app_casilla ac "
+				+ "on aic.id_casilla = ac.id "
+				+ "where hora_instalacion Between '09:00:01' And '09:59:59' and ac.local_id = ? ";
+		return template.queryForObject(sql, new Object[] { idDistritoLocal }, new int[] { Types.NUMERIC }, new LongRowMapper());
+	}
+
+	@Override
+	public Long getCasillasInstaladas6L(Long idDistritoLocal) {
+
+		String sql = "select count(*) from app_instalacion_casilla aic "
+				+ "inner join app_casilla ac "
+				+ "on aic.id_casilla = ac.id "
+				+ "where hora_instalacion Between '10:00:00' And '18:00:00' and ac.local_id = ? ";
+		return template.queryForObject(sql, new Object[] { idDistritoLocal }, new int[] { Types.NUMERIC }, new LongRowMapper());
+	}
+
+	@Override
+	public Long getTotalCasillasInstaladasL(Long idDistritoFederal) {
+		
+		String sql = "select count(*) from app_instalacion_casilla aic "
+				+ "inner join app_casilla ac "
+				+ "on aic.id_casilla = ac.id "
+				+ "where ac.local_id = ?";
+		return template.queryForObject(sql, new Object[] { idDistritoFederal }, new int[] { Types.NUMERIC }, new LongRowMapper());
+	}
+	@Override
+	public Long getCasillasByMunicipal(Long idMunicipal) {
+
+		String sql = "select COUNT(*) from app_casilla ac where ac.municpio_id  = ? ";
+		return template.queryForObject(sql, new Object[] { idMunicipal }, new int[] { Types.NUMERIC }, new LongRowMapper());
+	}
+
+	@Override
+	public Long getCasillasInstaladas1M(Long idMunicipal) {
+
+		String sql = "select count(*) from app_instalacion_casilla aic "
+				+ "inner join app_casilla ac "
+				+ "on aic.id_casilla = ac.id "
+				+ "where hora_instalacion Between '07:00:00' And '07:30:00' and ac.municpio_id = ? ";
+		return template.queryForObject(sql, new Object[] { idMunicipal }, new int[] { Types.NUMERIC }, new LongRowMapper());
+	}
+
+	@Override
+	public Long getCasillasInstaladas2M(Long idMunicipal) {
+		
+		String sql = "select count(*) from app_instalacion_casilla aic "
+				+ "inner join app_casilla ac "
+				+ "on aic.id_casilla = ac.id "
+				+ "where hora_instalacion Between '07:30:01' And '08:00:00' and ac.municpio_id = ? ";
+		return template.queryForObject(sql, new Object[] { idMunicipal }, new int[] { Types.NUMERIC }, new LongRowMapper());
+	}
+
+	@Override
+	public Long getCasillasInstaladas3M(Long idMunicipal) {
+		
+		String sql = "select count(*) from app_instalacion_casilla aic "
+				+ "inner join app_casilla ac "
+				+ "on aic.id_casilla = ac.id "
+				+ "where hora_instalacion Between '08:00:01' And '08:30:59' and ac.municpio_id = ? ";
+		return template.queryForObject(sql, new Object[] { idMunicipal }, new int[] { Types.NUMERIC }, new LongRowMapper());
+	}
+
+	@Override
+	public Long getCasillasInstaladas4M(Long idMunicipal) {
+		
+		String sql = "select count(*) from app_instalacion_casilla aic "
+				+ "inner join app_casilla ac "
+				+ "on aic.id_casilla = ac.id "
+				+ "where hora_instalacion Between '08:31:00' And '09:00:00' and ac.municpio_id = ? ";
+		return template.queryForObject(sql, new Object[] { idMunicipal }, new int[] { Types.NUMERIC }, new LongRowMapper());
+	}
+
+	@Override
+	public Long getCasillasInstaladas5M(Long idMunicipal) {
+		
+		String sql = "select count(*) from app_instalacion_casilla aic "
+				+ "inner join app_casilla ac "
+				+ "on aic.id_casilla = ac.id "
+				+ "where hora_instalacion Between '09:00:01' And '09:59:59' and ac.municpio_id  = ? ";
+		return template.queryForObject(sql, new Object[] { idMunicipal }, new int[] { Types.NUMERIC }, new LongRowMapper());
+	}
+
+	@Override
+	public Long getCasillasInstaladas6M(Long idMunicipal) {
+
+		String sql = "select count(*) from app_instalacion_casilla aic "
+				+ "inner join app_casilla ac "
+				+ "on aic.id_casilla = ac.id "
+				+ "where hora_instalacion Between '10:00:00' And '18:00:00' and ac.municpio_id = ? ";
+		return template.queryForObject(sql, new Object[] { idMunicipal }, new int[] { Types.NUMERIC }, new LongRowMapper());
+	}
+
+	@Override
+	public Long getTotalCasillasInstaladasM(Long idMunicipal) {
+		
+		String sql = "select count(*) from app_instalacion_casilla aic "
+				+ "inner join app_casilla ac "
+				+ "on aic.id_casilla = ac.id "
+				+ "where ac.municpio_id  = ?";
+		return template.queryForObject(sql, new Object[] { idMunicipal }, new int[] { Types.NUMERIC }, new LongRowMapper());
+	}
+	@Override
+	public String getNombreMunicipio(Long idMunicipal) {
+		
+		String sql = "select nombre from app_municipio am where id = ? group by nombre ";
+		return template.queryForObject(sql, new Object[] { idMunicipal }, new int[] { Types.NUMERIC }, new StringRowMapper());
+	}
+
+	@Override
+	public Long getCasillasByDistritoFederal(Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal, Long idRuta, Long idCasilla) {
+		
+		String select = "select count(*) from app_casilla ac "
+				+ "inner join app_asignacion_casillas aac "
+				+ "on ac.federal_id = aac.distrito_federal_id ";
+		
+				String sql = null;
+				String where = "";
+				List<Object> para = new ArrayList<Object>();
+				List<Integer> type = new ArrayList<Integer>();
+		
+				if (idDistritoFederal != null) {
+					where = " where federal_id = ? ";
+					para.add(idDistritoFederal);
+					type.add(Types.NUMERIC);
+				}
+		
+				if (idDistritoLocal != null) {
+		
+					if (para.size() > 0) {
+						where = where.concat(" and ac.local_id = ? ");
+					} else {
+						where = " where ac.local_id = ? ";
+					}
+					para.add(idDistritoLocal);
+					type.add(Types.NUMERIC);
+				}
+		
+				if (idMunicipal != null) {
+					if (para.size() > 0) {
+						where = where.concat(" and ac.municpio_id = ? ");
+					} else {
+						where = " where ac.municpio_id = ? ";
+					}
+					para.add(idMunicipal);
+					type.add(Types.NUMERIC);
+				}
+		
+				if (idRuta != null) {
+		
+					if (para.size() > 0) {
+						where = where.concat(" and aac.ruta = ? ");
+					} else {
+						where = " where aac.ruta = ? ";
+					}
+					para.add(idRuta);
+					type.add(Types.NUMERIC);
+				}
+		
+				if (idCasilla != null) {
+		
+					if (para.size() > 0) {
+						where = where.concat(" and aac.id_casilla = ? ");
+					} else {
+						where = " where aac.id_casilla = ? ";
+					}
+					para.add(idCasilla);
+					type.add(Types.NUMERIC);
+				}
+		
+				Object[] parametros = new Object[para.size()];
+				int[] types = new int[para.size()];
+		
+				for (int i = 0; i < para.size(); i++) {
+					parametros[i] = para.get(i);
+					types[i] = type.get(i);
+				}
+		
+				try {
+					
+					sql = select.concat(where);
+		
+					return template.queryForObject(sql, parametros, types, new LongRowMapper());
+				} catch (EmptyResultDataAccessException e) {
+					return null;
+				}
+
+	}
+
+	@Override
+	public Long getCasillasInstaladas1Federal(Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal,
+			Long idRuta, Long idCasilla) {
+		
+		String select = "select count(*) from app_instalacion_casilla aic "
+				+ "inner join app_casilla ac "
+				+ "on aic.id_casilla = ac.id "
+				+ "inner join app_asignacion_casillas aac "
+				+ "on ac.federal_id = aac.distrito_federal_id "
+				+ "where hora_instalacion Between '07:00:00' And '07:30:00'";
+		
+		String sql = null;
+		String where = "";
+		List<Object> para = new ArrayList<Object>();
+		List<Integer> type = new ArrayList<Integer>();
+
+		if (idDistritoFederal != null) {
+			where = " and federal_id = ? ";
+			para.add(idDistritoFederal);
+			type.add(Types.NUMERIC);
+		}
+
+		if (idDistritoLocal != null) {
+
+			if (para.size() > 0) {
+				where = where.concat(" and ac.local_id = ? ");
+			} else {
+				where = " and ac.local_id = ? ";
+			}
+			para.add(idDistritoLocal);
+			type.add(Types.NUMERIC);
+		}
+
+		if (idMunicipal != null) {
+			if (para.size() > 0) {
+				where = where.concat(" and ac.municpio_id = ? ");
+			} else {
+				where = " and ac.municpio_id = ? ";
+			}
+			para.add(idMunicipal);
+			type.add(Types.NUMERIC);
+		}
+
+		if (idRuta != null) {
+
+			if (para.size() > 0) {
+				where = where.concat(" and aac.ruta = ? ");
+			} else {
+				where = " and aac.ruta = ? ";
+			}
+			para.add(idRuta);
+			type.add(Types.NUMERIC);
+		}
+
+		if (idCasilla != null) {
+
+			if (para.size() > 0) {
+				where = where.concat(" and aac.id_casilla = ? ");
+			} else {
+				where = " and aac.id_casilla = ? ";
+			}
+			para.add(idCasilla);
+			type.add(Types.NUMERIC);
+		}
+
+		Object[] parametros = new Object[para.size()];
+		int[] types = new int[para.size()];
+
+		for (int i = 0; i < para.size(); i++) {
+			parametros[i] = para.get(i);
+			types[i] = type.get(i);
+		}
+
+		try {
+			
+			sql = select.concat(where);
+
+			return template.queryForObject(sql, parametros, types, new LongRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+		
+	}
+
+	@Override
+	public Long getCasillasInstaladas2Federal(Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal,
+			Long idRuta, Long idCasilla) {
+		
+		String select = "select count(*) from app_instalacion_casilla aic "
+				+ "inner join app_casilla ac "
+				+ "on aic.id_casilla = ac.id "
+				+ "inner join app_asignacion_casillas aac "
+				+ "on ac.federal_id = aac.distrito_federal_id "
+				+ "where hora_instalacion Between '07:31:00' And '08:00:00'";
+		
+		String sql = null;
+		String where = "";
+		List<Object> para = new ArrayList<Object>();
+		List<Integer> type = new ArrayList<Integer>();
+
+		if (idDistritoFederal != null) {
+			where = " and federal_id = ? ";
+			para.add(idDistritoFederal);
+			type.add(Types.NUMERIC);
+		}
+
+		if (idDistritoLocal != null) {
+
+			if (para.size() > 0) {
+				where = where.concat(" and ac.local_id = ? ");
+			} else {
+				where = " and ac.local_id = ? ";
+			}
+			para.add(idDistritoLocal);
+			type.add(Types.NUMERIC);
+		}
+
+		if (idMunicipal != null) {
+			if (para.size() > 0) {
+				where = where.concat(" and ac.municpio_id = ? ");
+			} else {
+				where = " and ac.municpio_id = ? ";
+			}
+			para.add(idMunicipal);
+			type.add(Types.NUMERIC);
+		}
+
+		if (idRuta != null) {
+
+			if (para.size() > 0) {
+				where = where.concat(" and aac.ruta = ? ");
+			} else {
+				where = " and aac.ruta = ? ";
+			}
+			para.add(idRuta);
+			type.add(Types.NUMERIC);
+		}
+
+		if (idCasilla != null) {
+
+			if (para.size() > 0) {
+				where = where.concat(" and aac.id_casilla = ? ");
+			} else {
+				where = " and aac.id_casilla = ? ";
+			}
+			para.add(idCasilla);
+			type.add(Types.NUMERIC);
+		}
+
+		Object[] parametros = new Object[para.size()];
+		int[] types = new int[para.size()];
+
+		for (int i = 0; i < para.size(); i++) {
+			parametros[i] = para.get(i);
+			types[i] = type.get(i);
+		}
+
+		try {
+			
+			sql = select.concat(where);
+
+			return template.queryForObject(sql, parametros, types, new LongRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+
+	}
+
+	@Override
+	public Long getCasillasInstaladas3Federal(Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal,
+			Long idRuta, Long idCasilla) {
+		
+		String select = "select count(*) from app_instalacion_casilla aic "
+				+ "inner join app_casilla ac "
+				+ "on aic.id_casilla = ac.id "
+				+ "inner join app_asignacion_casillas aac "
+				+ "on ac.federal_id = aac.distrito_federal_id "
+				+ "where hora_instalacion Between '08:01:00' And '08:30:00'";
+		
+		String sql = null;
+		String where = "";
+		List<Object> para = new ArrayList<Object>();
+		List<Integer> type = new ArrayList<Integer>();
+
+		if (idDistritoFederal != null) {
+			where = " and federal_id = ? ";
+			para.add(idDistritoFederal);
+			type.add(Types.NUMERIC);
+		}
+
+		if (idDistritoLocal != null) {
+
+			if (para.size() > 0) {
+				where = where.concat(" and ac.local_id = ? ");
+			} else {
+				where = " and ac.local_id = ? ";
+			}
+			para.add(idDistritoLocal);
+			type.add(Types.NUMERIC);
+		}
+
+		if (idMunicipal != null) {
+			if (para.size() > 0) {
+				where = where.concat(" and ac.municpio_id = ? ");
+			} else {
+				where = " and ac.municpio_id = ? ";
+			}
+			para.add(idMunicipal);
+			type.add(Types.NUMERIC);
+		}
+
+		if (idRuta != null) {
+
+			if (para.size() > 0) {
+				where = where.concat(" and aac.ruta = ? ");
+			} else {
+				where = " and aac.ruta = ? ";
+			}
+			para.add(idRuta);
+			type.add(Types.NUMERIC);
+		}
+
+		if (idCasilla != null) {
+
+			if (para.size() > 0) {
+				where = where.concat(" and aac.id_casilla = ? ");
+			} else {
+				where = " and aac.id_casilla = ? ";
+			}
+			para.add(idCasilla);
+			type.add(Types.NUMERIC);
+		}
+
+		Object[] parametros = new Object[para.size()];
+		int[] types = new int[para.size()];
+
+		for (int i = 0; i < para.size(); i++) {
+			parametros[i] = para.get(i);
+			types[i] = type.get(i);
+		}
+
+		try {
+			
+			sql = select.concat(where);
+
+			return template.queryForObject(sql, parametros, types, new LongRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+
+	}
+
+	@Override
+	public Long getCasillasInstaladas4Federal(Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal,
+			Long idRuta, Long idCasilla) {
+		
+		String select = "select count(*) from app_instalacion_casilla aic "
+				+ "inner join app_casilla ac "
+				+ "on aic.id_casilla = ac.id "
+				+ "inner join app_asignacion_casillas aac "
+				+ "on ac.federal_id = aac.distrito_federal_id "
+				+ "where hora_instalacion Between '08:31:00' And '09:00:00'";
+		
+		String sql = null;
+		String where = "";
+		List<Object> para = new ArrayList<Object>();
+		List<Integer> type = new ArrayList<Integer>();
+
+		if (idDistritoFederal != null) {
+			where = " and federal_id = ? ";
+			para.add(idDistritoFederal);
+			type.add(Types.NUMERIC);
+		}
+
+		if (idDistritoLocal != null) {
+
+			if (para.size() > 0) {
+				where = where.concat(" and ac.local_id = ? ");
+			} else {
+				where = " and ac.local_id = ? ";
+			}
+			para.add(idDistritoLocal);
+			type.add(Types.NUMERIC);
+		}
+
+		if (idMunicipal != null) {
+			if (para.size() > 0) {
+				where = where.concat(" and ac.municpio_id = ? ");
+			} else {
+				where = " and ac.municpio_id = ? ";
+			}
+			para.add(idMunicipal);
+			type.add(Types.NUMERIC);
+		}
+
+		if (idRuta != null) {
+
+			if (para.size() > 0) {
+				where = where.concat(" and aac.ruta = ? ");
+			} else {
+				where = " and aac.ruta = ? ";
+			}
+			para.add(idRuta);
+			type.add(Types.NUMERIC);
+		}
+
+		if (idCasilla != null) {
+
+			if (para.size() > 0) {
+				where = where.concat(" and aac.id_casilla = ? ");
+			} else {
+				where = " and aac.id_casilla = ? ";
+			}
+			para.add(idCasilla);
+			type.add(Types.NUMERIC);
+		}
+
+		Object[] parametros = new Object[para.size()];
+		int[] types = new int[para.size()];
+
+		for (int i = 0; i < para.size(); i++) {
+			parametros[i] = para.get(i);
+			types[i] = type.get(i);
+		}
+
+		try {
+			
+			sql = select.concat(where);
+
+			return template.queryForObject(sql, parametros, types, new LongRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+
+	}
+
+	@Override
+	public Long getCasillasInstaladas5Federal(Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal,
+			Long idRuta, Long idCasilla) {
+		
+		String select = "select count(*) from app_instalacion_casilla aic "
+				+ "inner join app_casilla ac "
+				+ "on aic.id_casilla = ac.id "
+				+ "inner join app_asignacion_casillas aac "
+				+ "on ac.federal_id = aac.distrito_federal_id "
+				+ "where hora_instalacion Between '09:01:00' And '09:59:59'";
+		
+		String sql = null;
+		String where = "";
+		List<Object> para = new ArrayList<Object>();
+		List<Integer> type = new ArrayList<Integer>();
+
+		if (idDistritoFederal != null) {
+			where = " and federal_id = ? ";
+			para.add(idDistritoFederal);
+			type.add(Types.NUMERIC);
+		}
+
+		if (idDistritoLocal != null) {
+
+			if (para.size() > 0) {
+				where = where.concat(" and ac.local_id = ? ");
+			} else {
+				where = " and ac.local_id = ? ";
+			}
+			para.add(idDistritoLocal);
+			type.add(Types.NUMERIC);
+		}
+
+		if (idMunicipal != null) {
+			if (para.size() > 0) {
+				where = where.concat(" and ac.municpio_id = ? ");
+			} else {
+				where = " and ac.municpio_id = ? ";
+			}
+			para.add(idMunicipal);
+			type.add(Types.NUMERIC);
+		}
+
+		if (idRuta != null) {
+
+			if (para.size() > 0) {
+				where = where.concat(" and aac.ruta = ? ");
+			} else {
+				where = " and aac.ruta = ? ";
+			}
+			para.add(idRuta);
+			type.add(Types.NUMERIC);
+		}
+
+		if (idCasilla != null) {
+
+			if (para.size() > 0) {
+				where = where.concat(" and aac.id_casilla = ? ");
+			} else {
+				where = " and aac.id_casilla = ? ";
+			}
+			para.add(idCasilla);
+			type.add(Types.NUMERIC);
+		}
+
+		Object[] parametros = new Object[para.size()];
+		int[] types = new int[para.size()];
+
+		for (int i = 0; i < para.size(); i++) {
+			parametros[i] = para.get(i);
+			types[i] = type.get(i);
+		}
+
+		try {
+			
+			sql = select.concat(where);
+
+			return template.queryForObject(sql, parametros, types, new LongRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+
+	}
+
+	@Override
+	public Long getCasillasInstaladas6Federal(Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal,
+			Long idRuta, Long idCasilla) {
+		
+		String select = "select count(*) from app_instalacion_casilla aic "
+				+ "inner join app_casilla ac "
+				+ "on aic.id_casilla = ac.id "
+				+ "inner join app_asignacion_casillas aac "
+				+ "on ac.federal_id = aac.distrito_federal_id "
+				+ "where hora_instalacion Between '10:00:00' And '18:00:00'";
+		
+		String sql = null;
+		String where = "";
+		List<Object> para = new ArrayList<Object>();
+		List<Integer> type = new ArrayList<Integer>();
+
+		if (idDistritoFederal != null) {
+			where = " and federal_id = ? ";
+			para.add(idDistritoFederal);
+			type.add(Types.NUMERIC);
+		}
+
+		if (idDistritoLocal != null) {
+
+			if (para.size() > 0) {
+				where = where.concat(" and ac.local_id = ? ");
+			} else {
+				where = " and ac.local_id = ? ";
+			}
+			para.add(idDistritoLocal);
+			type.add(Types.NUMERIC);
+		}
+
+		if (idMunicipal != null) {
+			if (para.size() > 0) {
+				where = where.concat(" and ac.municpio_id = ? ");
+			} else {
+				where = " and ac.municpio_id = ? ";
+			}
+			para.add(idMunicipal);
+			type.add(Types.NUMERIC);
+		}
+
+		if (idRuta != null) {
+
+			if (para.size() > 0) {
+				where = where.concat(" and aac.ruta = ? ");
+			} else {
+				where = " and aac.ruta = ? ";
+			}
+			para.add(idRuta);
+			type.add(Types.NUMERIC);
+		}
+
+		if (idCasilla != null) {
+
+			if (para.size() > 0) {
+				where = where.concat(" and aac.id_casilla = ? ");
+			} else {
+				where = " and aac.id_casilla = ? ";
+			}
+			para.add(idCasilla);
+			type.add(Types.NUMERIC);
+		}
+
+		Object[] parametros = new Object[para.size()];
+		int[] types = new int[para.size()];
+
+		for (int i = 0; i < para.size(); i++) {
+			parametros[i] = para.get(i);
+			types[i] = type.get(i);
+		}
+
+		try {
+			
+			sql = select.concat(where);
+
+			return template.queryForObject(sql, parametros, types, new LongRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+
+	}
+
+	@Override
+	public Long getTotalCasillasInstaladasFederal(Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal,
+			Long idRuta, Long idCasilla) {
+		
+		String select = "select count(*) from app_instalacion_casilla aic "
+				+ "				inner join app_casilla ac "
+				+ "				on aic.id_casilla = ac.id "
+				+ "inner join app_asignacion_casillas aac "
+				+ "on ac.federal_id = aac.distrito_federal_id ";
+		
+		String sql = null;
+		String where = "";
+		List<Object> para = new ArrayList<Object>();
+		List<Integer> type = new ArrayList<Integer>();
+
+		if (idDistritoFederal != null) {
+			where = " where federal_id = ? ";
+			para.add(idDistritoFederal);
+			type.add(Types.NUMERIC);
+		}
+
+		if (idDistritoLocal != null) {
+
+			if (para.size() > 0) {
+				where = where.concat(" and ac.local_id = ? ");
+			} else {
+				where = " where ac.local_id = ? ";
+			}
+			para.add(idDistritoLocal);
+			type.add(Types.NUMERIC);
+		}
+
+		if (idMunicipal != null) {
+			if (para.size() > 0) {
+				where = where.concat(" and ac.municpio_id = ? ");
+			} else {
+				where = " where ac.municpio_id = ? ";
+			}
+			para.add(idMunicipal);
+			type.add(Types.NUMERIC);
+		}
+
+		if (idRuta != null) {
+
+			if (para.size() > 0) {
+				where = where.concat(" and aac.ruta = ? ");
+			} else {
+				where = " where aac.ruta = ? ";
+			}
+			para.add(idRuta);
+			type.add(Types.NUMERIC);
+		}
+
+		if (idCasilla != null) {
+
+			if (para.size() > 0) {
+				where = where.concat(" and aac.id_casilla = ? ");
+			} else {
+				where = " where aac.id_casilla = ? ";
+			}
+			para.add(idCasilla);
+			type.add(Types.NUMERIC);
+		}
+
+		Object[] parametros = new Object[para.size()];
+		int[] types = new int[para.size()];
+
+		for (int i = 0; i < para.size(); i++) {
+			parametros[i] = para.get(i);
+			types[i] = type.get(i);
+		}
+
+		try {
+
+			sql = select.concat(where);
+
+			return template.queryForObject(sql, parametros, types, new LongRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+
 }

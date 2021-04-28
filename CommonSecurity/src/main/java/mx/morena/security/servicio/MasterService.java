@@ -68,6 +68,14 @@ public class MasterService {
 	
 	protected static final String CSV_SEGUIMIENTOVOTO = "ReporteSeguimientoVoto.csv";
 	
+	//Reportes Instalacion Casilla
+	protected static final String CSV_INST_ESTATAL =  "ReporteInstalacionCasillaEstatal.csv";
+	protected static final String CSV_INST_FEDERAL =  "ReporteInstalacionCasillaFederal.csv";
+	protected static final String CSV_INST_LOCAL =  "ReporteInstalacionCasillaLocal.csv";
+	protected static final String CSV_INST_MUNICIPAL =  "ReporteInstalacionCasillaMunicipal.csv";
+	protected static final String CSV_INST_CRG = "ReporteInstalacionCasillaCrg.csv";
+	protected static final String CSV_INST_RG = "ReporteInstalacionCasillaRg.csv";
+	
 	protected static final String CSV_CAPACITACION_RG = "ReporteCapacitacionRg.csv";
 	protected static final String CSV_REPORTE_VOTACION = "ReporteVotacion.csv";
 	protected static final String CSV_ASISTENCIA_ESTATAL = "ReporteAsisenciaEstatal.csv";
