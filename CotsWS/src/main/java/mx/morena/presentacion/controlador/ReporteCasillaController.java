@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import mx.morena.negocio.dto.ReporteAsistenciaEstatalDTO;
+import mx.morena.negocio.dto.ReporteAsistenciaFederalDTO;
 import mx.morena.negocio.dto.ReporteVotacionDTO;
 import mx.morena.negocio.exception.CotException;
 import mx.morena.negocio.servicios.IReporteCasillaService;
@@ -60,6 +62,88 @@ public class ReporteCasillaController extends MasterController {
 			Long usuario = getUsuario(request);
 			long perfil = getPerfil(request);
 			reporteCasillaService.getReporteVotacionDownload(response, usuario, perfil, idReporte);
+
+		} catch (CotException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+		}
+	}
+	
+	
+	@GetMapping("/asistenciaEstatal")	
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	public List<ReporteAsistenciaEstatalDTO> reporteAsistenciaEstatal(HttpServletResponse response, HttpServletRequest request) throws IOException{ 
+		
+		try {
+			long usuario = getUsuario(request);
+			long perfil = getPerfil(request);
+			
+			return reporteCasillaService.getReporteAsistenciaEstatal(usuario, perfil );
+
+		} catch (CotException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+		}
+		return null;
+	}
+	
+	@GetMapping("/asistenciaEstatal/download")	
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	public void downloadReporteAsistenciaEstatal(HttpServletResponse response, HttpServletRequest request) throws IOException{ 
+		
+		try {
+			long usuario = getUsuario(request);
+			long perfil = getPerfil(request);
+			
+			reporteCasillaService.getReporteAsistenciaEstatalDownload(response, usuario, perfil );
+
+		} catch (CotException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+		}
+	}
+	
+	@GetMapping("/asistenciaFederal")	
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	public List<ReporteAsistenciaFederalDTO> reporteAsistenciaFederal(HttpServletResponse response, HttpServletRequest request,
+			@RequestParam(value = "idFederal", required = false) Long idFederal) throws IOException {
+		
+		try {
+			long usuario = getUsuario(request);
+			long perfil = getPerfil(request);
+			
+			return reporteCasillaService.getReporteAsistenciaDistrital(usuario, perfil, idFederal);
+
+		} catch (CotException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+		}
+		return null;
+	}
+
+	
+	@GetMapping("/asistenciaFederal/download")	
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	public void downloadReporteAsistenciaDistrital(HttpServletResponse response, HttpServletRequest request,
+			@RequestParam(value = "idFederal", required = false) Long idFederal) throws IOException { 
+		
+		try {
+			long usuario = getUsuario(request);
+			long perfil = getPerfil(request);
+			
+			reporteCasillaService.getReporteAsistenciaDistritalDownload(response, usuario, perfil, idFederal );
 
 		} catch (CotException e) {
 			e.printStackTrace();

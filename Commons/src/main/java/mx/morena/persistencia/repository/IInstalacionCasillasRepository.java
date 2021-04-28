@@ -12,4 +12,8 @@ public interface IInstalacionCasillasRepository {
 
 	List<InstalacionCasilla> getById(Long idCasilla);
 
+	Long getCountRgByDfAndAsistencia(Long idFederal, String SI);
+
+	Long getCountRcByDfAndAsistencia(Long idFederal, String SI);
+
 }

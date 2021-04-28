@@ -3,6 +3,8 @@ package mx.morena.persistencia.repository.impl;
 import java.sql.Types;
 import java.util.List;
 
+import java.sql.Types;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -54,6 +56,24 @@ public class InstalacionCasillasRepository implements IInstalacionCasillasReposi
 			return null;
 		}
 
+	}
+
+	@Override
+	public Long getCountRgByDfAndAsistencia(Long idFederal, String SI) {
+		String sql = "select count(*) from app_instalacion_casilla aic " 
+				+"inner join app_casilla ac "
+				+"on aic.id_casilla = ac.id " 
+				+"where ac.federal_id = ? and aic.llego_rg = ?";
+		return template.queryForObject(sql, new Object[] { idFederal, SI }, new int[] { Types.NUMERIC, Types.VARCHAR }, new LongRowMapper());
+	}
+
+	@Override
+	public Long getCountRcByDfAndAsistencia(Long idFederal, String SI) {
+		String sql = "select count(*) from app_instalacion_casilla aic " 
+				+"inner join app_casilla ac "
+				+"on aic.id_casilla = ac.id " 
+				+"where ac.federal_id = ? and aic.llego_rc = ?";
+		return template.queryForObject(sql, new Object[] { idFederal, SI }, new int[] { Types.NUMERIC, Types.VARCHAR }, new LongRowMapper());
 	}
 
 	
