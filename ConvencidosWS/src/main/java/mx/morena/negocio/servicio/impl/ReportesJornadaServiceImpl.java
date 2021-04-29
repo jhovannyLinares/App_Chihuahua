@@ -41,6 +41,7 @@ public class ReportesJornadaServiceImpl extends MasterService implements IReport
 		Usuario usuario = usuarioRepository.findById(idUsuario);
 		Long perfil = usuario.getPerfil();
 		Long idEstado = 0L;
+		Long idDistrito = 0L;
 		
 		if (idEntidad != null) {
 			idEstado = idEntidad;
@@ -117,6 +118,24 @@ public class ReportesJornadaServiceImpl extends MasterService implements IReport
 			
 			return reporteDto;
 			
+		} else if (perfil != PERFIL_RC && perfil != PERFIL_BRIGADISTA) {
+			List<ReporteCapacitacionEstatalDTO> reporteDto = new ArrayList<ReporteCapacitacionEstatalDTO>();
+			ReporteCapacitacionEstatalDTO dto = null;
+			
+			if (idDistritoFederal != null) {
+				idDistrito = idDistritoFederal;
+			} else {
+				idDistrito = usuario.getFederal();
+			}
+			
+			DistritoFederal distrito = distritoRepository.findById(idDistrito);
+			
+			dto = new ReporteCapacitacionEstatalDTO();
+			dto = calculosReporteCapEstatal(idEstado, idDistrito, distrito.getCabeceraFederal());
+
+			reporteDto.add(dto);
+			
+			return reporteDto;
 		} else {
 			throw new JornadaException("No cuenta con los permisos suficientes para consultar el reporte", 401);
 		}
@@ -137,17 +156,19 @@ public class ReportesJornadaServiceImpl extends MasterService implements IReport
 		Long nombramientoRg = capacitacionRepository.getNombramientoByDfAndRepresentante(idEstado, idDf, PERFIL_RG, true);
 		Long capacitacionRc = capacitacionRepository.getCapacitacionByDfAndRepresentante(idEstado, idDf, PERFIL_RC, SI_TOMO_CAPACITACION);
 		Long nombramientoRc = capacitacionRepository.getNombramientoByDfAndRepresentante(idEstado, idDf, PERFIL_RC, true);
-
+		Long metaRg = 30L;
+		Long metaRc = 40L;
+		
 		dto.setNumero(idDf);
 		dto.setDistritoFederal(df);
-		dto.setMetaRG(30L);
+		dto.setMetaRG(metaRg);
 		dto.setAvanceCapacitacionRG(capacitacionRg);
 		double porcentajeCapRG = (dto.getAvanceCapacitacionRG() * 100.0) / dto.getMetaRG();
 		dto.setPorcentajeCapacitacionRG(dosDecimales(porcentajeCapRG).doubleValue());
 		dto.setAvanceEntregaNombramientoRG(nombramientoRg);
 		double porcentajeEntregaRG = (dto.getAvanceEntregaNombramientoRG() * 100.0) / dto.getMetaRG();
 		dto.setPorcentajeAvanceEntregaRG(dosDecimales(porcentajeEntregaRG).doubleValue());
-		dto.setMetaRC(40L);
+		dto.setMetaRC(metaRc);
 		dto.setAvanceCapacitacionRC(capacitacionRc);
 		double porcentajeCapRC = (dto.getAvanceCapacitacionRC() * 100.0) / dto.getMetaRC();
 		dto.setPorcentajeCapacitacionRC(dosDecimales(porcentajeCapRC).doubleValue());
@@ -159,15 +180,22 @@ public class ReportesJornadaServiceImpl extends MasterService implements IReport
 	}
 
 	@Override
-	public void getReporteCapEstatalDownload(HttpServletResponse response, Long idUsuario, Long idEntidad, Long idDistritoFederal) throws JornadaException, IOException {
-		setNameFile(response, CSV_CAPACITACION_NOMB_ESTATAL);
+	public void getReporteCapEstatalDownload(HttpServletResponse response, Long idUsuario, Long idEntidad, Long idDistritoFederal, Long perfil)
+														throws JornadaException, IOException {
+		if (perfil != PERFIL_RC && perfil != PERFIL_BRIGADISTA) {
+			
+			setNameFile(response, CSV_CAPACITACION_NOMB_ESTATAL);
+			
+			List<ReporteCapacitacionEstatalDTO> reporteDTOs = getReporteCapEstatal(idUsuario, idEntidad, idDistritoFederal);
 
-		List<ReporteCapacitacionEstatalDTO> reporteDTOs = getReporteCapEstatal(idUsuario, idEntidad, idDistritoFederal);
+			String[] header = { "numero", "distritoFederal", "metaRG", "avanceCapacitacionRG", "porcentajeCapacitacionRG", "avanceEntregaNombramientoRG",
+					"porcentajeAvanceEntregaRG", "metaRC", "avanceCapacitacionRC", "porcentajeCapacitacionRC", "avanceEntregaNombramientoRC", "porcentajeAvanceEntregaRC" };
 
-		String[] header = { "numero", "distritoFederal", "metaRG", "avanceCapacitacionRG", "porcentajeCapacitacionRG", "avanceEntregaNombramientoRG",
-				"porcentajeAvanceEntregaRG", "metaRC", "avanceCapacitacionRC", "porcentajeCapacitacionRC", "avanceEntregaNombramientoRC", "porcentajeAvanceEntregaRC" };
-
-		setWriterFile(response, reporteDTOs, header);
+			setWriterFile(response, reporteDTOs, header);
+		} else {
+			throw new JornadaException("No cuenta con los permisos suficientes para consultar el reporte", 401);
+		}
+		
 	}
 
 	@Override

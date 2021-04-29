@@ -59,7 +59,8 @@ public class ReportesJornadaController extends MasterController {
 								@RequestParam(value = "idFederal", required = false) Long idFederal) throws IOException {
 		try {
 			Long idUsuario = getUsuario(request);
-			reportesJornadaService.getReporteCapEstatalDownload(response, idUsuario, idEntidad, idFederal);
+			Long perfil = getPerfil(request);
+			reportesJornadaService.getReporteCapEstatalDownload(response, idUsuario, idEntidad, idFederal, perfil);
 		} catch (JornadaException e) {
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
