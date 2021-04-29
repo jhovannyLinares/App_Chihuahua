@@ -150,64 +150,64 @@ public class CasillaRepository implements ICasillaRepository {
 		
 	}
 
-	@Override
-	public String getTipoCasillasById(Long casillaId) {
-		String sql = "select tipo_casilla from app_casilla ac where id = ?";
-		try {
-			return template.queryForObject(sql, new Object[] { casillaId }, new int[] { Types.NUMERIC },
-					new StringRowMapper());
-		}catch (EmptyResultDataAccessException e) {
-			return null;
-		}
-	}
-
-	@Override
-	public List<Casilla> getCasillasAsignadas(long idEstado, long idDistrito, long idMunicipio, long perfilUsuario) {
-		String select = "select * from app_casilla  ";
-		String order = " and is_asignada = true order by id asc ";
-
-		String sql = null;
-		String where = "";
-		List<Object> para = new ArrayList<Object>();
-		List<Integer> type = new ArrayList<Integer>();
-
-		if (perfilUsuario == 1) {
-			where = "where entidad_id = ?";
-			para.add(idEstado);
-			type.add(Types.NUMERIC);
-		}
-		if (perfilUsuario == 2) {
-			where = " where entidad_id = ? and federal_id = ? ";
-			para.add(idEstado);
-			type.add(Types.NUMERIC);
-			para.add(idDistrito);
-			type.add(Types.NUMERIC);
-		}
-		if (perfilUsuario == 4) {
-			where = " where entidad_id = ? and municipio_id = ? ";
-			para.add(idEstado);
-			type.add(Types.NUMERIC);
-			para.add(idMunicipio);
-			type.add(Types.NUMERIC);
-		}
-
-		Object[] parametros = new Object[para.size()];
-		int[] types = new int[para.size()];
-
-		for (int i = 0; i < para.size(); i++) {
-			parametros[i] = para.get(i);
-			types[i] = type.get(i);
-		}
-
-		try {
-			sql = select.concat(where);
-			sql = sql.concat(order);
-			System.out.println("***** " + sql);
-			return template.queryForObject(sql, parametros, types, new CasillasRowMapper());
-		} catch (EmptyResultDataAccessException e) {
-			return null;
-		}
-	}
+//	@Override
+//	public String getTipoCasillasById(Long casillaId) {
+//		String sql = "select tipo_casilla from app_casilla ac where id = ?";
+//		try {
+//			return template.queryForObject(sql, new Object[] { casillaId }, new int[] { Types.NUMERIC },
+//					new StringRowMapper());
+//		}catch (EmptyResultDataAccessException e) {
+//			return null;
+//		}
+//	}
+//
+//	@Override
+//	public List<Casilla> getCasillasAsignadas(long idEstado, long idDistrito, long idMunicipio, long perfilUsuario) {
+//		String select = "select * from app_casilla  ";
+//		String order = " and is_asignada = true order by id asc ";
+//
+//		String sql = null;
+//		String where = "";
+//		List<Object> para = new ArrayList<Object>();
+//		List<Integer> type = new ArrayList<Integer>(); 
+//
+//		if (perfilUsuario == 1) {
+//			where = "where entidad_id = ?";
+//			para.add(idEstado);
+//			type.add(Types.NUMERIC);
+//		}
+//		if (perfilUsuario == 2) {
+//			where = " where entidad_id = ? and federal_id = ? ";
+//			para.add(idEstado);
+//			type.add(Types.NUMERIC);
+//			para.add(idDistrito);
+//			type.add(Types.NUMERIC);
+//		}
+//		if (perfilUsuario == 4) {
+//			where = " where entidad_id = ? and municipio_id = ? ";
+//			para.add(idEstado);
+//			type.add(Types.NUMERIC);
+//			para.add(idMunicipio);
+//			type.add(Types.NUMERIC);
+//		}
+//
+//		Object[] parametros = new Object[para.size()];
+//		int[] types = new int[para.size()];
+//
+//		for (int i = 0; i < para.size(); i++) {
+//			parametros[i] = para.get(i);
+//			types[i] = type.get(i);
+//		}
+//
+//		try {
+//			sql = select.concat(where);
+//			sql = sql.concat(order);
+//			System.out.println("***** " + sql);
+//			return template.queryForObject(sql, parametros, types, new CasillasRowMapper());
+//		} catch (EmptyResultDataAccessException e) {
+//			return null;
+//		}
+//	}
 
 	@Override
 	public List<Casilla> getLocalesByFederal(Long federal) {
