@@ -18,6 +18,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import mx.morena.negocio.dto.ReporteAsistenciaEstatalDTO;
 import mx.morena.negocio.dto.ReporteAsistenciaFederalDTO;
 import mx.morena.negocio.dto.ReporteAsistenciaLocalDTO;
+import mx.morena.negocio.dto.ReporteResultadosDTO;
 import mx.morena.negocio.dto.ReporteVotacionDTO;
 import mx.morena.negocio.exception.CotException;
 import mx.morena.negocio.servicios.IReporteCasillaService;
@@ -178,5 +179,46 @@ public class ReporteCasillaController extends MasterController {
 //		}
 //		return null;
 //	}
+	
+	@GetMapping("/resultados")
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	private List<ReporteResultadosDTO> getReporteResultados(HttpServletResponse response, HttpServletRequest request,
+			@RequestParam(value = "idReporte", required = false) Long idReporte) throws IOException {
+		try {
+			
+			Long usuario = getUsuario(request);
+			Long perfil = getPerfil(request);
+			
+			return reporteCasillaService.getReporteResultados(usuario, perfil, idReporte);
+			
+		} catch (CotException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+			return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			return null;
+		}
+			}
+	
+	@GetMapping("/resultados/download")	
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	public void downloadResultados(HttpServletResponse response, HttpServletRequest request,
+			@RequestParam(value = "idReporte", required = false) Long idReporte) throws IOException{ 
+		
+		try {
+			Long usuario = getUsuario(request);
+			long perfil = getPerfil(request);
+			reporteCasillaService.getReporteResultadosDownload(response, usuario, perfil, idReporte);
+
+		} catch (CotException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+		}
+	}
 
 }

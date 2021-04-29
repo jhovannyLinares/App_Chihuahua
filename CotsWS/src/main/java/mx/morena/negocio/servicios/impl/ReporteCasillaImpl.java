@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import mx.morena.negocio.dto.ReporteAsistenciaEstatalDTO;
 import mx.morena.negocio.dto.ReporteAsistenciaFederalDTO;
 import mx.morena.negocio.dto.ReporteAsistenciaLocalDTO;
+import mx.morena.negocio.dto.ReporteResultadosDTO;
 import mx.morena.negocio.dto.ReporteVotacionDTO;
 import mx.morena.negocio.exception.CotException;
 import mx.morena.negocio.servicios.IReporteCasillaService;
@@ -409,5 +410,140 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 		lstDto.add(dto);
 
 		return lstDto;
+	}
+	
+
+	@Override
+	public List<ReporteResultadosDTO> getReporteResultados(Long usuario, Long perfil, Long idReporte)
+			throws CotException, IOException {
+
+		if (perfil == PERFIL_RG) {
+
+			List<ReporteResultadosDTO> listaDTO = new ArrayList<>();
+			List<DistritoFederal> listDF = null;
+			ReporteResultadosDTO dto = null;
+			ReporteResultadosDTO total = new ReporteResultadosDTO();
+
+			listDF = distritoFederalRepository.findAll();
+			System.out.print("Tamaño de lista: " + listDF.size());
+
+			total.setIdFederal(1L);
+			total.setListaNominal(0L);
+			total.setPartido1(0L);
+			total.setPorcentajePartido1(0.0);
+			total.setPartido2(0L);
+			total.setPorcentajePartido2(0.0);
+			total.setPartido3(0L);
+			total.setPorcentajePartido3(0.0);
+			total.setPartido4(0L);
+			total.setPorcentajePartido4(0.0);
+			total.setPartido5(0L);
+			total.setPorcentajePartido5(0.0);
+			total.setPartido6(0L);
+			total.setPorcentajePartido6(0.0);
+			total.setNulos(0L);
+			total.setPorcentajeNulos(0.0);
+			total.setCrg(0L);
+			total.setPorcentajeCrg(0.0);
+			total.setTotal(0L);
+			total.setPorcentajeTotal(0.0);
+			total.setCandidato1(0L);
+			total.setPorcentajeCandidato1(0.0);
+			total.setCandidato2(0L);
+			total.setPorcentajeCandidato2(0.0);
+
+			for (DistritoFederal items : listDF) {
+				dto = new ReporteResultadosDTO();
+
+				dto.setIdFederal(items.getId());
+				dto.setListaNominal(20L);
+				dto.setPartido1(10L);
+				dto.setPorcentajePartido1(0.0);
+				dto.setPartido2(20L);
+				dto.setPorcentajePartido2(0.0);
+				dto.setPartido3(20L);
+				dto.setPorcentajePartido3(0.0);
+				dto.setPartido4(20L);
+				dto.setPorcentajePartido4(0.0);
+				dto.setPartido5(20L);
+				dto.setPorcentajePartido5(0.0);
+				dto.setPartido6(20L);
+				dto.setPorcentajePartido6(0.0);
+				dto.setNulos(50L);
+				dto.setPorcentajeNulos(0.0);
+				dto.setCrg(20L);
+				dto.setPorcentajeCrg(0.0);
+				dto.setTotal(100L);
+				dto.setPorcentajeTotal(0.0);
+				dto.setCandidato1(500L);
+				dto.setPorcentajeCandidato1(0.0);
+				dto.setCandidato2(454L);
+				dto.setPorcentajeCandidato2(0.0);
+
+				listaDTO.add(dto);
+				
+				total.setIdFederal(null);
+				total.setListaNominal(total.getListaNominal() + dto.getListaNominal());
+				total.setPartido1(total.getPartido1() + dto.getPartido1());
+				total.setPorcentajePartido1(total.getPorcentajePartido1() + dto.getPorcentajePartido1());
+				total.setPartido2(total.getPartido2() +  dto.getPartido2());
+				total.setPorcentajePartido2(total.getPorcentajePartido2() + dto.getPorcentajePartido2());
+				total.setPartido3(total.getPartido3() + dto.getPartido3());
+				total.setPorcentajePartido3(total.getPorcentajePartido3() + dto.getPorcentajePartido3());
+				total.setPartido4(total.getPartido4() + dto.getPartido4());
+				total.setPorcentajePartido4(total.getPorcentajePartido4() + dto.getPorcentajePartido4());
+				total.setPartido5(total.getPartido5() + dto.getPartido5());
+				total.setPorcentajePartido5(total.getPorcentajePartido5() +  dto.getPorcentajePartido5());
+				total.setPartido6(total.getPartido6() + dto.getPartido6());
+				total.setPorcentajePartido6(total.getPorcentajePartido6() +  dto.getPorcentajePartido6());
+				total.setNulos(total.getNulos() + dto.getNulos());
+				total.setPorcentajeNulos(total.getPorcentajeNulos() + dto.getPorcentajeNulos());
+				total.setCrg(total.getCrg() +  dto.getCrg());
+				total.setPorcentajeCrg(total.getPorcentajeCrg() +  dto.getPorcentajeCrg());
+				total.setTotal(total.getTotal() + dto.getTotal());
+				total.setPorcentajeTotal(total.getPorcentajeTotal() +  dto.getPorcentajeTotal());
+				total.setCandidato1(total.getCandidato1() + dto.getCandidato1());
+				total.setPorcentajeCandidato1(total.getCandidato1() + dto.getPorcentajeCandidato1());
+				total.setCandidato2(total.getCandidato2() + dto.getCandidato2());
+				total.setPorcentajeCandidato2(total.getPorcentajeCandidato2() + dto.getPorcentajeCandidato2());
+				
+				
+
+			}
+			
+			listaDTO.add(total);
+
+			return listaDTO;
+
+		} else {
+			throw new CotException("No cuenta con los permisos suficientes para consultar el reporte", 401);
+		}
+	}
+
+	@Override
+	public void getReporteResultadosDownload(HttpServletResponse response, Long usuario, Long perfil, Long idReporte)
+			throws CotException, IOException {
+
+		if (perfil == PERFIL_RG) {
+			if (idReporte >= 1 && idReporte <= 5) {
+
+				setNameFile(response, CSV_REPORTE_RESULTADOS);
+
+				List<ReporteResultadosDTO> reporteDTOs = getReporteResultados(usuario, perfil, idReporte);
+
+				String[] header = { "idFederal", "listaNominal", "partido1", "porcentajePartido1", "partido2",
+						"porcentajePartido2", "partido3", "porcentajePartido3", "partido4", "porcentajePartido4",
+						"partido5", "porcentajePartido5", "partido6", "porcentajePartido6", "nulos", "porcentajeNulos",
+						"crg", "porcentajeCrg", "total", "porcentajeTotal", "candidato1", "porcentajeCandidato1",
+						"candidato2", "porcentajeCandidato2" };
+
+				setWriterFile(response, reporteDTOs, header);
+			} else {
+				throw new CotException("No existe el id del reporte a consultar", 404);
+			}
+		} else {
+			throw new CotException("No cuenta con los permisos suficientes para consultar el reporte", 401);
+		}
+
 	}
 }
