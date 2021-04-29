@@ -13,4 +13,6 @@ public interface IMunicipioRepository {
 	List<Municipio> getByFederal(Long idFederal);
 	
 	List<Municipio> getAll();
+	
+	List<Municipio> getByEntidad(Long idEntidad);
 }
