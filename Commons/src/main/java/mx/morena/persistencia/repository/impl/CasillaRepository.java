@@ -1,6 +1,7 @@
 package mx.morena.persistencia.repository.impl;
 
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +13,11 @@ import mx.morena.persistencia.entidad.AsignacionCasillas;
 import mx.morena.persistencia.entidad.Casilla;
 import mx.morena.persistencia.repository.ICasillaRepository;
 import mx.morena.persistencia.rowmapper.AsignacionCasillasRowMapper;
+import mx.morena.persistencia.rowmapper.CasillasLocalesByFederalRowMapper;
 import mx.morena.persistencia.rowmapper.CasillasRowMapper;
 import mx.morena.persistencia.rowmapper.CountCasillasRowMapper;
+import mx.morena.persistencia.rowmapper.DistritoLocalGroupRowMapper;
+import mx.morena.persistencia.rowmapper.StringRowMapper;
 
 @Repository
 public class CasillaRepository implements ICasillaRepository {
@@ -144,6 +148,82 @@ public class CasillaRepository implements ICasillaRepository {
 
 		return template.queryForObject(sql,new Object[] { idCasilla },  new int[] { Types.NUMERIC }, new CasillasRowMapper());
 		
+	}
+
+	@Override
+	public String getTipoCasillasById(Long casillaId) {
+		String sql = "select tipo_casilla from app_casilla ac where id = ?";
+		try {
+			return template.queryForObject(sql, new Object[] { casillaId }, new int[] { Types.NUMERIC },
+					new StringRowMapper());
+		}catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+
+	@Override
+	public List<Casilla> getCasillasAsignadas(long idEstado, long idDistrito, long idMunicipio, long perfilUsuario) {
+		String select = "select * from app_casilla  ";
+		String order = " and is_asignada = true order by id asc ";
+
+		String sql = null;
+		String where = "";
+		List<Object> para = new ArrayList<Object>();
+		List<Integer> type = new ArrayList<Integer>();
+
+		if (perfilUsuario == 1) {
+			where = "where entidad_id = ?";
+			para.add(idEstado);
+			type.add(Types.NUMERIC);
+		}
+		if (perfilUsuario == 2) {
+			where = " where entidad_id = ? and federal_id = ? ";
+			para.add(idEstado);
+			type.add(Types.NUMERIC);
+			para.add(idDistrito);
+			type.add(Types.NUMERIC);
+		}
+		if (perfilUsuario == 4) {
+			where = " where entidad_id = ? and municipio_id = ? ";
+			para.add(idEstado);
+			type.add(Types.NUMERIC);
+			para.add(idMunicipio);
+			type.add(Types.NUMERIC);
+		}
+
+		Object[] parametros = new Object[para.size()];
+		int[] types = new int[para.size()];
+
+		for (int i = 0; i < para.size(); i++) {
+			parametros[i] = para.get(i);
+			types[i] = type.get(i);
+		}
+
+		try {
+			sql = select.concat(where);
+			sql = sql.concat(order);
+			System.out.println("***** " + sql);
+			return template.queryForObject(sql, parametros, types, new CasillasRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+
+	@Override
+	public List<Casilla> getLocalesByFederal(Long federal) {
+		String sql = "select federal_id, local_id from app_casilla ac where  federal_id  = ? group by local_id, federal_id order by local_id asc ";
+		return template.queryForObject(sql,new Object[] { federal },  new int[] { Types.NUMERIC }, new CasillasLocalesByFederalRowMapper());
+	}
+
+	@Override
+	public List<Casilla> getAllDistritosLocales() {
+		String sql = "select local_id from app_casilla ac group by local_id order by local_id asc ";
+		try {
+		return template.queryForObject(sql, new DistritoLocalGroupRowMapper());
+		}catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	
 	}
 
 }

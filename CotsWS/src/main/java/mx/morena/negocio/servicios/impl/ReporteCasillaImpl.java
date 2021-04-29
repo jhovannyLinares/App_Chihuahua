@@ -13,11 +13,14 @@ import org.springframework.stereotype.Service;
 
 import mx.morena.negocio.dto.ReporteAsistenciaEstatalDTO;
 import mx.morena.negocio.dto.ReporteAsistenciaFederalDTO;
+import mx.morena.negocio.dto.ReporteAsistenciaLocalDTO;
 import mx.morena.negocio.dto.ReporteVotacionDTO;
 import mx.morena.negocio.exception.CotException;
 import mx.morena.negocio.servicios.IReporteCasillaService;
+import mx.morena.persistencia.entidad.Casilla;
 import mx.morena.persistencia.entidad.DistritoFederal;
 import mx.morena.persistencia.entidad.Usuario;
+import mx.morena.persistencia.repository.ICasillaRepository;
 import mx.morena.persistencia.repository.IDistritoFederalRepository;
 import mx.morena.persistencia.repository.IInstalacionCasillasRepository;
 import mx.morena.persistencia.repository.IReporteCasillasRepository;
@@ -38,6 +41,9 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 	
 	@Autowired
 	private IUsuarioRepository usuarioRepository;
+	
+	@Autowired
+	private ICasillaRepository casillasRepository;
 	
 	private String once = "11:00:00";
 	
@@ -155,12 +161,13 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 	}
 
 	@Override
-	public List<ReporteAsistenciaEstatalDTO> getReporteAsistenciaEstatal(Long usuario, Long perfil)
+	public List<ReporteAsistenciaEstatalDTO> getReporteAsistenciaEstatal(Long usuario, Long perfil, Long idFederal)
 			throws CotException, IOException {
 		if (perfil == PERFIL_ESTATAL) {
 
 			List<DistritoFederal> lstSeccion = null;
 			List<ReporteAsistenciaEstatalDTO> lstDto = new ArrayList<ReporteAsistenciaEstatalDTO>();
+			List<ReporteAsistenciaEstatalDTO> lstDtoDf = null;
 			ReporteAsistenciaEstatalDTO dto = null;
 			ReporteAsistenciaEstatalDTO total = new ReporteAsistenciaEstatalDTO();
 			total.setIdFederal(null);
@@ -171,82 +178,91 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 			total.setRgPorcentaje(0.0);
 			total.setRcPorcentaje(0.0);
 
-			lstSeccion = distritoFederalRepository.findAll();
+			if (idFederal == null) {
+				lstSeccion = distritoFederalRepository.findAll();
+				for (DistritoFederal df : lstSeccion) {
 
-			for (DistritoFederal df : lstSeccion) {
-				dto = new ReporteAsistenciaEstatalDTO();
+					dto = getAsistenciaEstatal(df.getId());
+					lstDto.add(dto);
+					
+					total.setRgMeta(total.getRgMeta() + dto.getRgMeta());
+					total.setRcMeta(total.getRcMeta() + dto.getRcMeta());
+					total.setRgAsistencia(total.getRgAsistencia() + dto.getRgAsistencia());
+					total.setRcAsistencia(total.getRcAsistencia() + dto.getRcAsistencia());
 
-				Long rgMeta;
-				Long rcMeta;
-				Long rgAsistencia = instalacionCasillaRepository.getCountRgByDfAndAsistencia(df.getId(), SI);
-				Long rcAsistencia = instalacionCasillaRepository.getCountRcByDfAndAsistencia(df.getId(), SI);
+				}
+				
+				total.setRgPorcentaje(dosDecimales((total.getRgAsistencia() * 100.0) / total.getRgMeta()).doubleValue());
+				total.setRcPorcentaje(dosDecimales((total.getRcAsistencia() * 100.0) / total.getRcMeta()).doubleValue());
+				
+				lstDto.add(total);
 
-				dto.setIdFederal(df.getId());
-				dto.setRgMeta(100L);
-				dto.setRcMeta(100L);
-				dto.setRgAsistencia(rgAsistencia);
-				dto.setRcAsistencia(rcAsistencia);
-				dto.setRgPorcentaje(dosDecimales((dto.getRgAsistencia() * 100.0) / dto.getRgMeta()).doubleValue());
-				dto.setRcPorcentaje(dosDecimales((dto.getRcAsistencia() * 100.0) / dto.getRcMeta()).doubleValue());
+				return lstDto;
 
+			} else {
+
+				dto = getAsistenciaEstatal(idFederal);
 				lstDto.add(dto);
-
-				total.setRgMeta(total.getRgMeta() + dto.getRgMeta());
-				total.setRcMeta(total.getRcMeta() + dto.getRcMeta());
-				total.setRgAsistencia(total.getRgAsistencia() + dto.getRgAsistencia());
-				total.setRcAsistencia(total.getRcAsistencia() + dto.getRcAsistencia());
 			}
 
-			lstDto.add(total);
 			return lstDto;
 
 		} else {
 			throw new CotException("No cuenta con los permisos suficientes para consultar el reporte", 401);
 		}
-
 	}
 
 	@Override
-	public void getReporteAsistenciaEstatalDownload(HttpServletResponse response, Long usuario, Long perfil)
+	public void getReporteAsistenciaEstatalDownload(HttpServletResponse response, Long usuario, Long perfil, Long idFederal)
 			throws CotException, IOException {
-
-		if (perfil == PERFIL_ESTATAL) {
 
 			setNameFile(response, CSV_ASISTENCIA_ESTATAL);
 
-			List<ReporteAsistenciaEstatalDTO> reporteDTOs = getReporteAsistenciaEstatal(usuario, perfil);
+			List<ReporteAsistenciaEstatalDTO> reporteDTOs = getReporteAsistenciaEstatal(usuario, perfil, idFederal);
 
-			String[] header = { "idFederal", "rgMeta", "rcMeta", "rgAsistencia", "rcAsistencia", "rgPorcentaje",
+			String[] header = { "idFederal", "rgMeta", "rcMeta", "rgAsistencia", "rgPorcentaje", "rcAsistencia", 
 					"rcPorcentaje" };
 
 			setWriterFile(response, reporteDTOs, header);
-		} else {
-			throw new CotException("No cuenta con los permisos suficientes para consultar el reporte", 401);
-		}
+	}
+	
+	public ReporteAsistenciaEstatalDTO getAsistenciaEstatal(Long federal) {
+		List<ReporteAsistenciaEstatalDTO> lstDto = new ArrayList<>();
+		ReporteAsistenciaEstatalDTO dto = new ReporteAsistenciaEstatalDTO();
+
+		dto = new ReporteAsistenciaEstatalDTO();
+
+		Long rgMeta;
+		Long rcMeta;
+		Long rgAsistencia = instalacionCasillaRepository.getCountRgByDfAndAsistencia(federal, SI);
+		Long rcAsistencia = instalacionCasillaRepository.getCountRcByDfAndAsistencia(federal, SI);
+
+		dto.setIdFederal(federal);
+		dto.setRgMeta(100L);
+		dto.setRcMeta(100L);
+		dto.setRgAsistencia(rgAsistencia);
+		dto.setRcAsistencia(rcAsistencia);
+		dto.setRgPorcentaje(dosDecimales((dto.getRgAsistencia() * 100.0) / dto.getRgMeta()).doubleValue());
+		dto.setRcPorcentaje(dosDecimales((dto.getRcAsistencia() * 100.0) / dto.getRcMeta()).doubleValue());
+
+		lstDto.add(dto);
+
+		return dto;
 	}
 
 	@Override
-	public List<ReporteAsistenciaFederalDTO> getReporteAsistenciaDistrital(Long usuario, Long perfil, Long idFederal)
+	public List<ReporteAsistenciaFederalDTO> getReporteAsistenciaDistrital(Long usuario, Long perfil)
 			throws CotException, IOException {
 
-		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL) {
+		if (perfil == PERFIL_FEDERAL) {
 
 			List<ReporteAsistenciaFederalDTO> lstDto = new ArrayList<ReporteAsistenciaFederalDTO>();
 			ReporteAsistenciaFederalDTO dto = new ReporteAsistenciaFederalDTO();
 
 			Long distrito = 0L;
 
-			if (perfil == PERFIL_FEDERAL) {
-				Usuario usr = usuarioRepository.findById(usuario);
-				distrito = usr.getFederal();
-			}
-			if (perfil == PERFIL_ESTATAL) {
-				if (idFederal != null && idFederal != 0) {
-					distrito = idFederal;
-				} else {
-					throw new CotException("Debe de ingresar un distrito federal.", 400);
-				}
-			}
+			Usuario usr = usuarioRepository.findById(usuario);
+			distrito = usr.getFederal();
 
 			Long rgMeta = 0L;
 			Long rcMeta = 0L;
@@ -272,19 +288,126 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 	}
 
 	@Override
-	public void getReporteAsistenciaDistritalDownload(HttpServletResponse response, Long usuario, Long perfil,
-			Long idFederal) throws CotException, IOException {
+	public void getReporteAsistenciaDistritalDownload(HttpServletResponse response, Long usuario, Long perfil) throws CotException, IOException {
 
-					setNameFile(response, CSV_ASISTENCIA_DISTRITAL);
+		setNameFile(response, CSV_ASISTENCIA_DISTRITAL);
 
-					List<ReporteAsistenciaFederalDTO> reporteDTOs = getReporteAsistenciaDistrital(usuario, perfil,
-							idFederal);
+		List<ReporteAsistenciaFederalDTO> reporteDTOs = getReporteAsistenciaDistrital(usuario, perfil);
 
-					String[] header = { "idFederal", "rgMeta", "rcMeta", "rgAsistencia", "rcAsistencia", "rgPorcentaje",
-							"rcPorcentaje" };
+		String[] header = { "idFederal", "rgMeta", "rcMeta", "rgAsistencia", "rcAsistencia", "rgPorcentaje",
+				"rcPorcentaje" };
 
-					setWriterFile(response, reporteDTOs, header);
+		setWriterFile(response, reporteDTOs, header);
 
-				
+	}
+
+	@Override
+	public List<ReporteAsistenciaLocalDTO> getReporteAsistenciaLocal(Long usuario, Long perfil, Long idFederal,
+			Long idLocal) throws CotException, IOException {
+
+		boolean estFed = perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL;
+
+		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL || perfil == PERFIL_LOCAL) {
+
+			List<ReporteAsistenciaLocalDTO> lstDto = new ArrayList<>();
+			List<ReporteAsistenciaLocalDTO> lstDtoForLocales = null;
+			List<Casilla> lstCasilla = null;
+			ReporteAsistenciaLocalDTO total = new ReporteAsistenciaLocalDTO();
+
+			Long local = 0L;
+			Long federal = 0L;
+			Long tipo = 0L;
+
+			total.setIdLocal(null);
+			total.setRgMeta(0L);
+			total.setRcMeta(0L);
+			total.setRgAsistencia(0L);
+			total.setRcAsistencia(0L);
+			total.setRgPorcentaje(0.0);
+			total.setRcPorcentaje(0.0);
+			Long rgMeta = 0L;
+			Long rcMeta = 0L;
+			Usuario usr = usuarioRepository.findById(usuario);
+
+			if (perfil == PERFIL_LOCAL) {
+				local = usr.getLocalidad();
+				tipo = 1L;
+				lstDto = getAsistenciaLocales(local, federal, tipo);
+			}
+
+			if (perfil == PERFIL_FEDERAL) {
+				tipo = 2L;
+				if (idLocal != null) {
+					federal = usr.getFederal();
+					local = idLocal;
+					lstDto = getAsistenciaLocales(local, federal, tipo);
+				} else {
+					federal = usr.getFederal();
+					lstCasilla = casillasRepository.getLocalesByFederal(usr.getFederal());
+					System.out.println("********* " + lstCasilla.size());
+					
+					for (Casilla casilla : lstCasilla) {
+						lstDtoForLocales = getAsistenciaLocales(casilla.getLocal(), federal, tipo);
+						lstDto.addAll(lstDtoForLocales);
+					}
+					
+					System.out.println("Lista for " + lstDto.size());
+					return lstDto;
+				}
+			}
+			
+			if (perfil == PERFIL_ESTATAL) {
+//				tipo = 3L;
+				if (idFederal == null && idLocal == null) {
+					tipo = 1L;
+					lstCasilla = casillasRepository.getAllDistritosLocales();
+					System.out.println("**** " + lstCasilla.size());
+					for (Casilla casilla : lstCasilla) {
+						lstDtoForLocales = getAsistenciaLocales(casilla.getLocal(), federal, tipo);
+						lstDto.addAll(lstDtoForLocales);
+					}
+					return lstDto;
+				}
+			}
+
+//			if (perfil == PERFIL_ESTATAL) {
+//				if (idFederal != null && idLocal != null) {
+//					federal = idFederal;
+//					local = idLocal;
+//					tipo = 3L;
+//				} else {
+//					throw new CotException("Debe de ingresar la informacion correspondiente.", 400);
+//				}
+//			}
+
+//			lstDto = getAsistenciaLocales(local, federal, tipo, dto);
+			System.out.println("Lista return " + lstDto.size());
+			return lstDto;
+			
+		} else {
+			throw new CotException("No cuenta con los permisos suficientes para consultar el reporte", 401);
+		}
+	}
+
+	public List<ReporteAsistenciaLocalDTO> getAsistenciaLocales(Long local, Long federal, Long tipo) {
+		List<ReporteAsistenciaLocalDTO> lstDto = new ArrayList<>();
+		
+		ReporteAsistenciaLocalDTO dto = new ReporteAsistenciaLocalDTO();
+		
+
+		Long rgAsistencia = instalacionCasillaRepository.getCountRgByLocalAndAsistencia(local, SI, federal, tipo);
+		Long rcAsistencia = instalacionCasillaRepository.getCountRcByLocalAndAsistencia(local, SI, federal, tipo);
+
+		dto.setIdLocal(local);
+		dto.setRgMeta(50L);
+		dto.setRcMeta(50L);
+		dto.setRgAsistencia(rgAsistencia);
+		dto.setRcAsistencia(rcAsistencia);
+		dto.setRgPorcentaje(dosDecimales((dto.getRgAsistencia() * 100.0) / dto.getRgMeta()).doubleValue());
+		dto.setRcPorcentaje(dosDecimales((dto.getRcAsistencia() * 100.0) / dto.getRcMeta()).doubleValue());
+
+		lstDto.add(dto);
+
+		return lstDto;
 	}
 }

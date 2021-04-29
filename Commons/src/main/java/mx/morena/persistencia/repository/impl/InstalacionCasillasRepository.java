@@ -1,11 +1,12 @@
 package mx.morena.persistencia.repository.impl;
 
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.List;
 
-import java.sql.Types;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -64,16 +65,113 @@ public class InstalacionCasillasRepository implements IInstalacionCasillasReposi
 				+"inner join app_casilla ac "
 				+"on aic.id_casilla = ac.id " 
 				+"where ac.federal_id = ? and aic.llego_rg = ?";
+		
 		return template.queryForObject(sql, new Object[] { idFederal, SI }, new int[] { Types.NUMERIC, Types.VARCHAR }, new LongRowMapper());
 	}
 
 	@Override
 	public Long getCountRcByDfAndAsistencia(Long idFederal, String SI) {
 		String sql = "select count(*) from app_instalacion_casilla aic " 
-				+"inner join app_casilla ac "
-				+"on aic.id_casilla = ac.id " 
-				+"where ac.federal_id = ? and aic.llego_rc = ?";
-		return template.queryForObject(sql, new Object[] { idFederal, SI }, new int[] { Types.NUMERIC, Types.VARCHAR }, new LongRowMapper());
+					+ "inner join app_casilla ac "
+					+ "on aic.id_casilla = ac.id " 
+					+ "where ac.federal_id = ? and aic.llego_rc = ?";
+		
+		return template.queryForObject(sql, new Object[] { idFederal, SI }, new int[] { Types.NUMERIC, Types.VARCHAR },
+				new LongRowMapper());
+	}
+
+	@Override
+	public Long getCountRgByLocalAndAsistencia(Long local, String SI, Long idFederal, Long tipo) {
+		String select = "select count(*) from app_instalacion_casilla aic " 
+					+ "inner join app_casilla ac "
+					+ "on ac.id = aic.id_casilla " ;
+//					+ "where ac.local_id =  ? and aic.llego_rg = ?";
+		
+		String sql = null;
+		String where = "";
+		List<Object> para = new ArrayList<Object>();
+		List<Integer> type = new ArrayList<Integer>();
+		
+		if (tipo == 1L) {
+			where = " where ac.local_id =  ? and aic.llego_rg = 'si' ";
+			para.add(local);
+//			para.add(SI);
+			type.add(Types.NUMERIC);
+//			type.add(Types.VARCHAR);
+		}
+		
+		if (tipo == 2L || tipo == 3L) {
+			where = " where ac.local_id =  ? and aic.llego_rg = 'si' and ac.federal_id = ? ";
+			para.add(local);
+			type.add(Types.NUMERIC);
+			para.add(idFederal);
+			type.add(Types.NUMERIC);
+		}
+		
+		Object[] parametros = new Object[para.size()];
+		int[] types = new int[para.size()];
+
+		for (int i = 0; i < para.size(); i++) {
+			parametros[i] = para.get(i);
+			types[i] = type.get(i);
+		}
+
+		try {
+			sql = select.concat(where);
+
+			return template.queryForObject(sql, parametros, types ,new LongRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+
+		
+	}
+
+	@Override
+	public Long getCountRcByLocalAndAsistencia(Long local, String SI, Long idFederal, Long tipo) {
+		String select = "select count(*) from app_instalacion_casilla aic " 
+					+ "inner join app_casilla ac "
+					+ "on ac.id = aic.id_casilla " ;
+//					+ "where ac.local_id =  ? and aic.llego_rc = ?";
+		
+		
+		String sql = null;
+		String where = "";
+		List<Object> para = new ArrayList<Object>();
+		List<Integer> type = new ArrayList<Integer>();
+		
+		if (tipo == 1L) {
+			where = " where ac.local_id =  ? and aic.llego_rc = 'si' ";
+			para.add(local);
+//			para.add(SI);
+			type.add(Types.NUMERIC);
+//			type.add(Types.VARCHAR);
+		}
+		
+		if (tipo == 2L || tipo == 3L) {
+			where = " where ac.local_id =  ? and aic.llego_rc = 'si' and ac.federal_id = ? ";
+			para.add(local);
+			type.add(Types.NUMERIC);
+			para.add(idFederal);
+			type.add(Types.NUMERIC);
+		}
+
+		Object[] parametros = new Object[para.size()];
+		int[] types = new int[para.size()];
+
+		for (int i = 0; i < para.size(); i++) {
+			parametros[i] = para.get(i);
+			types[i] = type.get(i);
+		}
+
+		try {
+			sql = select.concat(where);
+
+			return template.queryForObject(sql, parametros, types ,new LongRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+		
 	}
 
 	

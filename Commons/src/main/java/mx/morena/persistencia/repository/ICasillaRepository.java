@@ -31,4 +31,12 @@ public interface ICasillaRepository {
 
 	public List<Casilla> getCasillasById(Long idCasilla);
 
+//	public String getTipoCasillasById(Long casillaId);
+//
+//	public List<Casilla> getCasillasAsignadas(long idEstado, long idDistrito, long idMunicipio, long perfilUsuario);
+
+	public List<Casilla> getLocalesByFederal(Long federal);
+
+	public List<Casilla> getAllDistritosLocales();
+
 }
