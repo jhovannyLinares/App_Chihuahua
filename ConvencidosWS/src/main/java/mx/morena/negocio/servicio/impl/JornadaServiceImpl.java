@@ -35,10 +35,8 @@ public class JornadaServiceImpl extends MasterService implements IJornadaService
 				
 				Long tipo = capacitacionRepository.getTipoRepresentante(claveElector);
 				
-				if(tipo == PERFIL_RC) {
-					lstCap = capacitacionRepository.getRepresentanteRcByClave(claveElector);
-				}else if(tipo == PERFIL_RG) {
-					lstCap = capacitacionRepository.getRepresentanteRgByClave(claveElector);
+				if(tipo == PERFIL_RC || tipo == PERFIL_RG) {
+					lstCap = capacitacionRepository.getRepresentanteByClave(claveElector);
 				}else {
 					throw new JornadaException("La clave de elector ingresada no pertenece a los perfiles establecidos", 400);
 				}
@@ -55,7 +53,7 @@ public class JornadaServiceImpl extends MasterService implements IJornadaService
 		
 		if (rc == true) {
 
-				lstCap = capacitacionRepository.getRepresentanteByRc(PERFIL_RC);
+				lstCap = capacitacionRepository.getRepresentanteByTipo(PERFIL_RC);
 				
 				if(lstCap != null) {
 					
@@ -71,7 +69,7 @@ public class JornadaServiceImpl extends MasterService implements IJornadaService
 		
 		if (rg == true) {
 			
-			lstCap = capacitacionRepository.getRepresentanteByRg(PERFIL_RG);
+			lstCap = capacitacionRepository.getRepresentanteByTipo(PERFIL_RG);
 			
 			if(lstCap != null) {
 				

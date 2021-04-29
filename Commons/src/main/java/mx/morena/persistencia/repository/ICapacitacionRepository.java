@@ -7,13 +7,9 @@ import mx.morena.persistencia.entidad.RegistroCapacitacion;
 
 public interface ICapacitacionRepository {
 	
-	List<Capacitacion> getRepresentanteRcByClave( String claveElector);
+	List<Capacitacion> getRepresentanteByClave( String claveElector);
 	
-	List<Capacitacion> getRepresentanteRgByClave( String claveElector);
-	
-	List<Capacitacion> getRepresentanteByRc(Long tipo);
-	
-	List<Capacitacion> getRepresentanteByRg(Long tipo);
+	List<Capacitacion> getRepresentanteByTipo(Long tipo);
 	
 	Long getTipoRepresentante(String claveElector);
 
