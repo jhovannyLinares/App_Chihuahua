@@ -10,6 +10,8 @@ public class Partido {
 
 	private String candidato;
 
+	private Long ubicacion;
+
 	public Long getId() {
 		return id;
 	}
@@ -40,6 +42,14 @@ public class Partido {
 
 	public void setCandidato(String candidato) {
 		this.candidato = candidato;
+	}
+
+	public Long getUbicacion() {
+		return ubicacion;
+	}
+
+	public void setUbicacion(Long ubicacion) {
+		this.ubicacion = ubicacion;
 	}
 
 }

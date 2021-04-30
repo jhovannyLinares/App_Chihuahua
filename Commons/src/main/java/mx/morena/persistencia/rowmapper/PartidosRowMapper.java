@@ -23,6 +23,7 @@ public class PartidosRowMapper implements RowMapper<List<Partido>> {
 			partido.setPartido(rs.getString("partido"));
 			partido.setTipoPartido(rs.getString("tipo_partido"));
 			partido.setCandidato(rs.getString("candidato"));
+			partido.setUbicacion(rs.getLong("ubicacion"));
 
 			partidos.add(partido);
 

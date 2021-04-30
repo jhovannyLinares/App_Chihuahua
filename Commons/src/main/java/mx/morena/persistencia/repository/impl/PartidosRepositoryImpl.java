@@ -98,4 +98,72 @@ public class PartidosRepositoryImpl implements IPartidosRepository {
 		}
 	}
 
+	@Override
+	public List<Partido> getGobernador() {
+
+		String sql = "SELECT id, entidad_id as ubicacion, partido, candidato, tipo_partido, cargo, a_paterno, a_materno, nombres FROM app_partidos_entidad ";
+
+		try {
+			System.out.println(sql);
+			return template.queryForObject(sql, new PartidosRowMapper());
+
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+
+	@Override
+	public List<Partido> getMunicipal() {
+		String sql = "SELECT id, clave_municipio as ubicacion, municipio, tipo_partido, partido, cargo, p_paterno, a_materno, nombres, candidato, id_cargo "
+				+ " FROM app_partidos_municipio ";
+
+		try {
+			return template.queryForObject(sql, new PartidosRowMapper());
+
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+
+	@Override
+	public List<Partido> getSindico() {
+
+		String sql = "SELECT id, clave_municipio as ubicacion, municipio, tipo_partido, partido, cargo, a_paterno, a_materno, nombres, candidato, id_cargo "
+				+ " FROM app_partidos_sindico  ";
+
+		try {
+			return template.queryForObject(sql, new PartidosRowMapper());
+
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+
+	}
+
+	@Override
+	public List<Partido> getDiputadoLocal() {
+		String sql = "SELECT id, distrito_federal as ubicacion, tipo_partido, partido, cargo, a_paterno, a_materno, nombres, candidato, id_cargo "
+				+ " FROM app_partidos_diputado_local ";
+
+		try {
+			return template.queryForObject(sql, new PartidosRowMapper());
+
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+
+	@Override
+	public List<Partido> getDiputadoFederal() {
+
+		String sql = "SELECT id, distrito_federal as ubicacion, tipo_partido, partido, cargo, a_paterno, a_materno, nombres, candidato, id_cargo "
+				+ " FROM app_partidos_diputado_federal ";
+
+		try {
+			return template.queryForObject(sql, new PartidosRowMapper());
+
+		} catch (EmptyResultDataAccessException e) {
+			return new ArrayList<Partido>();
+		}
+	}
 }

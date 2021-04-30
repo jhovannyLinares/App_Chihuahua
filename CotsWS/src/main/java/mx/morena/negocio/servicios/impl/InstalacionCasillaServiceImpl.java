@@ -22,6 +22,7 @@ import mx.morena.persistencia.entidad.AsignacionCasillas;
 import mx.morena.persistencia.entidad.Casilla;
 import mx.morena.persistencia.entidad.IncidenciasCasillas;
 import mx.morena.persistencia.entidad.InstalacionCasilla;
+import mx.morena.persistencia.entidad.Partido;
 import mx.morena.persistencia.entidad.ReporteCasilla;
 import mx.morena.persistencia.entidad.Representantes;
 import mx.morena.persistencia.entidad.RepresentantesAsignados;
@@ -62,6 +63,15 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 
 	@Autowired
 	private IPartidosRepository partidosRepository;
+	
+	
+	private List<Partido> gobernador;
+	private List<Partido> municipal;
+	private List<Partido> sindico;
+	private List<Partido> diputadoLocal;
+	private List<Partido> diputadoFederal;
+	
+	
 
 	@Override
 	@Transactional(rollbackFor = { CotException.class })
@@ -154,94 +164,87 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 
 	@Override
 	public List<CasillasDTO> getCasillasAsignadas(Long idUsuario) throws CotException {
+
 		Usuario usuario = usuarioRepository.findById(idUsuario);
+
 		Long perfil = usuario.getPerfil();
 		Long idRepresentante = usuario.getRepresentante();
 		Long idEntidad = usuario.getEntidad();
 
-		if (perfil == PERFIL_RC) {
-			Representantes representante = representanteRepository.getRepresentanteByIdAndTipo(idRepresentante,
-					PERFIL_RC);
-			if (representante != null) {
-
-				List<RepresentantesAsignados> representantesAs = representanteAsignadoRepository
-						.getByEntidadAndIdRepresentante(idEntidad, representante.getId());
-				List<CasillasDTO> casillas = new ArrayList<CasillasDTO>();
-				List<AsignacionCasillas> casillasAsignadas = new ArrayList<AsignacionCasillas>();
-
-				if (representantesAs != null && !representantesAs.isEmpty()) {
-					for (RepresentantesAsignados representanteAsignado : representantesAs) {
-						if (representanteAsignado.getCasillaId() != null) {
-
-							casillasAsignadas = casillaRepository
-									.getCasillasAsignadasById(representanteAsignado.getCasillaId());
-
-							if (casillasAsignadas != null) {
-
-								casillas = casillasAsignadas.stream().map(this::convertirADto)
-										.collect(Collectors.toList());
-
-								for (CasillasDTO dto : casillas) {
-									dto.setVotaciones(getVotaciones(dto.getIdCasilla()));
-								}
-							} else {
-								throw new CotException("No se encontraron casillas asignadas", 404);
-							}
-						} else {
-							throw new CotException("El no. de casilla no puede ser nula", 400);
-						}
-					}
-				} else {
-					throw new CotException("El representante no tiene asignaciones", 404);
-				}
-
-				return casillas;
-			} else {
-				throw new CotException("No se encontro el representante", 404);
-			}
-
-		} else if (perfil == PERFIL_RG) {
-			Representantes representante = representanteRepository.getRepresentanteByIdAndTipo(idRepresentante,
-					PERFIL_RG);
-			if (representante != null) {
-
-				List<RepresentantesAsignados> rutasRepresentantes = representanteAsignadoRepository
-						.getByEntidadAndIdRepresentante(idEntidad, representante.getId());
-				List<CasillasDTO> casillas = new ArrayList<CasillasDTO>();
-				List<AsignacionCasillas> casillasAsignadas = new ArrayList<AsignacionCasillas>();
-
-				if (rutasRepresentantes != null && !rutasRepresentantes.isEmpty()) {
-					for (RepresentantesAsignados rep : rutasRepresentantes) {
-						if (rep != null && rep.getRutaId() != null) {
-							casillasAsignadas = casillaRepository.getCasillasAsignadasByRuta(idEntidad,
-									rep.getDistritoFederalId(), rep.getRutaId());
-
-							if (casillasAsignadas != null) {
-								casillas = casillasAsignadas.stream().map(this::convertirADto)
-										.collect(Collectors.toList());
-								for (CasillasDTO dto : casillas) {
-									dto.setVotaciones(getVotaciones(dto.getIdCasilla()));
-								}
-							} else {
-								throw new CotException("No se encontraron casillas", 404);
-							}
-						} else {
-							throw new CotException("La ruta no puede ser nula", 400);
-						}
-					}
-
-					return casillas;
-
-				} else {
-					throw new CotException("No se encontraron rutas", 404);
-				}
-
-			} else {
-				throw new CotException("No se encontro el representante", 404);
-			}
-		} else {
+		if (perfil != PERFIL_RC && perfil != PERFIL_RG) {
 			throw new CotException("No cuenta con los permisos suficientes para realizar la operacion.", 401);
 		}
+		Representantes representante = null;
+		
+		if (perfil == PERFIL_RC ) {
+			representante = representanteRepository.getRepresentanteByIdAndTipo(idRepresentante, PERFIL_RC);
+		}
+		if ( perfil == PERFIL_RG) {
+			representante = representanteRepository.getRepresentanteByIdAndTipo(idRepresentante, PERFIL_RG);
+		}
+
+		if (representante == null) {
+			throw new CotException("No se encontro el representante", 404);
+		}
+
+		List<RepresentantesAsignados> representantesAs = representanteAsignadoRepository
+				.getByEntidadAndIdRepresentante(idEntidad, representante.getId());
+		
+		List<CasillasDTO> casillas = new ArrayList<CasillasDTO>();
+		List<AsignacionCasillas> casillasAsignadas = new ArrayList<AsignacionCasillas>();
+		
+		
+		
+		
+		if (representantesAs != null && !representantesAs.isEmpty()) {
+			
+			for (RepresentantesAsignados representanteAsignado : representantesAs) {
+				
+				if (representanteAsignado.getCasillaId() != null) {
+
+					casillasAsignadas = casillaRepository
+							.getCasillasAsignadasById(representanteAsignado.getCasillaId());
+
+					if (casillasAsignadas != null) {
+
+						casillas = casillasAsignadas.stream().map(this::convertirADto).collect(Collectors.toList());
+
+						
+						for (CasillasDTO dto : casillas) {
+							dto.setVotaciones(getVotaciones(dto.getIdCasilla()));
+						}
+						
+						
+					} else {
+						throw new CotException("No se encontraron casillas asignadas", 404);
+					}
+					
+				} else {
+					throw new CotException("El no. de casilla no puede ser nula", 400);
+				}
+			}
+			
+		} else {
+			throw new CotException("El representante no tiene asignaciones", 404);
+		}
+
+		return casillas;
+
+	}
+
+	private void consultarVotaciones() {
+
+		if (gobernador == null)
+			gobernador = partidosRepository.getGobernador();
+		if (municipal == null)
+			municipal = partidosRepository.getMunicipal();
+		if (sindico == null)
+			sindico = partidosRepository.getSindico();
+		if (diputadoLocal == null)
+			diputadoLocal = partidosRepository.getDiputadoLocal();
+		if (diputadoFederal == null)
+			diputadoFederal = partidosRepository.getDiputadoFederal();
+
 	}
 
 	private CasillasDTO convertirADto(AsignacionCasillas asignacioncasillas) {
@@ -292,6 +295,8 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 	}
 
 	private List<VotacionesDTO> getVotaciones(Long idCasilla) throws CotException {
+		
+		consultarVotaciones();
 
 		List<Casilla> casillas = casillaRepository.getCasillasById(idCasilla);
 
@@ -301,35 +306,49 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 
 		for (Casilla casilla : casillas) {
 
-			if (partidosRepository.getGobernador(casilla.getEntidad()).size() > 0) {
+			if (gobernador.stream()
+					.filter(partido -> casilla.getEntidad().longValue() == partido.getUbicacion().longValue()).findAny()
+					.orElse(null) != null) {
 				dto = new VotacionesDTO();
 				dto.setId(1L);
 				dto.setDescripcion("GOBERNADOR");
 				votacionesDTOs.add(dto);
 			}
 
-			if (partidosRepository.getMunicipal(casilla.getMunicipio()).size() > 0) {
+			if (municipal.stream()
+					.filter(partido -> casilla.getMunicipio().longValue() == partido.getUbicacion().longValue())
+					.findAny().orElse(null) != null) {
+//			if (partidosRepository.getMunicipal(casilla.getMunicipio()).size() > 0) {
 				dto = new VotacionesDTO();
 				dto.setId(2L);
 				dto.setDescripcion("PRESIDENTE MUNICIPAL");
 				votacionesDTOs.add(dto);
 			}
-
-			if (partidosRepository.getSindico(casilla.getMunicipio()).size() > 0) {
+//			
+			if (sindico.stream()
+					.filter(partido -> casilla.getMunicipio().longValue() == partido.getUbicacion().longValue())
+					.findAny().orElse(null) != null) {
+//			if (partidosRepository.getSindico(casilla.getMunicipio()).size() > 0) {
 				dto = new VotacionesDTO();
 				dto.setId(3L);
 				dto.setDescripcion("SINDICO");
 				votacionesDTOs.add(dto);
 			}
-
-			if (partidosRepository.getDiputadoLocal(casilla.getFederal()).size() > 0) {
+//
+			if (diputadoLocal.stream()
+					.filter(partido -> casilla.getFederal().longValue() == partido.getUbicacion().longValue()).findAny()
+					.orElse(null) != null) {
+//			if (partidosRepository.getDiputadoLocal(casilla.getFederal()).size() > 0) {
 				dto = new VotacionesDTO();
 				dto.setId(4L);
 				dto.setDescripcion("DIPUTADO LOCAL");
 				votacionesDTOs.add(dto);
 			}
-
-			if (partidosRepository.getDiputadoFederal(casilla.getFederal()).size() > 0) {
+//
+			if (diputadoFederal.stream()
+					.filter(partido -> casilla.getFederal().longValue() == partido.getUbicacion().longValue()).findAny()
+					.orElse(null) != null) {
+//			if (partidosRepository.getDiputadoFederal(casilla.getFederal()).size() > 0) {
 				dto = new VotacionesDTO();
 				dto.setId(5L);
 				dto.setDescripcion("DIPUTADO FEDERAL");
