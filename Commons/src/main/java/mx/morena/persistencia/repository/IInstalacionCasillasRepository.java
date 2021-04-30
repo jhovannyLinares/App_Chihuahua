@@ -16,8 +16,8 @@ public interface IInstalacionCasillasRepository {
 
 	Long getCountRcByDfAndAsistencia(Long idFederal, String SI);
 
-	Long getCountRgByLocalAndAsistencia(Long local, String SI, Long idFederal, Long tipo);
+	Long getCountRgByLocalAndAsistencia(Long local, String SI, Long idFederal, Long tipo, Long idMunicipio);
 
-	Long getCountRcByLocalAndAsistencia(Long local, String SI, Long idFederal, Long tipo);
+	Long getCountRcByLocalAndAsistencia(Long local, String SI, Long idFederal, Long tipo, Long idMunicipio);
 
 }

@@ -18,6 +18,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import mx.morena.negocio.dto.ReporteAsistenciaEstatalDTO;
 import mx.morena.negocio.dto.ReporteAsistenciaFederalDTO;
 import mx.morena.negocio.dto.ReporteAsistenciaLocalDTO;
+import mx.morena.negocio.dto.ReporteAsistenciaMunicipalDTO;
 import mx.morena.negocio.dto.ReporteResultadosDTO;
 import mx.morena.negocio.dto.ReporteVotacionDTO;
 import mx.morena.negocio.dto.ReporteVotacionMunicipalDTO;
@@ -159,29 +160,74 @@ public class ReporteCasillaController extends MasterController {
 			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 	}
+	
+	@GetMapping("/asistenciaLocal")	
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	public List<ReporteAsistenciaLocalDTO> reporteAsistenciaLocal(HttpServletResponse response, HttpServletRequest request,
+			@RequestParam(value = "idFederal", required = false) Long idFederal,
+			@RequestParam(value = "idLocal", required = false) Long idLocal) throws IOException {
+		
+		try {
+			long usuario = getUsuario(request);
+			long perfil = getPerfil(request);
+			
+			return reporteCasillaService.getReporteAsistenciaLocal(usuario, perfil, idFederal, idLocal);
 
-//	@GetMapping("/asistenciaLocal")	
-//	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-//	public List<ReporteAsistenciaLocalDTO> reporteAsistenciaLocal(HttpServletResponse response, HttpServletRequest request,
-//			@RequestParam(value = "idFederal", required = false) Long idFederal,
-//			@RequestParam(value = "idLocal", required = false) Long idLocal) throws IOException {
-//		
-//		try {
-//			long usuario = getUsuario(request);
-//			long perfil = getPerfil(request);
-//			
-//			return reporteCasillaService.getReporteAsistenciaLocal(usuario, perfil, idFederal, idLocal);
-//
-//		} catch (CotException e) {
-//			e.printStackTrace();
-//			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
-//		}
-//		return null;
-//	}
+		} catch (CotException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+		}
+		return null;
+	}
+	
+	@GetMapping("/asistenciaLocal/download")	
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	public void downloadReporteAsistenciaLocal(HttpServletResponse response, HttpServletRequest request,
+			@RequestParam(value = "idFederal", required = false) Long idFederal,
+			@RequestParam(value = "idLocal", required = false) Long idLocal) throws IOException {
+		
+		try {
+			long usuario = getUsuario(request);
+			long perfil = getPerfil(request);
+			
+			reporteCasillaService.getReporteAsistenciaLocalDownload(response, usuario, perfil, idFederal, idLocal);
 
+		} catch (CotException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+		}
+	}
+	
+	@GetMapping("/asistenciaMunicipal")	
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	public List<ReporteAsistenciaMunicipalDTO> reporteAsistenciaMunicipal(HttpServletResponse response, HttpServletRequest request,
+			@RequestParam(value = "idFederal", required = false) Long idFederal,
+			@RequestParam(value = "idLocal", required = false) Long idLocal,
+			@RequestParam(value = "idMunicipio", required = false) Long idMunicipio) throws IOException {
+		
+		try {
+			long usuario = getUsuario(request);
+			long perfil = getPerfil(request);
+			
+			return reporteCasillaService.getReporteAsistenciaMunicipal(usuario, perfil, idFederal, idLocal, idMunicipio);
+
+		} catch (CotException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+		}
+		return null;
+	}
+
+	
 	@GetMapping("/resultados")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
 	private List<ReporteResultadosDTO> getReporteResultados(HttpServletResponse response, HttpServletRequest request,

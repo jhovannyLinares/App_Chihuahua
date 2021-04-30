@@ -1,6 +1,7 @@
 package mx.morena.persistencia.repository.impl;
 
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +11,10 @@ import org.springframework.stereotype.Repository;
 
 import mx.morena.persistencia.entidad.Municipio;
 import mx.morena.persistencia.repository.IMunicipioRepository;
+import mx.morena.persistencia.rowmapper.LongRowMapper;
 import mx.morena.persistencia.rowmapper.MunicipioRowMapper;
 import mx.morena.persistencia.rowmapper.MunicipiosRowMapper;
+import mx.morena.persistencia.rowmapper.StringRowMapper;
 
 @Repository
 public class MunicipioRepository implements IMunicipioRepository {
@@ -66,6 +69,60 @@ public class MunicipioRepository implements IMunicipioRepository {
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}
+	}
+
+	@Override
+	public String getNombreByIdAndDf(Long municipio, Long federal) {
+		String select ="select nombre from app_municipio am  where id = ? and federal_id = ?";
+		
+		String sql = select;
+		String where = "";
+		List<Object> para = new ArrayList<Object>();
+		List<Integer> type = new ArrayList<Integer>();
+		
+//		if (federal != null) {
+//			where = " where federal_id = ? ";
+//			para.add(federal);
+//			type.add(Types.NUMERIC);
+//		}
+//		
+//		if (municipio != null) {
+//
+//			if (para.size() > 0) {
+//				where = where.concat(" and id = ? ");
+//			} else {
+//				where = " where id = ? ";
+//			}
+//			para.add(municipio);
+//			type.add(Types.NUMERIC);
+//		}
+		
+		
+		
+		Object[] parametros = new Object[para.size()];
+		int[] types = new int[para.size()];
+
+		for (int i = 0; i < para.size(); i++) {
+			parametros[i] = para.get(i);
+			types[i] = type.get(i);
+		}
+
+//		try {
+//			sql = select.concat(where);
+//
+//			return template.queryForObject(sql, parametros, types ,new StringRowMapper());
+//		} catch (EmptyResultDataAccessException e) {
+//			return null;
+//		}
+		
+		
+		try {
+			return template.queryForObject(sql, new Object[] { municipio, federal }, new int[] { Types.NUMERIC, Types.NUMERIC },
+					new StringRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	
 	}
 
 }

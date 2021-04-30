@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import mx.morena.negocio.dto.ReporteAsistenciaEstatalDTO;
 import mx.morena.negocio.dto.ReporteAsistenciaFederalDTO;
 import mx.morena.negocio.dto.ReporteAsistenciaLocalDTO;
+import mx.morena.negocio.dto.ReporteAsistenciaMunicipalDTO;
 import mx.morena.negocio.dto.ReporteResultadosDTO;
 import mx.morena.negocio.dto.ReporteVotacionDTO;
 import mx.morena.negocio.dto.ReporteVotacionMunicipalDTO;
@@ -301,7 +302,7 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 
 		List<ReporteAsistenciaFederalDTO> reporteDTOs = getReporteAsistenciaDistrital(usuario, perfil);
 
-		String[] header = { "idFederal", "rgMeta", "rcMeta", "rgAsistencia", "rcAsistencia", "rgPorcentaje",
+		String[] header = { "idFederal", "rgMeta", "rcMeta", "rgAsistencia", "rgPorcentaje", "rcAsistencia", 
 				"rcPorcentaje" };
 
 		setWriterFile(response, reporteDTOs, header);
@@ -312,14 +313,13 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 	public List<ReporteAsistenciaLocalDTO> getReporteAsistenciaLocal(Long usuario, Long perfil, Long idFederal,
 			Long idLocal) throws CotException, IOException {
 
-		boolean estFed = perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL;
 
-		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL || perfil == PERFIL_LOCAL) {
+		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_LOCAL) {
 
 			List<ReporteAsistenciaLocalDTO> lstDto = new ArrayList<>();
-			List<ReporteAsistenciaLocalDTO> lstDtoForLocales = null;
 			List<Casilla> lstCasilla = null;
 			ReporteAsistenciaLocalDTO total = new ReporteAsistenciaLocalDTO();
+			ReporteAsistenciaLocalDTO dto = null;
 
 			Long local = 0L;
 			Long federal = 0L;
@@ -334,60 +334,32 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 			total.setRcPorcentaje(0.0);
 			Long rgMeta = 0L;
 			Long rcMeta = 0L;
-			Usuario usr = usuarioRepository.findById(usuario);
+			
 
 			if (perfil == PERFIL_LOCAL) {
+				Usuario usr = usuarioRepository.findById(usuario);
 				local = usr.getLocalidad();
 				tipo = 1L;
-				lstDto = getAsistenciaLocales(local, federal, tipo);
-			}
-
-			if (perfil == PERFIL_FEDERAL) {
-				tipo = 2L;
-				if (idLocal != null) {
-					federal = usr.getFederal();
-					local = idLocal;
-					lstDto = getAsistenciaLocales(local, federal, tipo);
-				} else {
-					federal = usr.getFederal();
-					lstCasilla = casillasRepository.getLocalesByFederal(usr.getFederal());
-					System.out.println("********* " + lstCasilla.size());
-					
-					for (Casilla casilla : lstCasilla) {
-						lstDtoForLocales = getAsistenciaLocales(casilla.getLocal(), federal, tipo);
-						lstDto.addAll(lstDtoForLocales);
-					}
-					
-					System.out.println("Lista for " + lstDto.size());
-					return lstDto;
-				}
+				dto = getAsistenciaLocales(local, federal, tipo);
+				lstDto.add(dto);
 			}
 			
 			if (perfil == PERFIL_ESTATAL) {
-//				tipo = 3L;
-				if (idFederal == null && idLocal == null) {
-					tipo = 1L;
-					lstCasilla = casillasRepository.getAllDistritosLocales();
-					System.out.println("**** " + lstCasilla.size());
-					for (Casilla casilla : lstCasilla) {
-						lstDtoForLocales = getAsistenciaLocales(casilla.getLocal(), federal, tipo);
-						lstDto.addAll(lstDtoForLocales);
-					}
+
+				if (idFederal != null && idLocal != null) {
+					tipo = 2L;
+//					lstCasilla = casillasRepository.getAllDistritosLocales();
+//					System.out.println("**** " + lstCasilla.size());
+//					for (Casilla casilla : lstCasilla) {
+					dto = getAsistenciaLocales(idLocal, idFederal, tipo);
+					lstDto.add(dto);
+//					}
 					return lstDto;
+				} else {
+					throw new CotException("Ingrese los campos obligatorios.", 400);
 				}
 			}
 
-//			if (perfil == PERFIL_ESTATAL) {
-//				if (idFederal != null && idLocal != null) {
-//					federal = idFederal;
-//					local = idLocal;
-//					tipo = 3L;
-//				} else {
-//					throw new CotException("Debe de ingresar la informacion correspondiente.", 400);
-//				}
-//			}
-
-//			lstDto = getAsistenciaLocales(local, federal, tipo, dto);
 			System.out.println("Lista return " + lstDto.size());
 			return lstDto;
 			
@@ -396,14 +368,14 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 		}
 	}
 
-	public List<ReporteAsistenciaLocalDTO> getAsistenciaLocales(Long local, Long federal, Long tipo) {
+	public ReporteAsistenciaLocalDTO getAsistenciaLocales(Long local, Long federal, Long tipo) {
 		List<ReporteAsistenciaLocalDTO> lstDto = new ArrayList<>();
 		
 		ReporteAsistenciaLocalDTO dto = new ReporteAsistenciaLocalDTO();
 		
 
-		Long rgAsistencia = instalacionCasillaRepository.getCountRgByLocalAndAsistencia(local, SI, federal, tipo);
-		Long rcAsistencia = instalacionCasillaRepository.getCountRcByLocalAndAsistencia(local, SI, federal, tipo);
+		Long rgAsistencia = instalacionCasillaRepository.getCountRgByLocalAndAsistencia(local, SI, federal, tipo, 0L);
+		Long rcAsistencia = instalacionCasillaRepository.getCountRcByLocalAndAsistencia(local, SI, federal, tipo, 0L);
 
 		dto.setIdLocal(local);
 		dto.setRgMeta(50L);
@@ -415,7 +387,87 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 
 		lstDto.add(dto);
 
-		return lstDto;
+		return dto;
+	}
+
+	@Override
+	public void getReporteAsistenciaLocalDownload(HttpServletResponse response, long usuario, long perfil,
+			Long idFederal, Long idLocal) throws CotException, IOException {
+		setNameFile(response, CSV_ASISTENCIA_LOCAL);
+
+		List<ReporteAsistenciaLocalDTO> reporteDTOs = getReporteAsistenciaLocal(usuario, perfil, idFederal, idLocal);
+
+		String[] header = { "idLocal", "rgMeta", "rcMeta", "rgAsistencia", "rgPorcentaje", "rcAsistencia", 
+				"rcPorcentaje" };
+
+		setWriterFile(response, reporteDTOs, header);
+	}
+
+	@Override
+	public List<ReporteAsistenciaMunicipalDTO> getReporteAsistenciaMunicipal(long usuario, long perfil, Long idFederal,
+			Long idLocal, Long idMunicipio) throws CotException, IOException {
+
+		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_MUNICIPAL) {
+
+			List<ReporteAsistenciaMunicipalDTO> lstDto = new ArrayList<>();
+			List<Municipio> lstMunicipio = null;
+			ReporteAsistenciaMunicipalDTO dto = null;
+			Long tipo = 0L;
+
+			if (perfil == PERFIL_MUNICIPAL) {
+				Usuario usr = usuarioRepository.findById(usuario);
+				tipo = 4L;
+				dto = getAsistenciaMunicipal(idLocal, idFederal, tipo, usr.getMunicipio());
+				lstDto.add(dto);
+
+			}
+			if (perfil == PERFIL_ESTATAL) {
+				if(idFederal != null && idMunicipio == null ) {
+					tipo = 5L;
+					lstMunicipio = municipioRepository.getByFederal(idFederal);
+					for (Municipio mun : lstMunicipio) {
+					   dto = getAsistenciaMunicipal(idLocal, idFederal, tipo, mun.getId());
+					lstDto.add(dto);
+					}
+					
+//				}else {
+//					throw new CotException("Ingrese los campos obligatorios.", 400);
+				}
+				if(idFederal !=null && idMunicipio != null) {
+					tipo = 6L;
+					  dto = getAsistenciaMunicipal(idLocal, idFederal, tipo, idMunicipio);
+						lstDto.add(dto);
+				}
+			}
+
+			return lstDto;
+
+		} else {
+			throw new CotException("No cuenta con los permisos suficientes para consultar el reporte", 401);
+		}
+	}
+
+	public ReporteAsistenciaMunicipalDTO getAsistenciaMunicipal(Long local, Long federal, Long tipo, Long municipio) {
+		List<ReporteAsistenciaMunicipalDTO> lstDto = new ArrayList<>();
+		
+		ReporteAsistenciaMunicipalDTO dto = new ReporteAsistenciaMunicipalDTO();
+		
+
+		Long rgAsistencia = instalacionCasillaRepository.getCountRgByLocalAndAsistencia(local, SI, federal, tipo, municipio);
+		Long rcAsistencia = instalacionCasillaRepository.getCountRcByLocalAndAsistencia(local, SI, federal, tipo, municipio);
+		String nomMunicipio = municipioRepository.getNombreByIdAndDf(municipio, federal);
+		
+		dto.setMunicipio(nomMunicipio);
+		dto.setRgMeta(50L);
+		dto.setRcMeta(50L);
+		dto.setRgAsistencia(rgAsistencia);
+		dto.setRcAsistencia(rcAsistencia);
+		dto.setRgPorcentaje(dosDecimales((dto.getRgAsistencia() * 100.0) / dto.getRgMeta()).doubleValue());
+		dto.setRcPorcentaje(dosDecimales((dto.getRcAsistencia() * 100.0) / dto.getRcMeta()).doubleValue());
+
+		lstDto.add(dto);
+
+		return dto;
 	}
 	
 

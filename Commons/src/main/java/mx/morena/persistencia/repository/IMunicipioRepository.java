@@ -15,4 +15,6 @@ public interface IMunicipioRepository {
 	List<Municipio> getAll();
 	
 	List<Municipio> getByEntidad(Long idEntidad);
+
+	String getNombreByIdAndDf(Long municipio, Long federal);
 }

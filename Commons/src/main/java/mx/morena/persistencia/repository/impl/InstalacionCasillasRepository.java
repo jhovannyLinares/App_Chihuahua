@@ -81,7 +81,7 @@ public class InstalacionCasillasRepository implements IInstalacionCasillasReposi
 	}
 
 	@Override
-	public Long getCountRgByLocalAndAsistencia(Long local, String SI, Long idFederal, Long tipo) {
+	public Long getCountRgByLocalAndAsistencia(Long local, String SI, Long idFederal, Long tipo, Long idMunicipio) {
 		String select = "select count(*) from app_instalacion_casilla aic " 
 					+ "inner join app_casilla ac "
 					+ "on ac.id = aic.id_casilla " ;
@@ -93,16 +93,45 @@ public class InstalacionCasillasRepository implements IInstalacionCasillasReposi
 		List<Integer> type = new ArrayList<Integer>();
 		
 		if (tipo == 1L) {
-			where = " where ac.local_id =  ? and aic.llego_rg = 'si' ";
+			where = " where ac.local_id =  ? and aic.llego_rg = ? ";
 			para.add(local);
-//			para.add(SI);
+			para.add(SI);
 			type.add(Types.NUMERIC);
-//			type.add(Types.VARCHAR);
+			type.add(Types.VARCHAR);
 		}
 		
-		if (tipo == 2L || tipo == 3L) {
-			where = " where ac.local_id =  ? and aic.llego_rg = 'si' and ac.federal_id = ? ";
+		if (tipo == 2L) {
+			where = " where ac.local_id =  ? and aic.llego_rg = ? and ac.federal_id = ? ";
 			para.add(local);
+			type.add(Types.NUMERIC);
+			para.add(SI);
+			type.add(Types.VARCHAR);
+			para.add(idFederal);
+			type.add(Types.NUMERIC);
+			
+		}
+		
+		if (tipo == 4L) {
+			where = "where aic.llego_rg = ? and ac.municpio_id = ? ";
+			para.add(SI);
+			type.add(Types.VARCHAR);
+			para.add(idMunicipio);
+			type.add(Types.NUMERIC);
+		}
+		
+		if (tipo == 5L) {
+			where = "where aic.llego_rg = ? and federal_id = ?";
+			para.add(SI);
+			type.add(Types.VARCHAR);
+			para.add(idFederal);
+			type.add(Types.NUMERIC);
+		}
+		
+		if (tipo == 6L) {
+			where = "where aic.llego_rg = ? and ac.municpio_id = ? and federal_id = ?";
+			para.add(SI);
+			type.add(Types.VARCHAR);
+			para.add(idMunicipio);
 			type.add(Types.NUMERIC);
 			para.add(idFederal);
 			type.add(Types.NUMERIC);
@@ -128,7 +157,7 @@ public class InstalacionCasillasRepository implements IInstalacionCasillasReposi
 	}
 
 	@Override
-	public Long getCountRcByLocalAndAsistencia(Long local, String SI, Long idFederal, Long tipo) {
+	public Long getCountRcByLocalAndAsistencia(Long local, String SI, Long idFederal, Long tipo, Long idMunicipio) {
 		String select = "select count(*) from app_instalacion_casilla aic " 
 					+ "inner join app_casilla ac "
 					+ "on ac.id = aic.id_casilla " ;
@@ -141,16 +170,43 @@ public class InstalacionCasillasRepository implements IInstalacionCasillasReposi
 		List<Integer> type = new ArrayList<Integer>();
 		
 		if (tipo == 1L) {
-			where = " where ac.local_id =  ? and aic.llego_rc = 'si' ";
+			where = " where ac.local_id =  ? and aic.llego_rc = ? ";
 			para.add(local);
-//			para.add(SI);
+			para.add(SI);
 			type.add(Types.NUMERIC);
-//			type.add(Types.VARCHAR);
+			type.add(Types.VARCHAR);
 		}
 		
-		if (tipo == 2L || tipo == 3L) {
-			where = " where ac.local_id =  ? and aic.llego_rc = 'si' and ac.federal_id = ? ";
+		if (tipo == 2L) {
+			where = " where ac.local_id =  ? and aic.llego_rc = ? and ac.federal_id = ? ";
 			para.add(local);
+			type.add(Types.NUMERIC);
+			para.add(SI);
+			type.add(Types.VARCHAR);
+			para.add(idFederal);
+			type.add(Types.NUMERIC);
+		}
+		
+		if (tipo == 4L) {
+			where = "where aic.llego_rc = ? and ac.municpio_id = ? ";
+			para.add(SI);
+			type.add(Types.VARCHAR);
+			para.add(idMunicipio);
+			type.add(Types.NUMERIC);
+		}
+		
+		if (tipo == 5L) {
+			where = "where aic.llego_rc = ? and federal_id = ?";
+			para.add(SI);
+			type.add(Types.VARCHAR);
+			para.add(idFederal);
+			type.add(Types.NUMERIC);
+		}
+		if (tipo == 6L) {
+			where = "where aic.llego_rc = ? and ac.municpio_id = ? and federal_id = ?";
+			para.add(SI);
+			type.add(Types.VARCHAR);
+			para.add(idMunicipio);
 			type.add(Types.NUMERIC);
 			para.add(idFederal);
 			type.add(Types.NUMERIC);
