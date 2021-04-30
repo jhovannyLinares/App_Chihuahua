@@ -77,14 +77,12 @@ public class ReportesSeguimientoVotoController extends MasterController{
 	private List<ReporteInstalacionCasillaDTO>getReporteInstCasillaEstatal(HttpServletResponse response, HttpServletRequest request,
 			@RequestParam(value = "idDistritoFederal", required = false) Long idDistritoFederal,						
 			@RequestParam(value = "idDistritoLocal", required = false) Long idDistritoLocal,
-			@RequestParam(value = "idMunicipal", required = false) Long idMunicipal,						
-			@RequestParam(value = "idRuta", required = false) Long idRuta,
-			@RequestParam(value = "idCasilla", required = false) Long idCasilla) throws SeguimientoVotoException, IOException{
+			@RequestParam(value = "idMunicipal", required = false) Long idMunicipal) throws SeguimientoVotoException, IOException{
 		
 		long idUsuario = getUsuario(request);
 		
 		try {
-			return reportesService.getInstalacionCasillaEstatal(idUsuario, idDistritoFederal, idDistritoLocal, idMunicipal, idRuta, idCasilla);
+			return reportesService.getInstalacionCasillaEstatal(idUsuario, idDistritoFederal, idDistritoLocal, idMunicipal);
 		} catch (SeguimientoVotoException e) {
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
@@ -102,14 +100,12 @@ public class ReportesSeguimientoVotoController extends MasterController{
 	private List<ReporteInstalacionCasillaDTO>getReporteInstCasillaFederal(HttpServletResponse response, HttpServletRequest request,
 			@RequestParam(value = "idDistritoFederal", required = false) Long idDistritoFederal,						
 			@RequestParam(value = "idDistritoLocal", required = false) Long idDistritoLocal,
-			@RequestParam(value = "idMunicipal", required = false) Long idMunicipal,						
-			@RequestParam(value = "idRuta", required = false) Long idRuta,
-			@RequestParam(value = "idCasilla", required = false) Long idCasilla) throws SeguimientoVotoException, IOException{
+			@RequestParam(value = "idMunicipal", required = false) Long idMunicipal) throws SeguimientoVotoException, IOException{
 		
 		long idUsuario = getUsuario(request);
 		
 		try {
-			return reportesService.getInstalacionCasillaFederal(idUsuario, idDistritoFederal, idDistritoLocal, idMunicipal, idRuta, idCasilla);
+			return reportesService.getInstalacionCasillaFederal(idUsuario, idDistritoFederal, idDistritoLocal, idMunicipal);
 		} catch (SeguimientoVotoException e) {
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
@@ -127,14 +123,12 @@ public class ReportesSeguimientoVotoController extends MasterController{
 	private List<ReporteInstalacionCasillaDTO>getReporteInstCasillaLocal(HttpServletResponse response, HttpServletRequest request,
 			@RequestParam(value = "idDistritoFederal", required = false) Long idDistritoFederal,						
 			@RequestParam(value = "idDistritoLocal", required = false) Long idDistritoLocal,
-			@RequestParam(value = "idMunicipal", required = false) Long idMunicipal,						
-			@RequestParam(value = "idRuta", required = false) Long idRuta,
-			@RequestParam(value = "idCasilla", required = false) Long idCasilla) throws SeguimientoVotoException, IOException{
+			@RequestParam(value = "idMunicipal", required = false) Long idMunicipal) throws SeguimientoVotoException, IOException{
 		
 		long idUsuario = getUsuario(request);
 		
 		try {
-			return reportesService.getInstalacionCasillaLocal(idUsuario, idDistritoFederal, idDistritoLocal, idMunicipal, idRuta, idCasilla);
+			return reportesService.getInstalacionCasillaLocal(idUsuario, idDistritoFederal, idDistritoLocal, idMunicipal);
 		} catch (SeguimientoVotoException e) {
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
@@ -152,14 +146,12 @@ public class ReportesSeguimientoVotoController extends MasterController{
 	private List<ReporteInstalacionCasillaMuniDTO>getReporteInstCasillaMunicipal(HttpServletResponse response, HttpServletRequest request,
 			@RequestParam(value = "idDistritoFederal", required = false) Long idDistritoFederal,						
 			@RequestParam(value = "idDistritoLocal", required = false) Long idDistritoLocal,
-			@RequestParam(value = "idMunicipal", required = false) Long idMunicipal,						
-			@RequestParam(value = "idRuta", required = false) Long idRuta,
-			@RequestParam(value = "idCasilla", required = false) Long idCasilla) throws SeguimientoVotoException, IOException{
+			@RequestParam(value = "idMunicipal", required = false) Long idMunicipal) throws SeguimientoVotoException, IOException{
 		
 		long idUsuario = getUsuario(request);
 		
 		try {
-			return reportesService.getInstalacionCasillaMunicipal(idUsuario, idDistritoFederal, idDistritoLocal, idMunicipal, idRuta, idCasilla);
+			return reportesService.getInstalacionCasillaMunicipal(idUsuario, idDistritoFederal, idDistritoLocal, idMunicipal);
 		} catch (SeguimientoVotoException e) {
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
@@ -177,14 +169,12 @@ public class ReportesSeguimientoVotoController extends MasterController{
 	private List<ReporteInstalacionCasillaCrgDTO>getReporteInstCasillaCrg(HttpServletResponse response, HttpServletRequest request,
 			@RequestParam(value = "idDistritoFederal", required = false) Long idDistritoFederal,						
 			@RequestParam(value = "idDistritoLocal", required = false) Long idDistritoLocal,
-			@RequestParam(value = "idMunicipal", required = false) Long idMunicipal,						
-			@RequestParam(value = "idRuta", required = false) Long idRuta,
-			@RequestParam(value = "idCasilla", required = false) Long idCasilla) throws SeguimientoVotoException, IOException{
+			@RequestParam(value = "idMunicipal", required = false) Long idMunicipal) throws SeguimientoVotoException, IOException{
 		
 		long idUsuario = getUsuario(request);
 		
 		try {
-			return reportesService.getInstalacionCasillaCrg(idUsuario, idDistritoFederal, idDistritoLocal, idMunicipal, idRuta, idCasilla);
+			return reportesService.getInstalacionCasillaCrg(idUsuario, idDistritoFederal, idDistritoLocal, idMunicipal);
 		} catch (SeguimientoVotoException e) {
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
@@ -202,14 +192,13 @@ public class ReportesSeguimientoVotoController extends MasterController{
 	private List<ReporteInstalacionCasillaRgDTO>getReporteInstCasillaRg(HttpServletResponse response, HttpServletRequest request,
 			@RequestParam(value = "idDistritoFederal", required = false) Long idDistritoFederal,						
 			@RequestParam(value = "idDistritoLocal", required = false) Long idDistritoLocal,
-			@RequestParam(value = "idMunicipal", required = false) Long idMunicipal,						
-			@RequestParam(value = "idRuta", required = false) Long idRuta,
-			@RequestParam(value = "idCasilla", required = false) Long idCasilla) throws SeguimientoVotoException, IOException{
+			@RequestParam(value = "idMunicipal", required = false) Long idMunicipal
+) throws SeguimientoVotoException, IOException{
 		
 		long idUsuario = getUsuario(request);
 		
 		try {
-			return reportesService.getInstalacionCasillaRg(idUsuario, idDistritoFederal, idDistritoLocal, idMunicipal, idRuta, idCasilla);
+			return reportesService.getInstalacionCasillaRg(idUsuario, idDistritoFederal, idDistritoLocal, idMunicipal);
 		} catch (SeguimientoVotoException e) {
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
@@ -227,14 +216,12 @@ public class ReportesSeguimientoVotoController extends MasterController{
 	public void downloadInstalacionCasillaEstatalCSV(HttpServletResponse response,  HttpServletRequest request,
 			@RequestParam(value = "idDistritoFederal", required = false) Long idDistritoFederal,						
 			@RequestParam(value = "idDistritoLocal", required = false) Long idDistritoLocal,
-			@RequestParam(value = "idMunicipal", required = false) Long idMunicipal,						
-			@RequestParam(value = "idRuta", required = false) Long idRuta,
-			@RequestParam(value = "idCasilla", required = false) Long idCasilla) throws SeguimientoVotoException, IOException {
+			@RequestParam(value = "idMunicipal", required = false) Long idMunicipal) throws SeguimientoVotoException, IOException {
 		
 		long usuario = getUsuario(request);
 		try {
 
-			reportesService.getReporteInstalacionCasillaEstatalDownload(response, usuario, idDistritoFederal, idDistritoLocal, idMunicipal, idRuta, idCasilla);
+			reportesService.getReporteInstalacionCasillaEstatalDownload(response, usuario, idDistritoFederal, idDistritoLocal, idMunicipal);
 
 		} catch (SeguimientoVotoException e) {
 			e.printStackTrace();
@@ -250,14 +237,12 @@ public class ReportesSeguimientoVotoController extends MasterController{
 	public void downloadInstalacionCasillaFederalCSV(HttpServletResponse response,  HttpServletRequest request,
 			@RequestParam(value = "idDistritoFederal", required = false) Long idDistritoFederal,						
 			@RequestParam(value = "idDistritoLocal", required = false) Long idDistritoLocal,
-			@RequestParam(value = "idMunicipal", required = false) Long idMunicipal,						
-			@RequestParam(value = "idRuta", required = false) Long idRuta,
-			@RequestParam(value = "idCasilla", required = false) Long idCasilla) throws SeguimientoVotoException, IOException {
+			@RequestParam(value = "idMunicipal", required = false) Long idMunicipal) throws SeguimientoVotoException, IOException {
 		
 		long usuario = getUsuario(request);
 		try {
 
-			reportesService.getReporteInstalacionCasillaFederalDownload(response, usuario, idDistritoFederal, idDistritoLocal, idMunicipal, idRuta, idCasilla);
+			reportesService.getReporteInstalacionCasillaFederalDownload(response, usuario, idDistritoFederal, idDistritoLocal, idMunicipal);
 
 		} catch (SeguimientoVotoException e) {
 			e.printStackTrace();
@@ -273,14 +258,12 @@ public class ReportesSeguimientoVotoController extends MasterController{
 	public void downloadInstalacionCasillaLocalCSV(HttpServletResponse response,  HttpServletRequest request,
 			@RequestParam(value = "idDistritoFederal", required = false) Long idDistritoFederal,						
 			@RequestParam(value = "idDistritoLocal", required = false) Long idDistritoLocal,
-			@RequestParam(value = "idMunicipal", required = false) Long idMunicipal,						
-			@RequestParam(value = "idRuta", required = false) Long idRuta,
-			@RequestParam(value = "idCasilla", required = false) Long idCasilla) throws SeguimientoVotoException, IOException {
+			@RequestParam(value = "idMunicipal", required = false) Long idMunicipal) throws SeguimientoVotoException, IOException {
 		
 		long usuario = getUsuario(request);
 		try {
 
-			reportesService.getReporteInstalacionCasillaLocalDownload(response, usuario, idDistritoFederal, idDistritoLocal, idMunicipal, idRuta, idCasilla);
+			reportesService.getReporteInstalacionCasillaLocalDownload(response, usuario, idDistritoFederal, idDistritoLocal, idMunicipal);
 
 		} catch (SeguimientoVotoException e) {
 			e.printStackTrace();
@@ -296,14 +279,12 @@ public class ReportesSeguimientoVotoController extends MasterController{
 	public void downloadInstalacionCasillaMunicipalCSV(HttpServletResponse response,  HttpServletRequest request,
 			@RequestParam(value = "idDistritoFederal", required = false) Long idDistritoFederal,						
 			@RequestParam(value = "idDistritoLocal", required = false) Long idDistritoLocal,
-			@RequestParam(value = "idMunicipal", required = false) Long idMunicipal,						
-			@RequestParam(value = "idRuta", required = false) Long idRuta,
-			@RequestParam(value = "idCasilla", required = false) Long idCasilla) throws SeguimientoVotoException, IOException {
+			@RequestParam(value = "idMunicipal", required = false) Long idMunicipal) throws SeguimientoVotoException, IOException {
 		
 		long usuario = getUsuario(request);
 		try {
 
-			reportesService.getReporteInstalacionCasillaMunicipalDownload(response, usuario, idDistritoFederal, idDistritoLocal, idMunicipal, idRuta, idCasilla);
+			reportesService.getReporteInstalacionCasillaMunicipalDownload(response, usuario, idDistritoFederal, idDistritoLocal, idMunicipal);
 
 		} catch (SeguimientoVotoException e) {
 			e.printStackTrace();
@@ -319,14 +300,12 @@ public class ReportesSeguimientoVotoController extends MasterController{
 	public void downloadInstalacionCasillaCrgCSV(HttpServletResponse response,  HttpServletRequest request,
 			@RequestParam(value = "idDistritoFederal", required = false) Long idDistritoFederal,						
 			@RequestParam(value = "idDistritoLocal", required = false) Long idDistritoLocal,
-			@RequestParam(value = "idMunicipal", required = false) Long idMunicipal,						
-			@RequestParam(value = "idRuta", required = false) Long idRuta,
-			@RequestParam(value = "idCasilla", required = false) Long idCasilla) throws SeguimientoVotoException, IOException {
+			@RequestParam(value = "idMunicipal", required = false) Long idMunicipal) throws SeguimientoVotoException, IOException {
 		
 		long usuario = getUsuario(request);
 		try {
 
-			reportesService.getReporteInstalacionCasillaCrgDownload(response, usuario, idDistritoFederal, idDistritoLocal, idMunicipal, idRuta, idCasilla);
+			reportesService.getReporteInstalacionCasillaCrgDownload(response, usuario, idDistritoFederal, idDistritoLocal, idMunicipal);
 
 		} catch (SeguimientoVotoException e) {
 			e.printStackTrace();
@@ -342,14 +321,12 @@ public class ReportesSeguimientoVotoController extends MasterController{
 	public void downloadInstalacionCasillaRgCSV(HttpServletResponse response,  HttpServletRequest request,
 			@RequestParam(value = "idDistritoFederal", required = false) Long idDistritoFederal,						
 			@RequestParam(value = "idDistritoLocal", required = false) Long idDistritoLocal,
-			@RequestParam(value = "idMunicipal", required = false) Long idMunicipal,						
-			@RequestParam(value = "idRuta", required = false) Long idRuta,
-			@RequestParam(value = "idCasilla", required = false) Long idCasilla) throws SeguimientoVotoException, IOException {
+			@RequestParam(value = "idMunicipal", required = false) Long idMunicipal) throws SeguimientoVotoException, IOException {
 		
 		long usuario = getUsuario(request);
 		try {
 
-			reportesService.getReporteInstalacionCasillaRgDownload(response, usuario, idDistritoFederal, idDistritoLocal, idMunicipal, idRuta, idCasilla);
+			reportesService.getReporteInstalacionCasillaRgDownload(response, usuario, idDistritoFederal, idDistritoLocal, idMunicipal);
 
 		} catch (SeguimientoVotoException e) {
 			e.printStackTrace();

@@ -6,7 +6,7 @@ import mx.morena.persistencia.entidad.Municipio;
 
 public interface IMunicipioRepository {
 
-	Municipio findById(Long municipio);
+	Municipio findById(Long municipio, Long federal);
 
 	List<Municipio> findAll();
 

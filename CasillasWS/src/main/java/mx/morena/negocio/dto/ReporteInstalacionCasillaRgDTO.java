@@ -4,7 +4,7 @@ public class ReporteInstalacionCasillaRgDTO {
 
 	private Long idDistrito;
 	
-	private Long seccion;
+	private String seccion;
 	
 	private String casillas;
 	
@@ -32,11 +32,11 @@ public class ReporteInstalacionCasillaRgDTO {
 		this.idDistrito = idDistrito;
 	}
 
-	public Long getSeccion() {
+	public String getSeccion() {
 		return seccion;
 	}
 
-	public void setSeccion(Long seccion) {
+	public void setSeccion(String seccion) {
 		this.seccion = seccion;
 	}
 

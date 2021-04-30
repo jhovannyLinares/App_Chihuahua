@@ -23,27 +23,27 @@ public interface IReporteSeguimientoVotoService {
 	
 	String marcarConvencido(Long idUsuario, Long idConvencido, boolean IsNotificado) throws SeguimientoVotoException;
 	
-	List<ReporteInstalacionCasillaDTO> getInstalacionCasillaEstatal(Long idUsuario, Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal, Long idRuta, Long idCasilla)throws SeguimientoVotoException, IOException;
+	List<ReporteInstalacionCasillaDTO> getInstalacionCasillaEstatal(Long idUsuario, Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal)throws SeguimientoVotoException, IOException;
 	
-	List<ReporteInstalacionCasillaDTO> getInstalacionCasillaFederal(Long idUsuario, Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal, Long idRuta, Long idCasilla)throws SeguimientoVotoException, IOException;
+	List<ReporteInstalacionCasillaDTO> getInstalacionCasillaFederal(Long idUsuario, Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal)throws SeguimientoVotoException, IOException;
 	
-	List<ReporteInstalacionCasillaDTO> getInstalacionCasillaLocal(Long idUsuario, Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal, Long idRuta, Long idCasilla)throws SeguimientoVotoException, IOException;
+	List<ReporteInstalacionCasillaDTO> getInstalacionCasillaLocal(Long idUsuario, Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal)throws SeguimientoVotoException, IOException;
 	
-	List<ReporteInstalacionCasillaMuniDTO> getInstalacionCasillaMunicipal(Long idUsuario, Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal, Long idRuta, Long idCasilla)throws SeguimientoVotoException, IOException;
+	List<ReporteInstalacionCasillaMuniDTO> getInstalacionCasillaMunicipal(Long idUsuario, Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal)throws SeguimientoVotoException, IOException;
 	
-	List<ReporteInstalacionCasillaCrgDTO> getInstalacionCasillaCrg(Long idUsuario, Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal, Long idRuta, Long idCasilla)throws SeguimientoVotoException, IOException;
+	List<ReporteInstalacionCasillaCrgDTO> getInstalacionCasillaCrg(Long idUsuario, Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal)throws SeguimientoVotoException, IOException;
 	
-	List<ReporteInstalacionCasillaRgDTO> getInstalacionCasillaRg(Long idUsuario, Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal, Long idRuta, Long idCasilla)throws SeguimientoVotoException, IOException;
+	List<ReporteInstalacionCasillaRgDTO> getInstalacionCasillaRg(Long idUsuario, Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal)throws SeguimientoVotoException, IOException;
 	
-	public void getReporteInstalacionCasillaEstatalDownload(HttpServletResponse response,Long idUsuario, Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal, Long idRuta, Long idCasilla)throws SeguimientoVotoException, IOException;
+	public void getReporteInstalacionCasillaEstatalDownload(HttpServletResponse response,Long idUsuario, Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal)throws SeguimientoVotoException, IOException;
 	
-	public void getReporteInstalacionCasillaFederalDownload(HttpServletResponse response,Long idUsuario, Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal, Long idRuta, Long idCasilla)throws SeguimientoVotoException, IOException;
+	public void getReporteInstalacionCasillaFederalDownload(HttpServletResponse response,Long idUsuario, Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal)throws SeguimientoVotoException, IOException;
 	
-	public void getReporteInstalacionCasillaLocalDownload(HttpServletResponse response,Long idUsuario, Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal, Long idRuta, Long idCasilla)throws SeguimientoVotoException, IOException;
+	public void getReporteInstalacionCasillaLocalDownload(HttpServletResponse response,Long idUsuario, Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal)throws SeguimientoVotoException, IOException;
 	
-	public void getReporteInstalacionCasillaMunicipalDownload(HttpServletResponse response,Long idUsuario, Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal, Long idRuta, Long idCasilla)throws SeguimientoVotoException, IOException;
+	public void getReporteInstalacionCasillaMunicipalDownload(HttpServletResponse response,Long idUsuario, Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal)throws SeguimientoVotoException, IOException;
 	
-	public void getReporteInstalacionCasillaCrgDownload(HttpServletResponse response,Long idUsuario, Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal, Long idRuta, Long idCasilla)throws SeguimientoVotoException, IOException;
+	public void getReporteInstalacionCasillaCrgDownload(HttpServletResponse response,Long idUsuario, Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal)throws SeguimientoVotoException, IOException;
 	
-	public void getReporteInstalacionCasillaRgDownload(HttpServletResponse response,Long idUsuario, Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal, Long idRuta, Long idCasilla)throws SeguimientoVotoException, IOException;
+	public void getReporteInstalacionCasillaRgDownload(HttpServletResponse response,Long idUsuario, Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal)throws SeguimientoVotoException, IOException;
 }

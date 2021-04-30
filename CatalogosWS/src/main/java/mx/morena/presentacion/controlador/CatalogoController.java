@@ -40,7 +40,7 @@ public class CatalogoController extends MasterController {
 
 	@GetMapping()
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	private CatalogoDTOOffline getCatalogos(HttpServletRequest request) {
+	private CatalogoDTOOffline getCatalogos(HttpServletRequest request) throws CatalogoException {
 
 		return ICatService.getCatalogos(getUsuario(request), getPerfil(request));
 
@@ -123,7 +123,7 @@ public class CatalogoController extends MasterController {
 
 	@GetMapping("/distritosFederales/{id}/municipios")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	private List<MunicipioDTO> getLocalByFederal(HttpServletRequest request, @PathVariable("id") Long idFederal) {
+	private List<MunicipioDTO> getLocalByFederal(HttpServletRequest request, @PathVariable("id") Long idFederal) throws CatalogoException {
 
 		long usuario = getUsuario(request);
 		long idPerfil = getPerfil(request);

@@ -117,7 +117,7 @@ public class CatalogoServiceImpl extends MasterService implements ICatalogoServi
 	}
 
 	@Override
-	public List<MunicipioDTO> getMunicipioByFederal(long idUsuario, long idPerfil, Long idFederal) {
+	public List<MunicipioDTO> getMunicipioByFederal(long idUsuario, long idPerfil, Long idFederal) throws CatalogoException {
 
 		Usuario usuario = usuarioRepository.findById(idUsuario);
 
@@ -125,7 +125,10 @@ public class CatalogoServiceImpl extends MasterService implements ICatalogoServi
 
 		if (usuario.getPerfil() > PERFIL_FEDERAL) {
 
-			Municipio municipio = municipioRepository.findById(usuario.getMunicipio());
+			Municipio municipio = municipioRepository.findById(usuario.getMunicipio(), usuario.getFederal());
+			if(municipio == null) {
+				throw new CatalogoException("No se localizaron los Municipios", 401);
+			}
 			MunicipioDTO dto = new MunicipioDTO();
 			MapperUtil.map(municipio, dto);
 
@@ -171,7 +174,7 @@ public class CatalogoServiceImpl extends MasterService implements ICatalogoServi
 //	}
 
 	@Override
-	public CatalogoDTOOffline getCatalogos(long usuarioId, long perfilId) {
+	public CatalogoDTOOffline getCatalogos(long usuarioId, long perfilId) throws CatalogoException {
 
 		logger.debug("getCatalogos");
 

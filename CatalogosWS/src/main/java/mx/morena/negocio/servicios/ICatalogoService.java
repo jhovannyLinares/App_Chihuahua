@@ -20,11 +20,11 @@ public interface ICatalogoService {
 
 	List<DistritoFederalDTO> getFederalByEntidad(long usuario, long perfil, Long idEntidad);
 
-	List<MunicipioDTO> getMunicipioByFederal(long usuario, long perfil, Long id);
+	List<MunicipioDTO> getMunicipioByFederal(long usuario, long perfil, Long id) throws CatalogoException;
 
 //	List<LocalidadDTO> getLocalidadByMunicipio(long usuario, long perfil, Long id);
 
-	CatalogoDTOOffline getCatalogos(long usuario, long perfil);
+	CatalogoDTOOffline getCatalogos(long usuario, long perfil) throws CatalogoException;
 
 	List<CasillaDTO> getCasillas(long usuario, long perfil, Long distritoFederalId, Long municipioId, Long seccionId, Boolean isLibres);
 

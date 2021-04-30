@@ -22,6 +22,7 @@ import mx.morena.negocio.exception.SeguimientoVotoException;
 import mx.morena.negocio.servicios.IReporteSeguimientoVotoService;
 import mx.morena.persistencia.entidad.Convencidos;
 import mx.morena.persistencia.entidad.DistritoFederal;
+import mx.morena.persistencia.entidad.Rutas;
 import mx.morena.persistencia.entidad.SeccionElectoral;
 import mx.morena.persistencia.entidad.Usuario;
 import mx.morena.persistencia.repository.ICasillaRepository;
@@ -251,7 +252,7 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 	// -------------------------Reportes--------------
 	@Override
 	public List<ReporteInstalacionCasillaDTO> getInstalacionCasillaEstatal(Long idUsuario, Long idDistritoFederal,
-			Long idDistritoLocal, Long idMunicipal, Long idRuta, Long idCasilla)
+			Long idDistritoLocal, Long idMunicipal)
 			throws SeguimientoVotoException, IOException {
 
 		Usuario usuario = usuarioRepository.findById(idUsuario);
@@ -266,7 +267,7 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 
 			List<DistritoFederal> distritos = distritoRepository.findByEntidad(idEstado);
 			
-			if(idDistritoFederal == null && idDistritoLocal == null && idMunicipal == null && idRuta == null && idCasilla  == null) {
+			if(idDistritoFederal == null && idDistritoLocal == null && idMunicipal == null) {
 	
 				for (DistritoFederal df1 : distritos) {
 					dto = new ReporteInstalacionCasillaDTO();
@@ -302,21 +303,21 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 				dto = new ReporteInstalacionCasillaDTO();
 				
 				Long countCasillas = seguimientoRepository.getCasillasByDistritoFederal(idDistritoFederal, idDistritoLocal,
-						idMunicipal, idRuta, idCasilla);
+						idMunicipal);
 				Long instaladas1 = seguimientoRepository.getCasillasInstaladas1Federal(idDistritoFederal, idDistritoLocal,
-						idMunicipal, idRuta, idCasilla);
+						idMunicipal);
 				Long instaladas2 = seguimientoRepository.getCasillasInstaladas2Federal(idDistritoFederal, idDistritoLocal,
-						idMunicipal, idRuta, idCasilla);
+						idMunicipal);
 				Long instaladas3 = seguimientoRepository.getCasillasInstaladas3Federal(idDistritoFederal, idDistritoLocal,
-						idMunicipal, idRuta, idCasilla);
+						idMunicipal);
 				Long instaladas4 = seguimientoRepository.getCasillasInstaladas4Federal(idDistritoFederal, idDistritoLocal,
-						idMunicipal, idRuta, idCasilla);
+						idMunicipal);
 				Long instaladas5 = seguimientoRepository.getCasillasInstaladas5Federal(idDistritoFederal, idDistritoLocal,
-						idMunicipal, idRuta, idCasilla);
+						idMunicipal);
 				Long instaladas6 = seguimientoRepository.getCasillasInstaladas6Federal(idDistritoFederal, idDistritoLocal,
-						idMunicipal, idRuta, idCasilla);
+						idMunicipal);
 				Long totalCasillas = seguimientoRepository.getTotalCasillasInstaladasFederal(idDistritoFederal,
-						idDistritoLocal, idMunicipal, idRuta, idCasilla);
+						idDistritoLocal, idMunicipal);
 
 				dto.setIdDistrito(idDistritoFederal);
 				dto.setCasillas(countCasillas);
@@ -343,20 +344,23 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 
 	@Override
 	public List<ReporteInstalacionCasillaDTO> getInstalacionCasillaFederal(Long idUsuario, Long idDistritoFederal,
-			Long idDistritoLocal, Long idMunicipal, Long idRuta, Long idCasilla)
+			Long idDistritoLocal, Long idMunicipal)
 			throws SeguimientoVotoException, IOException {
 
 		Usuario usuario = usuarioRepository.findById(idUsuario);
 		Long perfil = usuario.getPerfil();
 		Long idEstado = usuario.getEntidad();
 		Long df = usuario.getFederal();
+		
+		System.out.println(df);
+		System.out.println(idUsuario);
 
 		if (perfil == PERFIL_FEDERAL) {
 
 			List<ReporteInstalacionCasillaDTO> reporteDistDto = new ArrayList<ReporteInstalacionCasillaDTO>();
 			ReporteInstalacionCasillaDTO dto = null;
 			
-			if(idDistritoFederal == null && idDistritoLocal == null && idMunicipal == null && idRuta == null && idCasilla  == null) {
+			if(idDistritoFederal == null && idDistritoLocal == null && idMunicipal == null) {
 
 				dto = new ReporteInstalacionCasillaDTO();
 				
@@ -388,21 +392,21 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 				dto = new ReporteInstalacionCasillaDTO();
 				
 				Long countCasillas = seguimientoRepository.getCasillasByDistritoFederal(idDistritoFederal, idDistritoLocal,
-						idMunicipal, idRuta, idCasilla);
+						idMunicipal);
 				Long instaladas1 = seguimientoRepository.getCasillasInstaladas1Federal(idDistritoFederal, idDistritoLocal,
-						idMunicipal, idRuta, idCasilla);
+						idMunicipal);
 				Long instaladas2 = seguimientoRepository.getCasillasInstaladas2Federal(idDistritoFederal, idDistritoLocal,
-						idMunicipal, idRuta, idCasilla);
+						idMunicipal);
 				Long instaladas3 = seguimientoRepository.getCasillasInstaladas3Federal(idDistritoFederal, idDistritoLocal,
-						idMunicipal, idRuta, idCasilla);
+						idMunicipal);
 				Long instaladas4 = seguimientoRepository.getCasillasInstaladas4Federal(idDistritoFederal, idDistritoLocal,
-						idMunicipal, idRuta, idCasilla);
+						idMunicipal);
 				Long instaladas5 = seguimientoRepository.getCasillasInstaladas5Federal(idDistritoFederal, idDistritoLocal,
-						idMunicipal, idRuta, idCasilla);
+						idMunicipal);
 				Long instaladas6 = seguimientoRepository.getCasillasInstaladas6Federal(idDistritoFederal, idDistritoLocal,
-						idMunicipal, idRuta, idCasilla);
+						idMunicipal);
 				Long totalCasillas = seguimientoRepository.getTotalCasillasInstaladasFederal(idDistritoFederal,
-						idDistritoLocal, idMunicipal, idRuta, idCasilla);
+						idDistritoLocal, idMunicipal);
 
 				dto.setIdDistrito(idDistritoFederal);
 				dto.setCasillas(countCasillas);
@@ -429,45 +433,91 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 
 	@Override
 	public List<ReporteInstalacionCasillaDTO> getInstalacionCasillaLocal(Long idUsuario, Long idDistritoFederal,
-			Long idDistritoLocal, Long idMunicipal, Long idRuta, Long idCasilla)
+			Long idDistritoLocal, Long idMunicipal)
 			throws SeguimientoVotoException, IOException {
 
 		Usuario usuario = usuarioRepository.findById(idUsuario);
 		Long perfil = usuario.getPerfil();
 		Long idEstado = usuario.getEntidad();
 		Long df = usuario.getFederal();
+		Long dl = usuario.getDistritoLocal();
 
 		if (perfil == PERFIL_LOCAL) {
+			
+			System.out.println("local "+ dl);
+			System.out.println("perfil "+ perfil);
+			System.out.println("usuario "+ idUsuario);
 
 			List<ReporteInstalacionCasillaDTO> reporteDistDto = new ArrayList<ReporteInstalacionCasillaDTO>();
 			ReporteInstalacionCasillaDTO dto = null;
 
-			dto = new ReporteInstalacionCasillaDTO();
-
-			Long countCasillas = seguimientoRepository.getCasillasByLocal(idDistritoLocal);
-			Long instaladas1 = seguimientoRepository.getCasillasInstaladas1L(idDistritoLocal);
-			Long instaladas2 = seguimientoRepository.getCasillasInstaladas2L(idDistritoLocal);
-			Long instaladas3 = seguimientoRepository.getCasillasInstaladas3L(idDistritoLocal);
-			Long instaladas4 = seguimientoRepository.getCasillasInstaladas4L(idDistritoLocal);
-			Long instaladas5 = seguimientoRepository.getCasillasInstaladas5L(idDistritoLocal);
-			Long instaladas6 = seguimientoRepository.getCasillasInstaladas6L(idDistritoLocal);
-			Long totalCasillas = seguimientoRepository.getTotalCasillasInstaladasL(idDistritoLocal);
-
-			dto.setIdDistrito(idDistritoLocal);
-			dto.setCasillas(countCasillas);
-			dto.setInstaladas7a730(instaladas1);
-			dto.setInstaladas731a8(instaladas2);
-			dto.setInstaladas8a830(instaladas3);
-			dto.setInstaladas831a9(instaladas4);
-			dto.setInstaladasDespues9(instaladas5);
-			dto.setInstaladasDespues10(instaladas6);
-			dto.setTotalInstaladas(totalCasillas);
-			dto.setNoInstaladas(countCasillas - totalCasillas);
+			if(idDistritoFederal == null && idDistritoLocal == null && idMunicipal == null) {
+				
+				dto = new ReporteInstalacionCasillaDTO();
 	
-			reporteDistDto.add(dto);
+				Long countCasillas = seguimientoRepository.getCasillasByLocal(dl);
+				Long instaladas1 = seguimientoRepository.getCasillasInstaladas1L(dl);
+				Long instaladas2 = seguimientoRepository.getCasillasInstaladas2L(dl);
+				Long instaladas3 = seguimientoRepository.getCasillasInstaladas3L(dl);
+				Long instaladas4 = seguimientoRepository.getCasillasInstaladas4L(dl);
+				Long instaladas5 = seguimientoRepository.getCasillasInstaladas5L(dl);
+				Long instaladas6 = seguimientoRepository.getCasillasInstaladas6L(dl);
+				Long totalCasillas = seguimientoRepository.getTotalCasillasInstaladasL(dl);
+	
+				dto.setIdDistrito(dl);
+				dto.setCasillas(countCasillas);
+				dto.setInstaladas7a730(instaladas1);
+				dto.setInstaladas731a8(instaladas2);
+				dto.setInstaladas8a830(instaladas3);
+				dto.setInstaladas831a9(instaladas4);
+				dto.setInstaladasDespues9(instaladas5);
+				dto.setInstaladasDespues10(instaladas6);
+				dto.setTotalInstaladas(totalCasillas);
+				dto.setNoInstaladas(countCasillas - totalCasillas);
+				
+				reporteDistDto.add(dto);
+	
+			
+				return reporteDistDto;			
+			}else {
+				
+				Long disLocal = seguimientoRepository.getIdLocal(idDistritoFederal, idDistritoLocal, idMunicipal);
+				dto = new ReporteInstalacionCasillaDTO();
+				
+				Long countCasillas = seguimientoRepository.getCasillasByDistritoFederal(idDistritoFederal, idDistritoLocal,
+						idMunicipal);
+				Long instaladas1 = seguimientoRepository.getCasillasInstaladas1Federal(idDistritoFederal, idDistritoLocal,
+						idMunicipal);
+				Long instaladas2 = seguimientoRepository.getCasillasInstaladas2Federal(idDistritoFederal, idDistritoLocal,
+						idMunicipal);
+				Long instaladas3 = seguimientoRepository.getCasillasInstaladas3Federal(idDistritoFederal, idDistritoLocal,
+						idMunicipal);
+				Long instaladas4 = seguimientoRepository.getCasillasInstaladas4Federal(idDistritoFederal, idDistritoLocal,
+						idMunicipal);
+				Long instaladas5 = seguimientoRepository.getCasillasInstaladas5Federal(idDistritoFederal, idDistritoLocal,
+						idMunicipal);
+				Long instaladas6 = seguimientoRepository.getCasillasInstaladas6Federal(idDistritoFederal, idDistritoLocal,
+						idMunicipal);
+				Long totalCasillas = seguimientoRepository.getTotalCasillasInstaladasFederal(idDistritoFederal,
+						idDistritoLocal, idMunicipal);
 
-		
+				dto.setIdDistrito(idDistritoLocal);
+				dto.setCasillas(countCasillas);
+				dto.setInstaladas7a730(instaladas1);
+				dto.setInstaladas731a8(instaladas2);
+				dto.setInstaladas8a830(instaladas3);
+				dto.setInstaladas831a9(instaladas4);
+				dto.setInstaladasDespues9(instaladas5);
+				dto.setInstaladasDespues10(instaladas6);
+				dto.setTotalInstaladas(totalCasillas);
+				dto.setNoInstaladas(countCasillas - totalCasillas);
+
+				reporteDistDto.add(dto);
+
 			return reporteDistDto;
+
+				
+			}
 		} else {
 			throw new SeguimientoVotoException("No cuenta con los permisos suficientes para consultar el reporte", 401);
 		}
@@ -475,50 +525,89 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 
 	@Override
 	public List<ReporteInstalacionCasillaMuniDTO> getInstalacionCasillaMunicipal(Long idUsuario, Long idDistritoFederal,
-			Long idDistritoLocal, Long idMunicipal, Long idRuta, Long idCasilla)
+			Long idDistritoLocal, Long idMunicipal)
 			throws SeguimientoVotoException, IOException {
 
 		Usuario usuario = usuarioRepository.findById(idUsuario);
 		Long perfil = usuario.getPerfil();
 		Long idEstado = usuario.getEntidad();
 		Long df = usuario.getFederal();
+		Long mun = usuario.getMunicipio();
 
 		if (perfil == PERFIL_MUNICIPAL) {
 
 			List<ReporteInstalacionCasillaMuniDTO> reporteMuntDto = new ArrayList<ReporteInstalacionCasillaMuniDTO>();
 			ReporteInstalacionCasillaMuniDTO dto = null;
 
-			dto = new ReporteInstalacionCasillaMuniDTO();
-
+			if(idDistritoFederal == null && idDistritoLocal == null && idMunicipal == null) {
+				
 				dto = new ReporteInstalacionCasillaMuniDTO();
-
-//				Long idMuni = 1L;
-			String muni = seguimientoRepository.getNombreMunicipio(idMunicipal);
-				
-			Long countCasillas = seguimientoRepository.getCasillasByMunicipal(idMunicipal);
-			Long instaladas1 = seguimientoRepository.getCasillasInstaladas1M(idMunicipal);
-			Long instaladas2 = seguimientoRepository.getCasillasInstaladas2M(idMunicipal);
-			Long instaladas3 = seguimientoRepository.getCasillasInstaladas3M(idMunicipal);
-			Long instaladas4 = seguimientoRepository.getCasillasInstaladas4M(idMunicipal);
-			Long instaladas5 = seguimientoRepository.getCasillasInstaladas5M(idMunicipal);
-			Long instaladas6 = seguimientoRepository.getCasillasInstaladas6M(idMunicipal);
-			Long totalCasillas = seguimientoRepository.getTotalCasillasInstaladasM(idMunicipal);
-				
-			dto.setIdMunicipio(idMunicipal);
-			dto.setMunicipio(muni);
-			dto.setCasillas(countCasillas);
-			dto.setInstaladas7a730(instaladas1);
-			dto.setInstaladas731a8(instaladas2);
-			dto.setInstaladas8a830(instaladas3);
-			dto.setInstaladas831a9(instaladas4);
-			dto.setInstaladasDespues9(instaladas5);
-			dto.setInstaladasDespues10(instaladas6);
-			dto.setTotalInstaladas(totalCasillas);
-			dto.setNoInstaladas(countCasillas - totalCasillas);
+				String muni = seguimientoRepository.getNombreMunicipio(mun);
+					
+				Long countCasillas = seguimientoRepository.getCasillasByMunicipal(mun);
+				Long instaladas1 = seguimientoRepository.getCasillasInstaladas1M(mun);
+				Long instaladas2 = seguimientoRepository.getCasillasInstaladas2M(mun);
+				Long instaladas3 = seguimientoRepository.getCasillasInstaladas3M(mun);
+				Long instaladas4 = seguimientoRepository.getCasillasInstaladas4M(mun);
+				Long instaladas5 = seguimientoRepository.getCasillasInstaladas5M(mun);
+				Long instaladas6 = seguimientoRepository.getCasillasInstaladas6M(mun);
+				Long totalCasillas = seguimientoRepository.getTotalCasillasInstaladasM(mun);
+					
+				dto.setIdMunicipio(mun);
+				dto.setMunicipio(muni);
+				dto.setCasillas(countCasillas);
+				dto.setInstaladas7a730(instaladas1);
+				dto.setInstaladas731a8(instaladas2);
+				dto.setInstaladas8a830(instaladas3);
+				dto.setInstaladas831a9(instaladas4);
+				dto.setInstaladasDespues9(instaladas5);
+				dto.setInstaladasDespues10(instaladas6);
+				dto.setTotalInstaladas(totalCasillas);
+				dto.setNoInstaladas(countCasillas - totalCasillas);
+		
+				reporteMuntDto.add(dto);
 	
-			reporteMuntDto.add(dto);
+				return reporteMuntDto;
+				
+			}else{
+				
+				dto = new ReporteInstalacionCasillaMuniDTO();
+				String muni = seguimientoRepository.getNombreMunicipio(idMunicipal);
+				
+				Long countCasillas = seguimientoRepository.getCasillasByDistritoFederal(idDistritoFederal, idDistritoLocal,
+						idMunicipal);
+				Long instaladas1 = seguimientoRepository.getCasillasInstaladas1Federal(idDistritoFederal, idDistritoLocal,
+						idMunicipal);
+				Long instaladas2 = seguimientoRepository.getCasillasInstaladas2Federal(idDistritoFederal, idDistritoLocal,
+						idMunicipal);
+				Long instaladas3 = seguimientoRepository.getCasillasInstaladas3Federal(idDistritoFederal, idDistritoLocal,
+						idMunicipal);
+				Long instaladas4 = seguimientoRepository.getCasillasInstaladas4Federal(idDistritoFederal, idDistritoLocal,
+						idMunicipal);
+				Long instaladas5 = seguimientoRepository.getCasillasInstaladas5Federal(idDistritoFederal, idDistritoLocal,
+						idMunicipal);
+				Long instaladas6 = seguimientoRepository.getCasillasInstaladas6Federal(idDistritoFederal, idDistritoLocal,
+						idMunicipal);
+				Long totalCasillas = seguimientoRepository.getTotalCasillasInstaladasFederal(idDistritoFederal,
+						idDistritoLocal, idMunicipal);
+
+				dto.setIdMunicipio(idMunicipal);
+				dto.setMunicipio(muni);
+				dto.setCasillas(countCasillas);
+				dto.setInstaladas7a730(instaladas1);
+				dto.setInstaladas731a8(instaladas2);
+				dto.setInstaladas8a830(instaladas3);
+				dto.setInstaladas831a9(instaladas4);
+				dto.setInstaladasDespues9(instaladas5);
+				dto.setInstaladasDespues10(instaladas6);
+				dto.setTotalInstaladas(totalCasillas);
+				dto.setNoInstaladas(countCasillas - totalCasillas);
+
+				reporteMuntDto.add(dto);
 
 			return reporteMuntDto;
+
+			}
 
 		} else {
 			throw new SeguimientoVotoException("No cuenta con los permisos suficientes para consultar el reporte", 401);
@@ -527,7 +616,7 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 
 	@Override
 	public List<ReporteInstalacionCasillaCrgDTO> getInstalacionCasillaCrg(Long idUsuario, Long idDistritoFederal,
-			Long idDistritoLocal, Long idMunicipal, Long idRuta, Long idCasilla)
+			Long idDistritoLocal, Long idMunicipal)
 			throws SeguimientoVotoException, IOException {
 
 		Usuario usuario = usuarioRepository.findById(idUsuario);
@@ -542,16 +631,75 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 
 			dto = new ReporteInstalacionCasillaCrgDTO();
 
-			List<DistritoFederal> distritos = distritoRepository.findByEntidad(idEstado);
+			List<Rutas> rutas = seguimientoRepository.findByFederal(df);
+			
+			if(idDistritoFederal == null && idDistritoLocal == null && idMunicipal == null) {
 
-			for (DistritoFederal df1 : distritos) {
+				for (Rutas ruts : rutas) {
+					dto = new ReporteInstalacionCasillaCrgDTO();
+					
+					Long casillas = seguimientoRepository.getCasillasByRuta(ruts.getRuta());
+					
+					Long instaladas1 = seguimientoRepository.getCasillasInstaladas1Crg(ruts.getRuta());
+					Long instaladas2 = seguimientoRepository.getCasillasInstaladas2Crg(ruts.getRuta());
+					Long instaladas3 = seguimientoRepository.getCasillasInstaladas3Crg(ruts.getRuta());
+					Long instaladas4 = seguimientoRepository.getCasillasInstaladas4Crg(ruts.getRuta());
+					Long instaladas5 = seguimientoRepository.getCasillasInstaladas5Crg(ruts.getRuta());
+					Long instaladas6 = seguimientoRepository.getCasillasInstaladas6Crg(ruts.getRuta());
+					Long totalCasillas = seguimientoRepository.getTotalCasillasInstaladasCrg(ruts.getRuta());
+	
+					dto.setIdDistrito(df);
+					dto.setRutas(ruts.getRuta());
+					dto.setCasillas(casillas);
+					dto.setInstaladas7a730(instaladas1);
+					dto.setInstaladas731a8(instaladas2);
+					dto.setInstaladas8a830(instaladas3);
+					dto.setInstaladas831a9(instaladas4);
+					dto.setInstaladasDespues9(instaladas5);
+					dto.setInstaladasDespues10(instaladas6);
+					dto.setTotalInstaladas(totalCasillas);
+					dto.setNoInstaladas(casillas - totalCasillas);
+	
+					reporteCrgDto.add(dto);
+	
+				}
+	
+				return reporteCrgDto;
+			}else {
+				
 				dto = new ReporteInstalacionCasillaCrgDTO();
+				
+				String muni = seguimientoRepository.getNombreMunicipio(idMunicipal);
+				
+				Long countCasillas = seguimientoRepository.getCasillasByDistritoFederal(idDistritoFederal, idDistritoLocal,
+						idMunicipal);
+//				Long instaladas1 = seguimientoRepository.getCasillasInstaladas1Federal(idDistritoFederal, idDistritoLocal,
+//						idMunicipal);
+//				Long instaladas2 = seguimientoRepository.getCasillasInstaladas2Federal(idDistritoFederal, idDistritoLocal,
+//						idMunicipal);
+//				Long instaladas3 = seguimientoRepository.getCasillasInstaladas3Federal(idDistritoFederal, idDistritoLocal,
+//						idMunicipal);
+//				Long instaladas4 = seguimientoRepository.getCasillasInstaladas4Federal(idDistritoFederal, idDistritoLocal,
+//						idMunicipal);
+//				Long instaladas5 = seguimientoRepository.getCasillasInstaladas5Federal(idDistritoFederal, idDistritoLocal,
+//						idMunicipal);
+//				Long instaladas6 = seguimientoRepository.getCasillasInstaladas6Federal(idDistritoFederal, idDistritoLocal,
+//						idMunicipal);
+//				Long totalCasillas = seguimientoRepository.getTotalCasillasInstaladasFederal(idDistritoFederal,
+//						idDistritoLocal, idMunicipal);
 
-				Long ruta = 1L;
-
-				dto.setIdDistrito(df1.getId());
-				dto.setRutas(ruta);
-				dto.setCasillas(0L);
+				dto.setIdDistrito(df);
+//				dto.setRutas(ruts.getRuta());
+				dto.setCasillas(countCasillas);
+//				dto.setInstaladas7a730(instaladas1);
+//				dto.setInstaladas731a8(instaladas2);
+//				dto.setInstaladas8a830(instaladas3);
+//				dto.setInstaladas831a9(instaladas4);
+//				dto.setInstaladasDespues9(instaladas5);
+//				dto.setInstaladasDespues10(instaladas6);
+//				dto.setTotalInstaladas(totalCasillas);
+//				dto.setNoInstaladas(countCasillas - totalCasillas);
+				
 				dto.setInstaladas7a730(0L);
 				dto.setInstaladas731a8(0L);
 				dto.setInstaladas8a830(0L);
@@ -563,9 +711,10 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 
 				reporteCrgDto.add(dto);
 
-			}
-
 			return reporteCrgDto;
+
+				
+			}
 
 		} else {
 			throw new SeguimientoVotoException("No cuenta con los permisos suficientes para consultar el reporte", 401);
@@ -574,7 +723,7 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 
 	@Override
 	public List<ReporteInstalacionCasillaRgDTO> getInstalacionCasillaRg(Long idUsuario, Long idDistritoFederal,
-			Long idDistritoLocal, Long idMunicipal, Long idRuta, Long idCasilla)
+			Long idDistritoLocal, Long idMunicipal)
 			throws SeguimientoVotoException, IOException {
 
 		Usuario usuario = usuarioRepository.findById(idUsuario);
@@ -584,37 +733,78 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 
 		if (perfil == PERFIL_RG) {
 
-			List<ReporteInstalacionCasillaRgDTO> reporteMuntDto = new ArrayList<ReporteInstalacionCasillaRgDTO>();
+			List<ReporteInstalacionCasillaRgDTO> reporteRgDto = new ArrayList<ReporteInstalacionCasillaRgDTO>();
 			ReporteInstalacionCasillaRgDTO dto = null;
 
 			dto = new ReporteInstalacionCasillaRgDTO();
 
-			List<DistritoFederal> distritos = distritoRepository.findByEntidad(idEstado);
-
-			for (DistritoFederal df1 : distritos) {
+			List<SeccionElectoral> seccion = seguimientoRepository.getSeccionByDistrito(df);
+			
+			if(idDistritoFederal == null && idDistritoLocal == null && idMunicipal == null) {
+	
+				for (SeccionElectoral df1 : seccion) {
+					dto = new ReporteInstalacionCasillaRgDTO();
+					
+					Long descripcion = Long.parseLong(df1.getDescripcion());
+					
+					String tipoCasilla = seguimientoRepository.getTipoCasilla(descripcion);
+	
+					dto.setIdDistrito(df);
+					dto.setSeccion(df1.getDescripcion());
+					dto.setCasillas(tipoCasilla);
+					dto.setInstaladas7a730(0L);
+					dto.setInstaladas731a8(0L);
+					dto.setInstaladas8a830(0L);
+					dto.setInstaladas831a9(0L);
+					dto.setInstaladasDespues9(0L);
+					dto.setInstaladasDespues10(0L);
+					dto.setTotalInstaladas(0L);
+					dto.setNoInstaladas(0L);
+	
+					reporteRgDto.add(dto);
+	
+				}
+	
+				return reporteRgDto;
+			}else {
 				dto = new ReporteInstalacionCasillaRgDTO();
+				
+				String muni = seguimientoRepository.getNombreMunicipio(idMunicipal);
+				
+				Long countCasillas = seguimientoRepository.getCasillasByDistritoFederal(idDistritoFederal, idDistritoLocal,
+						idMunicipal);
+				Long instaladas1 = seguimientoRepository.getCasillasInstaladas1Federal(idDistritoFederal, idDistritoLocal,
+						idMunicipal);
+				Long instaladas2 = seguimientoRepository.getCasillasInstaladas2Federal(idDistritoFederal, idDistritoLocal,
+						idMunicipal);
+				Long instaladas3 = seguimientoRepository.getCasillasInstaladas3Federal(idDistritoFederal, idDistritoLocal,
+						idMunicipal);
+				Long instaladas4 = seguimientoRepository.getCasillasInstaladas4Federal(idDistritoFederal, idDistritoLocal,
+						idMunicipal);
+				Long instaladas5 = seguimientoRepository.getCasillasInstaladas5Federal(idDistritoFederal, idDistritoLocal,
+						idMunicipal);
+				Long instaladas6 = seguimientoRepository.getCasillasInstaladas6Federal(idDistritoFederal, idDistritoLocal,
+						idMunicipal);
+				Long totalCasillas = seguimientoRepository.getTotalCasillasInstaladasFederal(idDistritoFederal,
+						idDistritoLocal, idMunicipal);
 
-				Long seccion = 1L;
-				String tipoCasilla = "Basica";
+				dto.setIdDistrito(df);
+//				dto.setSeccion(df1.getDescripcion());
+//				dto.setCasillas(tipoCasilla);
+				dto.setInstaladas7a730(instaladas1);
+				dto.setInstaladas731a8(instaladas2);
+				dto.setInstaladas8a830(instaladas3);
+				dto.setInstaladas831a9(instaladas4);
+				dto.setInstaladasDespues9(instaladas5);
+				dto.setInstaladasDespues10(instaladas6);
+				dto.setTotalInstaladas(totalCasillas);
+				dto.setNoInstaladas(countCasillas - totalCasillas);
 
-				dto.setIdDistrito(df1.getId());
-				dto.setSeccion(seccion);
-				dto.setCasillas(tipoCasilla);
-				dto.setInstaladas7a730(0L);
-				dto.setInstaladas731a8(0L);
-				dto.setInstaladas8a830(0L);
-				dto.setInstaladas831a9(0L);
-				dto.setInstaladasDespues9(0L);
-				dto.setInstaladasDespues10(0L);
-				dto.setTotalInstaladas(0L);
-				dto.setNoInstaladas(0L);
+				reporteRgDto.add(dto);
 
-				reporteMuntDto.add(dto);
+			return reporteRgDto;
 
 			}
-
-			return reporteMuntDto;
-
 		} else {
 			throw new SeguimientoVotoException("No cuenta con los permisos suficientes para consultar el reporte", 401);
 		}
@@ -624,7 +814,7 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 
 	@Override
 	public void getReporteInstalacionCasillaEstatalDownload(HttpServletResponse response, Long idUsuario,
-			Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal, Long idRuta, Long idCasilla)
+			Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal)
 			throws SeguimientoVotoException, IOException {
 
 		Usuario usuario = usuarioRepository.findById(idUsuario);
@@ -635,7 +825,7 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 			setNameFile(response, CSV_INST_ESTATAL);
 
 			List<ReporteInstalacionCasillaDTO> estatalDTOs = getInstalacionCasillaEstatal(idUsuario, idDistritoFederal,
-					idDistritoLocal, idMunicipal, idRuta, idCasilla);
+					idDistritoLocal, idMunicipal);
 
 			String[] header = { "idDistrito", "casillas", "instaladas7a730", "instaladas731a8", "instaladas8a830",
 					"instaladas831a9", "instaladasDespues9", "instaladasDespues10", "totalInstaladas", "noInstaladas" };
@@ -650,7 +840,7 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 
 	@Override
 	public void getReporteInstalacionCasillaFederalDownload(HttpServletResponse response, Long idUsuario,
-			Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal, Long idRuta, Long idCasilla)
+			Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal)
 			throws SeguimientoVotoException, IOException {
 
 		Usuario usuario = usuarioRepository.findById(idUsuario);
@@ -661,7 +851,7 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 			setNameFile(response, CSV_INST_FEDERAL);
 
 			List<ReporteInstalacionCasillaDTO> federalDTOs = getInstalacionCasillaFederal(idUsuario, idDistritoFederal,
-					idDistritoLocal, idMunicipal, idRuta, idCasilla);
+					idDistritoLocal, idMunicipal);
 
 			String[] header = { "idDistrito", "casillas", "instaladas7a730", "instaladas731a8", "instaladas8a830",
 					"instaladas831a9", "instaladasDespues9", "instaladasDespues10", "totalInstaladas", "noInstaladas" };
@@ -676,7 +866,7 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 
 	@Override
 	public void getReporteInstalacionCasillaLocalDownload(HttpServletResponse response, Long idUsuario,
-			Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal, Long idRuta, Long idCasilla)
+			Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal)
 			throws SeguimientoVotoException, IOException {
 
 		Usuario usuario = usuarioRepository.findById(idUsuario);
@@ -687,7 +877,7 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 			setNameFile(response, CSV_INST_LOCAL);
 
 			List<ReporteInstalacionCasillaDTO> localDTOs = getInstalacionCasillaLocal(idUsuario, idDistritoFederal,
-					idDistritoLocal, idMunicipal, idRuta, idCasilla);
+					idDistritoLocal, idMunicipal);
 
 			String[] header = { "idDistrito", "casillas", "instaladas7a730", "instaladas731a8", "instaladas8a830",
 					"instaladas831a9", "instaladasDespues9", "instaladasDespues10", "totalInstaladas", "noInstaladas" };
@@ -702,7 +892,7 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 
 	@Override
 	public void getReporteInstalacionCasillaMunicipalDownload(HttpServletResponse response, Long idUsuario,
-			Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal, Long idRuta, Long idCasilla)
+			Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal)
 			throws SeguimientoVotoException, IOException {
 
 		Usuario usuario = usuarioRepository.findById(idUsuario);
@@ -713,7 +903,7 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 			setNameFile(response, CSV_INST_MUNICIPAL);
 
 			List<ReporteInstalacionCasillaMuniDTO> municipalDTOs = getInstalacionCasillaMunicipal(idUsuario,
-					idDistritoFederal, idDistritoLocal, idMunicipal, idRuta, idCasilla);
+					idDistritoFederal, idDistritoLocal, idMunicipal);
 
 			String[] header = { "idMunicipio", "municipio", "casillas", "instaladas7a730", "instaladas731a8",
 					"instaladas8a830", "instaladas831a9", "instaladasDespues9", "instaladasDespues10",
@@ -729,7 +919,7 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 
 	@Override
 	public void getReporteInstalacionCasillaCrgDownload(HttpServletResponse response, Long idUsuario,
-			Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal, Long idRuta, Long idCasilla)
+			Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal)
 			throws SeguimientoVotoException, IOException {
 
 		Usuario usuario = usuarioRepository.findById(idUsuario);
@@ -740,7 +930,7 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 			setNameFile(response, CSV_INST_CRG);
 
 			List<ReporteInstalacionCasillaCrgDTO> crgDTOs = getInstalacionCasillaCrg(idUsuario, idDistritoFederal,
-					idDistritoLocal, idMunicipal, idRuta, idCasilla);
+					idDistritoLocal, idMunicipal);
 
 			String[] header = { "idDistrito", "rutas", "casillas", "instaladas7a730", "instaladas731a8",
 					"instaladas8a830", "instaladas831a9", "instaladasDespues9", "instaladasDespues10",
@@ -756,7 +946,7 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 
 	@Override
 	public void getReporteInstalacionCasillaRgDownload(HttpServletResponse response, Long idUsuario,
-			Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal, Long idRuta, Long idCasilla)
+			Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal)
 			throws SeguimientoVotoException, IOException {
 
 		Usuario usuario = usuarioRepository.findById(idUsuario);
@@ -767,7 +957,7 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 			setNameFile(response, CSV_INST_RG);
 
 			List<ReporteInstalacionCasillaRgDTO> rgDTOs = getInstalacionCasillaRg(idUsuario, idDistritoFederal,
-					idDistritoLocal, idMunicipal, idRuta, idCasilla);
+					idDistritoLocal, idMunicipal);
 
 			String[] header = { "idDistrito", "seccion", "casillas", "instaladas7a730", "instaladas731a8",
 					"instaladas8a830", "instaladas831a9", "instaladasDespues9", "instaladasDespues10",

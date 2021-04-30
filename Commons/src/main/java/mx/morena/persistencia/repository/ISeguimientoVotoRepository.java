@@ -3,6 +3,7 @@ package mx.morena.persistencia.repository;
 import java.util.List;
 
 import mx.morena.persistencia.entidad.Convencidos;
+import mx.morena.persistencia.entidad.Rutas;
 import mx.morena.persistencia.entidad.SeccionElectoral;
 
 public interface ISeguimientoVotoRepository {
@@ -18,6 +19,14 @@ public interface ISeguimientoVotoRepository {
 	List<SeccionElectoral> getDistritos();
 	
 	List<Convencidos> getConvencidos(Long idSeccion);
+	
+	Long getIdLocal(Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal);
+	
+	Long getIdFederal(Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal);
+	
+	Long getIdMunicipal(Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal);
+	
+	String getNomMunicipal(Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal);
 	
 	Long getCasillasByDistrito(Long idDistritoFederal);
 	
@@ -69,20 +78,42 @@ Long getCasillasByMunicipal(Long idDistritoFederal);
 	
 	String getNombreMunicipio(Long idDistritoFederal);
 	
-Long getCasillasByDistritoFederal(Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal, Long idRuta, Long idCasilla);
+Long getCasillasByDistritoFederal(Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal);
 	
-	Long getCasillasInstaladas1Federal(Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal, Long idRuta, Long idCasilla);
+	Long getCasillasInstaladas1Federal(Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal);
 	
-	Long getCasillasInstaladas2Federal(Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal, Long idRuta, Long idCasilla);
+	Long getCasillasInstaladas2Federal(Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal);
 	
-	Long getCasillasInstaladas3Federal(Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal, Long idRuta, Long idCasilla);
+	Long getCasillasInstaladas3Federal(Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal);
 	
-	Long getCasillasInstaladas4Federal(Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal, Long idRuta, Long idCasilla);
+	Long getCasillasInstaladas4Federal(Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal);
 	
-	Long getCasillasInstaladas5Federal(Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal, Long idRuta, Long idCasilla);
+	Long getCasillasInstaladas5Federal(Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal);
 	
-	Long getCasillasInstaladas6Federal(Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal, Long idRuta, Long idCasilla);
+	Long getCasillasInstaladas6Federal(Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal);
 	
-	Long getTotalCasillasInstaladasFederal(Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal, Long idRuta, Long idCasilla);
+	Long getTotalCasillasInstaladasFederal(Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal);
+	
+	List<Rutas> findByFederal(Long idFederal);
+	
+	Long getCasillasByRuta(Long ruta);
+	
+	List<SeccionElectoral> getSeccionByDistrito(Long df);
+	
+	String getTipoCasilla( Long seccion);
+	
+	Long getCasillasInstaladas1Crg(Long idRuta);
+	
+	Long getCasillasInstaladas2Crg(Long idRuta);
+	
+	Long getCasillasInstaladas3Crg(Long idRuta);
+	
+	Long getCasillasInstaladas4Crg(Long idRuta);
+	
+	Long getCasillasInstaladas5Crg(Long idRuta);
+	
+	Long getCasillasInstaladas6Crg(Long idRuta);
+	
+	Long getTotalCasillasInstaladasCrg(Long idRuta);
 
 }

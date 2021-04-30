@@ -22,11 +22,11 @@ public class MunicipioRepository implements IMunicipioRepository {
 	private JdbcTemplate template;
 
 	@Override
-	public Municipio findById(Long municipio) {
+	public Municipio findById(Long municipio, Long federal) {
 
-		String sql = "SELECT * FROM app_municipio WHERE id = ?";
+		String sql = "SELECT * FROM app_municipio WHERE id = ? and federal_id = ?";
 		try {
-			return template.queryForObject(sql, new Object[] { municipio }, new int[] { Types.NUMERIC },
+			return template.queryForObject(sql, new Object[] { municipio, federal }, new int[] { Types.NUMERIC, Types.NUMERIC },
 					new MunicipioRowMapper());
 		} catch (EmptyResultDataAccessException e) {
 			return null;
