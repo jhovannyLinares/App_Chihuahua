@@ -101,13 +101,24 @@ public class InstalacionCasillasRepository implements IInstalacionCasillasReposi
 		}
 		
 		if (tipo == 2L) {
-			where = " where ac.local_id =  ? and aic.llego_rg = ? and ac.federal_id = ? ";
+			where = " where ac.local_id =  ? and aic.llego_rg = ?  ";
 			para.add(local);
 			type.add(Types.NUMERIC);
 			para.add(SI);
 			type.add(Types.VARCHAR);
-			para.add(idFederal);
+//			para.add(idFederal);
+//			type.add(Types.NUMERIC);
+			
+		}
+		
+		if (tipo == 3L) {
+			where = " where ac.local_id =  ? and aic.llego_rg = ?";
+			para.add(local);
 			type.add(Types.NUMERIC);
+			para.add(SI);
+			type.add(Types.VARCHAR);
+//			para.add(idFederal);
+//			type.add(Types.NUMERIC);
 			
 		}
 		
@@ -178,13 +189,23 @@ public class InstalacionCasillasRepository implements IInstalacionCasillasReposi
 		}
 		
 		if (tipo == 2L) {
-			where = " where ac.local_id =  ? and aic.llego_rc = ? and ac.federal_id = ? ";
+			where = " where ac.local_id =  ? and aic.llego_rc = ? ";
 			para.add(local);
 			type.add(Types.NUMERIC);
 			para.add(SI);
 			type.add(Types.VARCHAR);
-			para.add(idFederal);
+//			para.add(idFederal);
+//			type.add(Types.NUMERIC);
+		}
+		
+		if (tipo == 3L) {
+			where = " where ac.local_id =  ? and aic.llego_rc = ?  ";
+			para.add(local);
 			type.add(Types.NUMERIC);
+			para.add(SI);
+			type.add(Types.VARCHAR);
+//			para.add(idFederal);
+//			type.add(Types.NUMERIC);
 		}
 		
 		if (tipo == 4L) {

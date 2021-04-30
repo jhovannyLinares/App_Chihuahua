@@ -91,6 +91,8 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 			for (DistritoFederal se : lstSeccion) {
 				dto = new ReporteVotacionDTO();
 				
+				Long listaNominal = 0L;
+				
 				Long votos11 = reporteCasillaRepository.getCountByDistritoAndTipoVotacion(se.getId(), idReporte, once);
 				Long votos15 = reporteCasillaRepository.getCountByDistritoAndTipoVotacion(se.getId(), idReporte, quince);
 				Long votos18 = reporteCasillaRepository.getCountByDistritoAndTipoVotacion(se.getId(), idReporte, dieciocho);
@@ -175,7 +177,6 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 
 			List<DistritoFederal> lstSeccion = null;
 			List<ReporteAsistenciaEstatalDTO> lstDto = new ArrayList<ReporteAsistenciaEstatalDTO>();
-			List<ReporteAsistenciaEstatalDTO> lstDtoDf = null;
 			ReporteAsistenciaEstatalDTO dto = null;
 			ReporteAsistenciaEstatalDTO total = new ReporteAsistenciaEstatalDTO();
 			total.setIdFederal(null);
@@ -332,13 +333,10 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 			total.setRcAsistencia(0L);
 			total.setRgPorcentaje(0.0);
 			total.setRcPorcentaje(0.0);
-			Long rgMeta = 0L;
-			Long rcMeta = 0L;
 			
-
 			if (perfil == PERFIL_LOCAL) {
 				Usuario usr = usuarioRepository.findById(usuario);
-				local = usr.getLocalidad();
+				local = usr.getDistritoLocal();
 				tipo = 1L;
 				dto = getAsistenciaLocales(local, federal, tipo);
 				lstDto.add(dto);
@@ -346,17 +344,32 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 			
 			if (perfil == PERFIL_ESTATAL) {
 
-				if (idFederal != null && idLocal != null) {
+				if (idLocal != null) {
 					tipo = 2L;
-//					lstCasilla = casillasRepository.getAllDistritosLocales();
-//					System.out.println("**** " + lstCasilla.size());
-//					for (Casilla casilla : lstCasilla) {
 					dto = getAsistenciaLocales(idLocal, idFederal, tipo);
 					lstDto.add(dto);
-//					}
 					return lstDto;
 				} else {
-					throw new CotException("Ingrese los campos obligatorios.", 400);
+					tipo = 3L;
+					lstCasilla = casillasRepository.getAllDistritosLocales();
+					System.out.println("**** " + lstCasilla.size());
+					for (Casilla casilla : lstCasilla) {
+						dto = getAsistenciaLocales(casilla.getLocal(), idFederal, tipo);
+						
+						total.setRgMeta(total.getRgMeta() + dto.getRgMeta());
+						total.setRcMeta(total.getRcMeta() + dto.getRcMeta());
+						total.setRgAsistencia(total.getRgAsistencia() + dto.getRgAsistencia());
+						total.setRcAsistencia(total.getRcAsistencia() + dto.getRcAsistencia());
+						
+						lstDto.add(dto);
+					}
+					
+					total.setRgPorcentaje(dosDecimales((total.getRgAsistencia() * 100.0) / total.getRgMeta()).doubleValue());
+					total.setRcPorcentaje(dosDecimales((total.getRcAsistencia() * 100.0) / total.getRcMeta()).doubleValue());
+					
+					lstDto.add(total);
+					
+					return lstDto;
 				}
 			}
 
@@ -373,7 +386,8 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 		
 		ReporteAsistenciaLocalDTO dto = new ReporteAsistenciaLocalDTO();
 		
-
+		Long rgMeta = 0L;
+		Long rcMeta = 0L;
 		Long rgAsistencia = instalacionCasillaRepository.getCountRgByLocalAndAsistencia(local, SI, federal, tipo, 0L);
 		Long rcAsistencia = instalacionCasillaRepository.getCountRcByLocalAndAsistencia(local, SI, federal, tipo, 0L);
 
@@ -421,22 +435,22 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 				lstDto.add(dto);
 
 			}
+			
 			if (perfil == PERFIL_ESTATAL) {
-				if(idFederal != null && idMunicipio == null ) {
+
+				if (idFederal != null && idMunicipio == null) {
 					tipo = 5L;
 					lstMunicipio = municipioRepository.getByFederal(idFederal);
 					for (Municipio mun : lstMunicipio) {
-					   dto = getAsistenciaMunicipal(idLocal, idFederal, tipo, mun.getId());
-					lstDto.add(dto);
-					}
-					
-//				}else {
-//					throw new CotException("Ingrese los campos obligatorios.", 400);
-				}
-				if(idFederal !=null && idMunicipio != null) {
-					tipo = 6L;
-					  dto = getAsistenciaMunicipal(idLocal, idFederal, tipo, idMunicipio);
+						dto = getAsistenciaMunicipal(idLocal, idFederal, tipo, mun.getId());
 						lstDto.add(dto);
+					}
+				}
+
+				if (idFederal != null && idMunicipio != null) {
+					tipo = 6L;
+					dto = getAsistenciaMunicipal(idLocal, idFederal, tipo, idMunicipio);
+					lstDto.add(dto);
 				}
 			}
 
@@ -452,7 +466,8 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 		
 		ReporteAsistenciaMunicipalDTO dto = new ReporteAsistenciaMunicipalDTO();
 		
-
+		Long rgMeta = 0L;
+		Long rcMeta = 0L;
 		Long rgAsistencia = instalacionCasillaRepository.getCountRgByLocalAndAsistencia(local, SI, federal, tipo, municipio);
 		Long rcAsistencia = instalacionCasillaRepository.getCountRcByLocalAndAsistencia(local, SI, federal, tipo, municipio);
 		String nomMunicipio = municipioRepository.getNombreByIdAndDf(municipio, federal);
@@ -739,5 +754,18 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 			throw new CotException("No cuenta con los permisos suficientes para consultar el reporte", 401);
 		}
 
+	}
+
+	@Override
+	public void getReporteAsistenciaMunicipalDownload(HttpServletResponse response, long usuario, long perfil,
+			Long idFederal, Long idLocal, Long idMunicipio) throws CotException, IOException {
+		setNameFile(response, CSV_ASISTENCIA_MUNICIPAL);
+
+		List<ReporteAsistenciaMunicipalDTO> reporteDTOs = getReporteAsistenciaMunicipal(usuario, perfil, idFederal, idLocal, idMunicipio);
+
+		String[] header = { "municipio", "rgMeta", "rcMeta", "rgAsistencia", "rgPorcentaje", "rcAsistencia", 
+				"rcPorcentaje" };
+
+		setWriterFile(response, reporteDTOs, header);
 	}
 }
