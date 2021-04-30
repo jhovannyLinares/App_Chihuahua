@@ -10,6 +10,7 @@ import mx.morena.negocio.dto.ReporteAsistenciaFederalDTO;
 import mx.morena.negocio.dto.ReporteAsistenciaLocalDTO;
 import mx.morena.negocio.dto.ReporteResultadosDTO;
 import mx.morena.negocio.dto.ReporteVotacionDTO;
+import mx.morena.negocio.dto.ReporteVotacionMunicipalDTO;
 import mx.morena.negocio.exception.CotException;
 
 public interface IReporteCasillaService {
@@ -31,4 +32,8 @@ public interface IReporteCasillaService {
 	List<ReporteResultadosDTO> getReporteResultados(Long usuario, Long perfil, Long idReporte) throws CotException, IOException;
 	
 	void getReporteResultadosDownload(HttpServletResponse response, Long usuario, Long perfil, Long idReporte) throws CotException, IOException;
+	
+	List<ReporteVotacionMunicipalDTO> getReporteMunicipal(Long usuario, Long perfil, Long idReporte) throws CotException, IOException;
+	
+	void getReporteMunicipioDownload(HttpServletResponse response, Long usuario, Long perfil, Long idReporte) throws CotException, IOException;
 }
