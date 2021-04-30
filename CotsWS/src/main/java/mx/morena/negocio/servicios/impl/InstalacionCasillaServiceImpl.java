@@ -82,7 +82,7 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 
 			List<InstalacionCasilla> casillas = casillasRepository.getById(dto.getIdCasilla());
 
-			if (casillas != null) {
+			if (casillas == null) {
 
 				InstalacionCasilla ic = new InstalacionCasilla();
 
@@ -99,6 +99,7 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 				ic.setLlegoRc(dto.getLlegoRc());
 
 				if (casillasRepository.save(ic) == 0) {
+					
 					throw new CotException("No se guardo la informacion con éxito.", 409);
 				}
 			} else {
@@ -318,37 +319,33 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 			if (municipal.stream()
 					.filter(partido -> casilla.getMunicipio().longValue() == partido.getUbicacion().longValue())
 					.findAny().orElse(null) != null) {
-//			if (partidosRepository.getMunicipal(casilla.getMunicipio()).size() > 0) {
 				dto = new VotacionesDTO();
 				dto.setId(2L);
 				dto.setDescripcion("PRESIDENTE MUNICIPAL");
 				votacionesDTOs.add(dto);
 			}
-//			
+
 			if (sindico.stream()
 					.filter(partido -> casilla.getMunicipio().longValue() == partido.getUbicacion().longValue())
 					.findAny().orElse(null) != null) {
-//			if (partidosRepository.getSindico(casilla.getMunicipio()).size() > 0) {
 				dto = new VotacionesDTO();
 				dto.setId(3L);
 				dto.setDescripcion("SINDICO");
 				votacionesDTOs.add(dto);
 			}
-//
+
 			if (diputadoLocal.stream()
 					.filter(partido -> casilla.getFederal().longValue() == partido.getUbicacion().longValue()).findAny()
 					.orElse(null) != null) {
-//			if (partidosRepository.getDiputadoLocal(casilla.getFederal()).size() > 0) {
 				dto = new VotacionesDTO();
 				dto.setId(4L);
 				dto.setDescripcion("DIPUTADO LOCAL");
 				votacionesDTOs.add(dto);
 			}
-//
+
 			if (diputadoFederal.stream()
 					.filter(partido -> casilla.getFederal().longValue() == partido.getUbicacion().longValue()).findAny()
 					.orElse(null) != null) {
-//			if (partidosRepository.getDiputadoFederal(casilla.getFederal()).size() > 0) {
 				dto = new VotacionesDTO();
 				dto.setId(5L);
 				dto.setDescripcion("DIPUTADO FEDERAL");

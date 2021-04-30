@@ -54,6 +54,7 @@ public class InstalacionCasillasRepository implements IInstalacionCasillasReposi
 					new InstalacionRowMapper());
 
 		} catch (Exception e) {
+			e.printStackTrace();
 			return null;
 		}
 

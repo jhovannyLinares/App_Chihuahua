@@ -25,7 +25,7 @@ public class InstalacionRowMapper implements RowMapper<List<InstalacionCasilla>>
 			casilla = new InstalacionCasilla();
 
 			casilla.setDesayuno(rs.getString("desayuno"));
-			casilla.setFuncionariosFila(rs.getString("ruta"));
+			casilla.setFuncionariosFila(rs.getString("funcionarios_de_fila"));
 			casilla.setHoraInstalacion(rs.getTimestamp("hora_instalacion"));
 			casilla.setId(rs.getLong("id"));
 			casilla.setIdCasilla(rs.getLong("id_casilla"));
