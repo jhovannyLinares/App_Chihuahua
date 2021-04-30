@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.jdbc.core.RowMapper;
 
 import mx.morena.persistencia.entidad.Capacitacion;
+import mx.morena.persistencia.entidad.RegistroCapacitados;
 
 public class CapacitacionRowMapper implements RowMapper<List<Capacitacion>>{
 
@@ -16,6 +17,7 @@ public class CapacitacionRowMapper implements RowMapper<List<Capacitacion>>{
 		
 		List<Capacitacion> lstCap = new ArrayList<Capacitacion>();
 		Capacitacion rep = null;
+		RegistroCapacitados  reg = null;
 		
 		do {
 			rep = new Capacitacion();
@@ -26,15 +28,18 @@ public class CapacitacionRowMapper implements RowMapper<List<Capacitacion>>{
 			rep.setAsignado(rs.getLong("asignado"));
 			rep.setCargo(rs.getString("cargo"));
 			rep.setIsNombramiento(rs.getBoolean("nombramiento"));
-			rep.setTomoCapacitacion(rs.getString("capacitacion"));
-			rep.setFechaCapacitaion(rs.getTimestamp("fecha"));
-			rep.setHoraCapacitacion(rs.getTime("hora"));
-			rep.setLugarCapacitacion(rs.getString("lugar"));
-			rep.setCalle(rs.getString("calle"));
-			rep.setNumExt(rs.getString("exterior"));
-			rep.setNumInt(rs.getString("interior"));
-			rep.setColonia(rs.getString("colonias"));
-			rep.setMunicipio(rs.getString("municipio"));
+			reg = new RegistroCapacitados();
+			reg.setTomoCapacitacion(rs.getString("capacitacion"));
+			reg.setFechaCapacitaion(rs.getTimestamp("fecha"));
+			reg.setHoraCapacitacion(rs.getTime("hora"));
+			reg.setLugarCapacitacion(rs.getString("lugar"));
+			reg.setCalle(rs.getString("calle"));
+			reg.setNumExt(rs.getString("exterior"));
+			reg.setNumInt(rs.getString("interior"));
+			reg.setColonia(rs.getString("colonias"));
+			reg.setMunicipio(rs.getString("municipio"));
+			
+			rep.setCapacitacion(reg);
 			
 			lstCap.add(rep);
 			

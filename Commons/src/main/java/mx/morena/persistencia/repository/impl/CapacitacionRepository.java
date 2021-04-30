@@ -64,7 +64,7 @@ public class CapacitacionRepository implements ICapacitacionRepository{
 				+ "		left join app_cargos ac "
 				+ "		on arc.id_cargo = ac.id "
 				+ "		where ar.tipo_representante = ? group by atr.tipo_representante, ar.id, ara.casilla_id, ac.descripcion, arc3.is_nombramiento, "
-				+ "		capacitacion, fecha, hora, lugar, arc3.calle, interior, exterior, colonias, municipio, ara.ruta_id ";
+				+ "		capacitacion, fecha, hora, lugar, arc3.calle, interior, exterior, colonias, municipio, ara.ruta_id ORDER BY ar.id";
 		
 		try {
 			return template.queryForObject(sql,new Object[] { tipo }, new int[] { Types.INTEGER }, new CapacitacionRowMapper());
