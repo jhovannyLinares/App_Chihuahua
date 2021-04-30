@@ -16,7 +16,7 @@ public class IncidenciasCasillasRepository implements IIncidenciasCasillasReposi
 	@Override
 	public int save(IncidenciasCasillas ic) {
 		
-		String sql = "INSERT INTO app_incidencias_casillas (id, " + "id_casilla, " + " id_incidencia )"
+		String sql = "INSERT INTO app_incidencias_casillas (id,  id_casilla,  id_incidencia )"
 				+ " VALUES (COALESCE((SELECT MAX(id) FROM app_incidencias_casillas), 0)+1, ?, ?)";	
 //				+ " VALUES ((SELECT MAX(id)+1 FROM app_incidencias_casillas), ?, ?)";	
 
@@ -24,6 +24,7 @@ public class IncidenciasCasillasRepository implements IIncidenciasCasillasReposi
 			template.update(sql, new Object[] {ic.getIdCasilla(), ic.getIdIncidencia()});
 			return 1;
 		} catch (Exception e) {
+			e.printStackTrace();
 			return 0;
 		}
 	

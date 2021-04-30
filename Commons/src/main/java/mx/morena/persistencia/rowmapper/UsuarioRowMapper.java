@@ -23,6 +23,7 @@ public class UsuarioRowMapper implements RowMapper<Usuario> {
 		usuario.setMunicipio(rs.getLong("municipio_id"));
 		usuario.setRepresentante(rs.getLong("id_representante"));
 		usuario.setLocalidad(rs.getLong("localidad_id"));
+		usuario.setDistritoLocal(rs.getLong("distrito_local_id"));
 
 		return usuario;
 	}

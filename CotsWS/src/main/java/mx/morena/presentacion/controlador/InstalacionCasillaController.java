@@ -1,5 +1,6 @@
 package mx.morena.presentacion.controlador;
 
+
 import java.io.IOException;
 import java.util.List;
 
@@ -26,6 +27,7 @@ import mx.morena.negocio.dto.ReporteCasillaDTO;
 import mx.morena.negocio.exception.CotException;
 import mx.morena.negocio.servicios.IInstalacionCasillaService;
 import mx.morena.security.controller.MasterController;
+
 
 @RestController
 @RequestMapping(value = "/")

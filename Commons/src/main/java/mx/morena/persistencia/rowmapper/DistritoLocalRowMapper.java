@@ -7,7 +7,7 @@ import org.springframework.jdbc.core.RowMapper;
 
 import mx.morena.persistencia.entidad.DistritoFederal;
 
-public class DistritoFederalRowMapper implements RowMapper<DistritoFederal> {
+public class DistritoLocalRowMapper implements RowMapper<DistritoFederal> {
 
 	@Override
 	public DistritoFederal mapRow(ResultSet rs, int rowNum) throws SQLException {

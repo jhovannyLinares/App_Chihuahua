@@ -23,6 +23,8 @@ public class Usuario {
 	private Long municipio;
 
 	private Long localidad;
+	
+	private Long distritoLocal;
 
 	private Long seccionElectoral;
 
@@ -118,6 +120,14 @@ public class Usuario {
 		this.localidad = localidad;
 	}
 
+	public Long getDistritoLocal() {
+		return distritoLocal;
+	}
+
+	public void setDistritoLocal(Long distritoLocal) {
+		this.distritoLocal = distritoLocal;
+	}
+
 	public Long getSeccionElectoral() {
 		return seccionElectoral;
 	}
@@ -141,5 +151,7 @@ public class Usuario {
 	public void setRepresentante(Long representante) {
 		this.representante = representante;
 	}
+
+	
 	
 }

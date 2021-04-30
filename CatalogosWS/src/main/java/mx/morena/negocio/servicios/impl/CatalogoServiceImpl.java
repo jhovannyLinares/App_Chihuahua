@@ -362,7 +362,7 @@ public class CatalogoServiceImpl extends MasterService implements ICatalogoServi
 
 		if (usuario.getPerfil() > PERFIL_ESTATAL) {
 
-			DistritoFederal distritoFederal = localRepository.findById(usuario.getFederal());
+			DistritoFederal distritoFederal = localRepository.findById(usuario.getDistritoLocal());
 			DistritoFederalDTO dto = new DistritoFederalDTO();
 			MapperUtil.map(distritoFederal, dto);
 
