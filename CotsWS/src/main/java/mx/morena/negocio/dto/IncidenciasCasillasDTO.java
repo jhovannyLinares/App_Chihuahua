@@ -9,7 +9,7 @@ public class IncidenciasCasillasDTO {
 
 //	private Long idRg;
 
-	private Long tipoReporte;
+	private Integer tipoReporte;
 
 	private Long numero;
 
@@ -27,11 +27,11 @@ public class IncidenciasCasillasDTO {
 		this.idCasilla = idCasilla;
 	}
 
-	public Long getTipoReporte() {
+	public Integer getTipoReporte() {
 		return tipoReporte;
 	}
 
-	public void setTipoReporte(Long tipoReporte) {
+	public void setTipoReporte(Integer tipoReporte) {
 		this.tipoReporte = tipoReporte;
 	}
 

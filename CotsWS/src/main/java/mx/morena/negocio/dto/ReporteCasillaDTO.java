@@ -1,11 +1,9 @@
 package mx.morena.negocio.dto;
 
-import java.sql.Timestamp;
-
 public class ReporteCasillaDTO {
 
 	private String horaReporte;
-	private Long tipoReporte;
+	private Integer tipoReporte;
 	private Boolean capturado;
 
 	public String getHoraReporte() {
@@ -16,11 +14,11 @@ public class ReporteCasillaDTO {
 		this.horaReporte = horaReporte;
 	}
 
-	public Long getTipoReporte() {
+	public Integer getTipoReporte() {
 		return tipoReporte;
 	}
 
-	public void setTipoReporte(Long tipoReporte) {
+	public void setTipoReporte(Integer tipoReporte) {
 		this.tipoReporte = tipoReporte;
 	}
 

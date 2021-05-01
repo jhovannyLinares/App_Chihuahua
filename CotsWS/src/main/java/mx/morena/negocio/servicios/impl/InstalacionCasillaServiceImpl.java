@@ -1,6 +1,7 @@
 package mx.morena.negocio.servicios.impl;
 
 import java.io.IOException;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,6 +19,7 @@ import mx.morena.negocio.dto.VotacionesDTO;
 import mx.morena.negocio.dto.listIncidenciasDTO;
 import mx.morena.negocio.exception.CotException;
 import mx.morena.negocio.servicios.IInstalacionCasillaService;
+import mx.morena.negocio.util.MapperUtil;
 import mx.morena.persistencia.entidad.AsignacionCasillas;
 import mx.morena.persistencia.entidad.Casilla;
 import mx.morena.persistencia.entidad.IncidenciasCasillas;
@@ -86,20 +88,10 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 
 				InstalacionCasilla ic = new InstalacionCasilla();
 
-				ic.setIdCasilla(dto.getIdCasilla());
-				ic.setHoraInstalacion(dto.getHoraInstalacion());
-				ic.setHoraInstalacion(dto.getHoraInstalacion());
-				ic.setLlegaronFuncionarios(dto.getLlegaronFuncionarios());
-				ic.setFuncionariosFila(dto.getFuncionariosFila());
-				ic.setPaqueteCompleto(dto.getPaqueteCompleto());
-				ic.setLlegoRg(dto.getLlegoRg());
-				ic.setDesayuno(dto.getDesayuno());
-				ic.setInicioVotacion(dto.getInicioVotacion());
-				ic.setInicioVotacion(dto.getInicioVotacion());
-				ic.setLlegoRc(dto.getLlegoRc());
+				MapperUtil.map(dto, ic);
 
 				if (casillasRepository.save(ic) == 0) {
-					
+
 					throw new CotException("No se guardo la informacion con éxito.", 409);
 				}
 			} else {
@@ -118,17 +110,25 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 
 		if (perfil == PERFIL_RG) {
 
+			List<ReporteCasilla> reportes = reporteRepository.getReporteByIdCasilla(dto.getIdCasilla());
+			for (ReporteCasilla reporteCasilla : reportes) {
+				if (reporteCasilla.getTipoReporte().intValue() == dto.getTipoReporte().intValue()) {
+					throw new CotException("Reporte ya registrado", 409);
+				}
+
+			}	
+			
+
 			if (dto.getNumero() <= 750) {
 
 				List<listIncidenciasDTO> lstIn = dto.getIncidencia();
+
 				System.out.println(" numero incidencias " + lstIn.size());
 				IncidenciasCasillas ic = null;
 
 				Usuario usr = usuarioRepository.findById(usuario);
 
-				System.out.println("SSSS " + dto.getPresentaIncidencias());
-
-				if (dto.getPresentaIncidencias().equals("si")) {
+				if (dto.getPresentaIncidencias().equalsIgnoreCase("si")) {
 					for (listIncidenciasDTO incidencia : lstIn) {
 						ic = new IncidenciasCasillas();
 
@@ -145,7 +145,7 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 				ReporteCasilla rc = new ReporteCasilla();
 
 				rc.setIdCasilla(dto.getIdCasilla());
-//				rc.setHoraReporte(dto.getHoraReporte());
+				rc.setHoraReporte(new Time(dto.getHoraReporte().getTime()));
 				rc.setIdRg(usr.getId());
 				rc.setNumeroVotos(dto.getNumero());
 				rc.setTipoReporte(dto.getTipoReporte());
@@ -365,21 +365,34 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 
 		List<ReporteCasillaDTO> reporteCasillaDTOs = new ArrayList<ReporteCasillaDTO>();
 
+		ReporteCasillaDTO dto;
+
+		for (int i = 1; i <= 3; i++) {
+
+			dto = new ReporteCasillaDTO();
+			dto.setCapturado(false);
+			dto.setTipoReporte(i);
+			reporteCasillaDTOs.add(dto);
+		}
+
 		if (reporteCasillas != null) {
 
-			ReporteCasillaDTO dto;
-
 			for (ReporteCasilla reporteCasilla : reporteCasillas) {
-				dto = new ReporteCasillaDTO();
 
-				dto.setCapturado(true);
+				for (ReporteCasillaDTO reporteCasillaDTO : reporteCasillaDTOs) {
 
-				dto.setHoraReporte(reporteCasilla.getHoraReporte().toString());
+					if (reporteCasillaDTO.getTipoReporte() == reporteCasilla.getTipoReporte()) {
 
-				dto.setTipoReporte(reporteCasilla.getTipoReporte());
+						reporteCasillaDTO.setCapturado(true);
+						reporteCasillaDTO.setHoraReporte(reporteCasilla.getHoraReporte().toString());
+						reporteCasillaDTO.setTipoReporte(reporteCasilla.getTipoReporte());
+					}
 
-				reporteCasillaDTOs.add(dto);
+				}
+
+//				reporteCasillaDTOs.add(dto);
 			}
+
 		}
 
 		return reporteCasillaDTOs;
