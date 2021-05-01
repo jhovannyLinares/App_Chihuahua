@@ -20,7 +20,6 @@ public class RutaSeguimietoRowMapper implements RowMapper<List<Rutas>>{
 		do {
 			ruta = new Rutas();
 			
-//			ruta.setId(rs.getLong("id"));
 			ruta.setRuta(rs.getLong("ruta"));
 			
 			rutas.add(ruta);

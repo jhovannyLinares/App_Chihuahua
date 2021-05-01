@@ -116,4 +116,24 @@ Long getCasillasByDistritoFederal(Long idDistritoFederal, Long idDistritoLocal, 
 	
 	Long getTotalCasillasInstaladasCrg(Long idRuta);
 
+	List<Rutas>getCasillasInstaladas(Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal);
+	
+	List<SeccionElectoral> getSeccionByDistritosLocal(Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal);
+	
+	Long getCasillasInstaladas1Rg(Long descripcion);
+	
+	Long getCasillasInstaladas2Rg(Long descripcion);
+	
+	Long getCasillasInstaladas3Rg(Long descripcion);
+	
+	Long getCasillasInstaladas4Rg(Long descripcion);
+	
+	Long getCasillasInstaladas5Rg(Long descripcion);
+	
+	Long getCasillasInstaladas6Rg(Long descripcion);
+	
+	Long getTotalCasillasInstaladasRg(Long descripcion);
+	
+	Long getCasillasBySeccion(Long descripcion);
+
 }

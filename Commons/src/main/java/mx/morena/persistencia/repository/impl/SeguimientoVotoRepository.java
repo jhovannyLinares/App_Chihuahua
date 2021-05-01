@@ -1003,7 +1003,7 @@ public class SeguimientoVotoRepository implements ISeguimientoVotoRepository {
 	@Override
 	public Long getIdFederal(Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal) {
 
-		String select = "select  from app_instalacion_casilla aic " 
+		String select = "select federal_id from app_instalacion_casilla aic " 
 				+ " inner join app_casilla ac "
 				+ "	on aic.id_casilla = ac.id " 
 				+ "inner join app_asignacion_casillas aac "
@@ -1281,6 +1281,243 @@ public class SeguimientoVotoRepository implements ISeguimientoVotoRepository {
 				+ "on as2.id = cast(ar.seccion_id as INTEGER) "
 				+ "where ar.id = ?";
 		return template.queryForObject(sql, new Object[] { idRuta }, new int[] { Types.NUMERIC },
+				new LongRowMapper());
+	}
+
+	@Override
+	public List<Rutas> getCasillasInstaladas(Long idDistritoFederal, Long idDistritoLocal, Long idMunicipal) {
+		
+		String select = "select ar.ruta from app_rutas ar "
+				+ "inner join app_secciones as3 "
+				+ "on cast(ar.seccion_id as INTEGER) = as3.id";
+
+		String sql = null;
+		String where = "";
+		List<Object> para = new ArrayList<Object>();
+		List<Integer> type = new ArrayList<Integer>();
+
+		if (idDistritoFederal != null) {
+			where = " where as3.distrito_id = ? ";
+			para.add(idDistritoFederal);
+			type.add(Types.NUMERIC);
+		}
+
+		if (idDistritoLocal != null) {
+
+			if (para.size() > 0) {
+				where = where.concat(" and as3.local_id = ? ");
+			} else {
+				where = " where as3.local_id = ? ";
+			}
+			para.add(idDistritoLocal);
+			type.add(Types.NUMERIC);
+		}
+
+		if (idMunicipal != null) {
+			if (para.size() > 0) {
+				where = where.concat(" and as3.municipio_id = ? ");
+			} else {
+				where = " where as3.municipio_id = ? ";
+			}
+			para.add(idMunicipal);
+			type.add(Types.NUMERIC);
+		}
+
+		Object[] parametros = new Object[para.size()];
+		int[] types = new int[para.size()];
+
+		for (int i = 0; i < para.size(); i++) {
+			parametros[i] = para.get(i);
+			types[i] = type.get(i);
+		}
+
+		try {
+
+			sql = select.concat(where);
+			sql = sql.concat(" group by ar.ruta ");
+			
+			System.out.println(sql);
+			
+			return template.queryForObject(sql, parametros, types, new RutaSeguimietoRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+
+	@Override
+	public List<SeccionElectoral> getSeccionByDistritosLocal(Long idDistritoFederal, Long idDistritoLocal,
+			Long idMunicipal) {
+		
+
+		String select = "select ar.seccion_id from app_rutas ar "
+				+ "inner join app_secciones as3 "
+				+ "on cast(ar.seccion_id as INTEGER) = as3.id ";
+
+		String sql = null;
+		String where = "";
+		List<Object> para = new ArrayList<Object>();
+		List<Integer> type = new ArrayList<Integer>();
+
+		if (idDistritoFederal != null) {
+			where = " where as3.distrito_id = ? ";
+			para.add(idDistritoFederal);
+			type.add(Types.NUMERIC);
+		}
+
+		if (idDistritoLocal != null) {
+
+			if (para.size() > 0) {
+				where = where.concat(" and as3.local_id = ? ");
+			} else {
+				where = " where as3.local_id = ? ";
+			}
+			para.add(idDistritoLocal);
+			type.add(Types.NUMERIC);
+		}
+
+		if (idMunicipal != null) {
+			if (para.size() > 0) {
+				where = where.concat(" and as3.municipio_id = ? ");
+			} else {
+				where = " where as3.municipio_id = ? ";
+			}
+			para.add(idMunicipal);
+			type.add(Types.NUMERIC);
+		}
+
+		Object[] parametros = new Object[para.size()];
+		int[] types = new int[para.size()];
+
+		for (int i = 0; i < para.size(); i++) {
+			parametros[i] = para.get(i);
+			types[i] = type.get(i);
+		}
+
+		try {
+
+			sql = select.concat(where);
+			sql = sql.concat(" group by ar.seccion_id ");
+			return template.queryForObject(sql, parametros, types, new SeccionSeguimientoRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+		
+	}
+
+	@Override
+	public Long getCasillasInstaladas1Rg(Long descripcion) {
+		
+		String sql = "select count(*) from app_instalacion_casilla aic "
+				+ "inner join app_casilla ac "
+				+ "on aic.id_casilla = ac.id "
+				+ "inner join app_secciones as2 "
+				+ "on ac.seccion_id = as2.id "
+				+ "inner join app_rutas ar "
+				+ "on as2.id = cast(ar.seccion_id as INTEGER) "
+				+ "where  hora_instalacion Between '07:00:00' And '07:30:00' and ac.seccion_id = ?";
+		return template.queryForObject(sql, new Object[] { descripcion }, new int[] { Types.NUMERIC },
+				new LongRowMapper());
+	}
+
+	@Override
+	public Long getCasillasInstaladas2Rg(Long descripcion) {
+		
+		String sql = "select count(*) from app_instalacion_casilla aic "
+				+ "inner join app_casilla ac "
+				+ "on aic.id_casilla = ac.id "
+				+ "inner join app_secciones as2 "
+				+ "on ac.seccion_id = as2.id "
+				+ "inner join app_rutas ar "
+				+ "on as2.id = cast(ar.seccion_id as INTEGER) "
+				+ "where  hora_instalacion Between '07:31:00' And '08:00:00' and ac.seccion_id = ?";
+		return template.queryForObject(sql, new Object[] { descripcion }, new int[] { Types.NUMERIC },
+				new LongRowMapper());
+	}
+
+	@Override
+	public Long getCasillasInstaladas3Rg(Long descripcion) {
+		
+		String sql = "select count(*) from app_instalacion_casilla aic "
+				+ "inner join app_casilla ac "
+				+ "on aic.id_casilla = ac.id "
+				+ "inner join app_secciones as2 "
+				+ "on ac.seccion_id = as2.id "
+				+ "inner join app_rutas ar "
+				+ "on as2.id = cast(ar.seccion_id as INTEGER) "
+				+ "where  hora_instalacion Between '08:01:00' And '08:30:00' and ac.seccion_id = ?";
+		return template.queryForObject(sql, new Object[] { descripcion }, new int[] { Types.NUMERIC },
+				new LongRowMapper());
+	}
+
+	@Override
+	public Long getCasillasInstaladas4Rg(Long descripcion) {
+		
+		String sql = "select count(*) from app_instalacion_casilla aic "
+				+ "inner join app_casilla ac "
+				+ "on aic.id_casilla = ac.id "
+				+ "inner join app_secciones as2 "
+				+ "on ac.seccion_id = as2.id "
+				+ "inner join app_rutas ar "
+				+ "on as2.id = cast(ar.seccion_id as INTEGER) "
+				+ "where  hora_instalacion Between '08:31:00' And '09:00:00' and ac.seccion_id = ?";
+		return template.queryForObject(sql, new Object[] { descripcion }, new int[] { Types.NUMERIC },
+				new LongRowMapper());
+	}
+
+	@Override
+	public Long getCasillasInstaladas5Rg(Long descripcion) {
+		
+		String sql = "select count(*) from app_instalacion_casilla aic "
+				+ "inner join app_casilla ac "
+				+ "on aic.id_casilla = ac.id "
+				+ "inner join app_secciones as2 "
+				+ "on ac.seccion_id = as2.id "
+				+ "inner join app_rutas ar "
+				+ "on as2.id = cast(ar.seccion_id as INTEGER) "
+				+ "where  hora_instalacion Between '09:01:00' And '09:59:59' and ac.seccion_id = ?";
+		return template.queryForObject(sql, new Object[] { descripcion }, new int[] { Types.NUMERIC },
+				new LongRowMapper());
+	}
+
+	@Override
+	public Long getCasillasInstaladas6Rg(Long descripcion) {
+		
+		String sql = "select count(*) from app_instalacion_casilla aic "
+				+ "inner join app_casilla ac "
+				+ "on aic.id_casilla = ac.id "
+				+ "inner join app_secciones as2 "
+				+ "on ac.seccion_id = as2.id "
+				+ "inner join app_rutas ar "
+				+ "on as2.id = cast(ar.seccion_id as INTEGER) "
+				+ "where  hora_instalacion Between '10:00:00' And '18:00:00' and ac.seccion_id = ?";
+		return template.queryForObject(sql, new Object[] { descripcion }, new int[] { Types.NUMERIC },
+				new LongRowMapper());
+	}
+
+	@Override
+	public Long getTotalCasillasInstaladasRg(Long descripcion) {
+		String sql = "select count(*) from app_instalacion_casilla aic "
+				+ "inner join app_casilla ac "
+				+ "on aic.id_casilla = ac.id "
+				+ "inner join app_secciones as2 "
+				+ "on ac.seccion_id = as2.id "
+				+ "inner join app_rutas ar "
+				+ "on as2.id = cast(ar.seccion_id as INTEGER) "
+				+ "where ar.id = ?";
+		return template.queryForObject(sql, new Object[] { descripcion }, new int[] { Types.NUMERIC },
+				new LongRowMapper());
+	}
+
+	@Override
+	public Long getCasillasBySeccion(Long descripcion) {
+		
+		String sql = "select count(*) from app_casilla ac "
+				+ "inner join app_secciones as2 "
+				+ "on ac.seccion_id = as2.id "
+				+ "left join app_rutas ar "
+				+ "on cast(ar.seccion_id as INTEGER) = as2.id "
+				+ "where ac.seccion_id = ?";
+		return template.queryForObject(sql, new Object[] { descripcion }, new int[] { Types.NUMERIC },
 				new LongRowMapper());
 	}
 

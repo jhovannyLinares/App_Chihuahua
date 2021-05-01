@@ -631,9 +631,11 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 
 			dto = new ReporteInstalacionCasillaCrgDTO();
 
-			List<Rutas> rutas = seguimientoRepository.findByFederal(df);
+			
 			
 			if(idDistritoFederal == null && idDistritoLocal == null && idMunicipal == null) {
+				
+				List<Rutas> rutas = seguimientoRepository.findByFederal(df);
 
 				for (Rutas ruts : rutas) {
 					dto = new ReporteInstalacionCasillaCrgDTO();
@@ -667,53 +669,44 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 				return reporteCrgDto;
 			}else {
 				
-				dto = new ReporteInstalacionCasillaCrgDTO();
+				List<Rutas> rutas = seguimientoRepository.getCasillasInstaladas(idDistritoFederal, idDistritoLocal, idMunicipal);//findByFederal(idDistritoFederal);
 				
-				String muni = seguimientoRepository.getNombreMunicipio(idMunicipal);
+				if(rutas == null) {
+					throw new SeguimientoVotoException("No Se Encontraron Rutas", 401);
+				}
 				
-				Long countCasillas = seguimientoRepository.getCasillasByDistritoFederal(idDistritoFederal, idDistritoLocal,
-						idMunicipal);
-//				Long instaladas1 = seguimientoRepository.getCasillasInstaladas1Federal(idDistritoFederal, idDistritoLocal,
-//						idMunicipal);
-//				Long instaladas2 = seguimientoRepository.getCasillasInstaladas2Federal(idDistritoFederal, idDistritoLocal,
-//						idMunicipal);
-//				Long instaladas3 = seguimientoRepository.getCasillasInstaladas3Federal(idDistritoFederal, idDistritoLocal,
-//						idMunicipal);
-//				Long instaladas4 = seguimientoRepository.getCasillasInstaladas4Federal(idDistritoFederal, idDistritoLocal,
-//						idMunicipal);
-//				Long instaladas5 = seguimientoRepository.getCasillasInstaladas5Federal(idDistritoFederal, idDistritoLocal,
-//						idMunicipal);
-//				Long instaladas6 = seguimientoRepository.getCasillasInstaladas6Federal(idDistritoFederal, idDistritoLocal,
-//						idMunicipal);
-//				Long totalCasillas = seguimientoRepository.getTotalCasillasInstaladasFederal(idDistritoFederal,
-//						idDistritoLocal, idMunicipal);
-
-				dto.setIdDistrito(df);
-//				dto.setRutas(ruts.getRuta());
-				dto.setCasillas(countCasillas);
-//				dto.setInstaladas7a730(instaladas1);
-//				dto.setInstaladas731a8(instaladas2);
-//				dto.setInstaladas8a830(instaladas3);
-//				dto.setInstaladas831a9(instaladas4);
-//				dto.setInstaladasDespues9(instaladas5);
-//				dto.setInstaladasDespues10(instaladas6);
-//				dto.setTotalInstaladas(totalCasillas);
-//				dto.setNoInstaladas(countCasillas - totalCasillas);
-				
-				dto.setInstaladas7a730(0L);
-				dto.setInstaladas731a8(0L);
-				dto.setInstaladas8a830(0L);
-				dto.setInstaladas831a9(0L);
-				dto.setInstaladasDespues9(0L);
-				dto.setInstaladasDespues10(0L);
-				dto.setTotalInstaladas(0L);
-				dto.setNoInstaladas(0L);
-
-				reporteCrgDto.add(dto);
-
-			return reporteCrgDto;
-
-				
+				for (Rutas ruts : rutas) {
+					dto = new ReporteInstalacionCasillaCrgDTO();
+					
+					Long casillas = seguimientoRepository.getCasillasByRuta(ruts.getRuta());
+					
+					System.out.println(ruts.getRuta());
+					
+					Long instaladas1 = seguimientoRepository.getCasillasInstaladas1Crg(ruts.getRuta());
+					Long instaladas2 = seguimientoRepository.getCasillasInstaladas2Crg(ruts.getRuta());
+					Long instaladas3 = seguimientoRepository.getCasillasInstaladas3Crg(ruts.getRuta());
+					Long instaladas4 = seguimientoRepository.getCasillasInstaladas4Crg(ruts.getRuta());
+					Long instaladas5 = seguimientoRepository.getCasillasInstaladas5Crg(ruts.getRuta());
+					Long instaladas6 = seguimientoRepository.getCasillasInstaladas6Crg(ruts.getRuta());
+					Long totalCasillas = seguimientoRepository.getTotalCasillasInstaladasCrg(ruts.getRuta());
+	
+					dto.setIdDistrito(idDistritoFederal);
+					dto.setRutas(ruts.getRuta());
+					dto.setCasillas(casillas);
+					dto.setInstaladas7a730(instaladas1);
+					dto.setInstaladas731a8(instaladas2);
+					dto.setInstaladas8a830(instaladas3);
+					dto.setInstaladas831a9(instaladas4);
+					dto.setInstaladasDespues9(instaladas5);
+					dto.setInstaladasDespues10(instaladas6);
+					dto.setTotalInstaladas(totalCasillas);
+					dto.setNoInstaladas(casillas - totalCasillas);
+	
+					reporteCrgDto.add(dto);
+	
+				}
+	
+				return reporteCrgDto;
 			}
 
 		} else {
@@ -735,12 +728,28 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 
 			List<ReporteInstalacionCasillaRgDTO> reporteRgDto = new ArrayList<ReporteInstalacionCasillaRgDTO>();
 			ReporteInstalacionCasillaRgDTO dto = null;
+			
+			ReporteInstalacionCasillaRgDTO totales = new ReporteInstalacionCasillaRgDTO();
+			
+			totales.setIdDistrito(0L);
+			totales.setSeccion("");
+			totales.setCasillas("Suma");
+			totales.setInstaladas7a730(0L);
+			totales.setInstaladas731a8(0L);
+			totales.setInstaladas8a830(0L);
+			totales.setInstaladas831a9(0L);
+			totales.setInstaladasDespues9(0L);
+			totales.setInstaladasDespues10(0L);
+			totales.setTotalInstaladas(0L);
+			totales.setNoInstaladas(0L);
 
 			dto = new ReporteInstalacionCasillaRgDTO();
 
-			List<SeccionElectoral> seccion = seguimientoRepository.getSeccionByDistrito(df);
+			
 			
 			if(idDistritoFederal == null && idDistritoLocal == null && idMunicipal == null) {
+				
+				List<SeccionElectoral> seccion = seguimientoRepository.getSeccionByDistrito(df);
 	
 				for (SeccionElectoral df1 : seccion) {
 					dto = new ReporteInstalacionCasillaRgDTO();
@@ -748,62 +757,90 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 					Long descripcion = Long.parseLong(df1.getDescripcion());
 					
 					String tipoCasilla = seguimientoRepository.getTipoCasilla(descripcion);
+					
+					Long casillas = seguimientoRepository.getCasillasBySeccion(descripcion);
+					
+					Long instaladas1 = seguimientoRepository.getCasillasInstaladas1Rg(descripcion);
+					Long instaladas2 = seguimientoRepository.getCasillasInstaladas2Rg(descripcion);
+					Long instaladas3 = seguimientoRepository.getCasillasInstaladas3Rg(descripcion);
+					Long instaladas4 = seguimientoRepository.getCasillasInstaladas4Rg(descripcion);
+					Long instaladas5 = seguimientoRepository.getCasillasInstaladas5Rg(descripcion);
+					Long instaladas6 = seguimientoRepository.getCasillasInstaladas6Rg(descripcion);
+					Long totalCasillas = seguimientoRepository.getTotalCasillasInstaladasRg(descripcion);
 	
 					dto.setIdDistrito(df);
 					dto.setSeccion(df1.getDescripcion());
 					dto.setCasillas(tipoCasilla);
-					dto.setInstaladas7a730(0L);
-					dto.setInstaladas731a8(0L);
-					dto.setInstaladas8a830(0L);
-					dto.setInstaladas831a9(0L);
-					dto.setInstaladasDespues9(0L);
-					dto.setInstaladasDespues10(0L);
-					dto.setTotalInstaladas(0L);
-					dto.setNoInstaladas(0L);
-	
+					dto.setInstaladas7a730(instaladas1);
+					dto.setInstaladas731a8(instaladas2);
+					dto.setInstaladas8a830(instaladas3);
+					dto.setInstaladas831a9(instaladas4);
+					dto.setInstaladasDespues9(instaladas5);
+					dto.setInstaladasDespues10(instaladas6);
+					dto.setTotalInstaladas(totalCasillas);
+					dto.setNoInstaladas(casillas - totalCasillas);
+					
+					totales.setInstaladas7a730(totales.getInstaladas7a730() + dto.getInstaladas7a730());
+					totales.setInstaladas731a8(totales.getInstaladas731a8() + dto.getInstaladas731a8());
+					totales.setInstaladas8a830(totales.getInstaladas8a830() + dto.getInstaladas8a830());
+					totales.setInstaladas831a9(totales.getInstaladas831a9() + dto.getInstaladas831a9());
+					totales.setInstaladasDespues9(totales.getInstaladasDespues9() + dto.getInstaladasDespues9());
+					totales.setInstaladasDespues10(totales.getInstaladasDespues10() + dto.getInstaladasDespues10());
+					totales.setTotalInstaladas(totales.getTotalInstaladas() + dto.getTotalInstaladas());
+					totales.setNoInstaladas(totales.getNoInstaladas() + dto.getNoInstaladas());
+					
 					reporteRgDto.add(dto);
-	
 				}
+				reporteRgDto.add(totales);
 	
 				return reporteRgDto;
 			}else {
-				dto = new ReporteInstalacionCasillaRgDTO();
 				
-				String muni = seguimientoRepository.getNombreMunicipio(idMunicipal);
+				List<SeccionElectoral> seccion = seguimientoRepository.getSeccionByDistritosLocal(idDistritoFederal, idDistritoLocal, idMunicipal);
 				
-				Long countCasillas = seguimientoRepository.getCasillasByDistritoFederal(idDistritoFederal, idDistritoLocal,
-						idMunicipal);
-				Long instaladas1 = seguimientoRepository.getCasillasInstaladas1Federal(idDistritoFederal, idDistritoLocal,
-						idMunicipal);
-				Long instaladas2 = seguimientoRepository.getCasillasInstaladas2Federal(idDistritoFederal, idDistritoLocal,
-						idMunicipal);
-				Long instaladas3 = seguimientoRepository.getCasillasInstaladas3Federal(idDistritoFederal, idDistritoLocal,
-						idMunicipal);
-				Long instaladas4 = seguimientoRepository.getCasillasInstaladas4Federal(idDistritoFederal, idDistritoLocal,
-						idMunicipal);
-				Long instaladas5 = seguimientoRepository.getCasillasInstaladas5Federal(idDistritoFederal, idDistritoLocal,
-						idMunicipal);
-				Long instaladas6 = seguimientoRepository.getCasillasInstaladas6Federal(idDistritoFederal, idDistritoLocal,
-						idMunicipal);
-				Long totalCasillas = seguimientoRepository.getTotalCasillasInstaladasFederal(idDistritoFederal,
-						idDistritoLocal, idMunicipal);
-
-				dto.setIdDistrito(df);
-//				dto.setSeccion(df1.getDescripcion());
-//				dto.setCasillas(tipoCasilla);
-				dto.setInstaladas7a730(instaladas1);
-				dto.setInstaladas731a8(instaladas2);
-				dto.setInstaladas8a830(instaladas3);
-				dto.setInstaladas831a9(instaladas4);
-				dto.setInstaladasDespues9(instaladas5);
-				dto.setInstaladasDespues10(instaladas6);
-				dto.setTotalInstaladas(totalCasillas);
-				dto.setNoInstaladas(countCasillas - totalCasillas);
-
-				reporteRgDto.add(dto);
-
-			return reporteRgDto;
-
+				for (SeccionElectoral df1 : seccion) {
+					dto = new ReporteInstalacionCasillaRgDTO();
+					
+					Long descripcion = Long.parseLong(df1.getDescripcion());
+					
+					String tipoCasilla = seguimientoRepository.getTipoCasilla(descripcion);
+					
+					Long casillas = seguimientoRepository.getCasillasBySeccion(descripcion);
+					
+					Long instaladas1 = seguimientoRepository.getCasillasInstaladas1Rg(descripcion);
+					Long instaladas2 = seguimientoRepository.getCasillasInstaladas2Rg(descripcion);
+					Long instaladas3 = seguimientoRepository.getCasillasInstaladas3Rg(descripcion);
+					Long instaladas4 = seguimientoRepository.getCasillasInstaladas4Rg(descripcion);
+					Long instaladas5 = seguimientoRepository.getCasillasInstaladas5Rg(descripcion);
+					Long instaladas6 = seguimientoRepository.getCasillasInstaladas6Rg(descripcion);
+					Long totalCasillas = seguimientoRepository.getTotalCasillasInstaladasRg(descripcion);
+	
+					dto.setIdDistrito(df);
+					dto.setSeccion(df1.getDescripcion());
+					dto.setCasillas(tipoCasilla);
+					dto.setInstaladas7a730(instaladas1);
+					dto.setInstaladas731a8(instaladas2);
+					dto.setInstaladas8a830(instaladas3);
+					dto.setInstaladas831a9(instaladas4);
+					dto.setInstaladasDespues9(instaladas5);
+					dto.setInstaladasDespues10(instaladas6);
+					dto.setTotalInstaladas(totalCasillas);
+					dto.setNoInstaladas(casillas - totalCasillas);
+					
+					totales.setInstaladas7a730(totales.getInstaladas7a730() + dto.getInstaladas7a730());
+					totales.setInstaladas731a8(totales.getInstaladas731a8() + dto.getInstaladas731a8());
+					totales.setInstaladas8a830(totales.getInstaladas8a830() + dto.getInstaladas8a830());
+					totales.setInstaladas831a9(totales.getInstaladas831a9() + dto.getInstaladas831a9());
+					totales.setInstaladasDespues9(totales.getInstaladasDespues9() + dto.getInstaladasDespues9());
+					totales.setInstaladasDespues10(totales.getInstaladasDespues10() + dto.getInstaladasDespues10());
+					totales.setTotalInstaladas(totales.getTotalInstaladas() + dto.getTotalInstaladas());
+					totales.setNoInstaladas(totales.getNoInstaladas() + dto.getNoInstaladas());
+					
+					reporteRgDto.add(dto);
+				}
+				reporteRgDto.add(totales);
+	
+				return reporteRgDto;
 			}
 		} else {
 			throw new SeguimientoVotoException("No cuenta con los permisos suficientes para consultar el reporte", 401);
