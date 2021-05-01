@@ -21,7 +21,7 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 
 	@Autowired
 	IEnvioActasRepository envioActasRepository;
-	
+
 	@Override
 	public Long save(EnvioActasDTO actaDto, long perfil, long idUsuario) throws CotException {
 
@@ -30,30 +30,34 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 			throw new CotException("No cuenta con los servicios suficientes", 401);
 
 		} else {
-			
+
 			EnvioActas actas = new EnvioActas();
-			
+
 			actas.setTipo_votacion(actaDto.getTipoVotacion());
 			actas.setRuta_acta(actaDto.getRutaActa());
 			actas.setId_casilla(actaDto.getIdCasilla());
 			actas.setRegistro_acta((new Timestamp(new Date().getTime())));
-			
-			if(actas.getTipo_votacion() != null && actas.getTipo_votacion() > 0
-				&& actas.getRuta_acta() != null && actas.getRuta_acta() != " "
-				&& actas.getId_casilla() > 0 && actas.getId_casilla() != null) {
-			
-				envioActasRepository.save(actas);
-				
-				envioActasRepository.getIdMax();
-			}else {
-				throw new CotException("Todos los campos son requeridos", 400);
-			}
-			
-			
-			
-			
-			
 
+			if (actas.getTipo_votacion() != null && actas.getTipo_votacion() > 0) {
+			} else {
+				throw new CotException("El campo Tipo Votacion es Requerido", 400);
+			}
+			if (actas.getRuta_acta() != null && actas.getRuta_acta() != " ") {
+			} else {
+				throw new CotException("El campo Ruta Acta es Requerido", 400);
+			}
+
+			if (actas.getId_casilla() > 0 && actas.getId_casilla() != null) {
+			} else {
+				throw new CotException("El campo Id Casilla es Requerido", 400);
+			}
+			if (actas.getTipo_votacion() != null && actas.getTipo_votacion() > 0 && actas.getRuta_acta() != null
+					&& actas.getRuta_acta() != " " && actas.getId_casilla() > 0 && actas.getId_casilla() != null) {
+				envioActasRepository.save(actas);
+
+				envioActasRepository.getIdMax();
+
+			}
 		}
 
 		return null;
