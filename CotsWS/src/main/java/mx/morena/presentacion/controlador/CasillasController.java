@@ -27,7 +27,7 @@ public class CasillasController extends MasterController{
 	@Autowired
 	private ICasillasService casillaService;
 	
-	@PostMapping("/envio_actas")
+	@PostMapping("/envioActas")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
 	public Long guardarActas(HttpServletResponse response, HttpServletRequest request, @RequestBody EnvioActasDTO actas) throws IOException {
 		long perfil = getPerfil(request);

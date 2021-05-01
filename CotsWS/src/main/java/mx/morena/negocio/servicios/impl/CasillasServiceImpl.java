@@ -38,7 +38,9 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 			actas.setId_casilla(actaDto.getIdCasilla());
 			actas.setRegistro_acta((new Timestamp(new Date().getTime())));
 			
-			if(actas.getTipo_votacion() != null && actas.getRuta_acta() != null && actas.getId_casilla() > 0) {
+			if(actas.getTipo_votacion() != null && actas.getTipo_votacion() > 0
+				&& actas.getRuta_acta() != null && actas.getRuta_acta() != " "
+				&& actas.getId_casilla() > 0 && actas.getId_casilla() != null) {
 			
 				envioActasRepository.save(actas);
 				
