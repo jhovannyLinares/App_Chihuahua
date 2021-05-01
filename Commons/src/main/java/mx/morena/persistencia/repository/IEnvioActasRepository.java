@@ -7,4 +7,6 @@ public interface IEnvioActasRepository {
 	void save(EnvioActas Actas);
 	
 	Long getIdMax();
+	
+	Long countByTipoVotacionAndDistrito(Long df, Long tipo);
 }

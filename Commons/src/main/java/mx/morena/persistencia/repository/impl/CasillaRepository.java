@@ -225,5 +225,17 @@ public class CasillaRepository implements ICasillaRepository {
 		}
 	
 	}
+	
+	@Override
+	public Long countByEntidadAndFederal(Long entidad, Long idDistrito) {
+		String sql = "select count(*) from app_casilla ac where ac.entidad_id = ? AND ac.federal_id = ? ";
+		try {
+			return template.queryForObject(sql, new Object[] { entidad, idDistrito }, new int[] { Types.NUMERIC, Types.NUMERIC },
+					new CountCasillasRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		
+		}
+	}
 
 }

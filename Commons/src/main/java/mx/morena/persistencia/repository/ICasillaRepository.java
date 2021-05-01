@@ -39,4 +39,5 @@ public interface ICasillaRepository {
 
 	public List<Casilla> getAllDistritosLocales();
 
+	public Long countByEntidadAndFederal(Long entidad, Long idDistrito);
 }

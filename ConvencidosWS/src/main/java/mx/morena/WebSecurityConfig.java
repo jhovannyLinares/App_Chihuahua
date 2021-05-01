@@ -30,6 +30,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 				.antMatchers("/reporte/**").authenticated()
 				.antMatchers("/reportesCapacitacion/**").authenticated()
+				.antMatchers("/reportesResultados/**").authenticated()
 				.antMatchers("/convencidos/**")
 				.authenticated().anyRequest().authenticated()
 				.and().addFilterAfter(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
