@@ -20,4 +20,8 @@ public interface IInstalacionCasillasRepository {
 
 	Long getCountRcByLocalAndAsistencia(Long local, String SI, Long idFederal, Long tipo, Long idMunicipio);
 
+	Long getCountRgByLocalAndAsistenciaCrg(String SI,Long idCrg, Long casillaRuta, Long tipo, Long idFederal, Long municipio);
+
+	Long getCountRcByLocalAndAsistenciaCrg(String SI, Long idCrg, Long casillaRuta, Long tipo, Long idFederal, Long municipio);
+
 }

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import mx.morena.negocio.dto.ReporteAsistenciaCrgDTO;
 import mx.morena.negocio.dto.ReporteAsistenciaEstatalDTO;
 import mx.morena.negocio.dto.ReporteAsistenciaFederalDTO;
 import mx.morena.negocio.dto.ReporteAsistenciaLocalDTO;
@@ -214,6 +215,7 @@ public class ReporteCasillaController extends MasterController {
 		try {
 			long usuario = getUsuario(request);
 			long perfil = getPerfil(request);
+//			Long idLocal = 0L;
 			
 			return reporteCasillaService.getReporteAsistenciaMunicipal(usuario, perfil, idFederal, idLocal, idMunicipio);
 
@@ -225,6 +227,27 @@ public class ReporteCasillaController extends MasterController {
 			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 		return null;
+	}
+	
+	@GetMapping("/asistenciaMunicipal/download")	
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	public void downloadReporteAsistenciaMunicipal(HttpServletResponse response, HttpServletRequest request,
+			@RequestParam(value = "idFederal", required = false) Long idFederal,
+			@RequestParam(value = "idLocal", required = false) Long idLocal,
+			@RequestParam(value = "idMunicipio", required = false) Long idMunicipio) throws IOException {
+		try {
+			long usuario = getUsuario(request);
+			long perfil = getPerfil(request);
+			
+			reporteCasillaService.getReporteAsistenciaMunicipalDownload(response, usuario, perfil, idFederal, idLocal, idMunicipio);
+
+		} catch (CotException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+		}
 	}
 
 	
@@ -310,4 +333,48 @@ public class ReporteCasillaController extends MasterController {
 		}
 	}
 
+	@GetMapping("/asistenciaCrg")	
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	public List<ReporteAsistenciaCrgDTO> reporteAsistenciaCrg(HttpServletResponse response, HttpServletRequest request,
+			@RequestParam(value = "idFederal", required = false) Long idFederal,
+			@RequestParam(value = "idLocal", required = false) Long idLocal,
+			@RequestParam(value = "idMunicipio", required = false) Long idMunicipio) throws IOException {
+		
+		try {
+			long usuario = getUsuario(request);
+			long perfil = getPerfil(request);
+//			Long idLocal = 0L;
+			
+			return reporteCasillaService.getReporteAsistenciaCrg(usuario, perfil, idFederal, idLocal, idMunicipio);
+
+		} catch (CotException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+		}
+		return null;
+	}
+	
+	@GetMapping("/asistenciaCrg/download")	
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	public void downloadReporteAsistenciaCrg(HttpServletResponse response, HttpServletRequest request,
+			@RequestParam(value = "idFederal", required = false) Long idFederal,
+			@RequestParam(value = "idLocal", required = false) Long idLocal,
+			@RequestParam(value = "idMunicipio", required = false) Long idMunicipio) throws IOException {
+		try {
+			long usuario = getUsuario(request);
+			long perfil = getPerfil(request);
+			
+			reporteCasillaService.getReporteAsistenciaCrgDownload(response, usuario, perfil, idFederal, idLocal, idMunicipio);
+
+		} catch (CotException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+		}
+	}
 }

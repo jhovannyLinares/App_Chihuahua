@@ -10,7 +10,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.IdGenerator;
 
+import mx.morena.negocio.dto.ReporteAsistenciaCrgDTO;
 import mx.morena.negocio.dto.ReporteAsistenciaEstatalDTO;
 import mx.morena.negocio.dto.ReporteAsistenciaFederalDTO;
 import mx.morena.negocio.dto.ReporteAsistenciaLocalDTO;
@@ -20,10 +22,12 @@ import mx.morena.negocio.dto.ReporteVotacionDTO;
 import mx.morena.negocio.dto.ReporteVotacionMunicipalDTO;
 import mx.morena.negocio.exception.CotException;
 import mx.morena.negocio.servicios.IReporteCasillaService;
+import mx.morena.persistencia.entidad.AsignacionCasillas;
 import mx.morena.persistencia.entidad.Casilla;
 import mx.morena.persistencia.entidad.DistritoFederal;
 import mx.morena.persistencia.entidad.Municipio;
 import mx.morena.persistencia.entidad.Usuario;
+import mx.morena.persistencia.repository.IAsignacionCasillasRepository;
 import mx.morena.persistencia.repository.ICasillaRepository;
 import mx.morena.persistencia.repository.IDistritoFederalRepository;
 import mx.morena.persistencia.repository.IInstalacionCasillasRepository;
@@ -52,6 +56,9 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 	
 	@Autowired
 	private IMunicipioRepository municipioRepository;
+	
+	@Autowired
+	private IAsignacionCasillasRepository asignacionCasillasRepository;
 	
 	private String once = "11:00:00";
 	
@@ -764,6 +771,133 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 		List<ReporteAsistenciaMunicipalDTO> reporteDTOs = getReporteAsistenciaMunicipal(usuario, perfil, idFederal, idLocal, idMunicipio);
 
 		String[] header = { "municipio", "rgMeta", "rcMeta", "rgAsistencia", "rgPorcentaje", "rcAsistencia", 
+				"rcPorcentaje" };
+
+		setWriterFile(response, reporteDTOs, header);
+	}
+
+	@Override
+	public List<ReporteAsistenciaCrgDTO> getReporteAsistenciaCrg(long usuario, long perfil, Long idFederal,
+			Long idLocal, Long idMunicipio) throws CotException, IOException {
+
+		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_CRG) {
+			
+			List<ReporteAsistenciaCrgDTO> lstDto = new ArrayList<>();
+			ReporteAsistenciaCrgDTO dto = null;
+			ReporteAsistenciaCrgDTO total = new ReporteAsistenciaCrgDTO();
+			List<AsignacionCasillas> lstCasillas = null;
+			Long tipo = 0L;
+			
+			total.setIdFederal(null);
+			total.setCasillas(0L);
+			total.setRgMeta(0L);
+			total.setRcMeta(0L);
+			total.setRgAsistencia(0L);
+			total.setRcAsistencia(0L);
+			total.setRgPorcentaje(0.0);
+			total.setRcPorcentaje(0.0);
+			
+			if (perfil == PERFIL_CRG) {
+				Usuario usr = usuarioRepository.findById(usuario);
+				lstCasillas = asignacionCasillasRepository.getRutasByIdCrg(usr.getId());
+				tipo = 1L;
+				
+				for (AsignacionCasillas aCasillas : lstCasillas) {
+					
+					dto = getAsistenciaCrg(idLocal, idFederal, tipo, idMunicipio, usr.getId(), aCasillas.getId(), aCasillas.getFederalId(), aCasillas.getRuta());
+					
+					total.setCasillas(total.getCasillas() + dto.getCasillas());
+					total.setRgMeta(total.getRgMeta() + dto.getRgMeta());
+					total.setRcMeta(total.getRcMeta() + dto.getRcMeta());
+					total.setRgAsistencia(total.getRgAsistencia() + dto.getRgAsistencia());
+					total.setRcAsistencia(total.getRcAsistencia() + dto.getRcAsistencia());
+					
+					lstDto.add(dto);
+					
+				}
+				
+				total.setRgPorcentaje(dosDecimales((total.getRgAsistencia() * 100.0) / total.getRgMeta()).doubleValue());
+				total.setRcPorcentaje(dosDecimales((total.getRcAsistencia() * 100.0) / total.getRcMeta()).doubleValue());
+				
+				lstDto.add(total);
+				
+				return lstDto;
+			}
+			
+			if (perfil == PERFIL_ESTATAL) {
+				if (idFederal != null && idMunicipio == null) {
+					tipo = 2L;
+					lstCasillas = asignacionCasillasRepository.getRutasByFederal(idFederal);
+					System.out.println("***** " + lstCasillas.size());
+					for (AsignacionCasillas aCasillas : lstCasillas) {
+						dto = getAsistenciaCrg(idLocal, idFederal, tipo, idMunicipio, 0L, 0L, idFederal, aCasillas.getRuta());
+						
+						total.setCasillas(total.getCasillas() + dto.getCasillas());
+						total.setRgMeta(total.getRgMeta() + dto.getRgMeta());
+						total.setRcMeta(total.getRcMeta() + dto.getRcMeta());
+						total.setRgAsistencia(total.getRgAsistencia() + dto.getRgAsistencia());
+						total.setRcAsistencia(total.getRcAsistencia() + dto.getRcAsistencia());
+						
+						lstDto.add(dto);
+					}
+					
+					total.setRgPorcentaje(dosDecimales((total.getRgAsistencia() * 100.0) / total.getRgMeta()).doubleValue());
+					total.setRcPorcentaje(dosDecimales((total.getRcAsistencia() * 100.0) / total.getRcMeta()).doubleValue());
+					
+					lstDto.add(total);
+				}
+				
+				if(idFederal != null && idMunicipio != null) {
+					tipo = 3L;
+					dto = getAsistenciaCrg(idLocal, idFederal, tipo, idMunicipio, 0L, 0L, idFederal, 0L);
+					lstDto.add(dto);
+				}
+				
+				return lstDto;
+			}
+			
+		}else {
+			throw new CotException("No cuenta con los permisos suficientes para consultar el reporte", 401);
+		}
+		
+		return null;
+	}
+	
+	public ReporteAsistenciaCrgDTO getAsistenciaCrg(Long local, Long federal, Long tipo, Long municipio, Long idCrg, Long casillaId, Long casillaIdFederal, Long casillaRuta) {
+		List<ReporteAsistenciaCrgDTO> lstDto = new ArrayList<>();
+		
+		ReporteAsistenciaCrgDTO dto = new ReporteAsistenciaCrgDTO();
+		
+		Long rgMeta = 0L;
+		Long rcMeta = 0L;
+		Long rgAsistencia = instalacionCasillaRepository.getCountRgByLocalAndAsistenciaCrg(SI, idCrg, casillaRuta, tipo, federal, municipio);
+		Long rcAsistencia = instalacionCasillaRepository.getCountRcByLocalAndAsistenciaCrg(SI, idCrg, casillaRuta, tipo, federal, municipio);
+		Long casillas = asignacionCasillasRepository.countCasillasByIdCrgAndRuta(idCrg, casillaRuta, tipo, federal, municipio);
+		
+		dto.setIdFederal(casillaIdFederal);
+		dto.setRuta(casillaRuta);
+		dto.setCasillas(casillas);
+		
+		dto.setRgMeta(50L);
+		dto.setRcMeta(50L);
+		dto.setRgAsistencia(rgAsistencia);
+		dto.setRcAsistencia(rcAsistencia);
+		dto.setRgPorcentaje(dosDecimales((dto.getRgAsistencia() * 100.0) / dto.getRgMeta()).doubleValue());
+		dto.setRcPorcentaje(dosDecimales((dto.getRcAsistencia() * 100.0) / dto.getRcMeta()).doubleValue());
+
+		lstDto.add(dto);
+
+		return dto;
+	}
+
+	@Override
+	public void getReporteAsistenciaCrgDownload(HttpServletResponse response, long usuario, long perfil, Long idFederal,
+			Long idLocal, Long idMunicipio) throws CotException, IOException {
+		setNameFile(response, CSV_ASISTENCIA_MUNICIPAL);
+
+		List<ReporteAsistenciaCrgDTO> reporteDTOs = getReporteAsistenciaCrg(usuario, perfil, idFederal, idLocal, idMunicipio);
+
+		String[] header = {"idFederal", "ruta", "casillas", "rgMeta", "rcMeta", "rgAsistencia", "rgPorcentaje", "rcAsistencia", 
 				"rcPorcentaje" };
 
 		setWriterFile(response, reporteDTOs, header);

@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
+import mx.morena.negocio.dto.ReporteAsistenciaCrgDTO;
 import mx.morena.negocio.dto.ReporteAsistenciaEstatalDTO;
 import mx.morena.negocio.dto.ReporteAsistenciaFederalDTO;
 import mx.morena.negocio.dto.ReporteAsistenciaLocalDTO;
@@ -46,5 +47,11 @@ public interface IReporteCasillaService {
 	void getReporteMunicipioDownload(HttpServletResponse response, Long usuario, Long perfil, Long idReporte) throws CotException, IOException;
 
 	void getReporteAsistenciaMunicipalDownload(HttpServletResponse response, long usuario, long perfil, Long idFederal,
+			Long idLocal, Long idMunicipio) throws CotException, IOException;
+
+	List<ReporteAsistenciaCrgDTO> getReporteAsistenciaCrg(long usuario, long perfil, Long idFederal, Long idLocal,
+			Long idMunicipio) throws CotException, IOException;
+
+	void getReporteAsistenciaCrgDownload(HttpServletResponse response, long usuario, long perfil, Long idFederal,
 			Long idLocal, Long idMunicipio) throws CotException, IOException;
 }

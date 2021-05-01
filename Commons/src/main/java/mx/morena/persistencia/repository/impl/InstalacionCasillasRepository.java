@@ -1,5 +1,6 @@
 package mx.morena.persistencia.repository.impl;
 
+import java.beans.FeatureDescriptor;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
@@ -250,6 +251,137 @@ public class InstalacionCasillasRepository implements IInstalacionCasillasReposi
 			return null;
 		}
 		
+	}
+
+	@Override
+	public Long getCountRgByLocalAndAsistenciaCrg(String SI, Long idCrg, Long casillaRuta, Long tipo, Long federal, Long municipio) {
+		String select = "select count(*) from app_instalacion_casilla aic " 
+				+ "inner join app_asignacion_casillas aac "
+				+ "on aic.id_casilla = aac.id_casilla " ;
+//				+ "where aic.llego_rg = ? and aac.id_crg = ? and aac.ruta = ?";
+		
+		String sql = null;
+		String where = "";
+		List<Object> para = new ArrayList<Object>();
+		List<Integer> type = new ArrayList<Integer>();
+		
+		if (tipo == 1L) {
+			where = " where aic.llego_rg = ? and aac.id_crg = ? and aac.ruta = ? ";
+			
+			para.add(SI);
+			type.add(Types.VARCHAR);
+			para.add(idCrg);
+			type.add(Types.NUMERIC);
+			para.add(casillaRuta);
+			type.add(Types.NUMERIC);
+		}
+
+		if (tipo == 2L) {
+			where = "where aic.llego_rg = ? and aac.ruta = ? and aac.distrito_federal_id = ?";
+			para.add(SI);
+			type.add(Types.VARCHAR);
+//			para.add(idCrg);
+//			type.add(Types.NUMERIC);
+			para.add(casillaRuta);
+			type.add(Types.NUMERIC);
+			para.add(federal);
+			type.add(Types.NUMERIC);
+		}
+		
+		if (tipo == 3L) {
+			where = "inner join app_casilla ac " 
+					+"on ac.id = aic.id_casilla " 
+					+"where aic.llego_rg = ? and ac.municpio_id = ? ";
+			
+			para.add(SI);
+			type.add(Types.VARCHAR);
+			para.add(municipio);
+			type.add(Types.NUMERIC);
+		}
+		
+		
+
+		Object[] parametros = new Object[para.size()];
+		int[] types = new int[para.size()];
+
+		for (int i = 0; i < para.size(); i++) {
+			parametros[i] = para.get(i);
+			types[i] = type.get(i);
+		}
+
+		try {
+			sql = select.concat(where);
+
+			return template.queryForObject(sql, parametros, types ,new LongRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+
+	@Override
+	public Long getCountRcByLocalAndAsistenciaCrg(String SI, Long idCrg, Long casillaRuta, Long tipo, Long federal, Long municipio) {
+		String select = "select count(*) from app_instalacion_casilla aic " 
+				+ "inner join app_asignacion_casillas aac "
+				+ "on aic.id_casilla = aac.id_casilla " ;
+//				+ "where aic.llego_rc = ? and aac.id_crg = ? and aac.ruta = ?";
+		
+		
+		
+		String sql = null;
+		String where = "";
+		List<Object> para = new ArrayList<Object>();
+		List<Integer> type = new ArrayList<Integer>();
+		
+		if (tipo == 1L) {
+			where = " where aic.llego_rc = ? and aac.id_crg = ? and aac.ruta = ? ";
+			
+			para.add(SI);
+			type.add(Types.VARCHAR);
+			para.add(idCrg);
+			type.add(Types.NUMERIC);
+			para.add(casillaRuta);
+			type.add(Types.NUMERIC);
+		}
+
+		if (tipo == 2L) {
+			where = "where aic.llego_rc = ? and aac.ruta = ? and aac.distrito_federal_id = ?";
+			para.add(SI);
+			type.add(Types.VARCHAR);
+//			para.add(idCrg);
+//			type.add(Types.NUMERIC);
+			para.add(casillaRuta);
+			type.add(Types.NUMERIC);
+			para.add(federal);
+			type.add(Types.NUMERIC);
+		}
+		
+		if (tipo == 3L) {
+			where = "inner join app_casilla ac " 
+					+"on ac.id = aic.id_casilla " 
+					+"where aic.llego_rc = ? and ac.municpio_id = ? ";
+			
+			para.add(SI);
+			type.add(Types.VARCHAR);
+			para.add(municipio);
+			type.add(Types.NUMERIC);
+		}
+		
+
+		Object[] parametros = new Object[para.size()];
+		int[] types = new int[para.size()];
+
+		for (int i = 0; i < para.size(); i++) {
+			parametros[i] = para.get(i);
+			types[i] = type.get(i);
+		}
+
+		try {
+			sql = select.concat(where);
+
+			return template.queryForObject(sql, parametros, types ,new LongRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
 	}
 
 	
