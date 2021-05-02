@@ -3,6 +3,7 @@ package mx.morena.persistencia.repository;
 import java.util.List;
 
 import mx.morena.persistencia.entidad.Perfil;
+import mx.morena.persistencia.entidad.ReporteAsignacionRg;
 import mx.morena.persistencia.entidad.RepresentanteClaveElectoral;
 import mx.morena.persistencia.entidad.Representantes;
 import mx.morena.persistencia.entidad.RepresentantesAsignados;
@@ -23,6 +24,12 @@ public interface IRepresentanteRepository {
 	List<Perfil> getAllTipoRep();
 	
 	List<RepresentanteClaveElectoral> getAllRepresentantes(String claveElector);
+	
+	List<ReporteAsignacionRg> getReporteRg(Long idDistrito);
+	
+	List<ReporteAsignacionRg> getReporteRgEstatal();
+	
+	Long getCargo(Long idDistrito, Long cargo);
 
 	Long asignaRepresentante(RepresentantesAsignados representante);
 

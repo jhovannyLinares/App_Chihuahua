@@ -10,12 +10,14 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import mx.morena.persistencia.entidad.Perfil;
+import mx.morena.persistencia.entidad.ReporteAsignacionRg;
 import mx.morena.persistencia.entidad.RepresentanteClaveElectoral;
 import mx.morena.persistencia.entidad.Representantes;
 import mx.morena.persistencia.entidad.RepresentantesAsignados;
 import mx.morena.persistencia.repository.IRepresentanteRepository;
 import mx.morena.persistencia.rowmapper.IdMaxConvencidos;
 import mx.morena.persistencia.rowmapper.LongRowMapper;
+import mx.morena.persistencia.rowmapper.ReporteAsignacionRgRowMapper;
 import mx.morena.persistencia.rowmapper.RepresentanteClaveRowMapper;
 import mx.morena.persistencia.rowmapper.RepresentanteRowMapper;
 import mx.morena.persistencia.rowmapper.RepresentantesCrgRowMapper;
@@ -123,7 +125,7 @@ public class RepresentantesRepository implements IRepresentanteRepository {
 			return 0L;
 		}
 	}
-
+	
 	@Override
 	public List<RepresentanteClaveElectoral> getAllRepresentantes(String claveElector) {
 		
@@ -429,6 +431,59 @@ public class RepresentantesRepository implements IRepresentanteRepository {
 		try {
 			return template.queryForObject(sql, new Object[] { representanteId, tipoRepresentante }, new int[] { Types.NUMERIC, Types.NUMERIC },
 					new RepresentanteRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+
+	@Override
+	public List<ReporteAsignacionRg> getReporteRg(Long idDistrito) {
+		
+		String sql = "select ac.federal_id as dFederal, ac.local_id as dLocal, am.nombre as municipio, aac.ruta as ruta, count(aac.id_casilla) as casillas from app_casilla ac "
+				+ " inner join app_municipio am "
+				+ " on ac.municpio_id = am.id "
+				+ " inner join app_asignacion_casillas aac "
+				+ " on ac.id = aac.id_casilla "
+				+ " inner join app_representantes_asignados ara "
+				+ " on ac.id = ara.casilla_id "
+				+ " where ac.federal_id = ? group by ac.federal_id, ac.local_id, am.nombre, aac.ruta, aac.id_casilla ";
+		
+		try {
+			return template.queryForObject(sql,new Object[] { idDistrito }, new int[] { Types.NUMERIC }, new ReporteAsignacionRgRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+		
+	}
+
+	@Override
+	public Long getCargo(Long idDistrito, Long cargo) {
+		
+		String sql = "select count(ara.cargo) from app_casilla ac "
+				+ " inner join app_municipio am "
+				+ " on ac.municpio_id = am.id "
+				+ " inner join app_asignacion_casillas aac "
+				+ " on ac.id = aac.id_casilla "
+				+ " inner join app_representantes_asignados ara "
+				+ " on ac.id = ara.casilla_id "
+				+ " where ac.federal_id = ? and ara.cargo = ? ";
+		return template.queryForObject(sql, new Object[] { idDistrito, cargo }, new int[] { Types.NUMERIC, Types.NUMERIC }, new LongRowMapper());
+	}
+
+	@Override
+	public List<ReporteAsignacionRg> getReporteRgEstatal() {
+		
+		String sql = "select ac.federal_id as dFederal, ac.local_id as dLocal, am.nombre as municipio, aac.ruta as ruta, count(aac.id_casilla) as casillas from app_casilla ac "
+				+ " inner join app_municipio am "
+				+ " on ac.municpio_id = am.id "
+				+ " inner join app_asignacion_casillas aac "
+				+ " on ac.id = aac.id_casilla "
+				+ " inner join app_representantes_asignados ara "
+				+ " on ac.id = ara.casilla_id "
+				+ " group by ac.federal_id, ac.local_id, am.nombre, aac.ruta, aac.id_casilla order by ac.federal_id";
+		
+		try {
+			return template.queryForObject(sql,new Object[] { }, new int[] { }, new ReporteAsignacionRgRowMapper());
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}

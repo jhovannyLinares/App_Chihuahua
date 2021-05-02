@@ -14,11 +14,13 @@ import org.springframework.stereotype.Service;
 import mx.morena.negocio.dto.ReporteAsignacionDistritalDTO;
 import mx.morena.negocio.dto.ReporteCrgDTO;
 import mx.morena.negocio.dto.ReporteAsignacionEstatalDTO;
+import mx.morena.negocio.dto.ReporteAsignacionRgDTO;
 import mx.morena.negocio.exception.RepresentanteException;
 import mx.morena.negocio.dto.ReporteRCDTO;
 import mx.morena.negocio.dto.ReporteRgDTO;
 import mx.morena.negocio.servicios.IReportesAsignacionService;
 import mx.morena.persistencia.entidad.DistritoFederal;
+import mx.morena.persistencia.entidad.ReporteAsignacionRg;
 import mx.morena.persistencia.entidad.Usuario;
 import mx.morena.persistencia.repository.IDistritoFederalRepository;
 import mx.morena.persistencia.repository.IRepresentanteRepository;
@@ -375,12 +377,71 @@ if(perfil == PERFIL_ESTATAL) {
 	@Override
 	public void getReporteRgDownload(HttpServletResponse response, Long perfil, Long idUsuario)
 			throws RepresentanteException, IOException {
-		setNameFile(response, CSV_ASIGN_RG);
+		setNameFile(response, CSV_RG);
 		List<ReporteCrgDTO> crgDTOs = getReporteCrgDv(perfil, idUsuario);
 
 		String[] header = { "metaRg", "avanceCapturadoRg", "avanceAsignadoRg", "porcentajeAvanceRg"};
 
 		setWriterFile(response, crgDTOs, header);
+		
+	}
+
+	@Override
+	public List<ReporteAsignacionRgDTO> getReporteRgAsignado(Long perfil, Long idUsuario) throws RepresentanteException {
+		List<ReporteAsignacionRgDTO> lstAsigRgDto = new ArrayList<ReporteAsignacionRgDTO>();
+		List<ReporteAsignacionRg> lstAsigRg = null;
+		ReporteAsignacionRgDTO dto = new ReporteAsignacionRgDTO();
+		
+		Usuario usuario = usuarioRepository.findById(idUsuario);
+		long idDistrito = usuario.getFederal();
+		long perfilUsuario = usuario.getPerfil();
+
+		if(perfil == PERFIL_ESTATAL) {
+			lstAsigRg = representanteRepository.getReporteRgEstatal();
+		}else if(perfil != PERFIL_RC) {
+			lstAsigRg = representanteRepository.getReporteRg(idDistrito);
+		}else {
+			throw new RepresentanteException("No cuenta con permisos suficientes para consultar el reporte", 401);
+		}
+		
+		for (ReporteAsignacionRg rg : lstAsigRg) {
+			
+			Long propuesto1 = representanteRepository.getCargo(rg.getIdDistrito(), 1L);
+			Long suplente1 = representanteRepository.getCargo(rg.getIdDistrito(), 2L);
+			Long propuesto2 = representanteRepository.getCargo(rg.getIdDistrito(), 3L);
+			Long suplente2 = representanteRepository.getCargo(rg.getIdDistrito(), 4L);
+		
+			dto = new ReporteAsignacionRgDTO();
+			
+			dto.setIdDistrito(rg.getIdDistrito());
+			dto.setIdLocal(rg.getIdLocal());
+			dto.setMunicipio(rg.getMunicipio());
+			dto.setIdCasilla(rg.getIdCasilla());
+			dto.setIdRuta(rg.getIdRuta());
+			dto.setPropietarioUno(propuesto1);
+			dto.setPropietarioDos(propuesto2);
+			dto.setSuplenteUno(suplente1);
+			dto.setSuplenteDos(suplente2);
+			
+			lstAsigRgDto.add(dto);
+		}
+
+	return lstAsigRgDto;
+	}
+
+	@Override
+	public void getReporteRgAsignadoDownload(HttpServletResponse response, Long perfil, Long idUsuario)
+			throws RepresentanteException, IOException {
+		if(perfil != PERFIL_RC) {
+			setNameFile(response, CSV_ASIGN_RG);
+			List<ReporteAsignacionRgDTO> rgDTOs = getReporteRgAsignado(perfil, idUsuario);
+	
+			String[] header = { "idDistrito", "idLocal", "municipio", "idRuta", "idCasilla", "propietarioUno", "propietarioDos", "suplenteUno", "suplenteDos"};
+	
+			setWriterFile(response, rgDTOs, header);
+		}else {
+			throw new RepresentanteException("No cuenta con permisos suficientes para descargar el reporte", 401);
+		}
 		
 	}
 

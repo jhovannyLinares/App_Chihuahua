@@ -17,6 +17,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import mx.morena.negocio.dto.ReporteAsignacionDistritalDTO;
 import mx.morena.negocio.dto.ReporteCrgDTO;
 import mx.morena.negocio.dto.ReporteAsignacionEstatalDTO;
+import mx.morena.negocio.dto.ReporteAsignacionRgDTO;
 import mx.morena.negocio.exception.RepresentanteException;
 import mx.morena.negocio.servicios.IReportesAsignacionService;
 import mx.morena.negocio.dto.ReporteRCDTO;
@@ -207,7 +208,6 @@ public class ReportesAsignacionController extends MasterController{
 			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 	}
-
 	
 	@GetMapping("/rg/download")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
@@ -218,6 +218,45 @@ public class ReportesAsignacionController extends MasterController{
 			long usuario = getUsuario(request);
 			
 			reportesService.getReporteRgDownload(response, perfil, usuario);
+		} catch (RepresentanteException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+		}
+	}
+	
+	@GetMapping("/asignacionRg")
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	private List<ReporteAsignacionRgDTO> getReporteAsignadoRg(HttpServletResponse response, HttpServletRequest request) throws IOException {
+		
+		try {
+			long perfil = getPerfil(request);
+			long usuario = getUsuario(request);
+			
+			return reportesService.getReporteRgAsignado(perfil, usuario);
+		} catch (RepresentanteException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+			return null;
+		} catch (Exception e ) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			return null;
+		}
+
+	}
+	
+	@GetMapping("/asignacionRg/download")
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	public void downloadAsignadoRgCSV(HttpServletResponse response,  HttpServletRequest request) throws IOException {
+		
+		try {
+			long perfil = getPerfil(request);
+			long usuario = getUsuario(request);
+			
+			reportesService.getReporteRgAsignadoDownload(response, perfil, usuario);
 		} catch (RepresentanteException e) {
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
