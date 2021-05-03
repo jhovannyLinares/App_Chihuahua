@@ -132,7 +132,7 @@ public class InstalacionCasillasRepository implements IInstalacionCasillasReposi
 			type.add(Types.NUMERIC);
 		}
 		
-		if (tipo == 5L) {
+		if (tipo == 6L) {
 			where = "where aic.llego_rg = ? and federal_id = ?";
 			para.add(SI);
 			type.add(Types.VARCHAR);
@@ -140,7 +140,7 @@ public class InstalacionCasillasRepository implements IInstalacionCasillasReposi
 			type.add(Types.NUMERIC);
 		}
 		
-		if (tipo == 6L) {
+		if (tipo == 7L) {
 			where = "where aic.llego_rg = ? and ac.municpio_id = ? and federal_id = ?";
 			para.add(SI);
 			type.add(Types.VARCHAR);
@@ -218,14 +218,14 @@ public class InstalacionCasillasRepository implements IInstalacionCasillasReposi
 			type.add(Types.NUMERIC);
 		}
 		
-		if (tipo == 5L) {
+		if (tipo == 6L) {
 			where = "where aic.llego_rc = ? and federal_id = ?";
 			para.add(SI);
 			type.add(Types.VARCHAR);
 			para.add(idFederal);
 			type.add(Types.NUMERIC);
 		}
-		if (tipo == 6L) {
+		if (tipo == 7L) {
 			where = "where aic.llego_rc = ? and ac.municpio_id = ? and federal_id = ?";
 			para.add(SI);
 			type.add(Types.VARCHAR);

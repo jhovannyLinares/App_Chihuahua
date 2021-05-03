@@ -85,19 +85,6 @@ public class MunicipioRepository implements IMunicipioRepository {
 //			para.add(federal);
 //			type.add(Types.NUMERIC);
 //		}
-//		
-//		if (municipio != null) {
-//
-//			if (para.size() > 0) {
-//				where = where.concat(" and id = ? ");
-//			} else {
-//				where = " where id = ? ";
-//			}
-//			para.add(municipio);
-//			type.add(Types.NUMERIC);
-//		}
-		
-		
 		
 		Object[] parametros = new Object[para.size()];
 		int[] types = new int[para.size()];

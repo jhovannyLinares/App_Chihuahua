@@ -454,9 +454,18 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 			}
 			
 			if (perfil == PERFIL_ESTATAL) {
+				
+				if (idFederal == null && idMunicipio == null) {
+					tipo = 6L;
+					lstMunicipio = municipioRepository.findAll();
+					for (Municipio mun : lstMunicipio) {
+						dto = getAsistenciaMunicipal(idLocal, mun.getFederalId(), tipo, mun.getId());
+						lstDto.add(dto);
+					}
+				}
 
 				if (idFederal != null && idMunicipio == null) {
-					tipo = 5L;
+					tipo = 6L;
 					lstMunicipio = municipioRepository.getByFederal(idFederal);
 					for (Municipio mun : lstMunicipio) {
 						dto = getAsistenciaMunicipal(idLocal, idFederal, tipo, mun.getId());
@@ -465,7 +474,7 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 				}
 
 				if (idFederal != null && idMunicipio != null) {
-					tipo = 6L;
+					tipo = 7L;
 					dto = getAsistenciaMunicipal(idLocal, idFederal, tipo, idMunicipio);
 					lstDto.add(dto);
 				}

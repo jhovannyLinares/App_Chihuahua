@@ -24,6 +24,7 @@ public class MunicipiosRowMapper implements RowMapper<List<Municipio>> {
 
 			municipio.setId(rs.getLong("id"));
 			municipio.setDescripcion(rs.getString("nombre"));
+			municipio.setFederalId(rs.getLong("federal_id"));
 
 			municipios.add(municipio);
 			
