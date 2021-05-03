@@ -13,6 +13,7 @@ import mx.morena.persistencia.entidad.RegistroCapacitacion;
 import mx.morena.persistencia.repository.ICapacitacionRepository;
 import mx.morena.persistencia.rowmapper.CapacitacionRowMapper;
 import mx.morena.persistencia.rowmapper.LongRowMapper;
+import mx.morena.persistencia.rowmapper.RegistroCapacitacionRowMapper;
 
 @Repository
 public class CapacitacionRepository implements ICapacitacionRepository{
@@ -160,6 +161,18 @@ public class CapacitacionRepository implements ICapacitacionRepository{
 		try {
 			return template.queryForObject(sql, new Object[] {perfilRc, b, idEntidad, idFederal}, 
 					new int[] { Types.NUMERIC, Types.BOOLEAN, Types.NUMERIC, Types.NUMERIC }, new LongRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+
+	@Override
+	public List<RegistroCapacitacion> getCapacitacionByRepresentante(Long idRepresentante) {
+		String sql = " select * from app_registro_capacitacion arc where id_representante = ? ";
+		
+		try {
+			return template.queryForObject(sql, new Object[] {idRepresentante}, 
+					new int[] { Types.NUMERIC}, new RegistroCapacitacionRowMapper());
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}

@@ -912,7 +912,7 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 	@Override
 	public void getReporteAsistenciaCrgDownload(HttpServletResponse response, long usuario, long perfil, Long idFederal,
 			Long idLocal, Long idMunicipio) throws CotException, IOException {
-		setNameFile(response, CSV_ASISTENCIA_MUNICIPAL);
+		setNameFile(response, CSV_ASISTENCIA_CRG);
 
 		List<ReporteAsistenciaCrgDTO> reporteDTOs = getReporteAsistenciaCrg(usuario, perfil, idFederal, idLocal, idMunicipio);
 
@@ -1013,7 +1013,7 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 	public void getReporteAsistenciaRgDownload(HttpServletResponse response, long usuario, long perfil, Long idFederal,
 			Long idLocal, Long idMunicipio, String idRutaRg) throws CotException, IOException {
 
-		setNameFile(response, CSV_ASISTENCIA_MUNICIPAL);
+		setNameFile(response, CSV_ASISTENCIA_RG);
 
 		List<ReporteAsistenciaRgDTO> reporteDTOs = getReporteAsistenciaRg(usuario, perfil, idFederal, idLocal, idMunicipio, idRutaRg);
 

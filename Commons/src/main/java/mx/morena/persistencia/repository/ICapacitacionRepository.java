@@ -24,4 +24,6 @@ public interface ICapacitacionRepository {
 	Long getCountCapacitacionRC(Long idEntidad, Long idFederal, Long perfilRc);
 
 	Long getCountRcNombramiento(Long idEntidad, Long idFederal, Long perfilRc, boolean b);
+
+	List<RegistroCapacitacion> getCapacitacionByRepresentante(Long idRepresentante);
 }

@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import mx.morena.negocio.dto.CapacitacionDTO;
 import mx.morena.negocio.dto.RegistroCapacitacionDTO;
+import mx.morena.negocio.exception.ConvencidosException;
 import mx.morena.negocio.exception.JornadaException;
 import mx.morena.negocio.servicio.IJornadaService;
 import mx.morena.negocio.util.MapperUtil;
@@ -99,24 +100,29 @@ public class JornadaServiceImpl extends MasterService implements IJornadaService
 	}
 
 	@Override
-	@Transactional(rollbackFor={JornadaException.class})
+	@Transactional(rollbackFor = { JornadaException.class })
 	public String updateNombramiento(long usuario, CapacitacionDTO dto, long perfil)
 			throws JornadaException, IOException {
 
-		RegistroCapacitacion rc = null;
-		
-//		for (CapacitacionDTO cDto: dto) {
-			rc = new RegistroCapacitacion();
-			
+		List<RegistroCapacitacion> registro = capacitacionRepository
+				.getCapacitacionByRepresentante(dto.getIdRepresentante());
+
+		if (registro != null) {
+
+			RegistroCapacitacion rc = new RegistroCapacitacion();
+
 			rc.setIdRepresentante(dto.getIdRepresentante());
 			rc.setIsNombramiento(dto.getIsNombramiento());
-			
-			if (capacitacionRepository.updateNombramiento(rc) ==0) {
+
+			if (capacitacionRepository.updateNombramiento(rc) == 0) {
 				throw new JornadaException("No se guardo la informacion con exito", 409);
 			}
-//		}
 
-		return "Se actualizo la informacion con exito";
+			return "Se actualizo la informacion con exito";
+		} else {
+			throw new JornadaException("No se ha registrado la capacitacion del representante.", 404);
+		}
+		
 	}
 
 }
