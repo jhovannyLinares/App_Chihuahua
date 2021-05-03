@@ -30,7 +30,7 @@ public class CapacitacionRowMapper implements RowMapper<List<Capacitacion>>{
 			rep.setIsNombramiento(rs.getBoolean("nombramiento"));
 			reg = new RegistroCapacitados();
 			reg.setTomoCapacitacion(rs.getString("capacitacion"));
-			reg.setFechaCapacitaion(rs.getTimestamp("fecha"));
+			reg.setFechaCapacitaion(rs.getString("fecha"));
 			reg.setHoraCapacitacion(rs.getTime("hora"));
 			reg.setLugarCapacitacion(rs.getString("lugar"));
 			reg.setCalle(rs.getString("calle"));

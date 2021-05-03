@@ -7,7 +7,7 @@ public class RegistroCapacitadosDTO {
 	
 	private String tomoCapacitacion;
 	
-	private Timestamp fechaCapacitaion;
+	private String fechaCapacitaion;
 	
 	private Time horaCapacitacion;
 	
@@ -31,11 +31,11 @@ public class RegistroCapacitadosDTO {
 		this.tomoCapacitacion = tomoCapacitacion;
 	}
 
-	public Timestamp getFechaCapacitaion() {
+	public String getFechaCapacitaion() {
 		return fechaCapacitaion;
 	}
 
-	public void setFechaCapacitaion(Timestamp fechaCapacitaion) {
+	public void setFechaCapacitaion(String fechaCapacitaion) {
 		this.fechaCapacitaion = fechaCapacitaion;
 	}
 
