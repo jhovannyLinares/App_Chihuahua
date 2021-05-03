@@ -105,7 +105,7 @@ public class JornadaServiceImpl extends MasterService implements IJornadaService
 			throws JornadaException, IOException {
 
 		List<RegistroCapacitacion> registro = capacitacionRepository
-				.getCapacitacionByRepresentante(dto.getIdRepresentante());
+				.getCapacitacionByRepresentante(dto.getIdRepresentante()); 
 
 		if (registro != null) {
 

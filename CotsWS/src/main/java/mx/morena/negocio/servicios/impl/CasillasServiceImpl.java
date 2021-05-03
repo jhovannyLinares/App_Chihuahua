@@ -1,17 +1,16 @@
 package mx.morena.negocio.servicios.impl;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import mx.morena.negocio.dto.EnvioActasDTO;
+import mx.morena.negocio.dto.ResultadoOkDTO;
+import mx.morena.negocio.dto.ResultadoVotacionDTO;
 import mx.morena.negocio.exception.CotException;
 import mx.morena.negocio.servicios.ICasillasService;
-import mx.morena.negocio.util.MapperUtil;
 import mx.morena.persistencia.entidad.EnvioActas;
 import mx.morena.persistencia.repository.IEnvioActasRepository;
 import mx.morena.security.servicio.MasterService;
@@ -55,12 +54,20 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 					&& actas.getRuta_acta() != " " && actas.getId_casilla() > 0 && actas.getId_casilla() != null) {
 				envioActasRepository.save(actas);
 
-				envioActasRepository.getIdMax();
+				return envioActasRepository.getIdMax();
 
 			}
 		}
-
+//
 		return null;
+	}
+
+	@Override
+	public ResultadoOkDTO saveResultados(ResultadoVotacionDTO actas, long perfil, long usuario) throws CotException {
+		
+		// TODO Auto-generated method stub
+		return new ResultadoOkDTO(1,"OK");
+		
 	}
 
 }

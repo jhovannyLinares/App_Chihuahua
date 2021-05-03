@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import mx.morena.negocio.dto.EnvioActasDTO;
+import mx.morena.negocio.dto.ResultadoOkDTO;
+import mx.morena.negocio.dto.ResultadoVotacionDTO;
 import mx.morena.negocio.exception.CotException;
 import mx.morena.negocio.servicios.ICasillasService;
 import mx.morena.security.controller.MasterController;
@@ -35,6 +37,25 @@ public class CasillasController extends MasterController{
 
 		try {
 			return casillaService.save(actas, perfil, usuario);
+		} catch (CotException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+			return null;
+		} catch (Exception e ) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			return null;
+		}
+	}
+	
+	@PostMapping("/resultados")
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	public ResultadoOkDTO saveResultados(HttpServletResponse response, HttpServletRequest request, @RequestBody ResultadoVotacionDTO actas) throws IOException {
+		long perfil = getPerfil(request);
+		long usuario = getUsuario(request);
+
+		try {
+			return casillaService.saveResultados(actas, perfil, usuario);
 		} catch (CotException e) {
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());

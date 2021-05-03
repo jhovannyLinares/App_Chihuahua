@@ -111,12 +111,15 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 		if (perfil == PERFIL_RG) {
 
 			List<ReporteCasilla> reportes = reporteRepository.getReporteByIdCasilla(dto.getIdCasilla());
-			for (ReporteCasilla reporteCasilla : reportes) {
-				if (reporteCasilla.getTipoReporte().intValue() == dto.getTipoReporte().intValue()) {
-					throw new CotException("Reporte ya registrado", 409);
-				}
+			
+			if (reportes != null) {
+				for (ReporteCasilla reporteCasilla : reportes) {
+					if (reporteCasilla.getTipoReporte().intValue() == dto.getTipoReporte().intValue()) {
+						throw new CotException("Reporte ya registrado", 409);
+					}
 
-			}	
+				}
+			}
 			
 
 			if (dto.getNumero() <= 750) {
