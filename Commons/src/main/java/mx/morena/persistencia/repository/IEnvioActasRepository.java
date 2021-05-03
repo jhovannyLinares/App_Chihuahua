@@ -13,4 +13,8 @@ public interface IEnvioActasRepository {
 	Long countByTipoVotacionAndDistrito(Long df, Long tipo);
 
 	List<EnvioActas> getCasilla(Long idCasilla);
+	
+	Long validaDuplicidadActa(Long tipo, Long casila);
+	
+	
 }

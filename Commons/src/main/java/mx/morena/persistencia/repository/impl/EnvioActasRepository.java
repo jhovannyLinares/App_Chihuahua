@@ -54,4 +54,16 @@ public class EnvioActasRepository implements IEnvioActasRepository {
 		return template.queryForObject(sql, new Object[] { idCasilla }, new int[] { Types.NUMERIC}, new ActasRowMapper());
 	}
 
+	@Override
+	public Long validaDuplicidadActa(Long tipo, Long casilla) {
+		String sql = "select count(*) from app_envio_actas ac "
+				+ "where ac.tipo_votacion = ? and ac.id_casilla = ? ";
+		try {
+			return template.queryForObject(sql, new Object[] { tipo, casilla }, new int[] { Types.NUMERIC, Types.NUMERIC },
+					new LongRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+
 }

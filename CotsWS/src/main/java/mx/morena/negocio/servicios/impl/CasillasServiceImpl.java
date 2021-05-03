@@ -13,7 +13,6 @@ import mx.morena.negocio.dto.ResultadoVotacionDTO;
 import mx.morena.negocio.dto.VotacionesDTO;
 import mx.morena.negocio.exception.CotException;
 import mx.morena.negocio.servicios.ICasillasService;
-import mx.morena.negocio.servicios.IInstalacionCasillaService;
 import mx.morena.persistencia.entidad.EnvioActas;
 import mx.morena.persistencia.repository.IEnvioActasRepository;
 import mx.morena.security.servicio.MasterService;
@@ -23,9 +22,6 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 
 	@Autowired
 	IEnvioActasRepository envioActasRepository;
-	
-	@Autowired
-	IInstalacionCasillaService  instalacionCasillaService;
 
 	@Override
 	public Long save(EnvioActasDTO actaDto, long perfil, long idUsuario) throws CotException {
@@ -58,9 +54,16 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 			}
 			if (actas.getTipoVotacion() != null && actas.getTipoVotacion() > 0 && actas.getRutaActa() != null
 					&& actas.getRutaActa() != " " && actas.getIdCasilla() > 0 && actas.getIdCasilla() != null) {
-				envioActasRepository.save(actas);
 
-				return envioActasRepository.getIdMax();
+				Long duplicate = envioActasRepository.validaDuplicidadActa(actas.getTipoVotacion(),
+						actas.getIdCasilla());
+				if (duplicate < 1) {
+					envioActasRepository.save(actas);
+
+					return envioActasRepository.getIdMax();
+				} else {
+					throw new CotException("No se puede duplicar en acta", 401);
+				}
 
 			}
 		}
@@ -70,32 +73,16 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 
 	@Override
 	public ResultadoOkDTO saveResultados(ResultadoVotacionDTO actas, long perfil, long usuario) throws CotException {
-		
+
 		// TODO Auto-generated method stub
-		return new ResultadoOkDTO(1,"OK");
-		
+		return new ResultadoOkDTO(1, "OK");
+
 	}
 
 	@Override
 	public List<VotacionesDTO> getActas(Long idCasilla) throws CotException {
-
-		List<EnvioActas> actas = envioActasRepository.getCasilla(idCasilla);
-
-		List<VotacionesDTO> votacionesDTOs = instalacionCasillaService.getVotaciones(idCasilla);
-
-		for (VotacionesDTO votacionesDTO : votacionesDTOs) {
-			for (EnvioActas acta : actas) {
-
-				if (votacionesDTO.getId() == acta.getTipoVotacion()) {
-					
-					votacionesDTO.setCapturada(true);
-				}
-
-			}
-
-		}
-
-		return votacionesDTOs;
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
