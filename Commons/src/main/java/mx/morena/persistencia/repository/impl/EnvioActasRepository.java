@@ -1,6 +1,7 @@
 package mx.morena.persistencia.repository.impl;
 
 import java.sql.Types;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import mx.morena.persistencia.entidad.EnvioActas;
 import mx.morena.persistencia.repository.IEnvioActasRepository;
+import mx.morena.persistencia.rowmapper.ActasRowMapper;
 import mx.morena.persistencia.rowmapper.IdMaxEnvioActasRowMapper;
 import mx.morena.persistencia.rowmapper.LongRowMapper;
 
@@ -21,14 +23,11 @@ public class EnvioActasRepository implements IEnvioActasRepository {
 	private String campos = " tipo_votacion,ruta_acta,id_casilla,registro_acta ";
 
 	@Override
-	public void save(EnvioActas Actas) {
+	public void save(EnvioActas actas) {
 		String sql = " INSERT INTO app_envio_actas ( " + campos +" ) VALUES(?,?,?,?)";
 		
 		template.update(sql, 
-				new Object[] { Actas.getTipo_votacion(), Actas.getRuta_acta(), Actas.getId_casilla(), Actas.getRegistro_acta() });
-
-				
-		
+				new Object[] { actas.getTipoVotacion(), actas.getRutaActa(), actas.getIdCasilla(), actas.getRegistroActa() });
 	}
 
 	@Override
@@ -47,6 +46,12 @@ public class EnvioActasRepository implements IEnvioActasRepository {
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}
+	}
+
+	@Override
+	public List<EnvioActas> getCasilla(Long idCasilla) {
+		String sql = "SELECT id_acta,tipo_votacion,ruta_acta,id_casilla,registro_acta FROM app_envio_actas where id_casilla = ?";
+		return template.queryForObject(sql, new Object[] { idCasilla }, new int[] { Types.NUMERIC}, new ActasRowMapper());
 	}
 
 }

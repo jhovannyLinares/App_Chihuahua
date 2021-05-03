@@ -6,6 +6,8 @@ public class VotacionesDTO {
 
 	private String descripcion;
 
+	private Boolean capturada = false;
+
 	public Long getId() {
 		return id;
 	}
@@ -21,5 +23,15 @@ public class VotacionesDTO {
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
 	}
+
+	public Boolean getCapturada() {
+		return capturada;
+	}
+
+	public void setCapturada(Boolean capturada) {
+		this.capturada = capturada;
+	}
+
+
 
 }

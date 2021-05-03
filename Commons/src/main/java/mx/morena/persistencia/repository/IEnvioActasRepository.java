@@ -1,5 +1,7 @@
 package mx.morena.persistencia.repository;
 
+import java.util.List;
+
 import mx.morena.persistencia.entidad.EnvioActas;
 
 public interface IEnvioActasRepository {
@@ -9,4 +11,6 @@ public interface IEnvioActasRepository {
 	Long getIdMax();
 	
 	Long countByTipoVotacionAndDistrito(Long df, Long tipo);
+
+	List<EnvioActas> getCasilla(Long idCasilla);
 }

@@ -1,54 +1,53 @@
 package mx.morena.persistencia.entidad;
 
-import java.sql.Time;
 import java.sql.Timestamp;
 
 public class EnvioActas {
 
-	private Long id_acta;
-	private Long tipo_votacion;
-	private String ruta_acta;
-	private Long id_casilla;
-	private Timestamp registro_acta;
+	private Long idActa;
+	private Long tipoVotacion;
+	private String rutaActa;
+	private Long idCasilla;
+	private Timestamp registroActa;
 
-	public Long getId_acta() {
-		return id_acta;
+	public Long getIdActa() {
+		return idActa;
 	}
 
-	public void setId_acta(Long id_acta) {
-		this.id_acta = id_acta;
+	public void setIdActa(Long idActa) {
+		this.idActa = idActa;
 	}
 
-	public Long getTipo_votacion() {
-		return tipo_votacion;
+	public Long getTipoVotacion() {
+		return tipoVotacion;
 	}
 
-	public void setTipo_votacion(Long tipo_votacion) {
-		this.tipo_votacion = tipo_votacion;
+	public void setTipoVotacion(Long tipoVotacion) {
+		this.tipoVotacion = tipoVotacion;
 	}
 
-	public String getRuta_acta() {
-		return ruta_acta;
+	public String getRutaActa() {
+		return rutaActa;
 	}
 
-	public void setRuta_acta(String ruta_acta) {
-		this.ruta_acta = ruta_acta;
+	public void setRutaActa(String rutaActa) {
+		this.rutaActa = rutaActa;
 	}
 
-	public Long getId_casilla() {
-		return id_casilla;
+	public Long getIdCasilla() {
+		return idCasilla;
 	}
 
-	public void setId_casilla(Long id_casilla) {
-		this.id_casilla = id_casilla;
+	public void setIdCasilla(Long idCasilla) {
+		this.idCasilla = idCasilla;
 	}
 
-	public Timestamp getRegistro_acta() {
-		return registro_acta;
+	public Timestamp getRegistroActa() {
+		return registroActa;
 	}
 
-	public void setRegistro_acta(Timestamp registro_acta) {
-		this.registro_acta = registro_acta;
+	public void setRegistroActa(Timestamp registroActa) {
+		this.registroActa = registroActa;
 	}
 
 }

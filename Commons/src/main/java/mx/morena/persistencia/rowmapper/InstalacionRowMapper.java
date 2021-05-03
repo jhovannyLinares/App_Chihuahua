@@ -14,7 +14,6 @@ public class InstalacionRowMapper implements RowMapper<List<InstalacionCasilla>>
 	@Override
 	public List<InstalacionCasilla> mapRow(ResultSet rs, int rowNum) throws SQLException {
 
-//		id, id_casilla, llegaron_funcionarios, funcionarios_de_fila, paquete_completo, llego_rg, desayuno, hora_instalacion, inicio_votacion, llego_rc
 
 		List<InstalacionCasilla> casillas = new ArrayList<InstalacionCasilla>();
 

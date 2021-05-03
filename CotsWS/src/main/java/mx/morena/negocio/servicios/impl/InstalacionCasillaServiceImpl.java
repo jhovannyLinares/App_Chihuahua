@@ -340,8 +340,9 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 		}
 		return "Se guardo la hora de cierre de la casilla " + dto.getIdCasilla();
 	}
+	
 
-	private List<VotacionesDTO> getVotaciones(Long idCasilla) throws CotException {
+	public List<VotacionesDTO> getVotaciones(Long idCasilla) throws CotException {
 		
 		consultarVotaciones();
 
