@@ -43,5 +43,9 @@ public interface IRutasRepository {
 	public List<Rutas> getZonasByWhere(Long idFederal, Long zonaCRG, Long ruta, Long casilla);
 
 	public List<Rutas> getRutasByIdRutaRG(String idRutaRg);
+
+	public String getIdRuraById(Long rutaId);
+
+	public List<Rutas> getRutasByIdFederal(Long idFederal);
 	
 }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import mx.morena.persistencia.entidad.RepresentantesAsignados;
 import mx.morena.persistencia.repository.IRepresentantesAsignadosRepository;
+import mx.morena.persistencia.rowmapper.LongRowMapper;
 import mx.morena.persistencia.rowmapper.RepresentantesAsignadosRowMapper;
 
 @Repository
@@ -40,6 +41,18 @@ public class RepresentantesAsignadosRepository implements IRepresentantesAsignad
 		try {
 			return template.queryForObject(sql, new Object[] { entidad, id }, new int[] { Types.NUMERIC, Types.NUMERIC },
 					new RepresentantesAsignadosRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+
+	@Override
+	public Long getRutaIdByRepresentante(Long usuario) {
+		String sql = "select ruta_id from app_representantes_asignados ara where representante_id = ?";
+
+		try {
+			return template.queryForObject(sql, new Object[] { usuario }, new int[] { Types.NUMERIC },
+					new LongRowMapper());
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}

@@ -384,5 +384,58 @@ public class InstalacionCasillasRepository implements IInstalacionCasillasReposi
 		}
 	}
 
-	
+	@Override
+	public Long getCountRcByRutaRg(Long local, String SI, String idRutaRg, Long seccion, Long tipo,
+			String tipoCasilla) {
+		
+			String select = "select count(*) from app_instalacion_casilla aic " 
+				+ "inner join app_asignacion_casillas aac "
+				+ "on aic.id_casilla = aac.id_casilla " ;
+//				+ "where aic.llego_rc = ? and aac.id_crg = ? and aac.ruta = ?";
+		
+		
+		
+		String sql = null;
+		String where = "";
+		List<Object> para = new ArrayList<Object>();
+		List<Integer> type = new ArrayList<Integer>();
+		
+		if (tipo == 1L) {
+			where = "where aic.llego_rg = ? and aac.id_ruta_rg = ? and aac.seccion_id = ? and tipo_casilla = ?";
+			para.add(SI);
+			type.add(Types.VARCHAR);
+			para.add(idRutaRg);
+			type.add(Types.VARCHAR);
+			para.add(seccion);
+			type.add(Types.NUMERIC);
+			para.add(tipoCasilla);
+			type.add(Types.VARCHAR);
+		}
+
+		if (tipo == 2L) {
+			
+		}
+		
+		if (tipo == 3L) {
+			
+		}
+		
+
+		Object[] parametros = new Object[para.size()];
+		int[] types = new int[para.size()];
+
+		for (int i = 0; i < para.size(); i++) {
+			parametros[i] = para.get(i);
+			types[i] = type.get(i);
+		}
+
+		try {
+			sql = select.concat(where);
+
+			return template.queryForObject(sql, parametros, types ,new LongRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+
+	}
 }

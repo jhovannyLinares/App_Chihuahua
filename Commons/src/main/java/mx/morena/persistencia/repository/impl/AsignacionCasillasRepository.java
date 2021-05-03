@@ -12,6 +12,8 @@ import org.springframework.stereotype.Repository;
 import mx.morena.persistencia.entidad.AsignacionCasillas;
 import mx.morena.persistencia.repository.IAsignacionCasillasRepository;
 import mx.morena.persistencia.rowmapper.AsignacionCasillaRowMapper;
+import mx.morena.persistencia.rowmapper.AsignacionCasillasRowMapper;
+import mx.morena.persistencia.rowmapper.ListAsignacionCasillaRowMapper;
 import mx.morena.persistencia.rowmapper.LongRowMapper;
 
 @Repository
@@ -99,6 +101,16 @@ public class AsignacionCasillasRepository implements IAsignacionCasillasReposito
 			sql = select.concat(where);
 
 			return template.queryForObject(sql, parametros, types ,new LongRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+
+	@Override
+	public List<AsignacionCasillas> getTipoCasillasByRutaRg(String idRutaRg) {
+		String sql = "select * from app_asignacion_casillas aac where id_ruta_rg = ?";
+		try {
+			return template.queryForObject(sql, new Object[] { idRutaRg }, new int[] { Types.VARCHAR }, new ListAsignacionCasillaRowMapper() );
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}

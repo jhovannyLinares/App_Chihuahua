@@ -9,4 +9,6 @@ public interface IRepresentantesAsignadosRepository {
 	void save (RepresentantesAsignados reAsigandos);
 	
 	List<RepresentantesAsignados> getByEntidadAndIdRepresentante(Long entidad, Long id);
+
+	Long getRutaIdByRepresentante(Long usuario);
 }

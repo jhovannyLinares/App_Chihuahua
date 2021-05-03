@@ -125,4 +125,14 @@ public class MunicipioRepository implements IMunicipioRepository {
 	
 	}
 
+	@Override
+	public String getNombreById(Long idMunicipio) {
+		String sql = "select nombre from app_municipio am where id = ?";
+		try {
+			return template.queryForObject(sql, new Object[] { idMunicipio },
+					new int[] { Types.NUMERIC }, new StringRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
 }

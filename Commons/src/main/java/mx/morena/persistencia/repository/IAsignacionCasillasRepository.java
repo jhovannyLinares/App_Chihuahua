@@ -12,4 +12,6 @@ public interface IAsignacionCasillasRepository {
 
 	Long countCasillasByIdCrgAndRuta(Long idCrg, Long casillaRuta, Long tipo, Long idFederal, Long municipio);
 
+	List<AsignacionCasillas> getTipoCasillasByRutaRg(String idRutaRg);
+
 }

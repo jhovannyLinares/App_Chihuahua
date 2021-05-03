@@ -17,6 +17,7 @@ import mx.morena.persistencia.rowmapper.CasillasLocalesByFederalRowMapper;
 import mx.morena.persistencia.rowmapper.CasillasRowMapper;
 import mx.morena.persistencia.rowmapper.CountCasillasRowMapper;
 import mx.morena.persistencia.rowmapper.DistritoLocalGroupRowMapper;
+import mx.morena.persistencia.rowmapper.LongRowMapper;
 import mx.morena.persistencia.rowmapper.StringRowMapper;
 
 @Repository
@@ -235,6 +236,18 @@ public class CasillaRepository implements ICasillaRepository {
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		
+		}
+	}
+
+	@Override
+	public Long getIdMunicipioByIdCasilla(Long idCAsilla) {
+		String sql = "select municpio_id from app_casilla ac where id = ?";
+		try {
+			return template.queryForObject(sql, new Object[] { idCAsilla }, new int[] { Types.NUMERIC },
+					new LongRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+
 		}
 	}
 

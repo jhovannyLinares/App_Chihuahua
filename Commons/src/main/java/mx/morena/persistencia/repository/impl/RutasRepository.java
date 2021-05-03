@@ -16,12 +16,14 @@ import mx.morena.persistencia.repository.IRutasRepository;
 import mx.morena.persistencia.rowmapper.CasillaByRutaRowMapper;
 import mx.morena.persistencia.rowmapper.CasillaRowMapper;
 import mx.morena.persistencia.rowmapper.RepresentanteRowMapper;
+import mx.morena.persistencia.rowmapper.RutaByFederalRowMapper;
 import mx.morena.persistencia.rowmapper.RutaByZonaRowMapper;
 import mx.morena.persistencia.rowmapper.RutaConsultaRowMapper;
 import mx.morena.persistencia.rowmapper.RutaRowMapper;
 import mx.morena.persistencia.rowmapper.RutaTempRowMapper;
 import mx.morena.persistencia.rowmapper.RutasRowMapper;
 import mx.morena.persistencia.rowmapper.RutasTempRowMapper;
+import mx.morena.persistencia.rowmapper.StringRowMapper;
 import mx.morena.persistencia.rowmapper.ZonaRowMapper;
 import mx.morena.persistencia.rowmapper.ZonasByDfRowMapper;
 
@@ -360,4 +362,27 @@ public class RutasRepository implements IRutasRepository {
 	}
 	}
 
+	@Override
+	public String getIdRuraById(Long rutaId) {
+		String sql = "select id_ruta_rg from app_rutas ar where id = ?";
+		try {
+			return template.queryForObject(sql, new Object[] { rutaId }, new int[] { Types.NUMERIC },
+					new StringRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+
+	@Override
+	public List<Rutas> getRutasByIdFederal(Long idFederal) {
+		
+		String sql = " select * from app_rutas ar where distrito_federal_id = ? ";
+		
+		try {
+			return template.queryForObject(sql, new Object[] { idFederal }, new int[] { Types.NUMERIC },
+					new RutaByFederalRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
 }
