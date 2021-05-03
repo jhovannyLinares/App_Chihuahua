@@ -27,7 +27,7 @@ public interface ICasillaRepository {
 	
 	public List<AsignacionCasillas> getCasillasAsignadasById(Long idCasilla);
 	
-	public List<AsignacionCasillas> getCasillasAsignadasByRuta(Long entidad, Long idDistritoF, Long idRuta);
+	public List<AsignacionCasillas> getCasillasAsignadasByRuta( Long idDistritoF, Long idRuta);
 
 	public List<Casilla> getCasillasById(Long idCasilla);
 

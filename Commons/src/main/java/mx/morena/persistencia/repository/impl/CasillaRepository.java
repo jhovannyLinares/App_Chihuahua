@@ -108,7 +108,7 @@ public class CasillaRepository implements ICasillaRepository {
 	}
 
 	@Override
-	public List<AsignacionCasillas> getCasillasAsignadasByRuta(Long entidad, Long idDistritoF, Long idRuta) {
+	public List<AsignacionCasillas> getCasillasAsignadasByRuta( Long idDistritoF, Long idRuta) {
 		
 		String sql = " SELECT aac.id, aac.distrito_federal_id, aac.nombre_distrito, aac.zona_crg, aac.id_zona_crg, aac.ruta, aac.id_casilla, aac.tipo_casilla, " + 
 				" aac.seccion_id, aac.status, aac.id_ruta_rg, aac.id_crg, COALESCE(aic.id, 0 ) isOpen  " + 

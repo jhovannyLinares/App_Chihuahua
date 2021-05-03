@@ -189,18 +189,64 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 		}
 
 		List<RepresentantesAsignados> representantesAs = representanteAsignadoRepository
-				.getByEntidadAndIdRepresentante(idEntidad, representante.getId());
+				.getByEntidadAndIdRepresentante(idEntidad, representante.getId());	
 		
 		List<CasillasDTO> casillas = new ArrayList<CasillasDTO>();
+		
+		if (perfil == PERFIL_RC ) {
+			casillas = getCasillasRC(representantesAs);
+		}
+		if ( perfil == PERFIL_RG) {
+			casillas = getCasillasRG(representantesAs);
+		}
+		
+		
+
+		return casillas;
+
+	}
+	
+	private List<CasillasDTO> getCasillasRG(List<RepresentantesAsignados> rutasRepresentantes) throws CotException {
+
+		List<CasillasDTO> casillas = new ArrayList<CasillasDTO>();
 		List<AsignacionCasillas> casillasAsignadas = new ArrayList<AsignacionCasillas>();
-		
-		
-		
-		
+
+		if (rutasRepresentantes != null && !rutasRepresentantes.isEmpty()) {
+			for (RepresentantesAsignados rep : rutasRepresentantes) {
+				if (rep != null && rep.getRutaId() != null) {
+					casillasAsignadas = casillaRepository.getCasillasAsignadasByRuta(
+							rep.getDistritoFederalId(), rep.getRutaId());
+
+					if (casillasAsignadas != null) {
+						casillas = casillasAsignadas.stream().map(this::convertirADto)
+								.collect(Collectors.toList());
+						for (CasillasDTO dto : casillas) {
+							dto.setVotaciones(getVotaciones(dto.getIdCasilla()));
+						}
+					} else {
+						throw new CotException("No se encontraron casillas", 404);
+					}
+				} else {
+					throw new CotException("La ruta no puede ser nula", 400);
+				}
+			}
+
+		} else {
+			throw new CotException("No se encontraron rutas", 404);
+		}
+		return casillas;
+
+	}
+
+	private List<CasillasDTO> getCasillasRC(List<RepresentantesAsignados> representantesAs) throws CotException {
+
+		List<CasillasDTO> casillas = new ArrayList<CasillasDTO>();
+		List<AsignacionCasillas> casillasAsignadas = new ArrayList<AsignacionCasillas>();
+
 		if (representantesAs != null && !representantesAs.isEmpty()) {
-			
+
 			for (RepresentantesAsignados representanteAsignado : representantesAs) {
-				
+
 				if (representanteAsignado.getCasillaId() != null) {
 
 					casillasAsignadas = casillaRepository
@@ -210,25 +256,22 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 
 						casillas = casillasAsignadas.stream().map(this::convertirADto).collect(Collectors.toList());
 
-						
 						for (CasillasDTO dto : casillas) {
 							dto.setVotaciones(getVotaciones(dto.getIdCasilla()));
 						}
-						
-						
+
 					} else {
 						throw new CotException("No se encontraron casillas asignadas", 404);
 					}
-					
+
 				} else {
 					throw new CotException("El no. de casilla no puede ser nula", 400);
 				}
 			}
-			
+
 		} else {
 			throw new CotException("El representante no tiene asignaciones", 404);
 		}
-
 		return casillas;
 
 	}
