@@ -326,7 +326,7 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 				ReporteCasilla rc = new ReporteCasilla();
 
 				rc.setIdCasilla(dto.getIdCasilla());
-//				rc.setHoraCierre(dto.getHoraCierre());
+				rc.setHoraCierre(dto.getHoraCierre());
 
 				if (reporteRepository.updateHoraCierre(rc) == 0) {
 					throw new CotException("No se actualizo la hora de cierre", 409);

@@ -1,12 +1,13 @@
 package mx.morena.negocio.dto;
 
+import java.sql.Time;
 import java.sql.Timestamp;
 
 public class CierreCasillaDTO {
 	
 	private Long idCasilla;
 	
-	private Timestamp horaCierre;
+	private Time horaCierre;
 
 	public Long getIdCasilla() {
 		return idCasilla;
@@ -16,12 +17,12 @@ public class CierreCasillaDTO {
 		this.idCasilla = idCasilla;
 	}
 
-	public Timestamp getHoraCierre() {
+	public Time getHoraCierre() {
 		return horaCierre;
 	}
 
-	public void setHoraCierre(Timestamp horaCierre) {
+	public void setHoraCierre(Time horaCierre) {
 		this.horaCierre = horaCierre;
 	}
-	
+
 }
