@@ -15,6 +15,7 @@ import mx.morena.persistencia.repository.ICasillaRepository;
 import mx.morena.persistencia.rowmapper.AsignacionCasillasRowMapper;
 import mx.morena.persistencia.rowmapper.CasillasLocalesByFederalRowMapper;
 import mx.morena.persistencia.rowmapper.CasillasRowMapper;
+import mx.morena.persistencia.rowmapper.ConvencidosRowMapper;
 import mx.morena.persistencia.rowmapper.CountCasillasRowMapper;
 import mx.morena.persistencia.rowmapper.DistritoLocalGroupRowMapper;
 import mx.morena.persistencia.rowmapper.LongRowMapper;
@@ -249,6 +250,63 @@ public class CasillaRepository implements ICasillaRepository {
 			return null;
 
 		}
+	}
+
+	@Override
+	public List<Casilla> getCasillasAsistencia(Long idFederal, Long idLocal, Long idMunicipio, Long crg, Long rg,
+			String idRutaRg) {
+
+			String select = "select * from app_casilla ac";
+
+			String sql = null;
+			String where = "";
+			List<Object> para = new ArrayList<Object>();
+			List<Integer> type = new ArrayList<Integer>();
+
+			if (idFederal == null) {
+				where = "";
+			}
+			
+			if (idFederal != null) {
+				where = " where federal_id = ? ";
+				para.add(idFederal);
+				type.add(Types.NUMERIC);
+			}
+
+			if (idLocal != null) {
+
+				where = where.concat(" and local_id = ? ");
+
+				para.add(idLocal);
+				type.add(Types.NUMERIC);
+			}
+
+			if (idMunicipio != null) {
+
+				where = where.concat(" and municpio_id = ? ");
+
+				para.add(idMunicipio);
+				type.add(Types.NUMERIC);
+			}
+
+
+			Object[] parametros = new Object[para.size()];
+			int[] types = new int[para.size()];
+
+			for (int i = 0; i < para.size(); i++) {
+				parametros[i] = para.get(i);
+				types[i] = type.get(i);
+			}
+
+			try {
+
+				sql = select.concat(where);
+
+				return template.queryForObject(sql, parametros, types, new CasillasRowMapper());
+			} catch (EmptyResultDataAccessException e) {
+				return null;
+			}
+
 	}
 
 }

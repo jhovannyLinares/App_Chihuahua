@@ -40,7 +40,7 @@ public class AsignacionCasillasRepository implements IAsignacionCasillasReposito
 	@Override
 	public List<AsignacionCasillas> getRutasByFederal(Long idFederal) {
 		String sql = "select ruta, distrito_federal_id from app_asignacion_casillas aac where distrito_federal_id = ? " 
-				+ "group by ruta, distrito_federal_id order by ruta asc";
+				+ "group by ruta, distrito_federal_id order by ruta, distrito_federal_id asc";
 
 		try {
 
@@ -79,6 +79,14 @@ public class AsignacionCasillasRepository implements IAsignacionCasillasReposito
 		}
 		
 		if (tipo == 3L) {
+			where = " where distrito_federal_id = ? and ruta = ?";
+			para.add(idFederal);
+			type.add(Types.NUMERIC);
+			para.add(casillaRuta);
+			type.add(Types.NUMERIC);
+		}
+		
+		if (tipo == 4L) {
 			where = " inner join app_casilla ac "
 					+"on ac.id = aac.id_casilla " 
 					+"where ac.municpio_id = ? and ac.federal_id = ?";
@@ -111,6 +119,32 @@ public class AsignacionCasillasRepository implements IAsignacionCasillasReposito
 		String sql = "select * from app_asignacion_casillas aac where id_ruta_rg = ?";
 		try {
 			return template.queryForObject(sql, new Object[] { idRutaRg }, new int[] { Types.VARCHAR }, new ListAsignacionCasillaRowMapper() );
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+
+	@Override
+	public List<AsignacionCasillas> getAll() {
+		
+		String sql = "select ruta, distrito_federal_id from app_asignacion_casillas aac "
+					+"group by ruta, distrito_federal_id order by ruta, distrito_federal_id asc";
+		try {
+
+			return template.queryForObject(sql,	new AsignacionCasillaRowMapper());
+
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	@Override
+	public List<AsignacionCasillas> getRutasByIdFederal(Long idFederal) {
+
+		String sql = "select * from app_asignacion_casillas aac where distrito_federal_id = ? order by seccion_id";
+		try {
+			return template.queryForObject(sql, new Object[] { idFederal }, new int[] { Types.NUMERIC },
+					new ListAsignacionCasillaRowMapper());
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}

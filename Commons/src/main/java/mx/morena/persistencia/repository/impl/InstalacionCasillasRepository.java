@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import mx.morena.persistencia.entidad.InstalacionCasilla;
 import mx.morena.persistencia.repository.IInstalacionCasillasRepository;
+import mx.morena.persistencia.rowmapper.CasillasRowMapper;
 import mx.morena.persistencia.rowmapper.InstalacionRowMapper;
 import mx.morena.persistencia.rowmapper.LongRowMapper;
 
@@ -277,6 +278,15 @@ public class InstalacionCasillasRepository implements IInstalacionCasillasReposi
 		}
 
 		if (tipo == 2L) {
+			where = " where aic.llego_rg = ? and aac.distrito_federal_id = ? ";
+
+			para.add(SI);
+			type.add(Types.VARCHAR);
+			para.add(federal);
+			type.add(Types.NUMERIC);
+		}
+
+		if (tipo == 3L) {
 			where = "where aic.llego_rg = ? and aac.ruta = ? and aac.distrito_federal_id = ?";
 			para.add(SI);
 			type.add(Types.VARCHAR);
@@ -288,7 +298,7 @@ public class InstalacionCasillasRepository implements IInstalacionCasillasReposi
 			type.add(Types.NUMERIC);
 		}
 		
-		if (tipo == 3L) {
+		if (tipo == 4L) {
 			where = "inner join app_casilla ac " 
 					+"on ac.id = aic.id_casilla " 
 					+"where aic.llego_rg = ? and ac.municpio_id = ? ";
@@ -342,8 +352,17 @@ public class InstalacionCasillasRepository implements IInstalacionCasillasReposi
 			para.add(casillaRuta);
 			type.add(Types.NUMERIC);
 		}
-
+		
 		if (tipo == 2L) {
+			where = " where aic.llego_rc = ? and aac.distrito_federal_id = ? ";
+
+			para.add(SI);
+			type.add(Types.VARCHAR);
+			para.add(federal);
+			type.add(Types.NUMERIC);
+		}
+
+		if (tipo == 3L) {
 			where = "where aic.llego_rc = ? and aac.ruta = ? and aac.distrito_federal_id = ?";
 			para.add(SI);
 			type.add(Types.VARCHAR);
@@ -355,7 +374,7 @@ public class InstalacionCasillasRepository implements IInstalacionCasillasReposi
 			type.add(Types.NUMERIC);
 		}
 		
-		if (tipo == 3L) {
+		if (tipo == 4L) {
 			where = "inner join app_casilla ac " 
 					+"on ac.id = aic.id_casilla " 
 					+"where aic.llego_rc = ? and ac.municpio_id = ? ";
@@ -385,41 +404,82 @@ public class InstalacionCasillasRepository implements IInstalacionCasillasReposi
 	}
 
 	@Override
-	public Long getCountRcByRutaRg(Long local, String SI, String idRutaRg, Long seccion, Long tipo,
-			String tipoCasilla) {
+	public Long getCountRcByRutaRg(String SI, Long federal, Long local, Long municipio, Long seccion, Long crg, Long rg,
+			Long tipo, String tipoCasilla, String idRutaRg) {
 		
-			String select = "select count(*) from app_instalacion_casilla aic " 
+			String sql = "select count(*) from app_instalacion_casilla aic " 
 				+ "inner join app_asignacion_casillas aac "
-				+ "on aic.id_casilla = aac.id_casilla " ;
-//				+ "where aic.llego_rc = ? and aac.id_crg = ? and aac.ruta = ?";
-		
-		
-		
+				+ "on aic.id_casilla = aac.id_casilla " 
+				+ "where aic.llego_rc = ? and aac.id_ruta_rg = ? and aac.seccion_id = ? and tipo_casilla = ?";
+
+		try {
+
+			return template.queryForObject(sql, new Object[] { SI, idRutaRg, seccion, tipoCasilla }, new int[] {Types.VARCHAR, Types.VARCHAR, Types.NUMERIC, Types.VARCHAR }, new LongRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+
+	}
+
+	@Override
+	public Long getCountRcByAll(String SI, Long federal, Long local, Long municipio, Long seccion, Long crg, Long rg,
+			Long tipo, String tipoCasilla, String idRutaRg) {
+
+		String select = "select count(*) from app_instalacion_casilla aic " 
+				+ "inner join app_casilla ac "
+				+ "on aic.id_casilla = ac.id";
+
 		String sql = null;
 		String where = "";
 		List<Object> para = new ArrayList<Object>();
 		List<Integer> type = new ArrayList<Integer>();
-		
-		if (tipo == 1L) {
-			where = "where aic.llego_rg = ? and aac.id_ruta_rg = ? and aac.seccion_id = ? and tipo_casilla = ?";
+
+		if (federal == null) {
+			where = "where aic.llego_rc = ? ";
 			para.add(SI);
-			type.add(Types.VARCHAR);
-			para.add(idRutaRg);
-			type.add(Types.VARCHAR);
-			para.add(seccion);
-			type.add(Types.NUMERIC);
-			para.add(tipoCasilla);
 			type.add(Types.VARCHAR);
 		}
 
-		if (tipo == 2L) {
-			
+		if (federal != null) {
+//			if (para.size() > 0) {
+				where = " where aic.llego_rc = ? and ac.federal_id = ? and ac.tipo_casilla = ? and ac.seccion_id = ?";
+				para.add(SI);
+				type.add(Types.VARCHAR);
+				para.add(federal);
+				type.add(Types.NUMERIC);
+				para.add(tipoCasilla);
+				type.add(Types.VARCHAR);
+				para.add(seccion);
+				type.add(Types.NUMERIC);
+//			}
+		}
+
+		if (local != null) {
+			if (para.size() > 0) {
+				where = where.concat(" and ac.local_id = ? ");
+				para.add(local);
+				type.add(Types.NUMERIC);
+			}
 		}
 		
-		if (tipo == 3L) {
-			
+		if (municipio != null) {
+			if (para.size() > 0) {
+			where = where.concat(" and ac.municpio_id = ? ");
+			para.add(municipio);
+			type.add(Types.NUMERIC);
+			}
 		}
-		
+
+//		if (claveElector != null) {
+//
+//			if (para.size() > 0) {
+//				where = where.concat(" and ac.clave_elector = ? ");
+//			} else {
+//				where = " where ac.clave_elector = ? ";
+//			}
+//			para.add(claveElector);
+//			type.add(Types.VARCHAR);
+//		}
 
 		Object[] parametros = new Object[para.size()];
 		int[] types = new int[para.size()];
@@ -430,9 +490,12 @@ public class InstalacionCasillasRepository implements IInstalacionCasillasReposi
 		}
 
 		try {
-			sql = select.concat(where);
 
-			return template.queryForObject(sql, parametros, types ,new LongRowMapper());
+
+			sql = select.concat(where);
+//			System.out.println("xx " + sql);
+
+			return template.queryForObject(sql, parametros, types, new LongRowMapper());
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}

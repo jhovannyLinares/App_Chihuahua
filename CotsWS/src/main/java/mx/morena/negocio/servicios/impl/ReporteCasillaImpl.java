@@ -862,13 +862,13 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 			Long idLocal, Long idMunicipio) throws CotException, IOException {
 
 		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_CRG) {
-			
+
 			List<ReporteAsistenciaCrgDTO> lstDto = new ArrayList<>();
 			ReporteAsistenciaCrgDTO dto = null;
 			ReporteAsistenciaCrgDTO total = new ReporteAsistenciaCrgDTO();
 			List<AsignacionCasillas> lstCasillas = null;
 			Long tipo = 0L;
-			
+
 			total.setIdFederal(null);
 			total.setCasillas(0L);
 			total.setRgMeta(0L);
@@ -877,70 +877,101 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 			total.setRcAsistencia(0L);
 			total.setRgPorcentaje(0.0);
 			total.setRcPorcentaje(0.0);
-			
+
 			if (perfil == PERFIL_CRG) {
 				Usuario usr = usuarioRepository.findById(usuario);
 				lstCasillas = asignacionCasillasRepository.getRutasByIdCrg(usr.getId());
 				tipo = 1L;
-				
+
 				for (AsignacionCasillas aCasillas : lstCasillas) {
-					
-					dto = getAsistenciaCrg(idLocal, idFederal, tipo, idMunicipio, usr.getId(), aCasillas.getId(), aCasillas.getFederalId(), aCasillas.getRuta());
-					
+
+					dto = getAsistenciaCrg(idLocal, idFederal, tipo, idMunicipio, usr.getId(), aCasillas.getId(),
+							aCasillas.getFederalId(), aCasillas.getRuta());
+
 					total.setCasillas(total.getCasillas() + dto.getCasillas());
 					total.setRgMeta(total.getRgMeta() + dto.getRgMeta());
 					total.setRcMeta(total.getRcMeta() + dto.getRcMeta());
 					total.setRgAsistencia(total.getRgAsistencia() + dto.getRgAsistencia());
 					total.setRcAsistencia(total.getRcAsistencia() + dto.getRcAsistencia());
-					
+
 					lstDto.add(dto);
-					
+
 				}
-				
-				total.setRgPorcentaje(dosDecimales((total.getRgAsistencia() * 100.0) / total.getRgMeta()).doubleValue());
-				total.setRcPorcentaje(dosDecimales((total.getRcAsistencia() * 100.0) / total.getRcMeta()).doubleValue());
-				
+
+				total.setRgPorcentaje(
+						dosDecimales((total.getRgAsistencia() * 100.0) / total.getRgMeta()).doubleValue());
+				total.setRcPorcentaje(
+						dosDecimales((total.getRcAsistencia() * 100.0) / total.getRcMeta()).doubleValue());
+
 				lstDto.add(total);
-				
+
 				return lstDto;
 			}
-			
+
 			if (perfil == PERFIL_ESTATAL) {
-				if (idFederal != null && idMunicipio == null) {
+
+				if (idFederal == null && idMunicipio == null) {
 					tipo = 2L;
-					lstCasillas = asignacionCasillasRepository.getRutasByFederal(idFederal);
+					lstCasillas = asignacionCasillasRepository.getAll();
 					System.out.println("***** " + lstCasillas.size());
 					for (AsignacionCasillas aCasillas : lstCasillas) {
-						dto = getAsistenciaCrg(idLocal, idFederal, tipo, idMunicipio, 0L, 0L, idFederal, aCasillas.getRuta());
-						
+						dto = getAsistenciaCrg(idLocal, aCasillas.getFederalId(), tipo, idMunicipio, 0L, 0L,
+								aCasillas.getFederalId(), aCasillas.getRuta());
+
 						total.setCasillas(total.getCasillas() + dto.getCasillas());
 						total.setRgMeta(total.getRgMeta() + dto.getRgMeta());
 						total.setRcMeta(total.getRcMeta() + dto.getRcMeta());
 						total.setRgAsistencia(total.getRgAsistencia() + dto.getRgAsistencia());
 						total.setRcAsistencia(total.getRcAsistencia() + dto.getRcAsistencia());
-						
+
 						lstDto.add(dto);
 					}
-					
-					total.setRgPorcentaje(dosDecimales((total.getRgAsistencia() * 100.0) / total.getRgMeta()).doubleValue());
-					total.setRcPorcentaje(dosDecimales((total.getRcAsistencia() * 100.0) / total.getRcMeta()).doubleValue());
-					
+					total.setRgPorcentaje(
+							dosDecimales((total.getRgAsistencia() * 100.0) / total.getRgMeta()).doubleValue());
+					total.setRcPorcentaje(
+							dosDecimales((total.getRcAsistencia() * 100.0) / total.getRcMeta()).doubleValue());
+
 					lstDto.add(total);
 				}
-				
-				if(idFederal != null && idMunicipio != null) {
+
+				if (idFederal != null && idMunicipio == null) {
 					tipo = 3L;
+					lstCasillas = asignacionCasillasRepository.getRutasByFederal(idFederal);
+//					System.out.println("***** " + lstCasillas.size());
+					for (AsignacionCasillas aCasillas : lstCasillas) {
+						dto = getAsistenciaCrg(idLocal, idFederal, tipo, idMunicipio, 0L, 0L, idFederal,
+								aCasillas.getRuta());
+
+						total.setCasillas(total.getCasillas() + dto.getCasillas());
+						total.setRgMeta(total.getRgMeta() + dto.getRgMeta());
+						total.setRcMeta(total.getRcMeta() + dto.getRcMeta());
+						total.setRgAsistencia(total.getRgAsistencia() + dto.getRgAsistencia());
+						total.setRcAsistencia(total.getRcAsistencia() + dto.getRcAsistencia());
+
+						lstDto.add(dto);
+					}
+
+					total.setRgPorcentaje(
+							dosDecimales((total.getRgAsistencia() * 100.0) / total.getRgMeta()).doubleValue());
+					total.setRcPorcentaje(
+							dosDecimales((total.getRcAsistencia() * 100.0) / total.getRcMeta()).doubleValue());
+
+					lstDto.add(total);
+				}
+
+				if (idFederal != null && idMunicipio != null) {
+					tipo = 4L;
 					dto = getAsistenciaCrg(idLocal, idFederal, tipo, idMunicipio, 0L, 0L, idFederal, 0L);
 					lstDto.add(dto);
 				}
-				
+
 				return lstDto;
 			}
-			
-		}else {
+
+		} else {
 			throw new CotException("No cuenta con los permisos suficientes para consultar el reporte", 401);
 		}
-		
+
 		return null;
 	}
 	
@@ -995,9 +1026,13 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 			ReporteAsistenciaRgDTO dto = null;
 			List<AsignacionCasillas> lstAsignacion = null;
 			List<Rutas> lstRutas = null;
+			List<DistritoFederal> lstDistritos = null; 
+			List<Casilla> lstCasillas = null;
 			
 			Long tipo = 0L;
 			Long local = 0L;
+			Long crg = 0L;
+			Long rg = 0L;
 			
 			
 			if (perfil == PERFIL_RG) {
@@ -1007,7 +1042,7 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 				tipo = 1L;
 				
 				for (AsignacionCasillas aCAsillas : lstAsignacion) {
-					dto = getAsistenciaRg(local, aCAsillas.getFederalId(), tipo, 0L, aCAsillas.getSeccionId(), aCAsillas.getIdCasilla(), aCAsillas.getTipoCasilla(), RutaRg);
+					dto = getAsistenciaRg(tipo, aCAsillas.getFederalId(), 0L, 0L, aCAsillas.getSeccionId(), crg, rg, aCAsillas.getIdCasilla(), aCAsillas.getTipoCasilla(), RutaRg);
 					lstDto.add(dto);
 				}
 			
@@ -1015,27 +1050,12 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 			
 			if (perfil == PERFIL_ESTATAL) {
 				
-//				if (idFederal != null && idRutaRg == null ) {
-//					tipo = 2L;
-//					lstRutas = rutasRepository.getRutasByIdFederal(idFederal); 
-//					for (Rutas rutas : lstRutas) {
-//						dto = getAsistenciaRg(local, rutas.getIdDistrito(), tipo, 0L, rutas.getSeccionId(),3L, "", "");
-//						lstDto.add(dto);
-//					}
-//					
-//				}
+				tipo = 2L;
+				lstCasillas = casillasRepository.getCasillasAsistencia(idFederal, idLocal, idMunicipio, crg, rg, idRutaRg);
 				
-				if (idFederal != null && idRutaRg != null ) {
-					lstAsignacion = asignacionCasillasRepository.getTipoCasillasByRutaRg(idRutaRg);
-					tipo = 1L;
-					
-					for (AsignacionCasillas aCAsillas : lstAsignacion) {
-						dto = getAsistenciaRg(local, aCAsillas.getFederalId(), tipo, 0L, aCAsillas.getSeccionId(), aCAsillas.getIdCasilla(), aCAsillas.getTipoCasilla(), idRutaRg);
-						lstDto.add(dto);
-					}
-					
-				} else {
-					throw new CotException("Ingrese los datos obligatorios.", 404);
+				for (Casilla casillas : lstCasillas) {
+					dto = getAsistenciaRg(tipo, casillas.getFederal(), casillas.getLocal(),  casillas.getMunicipio(), casillas.getSeccionElectoral(), crg, rg, casillas.getId(), casillas.getTipo(), idRutaRg);
+					lstDto.add(dto);
 				}
 				
 			}
@@ -1046,13 +1066,23 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 		}
 	}
 	
-	public ReporteAsistenciaRgDTO getAsistenciaRg(Long local, Long federal, Long tipo, Long municipio, Long seccion, Long IdCAsilla, String tipoCasilla, String idRutaRg) {
+	public ReporteAsistenciaRgDTO getAsistenciaRg(Long tipo, Long federal, Long local,  Long municipio, Long seccion, Long crg, Long rg, Long IdCAsilla, String tipoCasilla, String idRutaRg) {
 		List<ReporteAsistenciaRgDTO> lstDto = new ArrayList<>();
 		
 		ReporteAsistenciaRgDTO dto = new ReporteAsistenciaRgDTO();
 		
 		Long rcMeta = 0L;
-		Long rcAsistencia = instalacionCasillaRepository.getCountRcByRutaRg(local, SI, idRutaRg, seccion, tipo, tipoCasilla);
+		Long rcAsistencia = 0L;
+		
+		if (tipo == 1L) {
+			rcAsistencia = instalacionCasillaRepository.getCountRcByRutaRg(SI, federal, local, municipio, seccion, crg,
+					rg, tipo, tipoCasilla, idRutaRg);
+		}
+		if (tipo == 2L) {
+			rcAsistencia = instalacionCasillaRepository.getCountRcByAll(SI, federal, local, municipio, seccion, crg, rg,
+					tipo, tipoCasilla, idRutaRg);
+		}
+		
 		Long idMunicipio = casillasRepository.getIdMunicipioByIdCasilla(IdCAsilla);
 		String nomMunicipio = municipioRepository.getNombreByIdAndDf(idMunicipio, federal);
 		

@@ -14,4 +14,8 @@ public interface IAsignacionCasillasRepository {
 
 	List<AsignacionCasillas> getTipoCasillasByRutaRg(String idRutaRg);
 
+	List<AsignacionCasillas> getAll();
+
+	List<AsignacionCasillas> getRutasByIdFederal(Long idFederal);
+
 }
