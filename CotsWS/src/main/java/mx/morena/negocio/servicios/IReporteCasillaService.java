@@ -43,9 +43,9 @@ public interface IReporteCasillaService {
 	
 	void getReporteResultadosDownload(HttpServletResponse response, Long usuario, Long perfil, Long idReporte) throws CotException, IOException;
 	
-	List<ReporteVotacionMunicipalDTO> getReporteMunicipal(Long usuario, Long perfil, Long idReporte) throws CotException, IOException;
+	List<ReporteVotacionMunicipalDTO> getReporteMunicipal(Long idUsuario, Long idEleccion) throws CotException;
 	
-	void getReporteMunicipioDownload(HttpServletResponse response, Long usuario, Long perfil, Long idReporte) throws CotException, IOException;
+	void getReporteMunicipioDownload(HttpServletResponse response, Long idUsuario, Long perfil, Long idEleccion) throws CotException, IOException;
 
 	void getReporteAsistenciaMunicipalDownload(HttpServletResponse response, long usuario, long perfil, Long idFederal,
 			Long idLocal, Long idMunicipio) throws CotException, IOException;

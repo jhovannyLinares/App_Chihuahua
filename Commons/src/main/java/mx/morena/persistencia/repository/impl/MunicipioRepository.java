@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
 
 import mx.morena.persistencia.entidad.Municipio;
 import mx.morena.persistencia.repository.IMunicipioRepository;
-import mx.morena.persistencia.rowmapper.LongRowMapper;
 import mx.morena.persistencia.rowmapper.MunicipioRowMapper;
 import mx.morena.persistencia.rowmapper.MunicipiosRowMapper;
 import mx.morena.persistencia.rowmapper.StringRowMapper;
@@ -124,12 +123,55 @@ public class MunicipioRepository implements IMunicipioRepository {
 	}
 
 	@Override
-	public List<Municipio> getByEstado(Long idEstado) {
-		String sql = "select am.federal_id, am.id, am.nombre from app_municipio am "
-				+ "where am.entidad_id = ? order by am.federal_id";
+	public List<Municipio> getByEstadoAndDfAndMunicipio(Long idEstado, Long df, Long idMunicipio) {
+		String select = "select am.federal_id, am.id, am.nombre from app_municipio am ";
+		
+		String sql = null;
+		String where = "";
+		String order = " order by am.federal_id";
+		List<Object> para = new ArrayList<Object>();
+		List<Integer> type = new ArrayList<Integer>();
+		
+		if (idEstado != null) {
+			where = " where am.entidad_id = ? ";
+			para.add(idEstado);
+			type.add(Types.NUMERIC);
+		}
+
+		if (df != null) {
+
+			if (para.size() > 0) {
+				where = where.concat(" and am.federal_id = ? ");
+			} else {
+				where = " where am.federal_id = ? ";
+			}
+			para.add(df);
+			type.add(Types.NUMERIC);
+		}
+
+		if (idMunicipio != null) {
+			if (para.size() > 0) {
+				where = where.concat(" and am.id = ? ");
+			} else {
+				where = " where am.id = ? ";
+			}
+			para.add(idMunicipio);
+			type.add(Types.NUMERIC);
+		}
+
+		Object[] parametros = new Object[para.size()];
+		int[] types = new int[para.size()];
+
+		for (int i = 0; i < para.size(); i++) {
+			parametros[i] = para.get(i);
+			types[i] = type.get(i);
+		}
+
 		try {
-			return template.queryForObject(sql, new Object[] { idEstado }, new int[] { Types.NUMERIC },
-					new MunicipiosRowMapper());
+			sql = select.concat(where).concat(order);
+			System.out.println(sql);
+
+			return template.queryForObject(sql, parametros, types, new MunicipiosRowMapper());
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}

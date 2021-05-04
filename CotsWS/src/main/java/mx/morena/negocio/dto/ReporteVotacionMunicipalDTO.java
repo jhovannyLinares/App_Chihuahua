@@ -4,175 +4,318 @@ public class ReporteVotacionMunicipalDTO {
 
 	private Long idFederal;
 	private String municipio;
-	private Long partido1;
-	private Double porcentajePartido1;
-	private Long partido2;
-	private Double porcentajePartido2;
-	private Long partido3;
-	private Double porcentajePartido3;
-	private Long partido4; 
-	private Double porcentajePartido4;
-	private Long partido5;
-	private Double porcentajePartido5;
-	private Long partido6;
-	private Double porcentajePartido6;
-	private Long Nulos;
+	private Long listaNominal;
+	private Long pan;
+	private Double porcentajePan;
+	private Long pri;
+	private Double porcentajePri;
+	private Long prd;
+	private Double porcentajePrd;
+	private Long pvem;
+	private Double porcentajePvem;
+	private Long pt;
+	private Double porcentajePt;
+	private Long mc;
+	private Double porcentajeMc;
+	private Long morena;
+	private Double porcentajeMorena;
+	private Long pes;
+	private Double porcentajePes;
+	private Long rsp;
+	private Double porcentajeRsp;
+	private Long fuerzaMexico;
+	private Double porcentajeFuerzaMexico;
+	private Long panal;
+	private Double porcentajePanal;
+	private Long nulos;
 	private Double porcentajeNulos;
-	private Long Crg;
+	private Long crg;
 	private Double porcentajeCrg;
 	private Long total;
 	private Double porcentajeTotal;
 	private Long candidato1;
 	private Double porcentajeCandidato1;
 	private Long candidato2;
-	private Double porcentajeCantidato2;
-	
+	private Double porcentajeCandidato2;
+
 	public Long getIdFederal() {
 		return idFederal;
 	}
+
 	public void setIdFederal(Long idFederal) {
 		this.idFederal = idFederal;
 	}
+
 	public String getMunicipio() {
 		return municipio;
 	}
+
 	public void setMunicipio(String municipio) {
 		this.municipio = municipio;
 	}
-	public Long getPartido1() {
-		return partido1;
+
+	public Long getListaNominal() {
+		return listaNominal;
 	}
-	public void setPartido1(Long partido1) {
-		this.partido1 = partido1;
+
+	public void setListaNominal(Long listaNominal) {
+		this.listaNominal = listaNominal;
 	}
-	public Double getPorcentajePartido1() {
-		return porcentajePartido1;
+
+	public Long getPan() {
+		return pan;
 	}
-	public void setPorcentajePartido1(Double porcentajePartido1) {
-		this.porcentajePartido1 = porcentajePartido1;
+
+	public void setPan(Long pan) {
+		this.pan = pan;
 	}
-	public Long getPartido2() {
-		return partido2;
+
+	public Double getPorcentajePan() {
+		return porcentajePan;
 	}
-	public void setPartido2(Long partido2) {
-		this.partido2 = partido2;
+
+	public void setPorcentajePan(Double porcentajePan) {
+		this.porcentajePan = porcentajePan;
 	}
-	public Double getPorcentajePartido2() {
-		return porcentajePartido2;
+
+	public Long getPri() {
+		return pri;
 	}
-	public void setPorcentajePartido2(Double porcentajePartido2) {
-		this.porcentajePartido2 = porcentajePartido2;
+
+	public void setPri(Long pri) {
+		this.pri = pri;
 	}
-	public Long getPartido3() {
-		return partido3;
+
+	public Double getPorcentajePri() {
+		return porcentajePri;
 	}
-	public void setPartido3(Long partido3) {
-		this.partido3 = partido3;
+
+	public void setPorcentajePri(Double porcentajePri) {
+		this.porcentajePri = porcentajePri;
 	}
-	public Double getPorcentajePartido3() {
-		return porcentajePartido3;
+
+	public Long getPrd() {
+		return prd;
 	}
-	public void setPorcentajePartido3(Double porcentajePartido3) {
-		this.porcentajePartido3 = porcentajePartido3;
+
+	public void setPrd(Long prd) {
+		this.prd = prd;
 	}
-	public Long getPartido4() {
-		return partido4;
+
+	public Double getPorcentajePrd() {
+		return porcentajePrd;
 	}
-	public void setPartido4(Long partido4) {
-		this.partido4 = partido4;
+
+	public void setPorcentajePrd(Double porcentajePrd) {
+		this.porcentajePrd = porcentajePrd;
 	}
-	public Double getPorcentajePartido4() {
-		return porcentajePartido4;
+
+	public Long getPvem() {
+		return pvem;
 	}
-	public void setPorcentajePartido4(Double porcentajePartido4) {
-		this.porcentajePartido4 = porcentajePartido4;
+
+	public void setPvem(Long pvem) {
+		this.pvem = pvem;
 	}
-	public Long getPartido5() {
-		return partido5;
+
+	public Double getPorcentajePvem() {
+		return porcentajePvem;
 	}
-	public void setPartido5(Long partido5) {
-		this.partido5 = partido5;
+
+	public void setPorcentajePvem(Double porcentajePvem) {
+		this.porcentajePvem = porcentajePvem;
 	}
-	public Double getPorcentajePartido5() {
-		return porcentajePartido5;
+
+	public Long getPt() {
+		return pt;
 	}
-	public void setPorcentajePartido5(Double porcentajePartido5) {
-		this.porcentajePartido5 = porcentajePartido5;
+
+	public void setPt(Long pt) {
+		this.pt = pt;
 	}
-	public Long getPartido6() {
-		return partido6;
+
+	public Double getPorcentajePt() {
+		return porcentajePt;
 	}
-	public void setPartido6(Long partido6) {
-		this.partido6 = partido6;
+
+	public void setPorcentajePt(Double porcentajePt) {
+		this.porcentajePt = porcentajePt;
 	}
-	public Double getPorcentajePartido6() {
-		return porcentajePartido6;
+
+	public Long getMc() {
+		return mc;
 	}
-	public void setPorcentajePartido6(Double porcentajePartido6) {
-		this.porcentajePartido6 = porcentajePartido6;
+
+	public void setMc(Long mc) {
+		this.mc = mc;
 	}
+
+	public Double getPorcentajeMc() {
+		return porcentajeMc;
+	}
+
+	public void setPorcentajeMc(Double porcentajeMc) {
+		this.porcentajeMc = porcentajeMc;
+	}
+
+	public Long getMorena() {
+		return morena;
+	}
+
+	public void setMorena(Long morena) {
+		this.morena = morena;
+	}
+
+	public Double getPorcentajeMorena() {
+		return porcentajeMorena;
+	}
+
+	public void setPorcentajeMorena(Double porcentajeMorena) {
+		this.porcentajeMorena = porcentajeMorena;
+	}
+
+	public Long getPes() {
+		return pes;
+	}
+
+	public void setPes(Long pes) {
+		this.pes = pes;
+	}
+
+	public Double getPorcentajePes() {
+		return porcentajePes;
+	}
+
+	public void setPorcentajePes(Double porcentajePes) {
+		this.porcentajePes = porcentajePes;
+	}
+
+	public Long getRsp() {
+		return rsp;
+	}
+
+	public void setRsp(Long rsp) {
+		this.rsp = rsp;
+	}
+
+	public Double getPorcentajeRsp() {
+		return porcentajeRsp;
+	}
+
+	public void setPorcentajeRsp(Double porcentajeRsp) {
+		this.porcentajeRsp = porcentajeRsp;
+	}
+
+	public Long getFuerzaMexico() {
+		return fuerzaMexico;
+	}
+
+	public void setFuerzaMexico(Long fuerzaMexico) {
+		this.fuerzaMexico = fuerzaMexico;
+	}
+
+	public Double getPorcentajeFuerzaMexico() {
+		return porcentajeFuerzaMexico;
+	}
+
+	public void setPorcentajeFuerzaMexico(Double porcentajeFuerzaMexico) {
+		this.porcentajeFuerzaMexico = porcentajeFuerzaMexico;
+	}
+
+	public Long getPanal() {
+		return panal;
+	}
+
+	public void setPanal(Long panal) {
+		this.panal = panal;
+	}
+
+	public Double getPorcentajePanal() {
+		return porcentajePanal;
+	}
+
+	public void setPorcentajePanal(Double porcentajePanal) {
+		this.porcentajePanal = porcentajePanal;
+	}
+
 	public Long getNulos() {
-		return Nulos;
+		return nulos;
 	}
+
 	public void setNulos(Long nulos) {
-		Nulos = nulos;
+		this.nulos = nulos;
 	}
+
 	public Double getPorcentajeNulos() {
 		return porcentajeNulos;
 	}
+
 	public void setPorcentajeNulos(Double porcentajeNulos) {
 		this.porcentajeNulos = porcentajeNulos;
 	}
+
 	public Long getCrg() {
-		return Crg;
+		return crg;
 	}
+
 	public void setCrg(Long crg) {
-		Crg = crg;
+		this.crg = crg;
 	}
+
 	public Double getPorcentajeCrg() {
 		return porcentajeCrg;
 	}
+
 	public void setPorcentajeCrg(Double porcentajeCrg) {
 		this.porcentajeCrg = porcentajeCrg;
 	}
+
 	public Long getTotal() {
 		return total;
 	}
+
 	public void setTotal(Long total) {
 		this.total = total;
 	}
+
 	public Double getPorcentajeTotal() {
 		return porcentajeTotal;
 	}
+
 	public void setPorcentajeTotal(Double porcentajeTotal) {
 		this.porcentajeTotal = porcentajeTotal;
 	}
+
 	public Long getCandidato1() {
 		return candidato1;
 	}
+
 	public void setCandidato1(Long candidato1) {
 		this.candidato1 = candidato1;
 	}
+
 	public Double getPorcentajeCandidato1() {
 		return porcentajeCandidato1;
 	}
+
 	public void setPorcentajeCandidato1(Double porcentajeCandidato1) {
 		this.porcentajeCandidato1 = porcentajeCandidato1;
 	}
+
 	public Long getCandidato2() {
 		return candidato2;
 	}
+
 	public void setCandidato2(Long candidato2) {
 		this.candidato2 = candidato2;
 	}
-	public Double getPorcentajeCantidato2() {
-		return porcentajeCantidato2;
+
+	public Double getPorcentajeCandidato2() {
+		return porcentajeCandidato2;
 	}
-	public void setPorcentajeCantidato2(Double porcentajeCantidato2) {
-		this.porcentajeCantidato2 = porcentajeCantidato2;
+
+	public void setPorcentajeCandidato2(Double porcentajeCandidato2) {
+		this.porcentajeCandidato2 = porcentajeCandidato2;
 	}
-	
-	
-	
 	
 }
