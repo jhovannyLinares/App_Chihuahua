@@ -122,4 +122,16 @@ public class MunicipioRepository implements IMunicipioRepository {
 			return null;
 		}
 	}
+
+	@Override
+	public List<Municipio> getByEstado(Long idEstado) {
+		String sql = "select am.federal_id, am.id, am.nombre from app_municipio am "
+				+ "where am.entidad_id = ? order by am.federal_id";
+		try {
+			return template.queryForObject(sql, new Object[] { idEstado }, new int[] { Types.NUMERIC },
+					new MunicipiosRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
 }
