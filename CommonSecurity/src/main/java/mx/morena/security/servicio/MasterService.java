@@ -105,12 +105,18 @@ public class MasterService {
 
 	}
 	
-	
 	protected void setWriterFile(HttpServletResponse response, List<?> objects,String[] header) throws IOException {
+		
+		setWriterFile(response,objects,header,header);
+		
+	}
+	
+	
+	protected void setWriterFile(HttpServletResponse response, List<?> objects,String[] header, String[] encabezadosCSV) throws IOException {
 
 		ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
 
-		csvWriter.writeHeader(header);
+		csvWriter.writeHeader(encabezadosCSV);
 
 		for (Object object : objects) {
 			csvWriter.write(object, header);
@@ -119,5 +125,8 @@ public class MasterService {
 		csvWriter.close();
 
 	}
+	
+	
+	
 	
 }
