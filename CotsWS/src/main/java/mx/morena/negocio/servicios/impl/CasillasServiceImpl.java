@@ -164,13 +164,13 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 			if (gobernador.stream()
 					.filter(partido -> casilla.getEntidad().longValue() == partido.getUbicacion().longValue()).findAny()
 					.orElse(null) != null) {
+
 				dto = new PartidosXAmbitoDTO();
 				dto.setId(1L);
 				dto.setDescripcion("GOBERNADOR");
-				
-				dto.setPartidos(MapperUtil.mapAll(gobernador, PartidoDTO.class));
-				
-				
+
+				dto.setPartidos(getPartidosXCasillas(gobernador,casilla.getEntidad()));
+
 				votacionesDTOs.add(dto);
 			}
 
@@ -180,7 +180,9 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 				dto = new PartidosXAmbitoDTO();
 				dto.setId(2L);
 				dto.setDescripcion("PRESIDENTE MUNICIPAL");
-				dto.setPartidos(MapperUtil.mapAll(municipal, PartidoDTO.class));
+				
+				dto.setPartidos(getPartidosXCasillas(municipal,casilla.getEntidad()));
+
 				votacionesDTOs.add(dto);
 			}
 
@@ -190,7 +192,7 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 				dto = new PartidosXAmbitoDTO();
 				dto.setId(3L);
 				dto.setDescripcion("SINDICO");
-				dto.setPartidos(MapperUtil.mapAll(sindico, PartidoDTO.class));
+				dto.setPartidos(getPartidosXCasillas(sindico,casilla.getEntidad()));
 				votacionesDTOs.add(dto);
 			}
 
@@ -200,7 +202,7 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 				dto = new PartidosXAmbitoDTO();
 				dto.setId(4L);
 				dto.setDescripcion("DIPUTADO LOCAL");
-				dto.setPartidos(MapperUtil.mapAll(diputadoLocal, PartidoDTO.class));
+				dto.setPartidos(getPartidosXCasillas(diputadoLocal,casilla.getEntidad()));
 				votacionesDTOs.add(dto);
 			}
 
@@ -210,7 +212,7 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 				dto = new PartidosXAmbitoDTO();
 				dto.setId(5L);
 				dto.setDescripcion("DIPUTADO FEDERAL");
-				dto.setPartidos(MapperUtil.mapAll(diputadoFederal, PartidoDTO.class));
+				dto.setPartidos(getPartidosXCasillas(diputadoFederal,casilla.getEntidad()));
 				votacionesDTOs.add(dto);
 			}
 
@@ -218,6 +220,20 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 
 		return votacionesDTOs;
 
+	}
+
+	private List<PartidoDTO> getPartidosXCasillas(List<Partido> partidosX, Long ubicacion) {
+		
+		List<Partido> partidos = new ArrayList<Partido>();
+
+		for (Partido partido : partidosX) {
+			if (partido.getUbicacion() == ubicacion) {
+				partidos.add(partido);
+			}
+		}
+
+		return MapperUtil.mapAll(partidos, PartidoDTO.class);
+		
 	}
 
 }

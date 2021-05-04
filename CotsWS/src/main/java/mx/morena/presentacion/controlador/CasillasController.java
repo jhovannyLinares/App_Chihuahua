@@ -76,6 +76,7 @@ public class CasillasController extends MasterController{
 	@GetMapping("/{idCasilla}/partidos")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
 	public List<PartidosXAmbitoDTO> getPartidos(HttpServletResponse response, HttpServletRequest request, @PathVariable("idCasilla") Long idCasilla) throws IOException {
+		
 		long perfil = getPerfil(request);
 		long usuario = getUsuario(request);
 
