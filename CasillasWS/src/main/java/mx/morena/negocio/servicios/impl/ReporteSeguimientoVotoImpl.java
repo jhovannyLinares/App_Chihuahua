@@ -680,8 +680,6 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 					
 					Long casillas = seguimientoRepository.getCasillasByRuta(ruts.getRuta());
 					
-					System.out.println(ruts.getRuta());
-					
 					Long instaladas1 = seguimientoRepository.getCasillasInstaladas1Crg(ruts.getRuta());
 					Long instaladas2 = seguimientoRepository.getCasillasInstaladas2Crg(ruts.getRuta());
 					Long instaladas3 = seguimientoRepository.getCasillasInstaladas3Crg(ruts.getRuta());
@@ -866,8 +864,11 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 
 			String[] header = { "idDistrito", "casillas", "instaladas7a730", "instaladas731a8", "instaladas8a830",
 					"instaladas831a9", "instaladasDespues9", "instaladasDespues10", "totalInstaladas", "noInstaladas" };
+			
+			String[] header2 = { "Distrito", "Casillas", "Instaladas 7:00 a 7:30", "Instaladas 7:31 a 8:00", "Instaladas 8:01 a 8:30",
+					"Instaladas 8:31 a 9:00", "Instaladas Despues de las 9", "Instaladas Despues de las 10", "Total Instaladas", "No Instaladas" };
 
-			setWriterFile(response, estatalDTOs, header);
+			setWriterFile(response, estatalDTOs, header, header2);
 
 		} else {
 			throw new SeguimientoVotoException("No cuenta con los permisos suficientes para descargar el reporte", 401);
@@ -892,8 +893,11 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 
 			String[] header = { "idDistrito", "casillas", "instaladas7a730", "instaladas731a8", "instaladas8a830",
 					"instaladas831a9", "instaladasDespues9", "instaladasDespues10", "totalInstaladas", "noInstaladas" };
+			
+			String[] header2 = { "Distrito", "Casillas", "Instaladas 7:00 a 7:30", "Instaladas 7:31 a 8:00", "Instaladas 8:01 a 8:30",
+					"Instaladas 8:31 a 9:00", "Instaladas Despues de las 9:00", "Instaladas Despues de las 10", "Total Instaladas", "No Instaladas" };
 
-			setWriterFile(response, federalDTOs, header);
+			setWriterFile(response, federalDTOs, header, header2);
 
 		} else {
 			throw new SeguimientoVotoException("No cuenta con los permisos suficientes para descargar el reporte", 401);
@@ -918,8 +922,11 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 
 			String[] header = { "idDistrito", "casillas", "instaladas7a730", "instaladas731a8", "instaladas8a830",
 					"instaladas831a9", "instaladasDespues9", "instaladasDespues10", "totalInstaladas", "noInstaladas" };
+			
+			String[] header2 = { "Distrito", "Casillas", "Instaladas 7:00 a 7:30", "Instaladas 7:31 a 8:00", "Instaladas 8:01 a 8:30",
+					"Instaladas 8:31 a 9:00", "Instaladas Despues de las 9", "Instaladas Despues de las 10", "Total Instaladas", "No Instaladas" };
 
-			setWriterFile(response, localDTOs, header);
+			setWriterFile(response, localDTOs, header, header2);
 
 		} else {
 			throw new SeguimientoVotoException("No cuenta con los permisos suficientes para descargar el reporte", 401);
@@ -945,8 +952,12 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 			String[] header = { "idMunicipio", "municipio", "casillas", "instaladas7a730", "instaladas731a8",
 					"instaladas8a830", "instaladas831a9", "instaladasDespues9", "instaladasDespues10",
 					"totalInstaladas", "noInstaladas" };
+			
+			String[] header2 = { "IdMunicipio", "Municipio", "Casillas", "Instaladas 7:00 a 7:30", "Instaladas 7:31 a 8:00",
+					"Instaladas 8:01 a 8:30", "Instaladas 8:31 a 9:00", "Instaladas Despues de las 9", "Instaladas Despues de las 10",
+					"Total Instaladas", "No Instaladas" };
 
-			setWriterFile(response, municipalDTOs, header);
+			setWriterFile(response, municipalDTOs, header, header2);
 
 		} else {
 			throw new SeguimientoVotoException("No cuenta con los permisos suficientes para descargar el reporte", 401);
@@ -972,8 +983,12 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 			String[] header = { "idDistrito", "rutas", "casillas", "instaladas7a730", "instaladas731a8",
 					"instaladas8a830", "instaladas831a9", "instaladasDespues9", "instaladasDespues10",
 					"totalInstaladas", "noInstaladas" };
+			
+			String[] header2 = { "Distrito", "Rutas", "Casillas", "Instaladas 7:00 a 7:30", "Instaladas 7:31 a 8:00",
+					"Instaladas 8:01 a 8:30", "Instaladas 8:31 a 9:00", "Instaladas Despues de las 9", "Instaladas Despues de las 10",
+					"Total Instaladas", "No Instaladas" };
 
-			setWriterFile(response, crgDTOs, header);
+			setWriterFile(response, crgDTOs, header, header2);
 
 		} else {
 			throw new SeguimientoVotoException("No cuenta con los permisos suficientes para descargar el reporte", 401);
@@ -999,8 +1014,12 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 			String[] header = { "idDistrito", "seccion", "casillas", "instaladas7a730", "instaladas731a8",
 					"instaladas8a830", "instaladas831a9", "instaladasDespues9", "instaladasDespues10",
 					"totalInstaladas", "noInstaladas" };
+			
+			String[] header2 = { "Distrito", "Seccion", "Casillas", "Instaladas 7:00 a 7:30", " Instaladas 7:31 a 8:00",
+					"Instaladas 8:01 a 8:30", "Instaladas 8:31 a 9:00", "Instaladas Despues de las 9", "Instaladas Despues de las 10",
+					"Total Instaladas", "No Instaladas" };
 
-			setWriterFile(response, rgDTOs, header);
+			setWriterFile(response, rgDTOs, header, header2);
 
 		} else {
 			throw new SeguimientoVotoException("No cuenta con los permisos suficientes para descargar el reporte", 401);
