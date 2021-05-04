@@ -793,49 +793,53 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 			throw new CotException("No cuenta con los permisos suficientes para consultar el reporte", 401);
 		}
 		
-		for (Municipio municipio : municipios) {
-			dto = new ReporteVotacionMunicipalDTO();
-			dto = calcularReporteResultados(idEntidad, municipio.getFederalId(), municipio.getId(), municipio.getDescripcion(), idEleccion);
+		if (municipios != null) {
+			for (Municipio municipio : municipios) {
+				dto = new ReporteVotacionMunicipalDTO();
+				dto = calcularReporteResultados(idEntidad, municipio.getFederalId(), municipio.getId(), municipio.getDescripcion(), idEleccion);
+				
+				resultados.add(dto);
+				
+				totales.setPan(totales.getPan() + dto.getPan());
+				totales.setPri(totales.getPri() + dto.getPri());
+				totales.setPrd(totales.getPrd() + dto.getPrd());
+				totales.setPvem(totales.getPvem() + dto.getPvem());
+				totales.setPt(totales.getPt() + dto.getPt());
+				totales.setMc(totales.getMc() + dto.getMc());
+				totales.setMorena(totales.getMorena() + dto.getMorena());
+				totales.setPes(totales.getPes() + dto.getPes());
+				totales.setRsp(totales.getRsp() + dto.getRsp());
+				totales.setFuerzaMexico(totales.getFuerzaMexico() + dto.getFuerzaMexico());
+				totales.setPanal(totales.getPanal() + dto.getPanal());
+				totales.setNulos(totales.getNulos() + dto.getNulos());
+				totales.setCrg(totales.getCrg() + dto.getCrg());
+				totales.setTotal(totales.getTotal() + dto.getTotal());
+				totales.setCandidato1(totales.getCandidato1() + dto.getCandidato1());
+				totales.setCandidato2(totales.getCandidato2() + dto.getCandidato2());
+				totales.setListaNominal(totales.getListaNominal() + dto.getListaNominal());
+			}
 			
-			resultados.add(dto);
-			
-			totales.setPan(totales.getPan() + dto.getPan());
-			totales.setPri(totales.getPri() + dto.getPri());
-			totales.setPrd(totales.getPrd() + dto.getPrd());
-			totales.setPvem(totales.getPvem() + dto.getPvem());
-			totales.setPt(totales.getPt() + dto.getPt());
-			totales.setMc(totales.getMc() + dto.getMc());
-			totales.setMorena(totales.getMorena() + dto.getMorena());
-			totales.setPes(totales.getPes() + dto.getPes());
-			totales.setRsp(totales.getRsp() + dto.getRsp());
-			totales.setFuerzaMexico(totales.getFuerzaMexico() + dto.getFuerzaMexico());
-			totales.setPanal(totales.getPanal() + dto.getPanal());
-			totales.setNulos(totales.getNulos() + dto.getNulos());
-			totales.setCrg(totales.getCrg() + dto.getCrg());
-			totales.setTotal(totales.getTotal() + dto.getTotal());
-			totales.setCandidato1(totales.getCandidato1() + dto.getCandidato1());
-			totales.setCandidato2(totales.getCandidato2() + dto.getCandidato2());
-			totales.setListaNominal(totales.getListaNominal() + dto.getListaNominal());
+			totales.setPorcentajePan(dosDecimales((totales.getPan()*100.00)/totales.getTotal()).doubleValue());
+			totales.setPorcentajePri(dosDecimales((totales.getPri()*100.00)/totales.getTotal()).doubleValue());
+			totales.setPorcentajePrd(dosDecimales((totales.getPrd()*100.00)/totales.getTotal()).doubleValue());
+			totales.setPorcentajePvem(dosDecimales((totales.getPvem()*100.00)/totales.getTotal()).doubleValue());
+			totales.setPorcentajePt(dosDecimales((totales.getPt()*100.00)/totales.getTotal()).doubleValue());
+			totales.setPorcentajeMc(dosDecimales((totales.getMc()*100.00)/totales.getTotal()).doubleValue());
+			totales.setPorcentajeMorena(dosDecimales((totales.getMorena()*100.00)/totales.getTotal()).doubleValue());
+			totales.setPorcentajePes(dosDecimales((totales.getPes()*100.00)/totales.getTotal()).doubleValue());
+			totales.setPorcentajeRsp(dosDecimales((totales.getRsp()*100.00)/totales.getTotal()).doubleValue());
+			totales.setPorcentajeFuerzaMexico(dosDecimales((totales.getFuerzaMexico()*100.00)/totales.getTotal()).doubleValue());
+			totales.setPorcentajePanal(dosDecimales((totales.getPanal()*100.00)/totales.getTotal()).doubleValue());
+			totales.setPorcentajeNulos(dosDecimales((totales.getNulos()*100.00)/totales.getTotal()).doubleValue());
+			totales.setPorcentajeCrg(dosDecimales((totales.getCrg()*100.00)/totales.getTotal()).doubleValue());
+			totales.setPorcentajeTotal(dosDecimales((totales.getTotal()*100.00)/totales.getListaNominal()).doubleValue());
+			totales.setPorcentajeCandidato1(dosDecimales((totales.getCandidato1()*100.00)/totales.getTotal()).doubleValue());
+			totales.setPorcentajeCandidato2(dosDecimales((totales.getCandidato2()*100.00)/totales.getTotal()).doubleValue());
+				
+			resultados.add(totales);
+		} else {
+			throw new CotException("No se encontraron datos", 404);
 		}
-			
-		totales.setPorcentajePan(dosDecimales((totales.getPan()*100.00)/totales.getTotal()).doubleValue());
-		totales.setPorcentajePri(dosDecimales((totales.getPri()*100.00)/totales.getTotal()).doubleValue());
-		totales.setPorcentajePrd(dosDecimales((totales.getPrd()*100.00)/totales.getTotal()).doubleValue());
-		totales.setPorcentajePvem(dosDecimales((totales.getPvem()*100.00)/totales.getTotal()).doubleValue());
-		totales.setPorcentajePt(dosDecimales((totales.getPt()*100.00)/totales.getTotal()).doubleValue());
-		totales.setPorcentajeMc(dosDecimales((totales.getMc()*100.00)/totales.getTotal()).doubleValue());
-		totales.setPorcentajeMorena(dosDecimales((totales.getMorena()*100.00)/totales.getTotal()).doubleValue());
-		totales.setPorcentajePes(dosDecimales((totales.getPes()*100.00)/totales.getTotal()).doubleValue());
-		totales.setPorcentajeRsp(dosDecimales((totales.getRsp()*100.00)/totales.getTotal()).doubleValue());
-		totales.setPorcentajeFuerzaMexico(dosDecimales((totales.getFuerzaMexico()*100.00)/totales.getTotal()).doubleValue());
-		totales.setPorcentajePanal(dosDecimales((totales.getPanal()*100.00)/totales.getTotal()).doubleValue());
-		totales.setPorcentajeNulos(dosDecimales((totales.getNulos()*100.00)/totales.getTotal()).doubleValue());
-		totales.setPorcentajeCrg(dosDecimales((totales.getCrg()*100.00)/totales.getTotal()).doubleValue());
-		totales.setPorcentajeTotal(dosDecimales((totales.getTotal()*100.00)/totales.getListaNominal()).doubleValue());
-		totales.setPorcentajeCandidato1(dosDecimales((totales.getCandidato1()*100.00)/totales.getTotal()).doubleValue());
-		totales.setPorcentajeCandidato2(dosDecimales((totales.getCandidato2()*100.00)/totales.getTotal()).doubleValue());
-			
-		resultados.add(totales);
 		
 		return resultados;
 	}
