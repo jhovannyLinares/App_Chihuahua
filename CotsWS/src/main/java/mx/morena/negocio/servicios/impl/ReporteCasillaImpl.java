@@ -528,23 +528,33 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 
 			total.setIdFederal(1L);
 			total.setListaNominal(0L);
-			total.setPartido1(0L);
-			total.setPorcentajePartido1(0.0);
-			total.setPartido2(0L);
-			total.setPorcentajePartido2(0.0);
-			total.setPartido3(0L);
-			total.setPorcentajePartido3(0.0);
-			total.setPartido4(0L);
-			total.setPorcentajePartido4(0.0);
-			total.setPartido5(0L);
-			total.setPorcentajePartido5(0.0);
-			total.setPartido6(0L);
-			total.setPorcentajePartido6(0.0);
+			total.setPAN(20L);
+			total.setPorcentajePAN(0.0);
+			total.setPRI(0L);
+			total.setPorcentajePRI(0.0);
+			total.setPRD(0L);
+			total.setPorcentajePRD(0.0);
+			total.setPVEM(0L);
+			total.setPorcentajePVEM(0.0);
+			total.setPT(0L);
+			total.setPorcentajePT(0.0);
+			total.setMC(0L);
+			total.setPorcentajeMC(0.0);
+			total.setMORENA(0L);
+			total.setPorcentajeMORENA(0.0);
+			total.setPES(0L);
+			total.setPorcentajePES(0.0);
+			total.setRSP(0L);
+			total.setPorcentajeRSP(0.0);
+			total.setFUERZAMEXICO(0L);
+			total.setPorcentajeFUERZAMEXICO(0.0);
+			total.setPANAL(0L);
+			total.setPorcentajePANAL(0.0);
 			total.setNulos(0L);
 			total.setPorcentajeNulos(0.0);
 			total.setCrg(0L);
 			total.setPorcentajeCrg(0.0);
-			total.setTotal(0L);
+			total.setTotal(20L);
 			total.setPorcentajeTotal(0.0);
 			total.setCandidato1(0L);
 			total.setPorcentajeCandidato1(0.0);
@@ -556,60 +566,111 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 
 				dto.setIdFederal(items.getId());
 				dto.setListaNominal(20L);
-				dto.setPartido1(10L);
-				dto.setPorcentajePartido1(0.0);
-				dto.setPartido2(20L);
-				dto.setPorcentajePartido2(0.0);
-				dto.setPartido3(20L);
-				dto.setPorcentajePartido3(0.0);
-				dto.setPartido4(20L);
-				dto.setPorcentajePartido4(0.0);
-				dto.setPartido5(20L);
-				dto.setPorcentajePartido5(0.0);
-				dto.setPartido6(20L);
-				dto.setPorcentajePartido6(0.0);
+				dto.setPAN(20L);
+				dto.setPRI(20L);
+				dto.setPRD(20L);
+				dto.setPVEM(20L);
+				dto.setPT(20L);
+				dto.setMC(20L);
+				dto.setMORENA(20L);
+				dto.setPES(20L);
+				dto.setRSP(20L);
+				dto.setFUERZAMEXICO(20L);
+				dto.setPANAL(20L);
 				dto.setNulos(50L);
-				dto.setPorcentajeNulos(0.0);
 				dto.setCrg(20L);
-				dto.setPorcentajeCrg(0.0);
-				dto.setTotal(100L);
-				dto.setPorcentajeTotal(0.0);
+
+				dto.setTotal(dto.getPAN() + dto.getPRI() + dto.getPRD() + dto.getPRD() + dto.getPVEM() + dto.getPT()
+						+ dto.getMC() + dto.getMORENA() + dto.getPES() + dto.getRSP() + dto.getFUERZAMEXICO()
+						+ dto.getPANAL() + dto.getNulos() + dto.getCrg());
+
+				double porcentajePartido1 = dosDecimales((dto.getPAN() * 100) / dto.getTotal()).doubleValue();
+				dto.setPorcentajePAN(porcentajePartido1);
+
+				double porcentajePartido2 = dosDecimales((dto.getPRI() * 100) / dto.getTotal()).doubleValue();
+				dto.setPorcentajePRI(porcentajePartido2);
+
+				double porcentajePartido3 = dosDecimales((dto.getPRD() * 100) / dto.getTotal()).doubleValue();
+				dto.setPorcentajePRD(porcentajePartido3);
+
+				double porcentajePartido4 = dosDecimales((dto.getPVEM() * 100) / dto.getTotal()).doubleValue();
+				dto.setPorcentajePVEM(porcentajePartido4);
+
+				double porcentajePartido5 = dosDecimales((dto.getPT() * 100) / dto.getTotal()).doubleValue();
+				dto.setPorcentajePT(porcentajePartido5);
+
+				double porcentajePartido6 = dosDecimales((dto.getMC() * 100) / dto.getTotal()).doubleValue();
+				dto.setPorcentajeMC(porcentajePartido6);
+
+				double porcentajePartido7 = dosDecimales((dto.getMORENA() * 100) / dto.getTotal()).doubleValue();
+				dto.setPorcentajeMORENA(porcentajePartido7);
+
+				double porcentajePartido8 = dosDecimales((dto.getPES() * 100) / dto.getTotal()).doubleValue();
+				dto.setPorcentajePES(porcentajePartido8);
+
+				double porcentajePartido9 = dosDecimales((dto.getRSP() * 100) / dto.getTotal()).doubleValue();
+				dto.setPorcentajeRSP(porcentajePartido9);
+
+				double porcentajePartido10 = dosDecimales((dto.getFUERZAMEXICO() * 100) / dto.getTotal()).doubleValue();
+				dto.setPorcentajeFUERZAMEXICO(porcentajePartido10);
+
+				double porcentajePartido11 = dosDecimales((dto.getPANAL() * 100) / dto.getTotal()).doubleValue();
+				dto.setPorcentajePANAL(porcentajePartido11);
+
+				double porcentajeNulos = dosDecimales((dto.getNulos() * 100) / dto.getTotal()).doubleValue();
+				dto.setPorcentajeNulos(porcentajeNulos);
+
+				double porcentajeCrg = dosDecimales((dto.getCrg() * 100) / dto.getTotal()).doubleValue();
+				dto.setPorcentajeCrg(porcentajeCrg);
+
+				double porcentajeTotal = dosDecimales((dto.getTotal() / dto.getListaNominal() * 100)).doubleValue();
+				dto.setPorcentajeTotal(porcentajeTotal);
 				dto.setCandidato1(500L);
-				dto.setPorcentajeCandidato1(0.0);
+				double porcentajeCandidato1 = dosDecimales((dto.getCandidato1() / dto.getTotal() * 100)).doubleValue();
+				dto.setPorcentajeCandidato1(porcentajeCandidato1);
 				dto.setCandidato2(454L);
-				dto.setPorcentajeCandidato2(0.0);
+				double porcentajeCandidato2 = dosDecimales((dto.getCandidato2() / dto.getTotal() * 100)).doubleValue();
+				dto.setPorcentajeCandidato2(porcentajeCandidato2);
 
 				listaDTO.add(dto);
-				
+
 				total.setIdFederal(null);
 				total.setListaNominal(total.getListaNominal() + dto.getListaNominal());
-				total.setPartido1(total.getPartido1() + dto.getPartido1());
-				total.setPorcentajePartido1(total.getPorcentajePartido1() + dto.getPorcentajePartido1());
-				total.setPartido2(total.getPartido2() +  dto.getPartido2());
-				total.setPorcentajePartido2(total.getPorcentajePartido2() + dto.getPorcentajePartido2());
-				total.setPartido3(total.getPartido3() + dto.getPartido3());
-				total.setPorcentajePartido3(total.getPorcentajePartido3() + dto.getPorcentajePartido3());
-				total.setPartido4(total.getPartido4() + dto.getPartido4());
-				total.setPorcentajePartido4(total.getPorcentajePartido4() + dto.getPorcentajePartido4());
-				total.setPartido5(total.getPartido5() + dto.getPartido5());
-				total.setPorcentajePartido5(total.getPorcentajePartido5() +  dto.getPorcentajePartido5());
-				total.setPartido6(total.getPartido6() + dto.getPartido6());
-				total.setPorcentajePartido6(total.getPorcentajePartido6() +  dto.getPorcentajePartido6());
+				total.setPAN(total.getPAN() + dto.getPAN());
+				total.setPorcentajePAN(total.getPorcentajePAN() + dto.getPorcentajePAN());
+				total.setPRI(total.getPRI() + dto.getPRI());
+				total.setPorcentajePRI(total.getPorcentajePRI() + dto.getPorcentajePRI());
+				total.setPRD(total.getPRD() + dto.getPRD());
+				total.setPorcentajePRD(total.getPorcentajePRD() + dto.getPorcentajePRD());
+				total.setPVEM(total.getPVEM() + dto.getPVEM());
+				total.setPorcentajePVEM(total.getPorcentajePVEM() + dto.getPorcentajePVEM());
+				total.setPT(total.getPT() + dto.getPT());
+				total.setPorcentajePT(total.getPorcentajePT() + dto.getPorcentajePT());
+				total.setMC(total.getMC() + dto.getMC());
+				total.setPorcentajeMC(total.getPorcentajeMC() + dto.getPorcentajeMC());
+				total.setMORENA(total.getMORENA() + dto.getMORENA());
+				total.setPorcentajeMORENA(total.getPorcentajeMORENA() + dto.getPorcentajeMORENA());
+				total.setPES(total.getPES() + dto.getPES());
+				total.setPorcentajePES(total.getPorcentajePES() + dto.getPorcentajePES());
+				total.setRSP(total.getRSP() + dto.getRSP());
+				total.setPorcentajeRSP(total.getPorcentajeRSP() + dto.getPorcentajeRSP());
+				total.setFUERZAMEXICO(total.getFUERZAMEXICO() + dto.getFUERZAMEXICO());
+				total.setPorcentajeFUERZAMEXICO(total.getPorcentajeFUERZAMEXICO() + dto.getPorcentajeFUERZAMEXICO());
+				total.setPANAL(total.getPANAL() + dto.getPANAL());
+				total.setPorcentajePANAL(total.getPorcentajePANAL() + dto.getPorcentajePANAL());
 				total.setNulos(total.getNulos() + dto.getNulos());
 				total.setPorcentajeNulos(total.getPorcentajeNulos() + dto.getPorcentajeNulos());
-				total.setCrg(total.getCrg() +  dto.getCrg());
-				total.setPorcentajeCrg(total.getPorcentajeCrg() +  dto.getPorcentajeCrg());
+				total.setCrg(total.getCrg() + dto.getCrg());
+				total.setPorcentajeCrg(total.getPorcentajeCrg() + dto.getPorcentajeCrg());
 				total.setTotal(total.getTotal() + dto.getTotal());
-				total.setPorcentajeTotal(total.getPorcentajeTotal() +  dto.getPorcentajeTotal());
+				total.setPorcentajeTotal(total.getPorcentajeTotal() + dto.getPorcentajeTotal());
 				total.setCandidato1(total.getCandidato1() + dto.getCandidato1());
 				total.setPorcentajeCandidato1(total.getCandidato1() + dto.getPorcentajeCandidato1());
 				total.setCandidato2(total.getCandidato2() + dto.getCandidato2());
 				total.setPorcentajeCandidato2(total.getPorcentajeCandidato2() + dto.getPorcentajeCandidato2());
-				
-				
 
 			}
-			
+
 			listaDTO.add(total);
 
 			return listaDTO;
@@ -630,11 +691,12 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 
 				List<ReporteResultadosDTO> reporteDTOs = getReporteResultados(usuario, perfil, idReporte);
 
-				String[] header = { "idFederal", "listaNominal", "partido1", "porcentajePartido1", "partido2",
-						"porcentajePartido2", "partido3", "porcentajePartido3", "partido4", "porcentajePartido4",
-						"partido5", "porcentajePartido5", "partido6", "porcentajePartido6", "nulos", "porcentajeNulos",
-						"crg", "porcentajeCrg", "total", "porcentajeTotal", "candidato1", "porcentajeCandidato1",
-						"candidato2", "porcentajeCandidato2" };
+				String[] header = { "idFederal", "listaNominal", "PAN", "porcentajePAN", "PRI", "porcentajePRI", "PRD",
+						"porcentajePRD", "PVEM", "porcentajePVEM", "PT", "porcentajePT", "MC", "porcentajeMC", "MORENA",
+						"porcentajeMORENA", "PES", "porcentajePES", "RSP", "porcentajeRSP", "FUERZAMEXICO",
+						"porcentajeFUERZAMEXICO", "PANAL", "porcentajePANAL", "nulos", "porcentajeNulos", "crg",
+						"porcentajeCrg", "total", "porcentajeTotal", "candidato1", "porcentajeCandidato1", "candidato2",
+						"porcentajeCandidato2" };
 
 				setWriterFile(response, reporteDTOs, header);
 			} else {
