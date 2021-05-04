@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -15,6 +16,7 @@ import mx.morena.negocio.dto.ReporteAsignacionDistritalDTO;
 import mx.morena.negocio.dto.ReporteCrgDTO;
 import mx.morena.negocio.dto.ReporteAsignacionEstatalDTO;
 import mx.morena.negocio.dto.ReporteAsignacionRgDTO;
+import mx.morena.negocio.dto.ReporteCrgAsignadoDTO;
 import mx.morena.negocio.exception.RepresentanteException;
 import mx.morena.negocio.dto.ReporteRCDTO;
 import mx.morena.negocio.dto.ReporteRgDTO;
@@ -38,7 +40,6 @@ public class ReportesAsignacionImpl extends MasterService implements IReportesAs
 	
 	@Autowired
 	private IUsuarioRepository usuarioRepository;
-	
 
 	@Override
 	public List<ReporteAsignacionDistritalDTO> getRepAsignacionDistrital(long idUsuario) throws RepresentanteException {
@@ -443,6 +444,90 @@ if(perfil == PERFIL_ESTATAL) {
 			throw new RepresentanteException("No cuenta con permisos suficientes para descargar el reporte", 401);
 		}
 		
+	}
+	
+	@Override
+	public List<ReporteCrgAsignadoDTO> getReporteCrgAsignado(Long idUsuario) throws RepresentanteException {
+		Usuario usuario = usuarioRepository.findById(idUsuario);
+		Long idEntidad = usuario.getEntidad();
+		Long idDistritoF = usuario.getFederal();
+		Long idMunicipio = usuario.getMunicipio();
+		Long idDistritoLocal = usuario.getDistritoLocal();
+		
+		Long perfil = usuario.getPerfil();
+		List<ReporteCrgAsignadoDTO> lstDto = new ArrayList<ReporteCrgAsignadoDTO>();
+		List <ReporteAsignacionRg> datos = new ArrayList<ReporteAsignacionRg>();
+		
+		if (perfil == PERFIL_ESTATAL) {
+			datos = representanteRepository.getDistritosAndMunicipios(idEntidad, null, null, null);
+			
+		} else if (perfil == PERFIL_FEDERAL) {
+			datos = representanteRepository.getDistritosAndMunicipios(idEntidad, idDistritoF, null, null);
+
+		} else if (perfil == PERFIL_LOCAL) {
+			datos = representanteRepository.getDistritosAndMunicipios(idEntidad, idDistritoF, idDistritoLocal, null);
+			
+		} else if (perfil == PERFIL_MUNICIPAL || perfil == PERFIL_CRG || perfil == PERFIL_RG) {
+			datos = representanteRepository.getDistritosAndMunicipios(idEntidad, idDistritoF, idDistritoLocal, idMunicipio);
+			
+		} else {
+			throw new RepresentanteException("No cuenta con permisos suficientes", 401);
+		}
+		
+		ReporteCrgAsignadoDTO reporteDto = null;
+		
+		if (datos != null) {
+			for (ReporteAsignacionRg dato : datos) {
+				reporteDto = new ReporteCrgAsignadoDTO();
+				//IdRuta trae el valor de idMunicipio
+				reporteDto = calcularReporteCrgAsignado(idEntidad, dato.getIdDistrito(), dato.getIdLocal(),
+							dato.getIdRuta(), dato.getMunicipio(), dato.getIdCasilla());
+				
+				lstDto.add(reporteDto);
+			}
+		} else {
+			throw new RepresentanteException("No se encontraron datos", 404);
+		}
+		
+		return lstDto;
+	}
+	
+	public ReporteCrgAsignadoDTO calcularReporteCrgAsignado(Long idEntidad, Long idDisitritoF, Long idDistritoL, Long idMunicipio, String municipio, Long casilla) {
+		ReporteCrgAsignadoDTO dto = new ReporteCrgAsignadoDTO();
+		
+		Long crg = representanteRepository.getRepCrgAsignadoByDistrito(idEntidad, idDisitritoF, idMunicipio, PERFIL_CRG);
+		List<Long> rutas = representanteRepository.getRutasByCrgAsignadoAndDistrito(idEntidad, idDisitritoF, idDistritoL, idMunicipio, PERFIL_CRG);
+		Long propietario1 = representanteRepository.getCargoByDistritoAndMunicipio(idDisitritoF, idDistritoL, idMunicipio, 1L);
+		Long suplente1 = representanteRepository.getCargoByDistritoAndMunicipio(idDisitritoF, idDistritoL, idMunicipio, 2L);
+		Long propietario2 = representanteRepository.getCargoByDistritoAndMunicipio(idDisitritoF, idDistritoL, idMunicipio, 3L);
+		Long suplente2 = representanteRepository.getCargoByDistritoAndMunicipio(idDisitritoF, idDistritoL, idMunicipio, 4L);
+		
+		if (rutas == null) {
+			rutas = (Arrays.asList(0L));
+		}
+		
+		dto.setIdDistrito(idDisitritoF);
+		dto.setIdLocal(idDistritoL);
+		dto.setMunicipio(municipio);
+		dto.setRutas(rutas);
+		dto.setCrg(crg);
+		dto.setCasillas(casilla);
+		dto.setPropietarioUno(propietario1);
+		dto.setPropietarioDos(propietario2);
+		dto.setSuplenteUno(suplente1);
+		dto.setSuplenteDos(suplente2);
+		
+		return dto;
+	}
+
+	@Override
+	public void getReporteCrgAsignadoDownload(HttpServletResponse response, long perfil, long idUsuario) throws RepresentanteException, IOException {
+		setNameFile(response, CSV_CRG_ASIGNADO);
+		List<ReporteCrgAsignadoDTO> crgDTOs = getReporteCrgAsignado(idUsuario);
+
+		String[] header = { "idDistrito", "idLocal", "municipio", "crg", "rutas", "casillas", "propietarioUno", "propietarioDos", "suplenteUno", "suplenteDos"};
+
+		setWriterFile(response, crgDTOs, header);
 	}
 
 }

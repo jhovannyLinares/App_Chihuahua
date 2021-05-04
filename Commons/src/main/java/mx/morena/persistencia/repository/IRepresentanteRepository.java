@@ -54,4 +54,12 @@ public interface IRepresentanteRepository {
 	Long getRepAsignadoByDistrito(Long id, Long perfil);
 
 	Representantes getRepresentanteByIdAndTipo(Long representanteId, Long tipoRepresentante);
+	
+	List<ReporteAsignacionRg> getDistritosAndMunicipios(Long idEntidad, Long idDistritoF, Long idDistritoL, Long idMunicipio);
+	
+	Long getRepCrgAsignadoByDistrito(Long idEntidad, Long idDistrito, Long idMunicipio, Long perfil);
+	
+	List<Long> getRutasByCrgAsignadoAndDistrito(Long idEntidad, Long idDistritoF, Long idDistritoL, Long idMunicipio, Long perfil);
+	
+	Long getCargoByDistritoAndMunicipio(Long idDistritoF, Long idDistritoL, Long idMunicipio, Long cargo);
 }

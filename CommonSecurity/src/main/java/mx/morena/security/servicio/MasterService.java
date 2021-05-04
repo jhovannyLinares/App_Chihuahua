@@ -66,6 +66,7 @@ public class MasterService {
 	protected static final String CSV_ASIGN_CRG = "ReporteAsignacionCrg.csv";
 	protected static final String CSV_RG = "ReporteRg.csv";
 	protected static final String CSV_ASIGN_RG = "ReporteAsignacionRg.csv";
+	protected static final String CSV_CRG_ASIGNADO = "ReporteCrgAsignado.csv";
 	
 	protected static final String CSV_CAPACITACION_NOMB_ESTATAL = "ReporteCapacitacionNombramientoEstatal.csv";
 	
@@ -89,6 +90,8 @@ public class MasterService {
 	protected static final String CSV_ASISTENCIA_RG = "ReporteAsisenciaRg.csv";
 	
 	protected static final String CSV_REPORTE_RESULTADOS_ACTAS = "ReporteResultadosActas.csv";
+	
+	protected static final String CSV_REPORTE_RESULTADOS_PMUNICIPAL = "ResultadosMuncipalPresidenteMunicipal.csv";
 	
 	private static final String HEADER_KEY = "Content-Disposition";
 	private static final String CONTENT_TYPE = "text/csv";

@@ -9,6 +9,7 @@ import mx.morena.negocio.dto.ReporteAsignacionDistritalDTO;
 import mx.morena.negocio.dto.ReporteCrgDTO;
 import mx.morena.negocio.dto.ReporteAsignacionEstatalDTO;
 import mx.morena.negocio.dto.ReporteAsignacionRgDTO;
+import mx.morena.negocio.dto.ReporteCrgAsignadoDTO;
 import mx.morena.negocio.exception.RepresentanteException;
 
 import mx.morena.negocio.dto.ReporteRCDTO;
@@ -39,4 +40,8 @@ public interface IReportesAsignacionService {
 	List<ReporteAsignacionRgDTO> getReporteRgAsignado(Long perfil, Long usuario) throws RepresentanteException;
 	
 	void getReporteRgAsignadoDownload(HttpServletResponse response, Long perfil, Long idUsuario) throws RepresentanteException, IOException;
+	
+	public List<ReporteCrgAsignadoDTO> getReporteCrgAsignado(Long idUsuario) throws RepresentanteException;
+	
+	void getReporteCrgAsignadoDownload(HttpServletResponse response, long perfil, long idUsuario) throws RepresentanteException, IOException;
 }

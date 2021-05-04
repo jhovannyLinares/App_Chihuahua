@@ -18,6 +18,7 @@ import mx.morena.negocio.dto.ReporteAsignacionDistritalDTO;
 import mx.morena.negocio.dto.ReporteCrgDTO;
 import mx.morena.negocio.dto.ReporteAsignacionEstatalDTO;
 import mx.morena.negocio.dto.ReporteAsignacionRgDTO;
+import mx.morena.negocio.dto.ReporteCrgAsignadoDTO;
 import mx.morena.negocio.exception.RepresentanteException;
 import mx.morena.negocio.servicios.IReportesAsignacionService;
 import mx.morena.negocio.dto.ReporteRCDTO;
@@ -266,6 +267,42 @@ public class ReportesAsignacionController extends MasterController{
 		}
 	}
 
+	@GetMapping("/crgAsignado")
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	private List<ReporteCrgAsignadoDTO> getReporteCrgAsignado(HttpServletResponse response, HttpServletRequest request) throws IOException {
+		
+		try {
+			long idUsuario = getUsuario(request);
+			
+			return reportesService.getReporteCrgAsignado(idUsuario);
+		} catch (RepresentanteException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+			return null;
+		} catch (Exception e ) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			return null;
+		}
+	}
+	
+	@GetMapping("/crgAsignado/download")
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	public void downloadAsignadoCrgCSV(HttpServletResponse response,  HttpServletRequest request) throws IOException {
+		
+		try {
+			long perfil = getPerfil(request);
+			long usuario = getUsuario(request);
+			
+			reportesService.getReporteCrgAsignadoDownload(response, perfil, usuario);
+		} catch (RepresentanteException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+		}
+	}
 }
 
 

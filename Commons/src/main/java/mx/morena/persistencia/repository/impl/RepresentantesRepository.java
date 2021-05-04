@@ -17,6 +17,8 @@ import mx.morena.persistencia.entidad.RepresentantesAsignados;
 import mx.morena.persistencia.repository.IRepresentanteRepository;
 import mx.morena.persistencia.rowmapper.IdMaxConvencidos;
 import mx.morena.persistencia.rowmapper.LongRowMapper;
+import mx.morena.persistencia.rowmapper.LongsRowMapper;
+import mx.morena.persistencia.rowmapper.ReporteAsignacionCrgRowMapper;
 import mx.morena.persistencia.rowmapper.ReporteAsignacionRgRowMapper;
 import mx.morena.persistencia.rowmapper.RepresentanteClaveRowMapper;
 import mx.morena.persistencia.rowmapper.RepresentanteRowMapper;
@@ -484,6 +486,115 @@ public class RepresentantesRepository implements IRepresentanteRepository {
 		
 		try {
 			return template.queryForObject(sql,new Object[] { }, new int[] { }, new ReporteAsignacionRgRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+	
+	@Override
+	public Long getRepCrgAsignadoByDistrito(Long idEntidad, Long idDistrito, Long idMunicipio, Long perfil) {
+		String sql = " select count(*) from app_representantes ar where ar.tipo_representante = ? and is_asignado = true and ar.estado_id = ? "
+				+ "and ar.distrito_federal_id = ? and ar.municipio_id = ? ";
+		try {
+			return template.queryForObject(sql, new Object[] { perfil, idEntidad, idDistrito, idMunicipio }, new int[]
+					{ Types.NUMERIC, Types.NUMERIC, Types.NUMERIC, Types.NUMERIC },
+					new LongRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+
+	@Override
+	public List<Long> getRutasByCrgAsignadoAndDistrito(Long idEntidad, Long idDistritoF, Long idDistritoL, Long idMunicipio, Long perfil) {
+		String sql = " SELECT aac.ruta FROM app_asignacion_casillas aac inner join app_representantes ar on aac.id_crg = ar.id "
+				+ "inner join app_casilla ac on aac.id_casilla = ac.id where (aac.id_crg is not null and aac.id_crg != 0) "
+				+ "and ar.tipo_representante = ? and aac.distrito_federal_id = ? and ac.entidad_id = ? "
+				+ "and ac.local_id = ? and ac.municpio_id = ? and aac.ruta != 0 group by aac.ruta ";
+		try {
+			return template.queryForObject(sql, new Object[] { perfil, idDistritoF, idEntidad, idDistritoL, idMunicipio }, new int[]
+					{ Types.NUMERIC, Types.NUMERIC, Types.NUMERIC, Types.NUMERIC, Types.NUMERIC },
+					new LongsRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+
+	@Override
+	public Long getCargoByDistritoAndMunicipio(Long idDistritoF, Long idDistritoL, Long idMunicipio, Long cargo) {
+		String sql = " select count(*) from app_casilla ac inner join app_municipio am on ac.municpio_id = am.id "
+				+ "inner join app_representantes_asignados ara on ac.id = ara.casilla_id "
+				+ "where ac.federal_id = ? and ac.local_id = ? and ac.municpio_id = ? and ara.cargo = ? ";
+		try {
+			return template.queryForObject(sql, new Object[] { idDistritoF, idDistritoL, idMunicipio, cargo }, new int[]
+					{ Types.NUMERIC, Types.NUMERIC, Types.NUMERIC, Types.NUMERIC }, new LongRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+
+	@Override
+	public List<ReporteAsignacionRg> getDistritosAndMunicipios(Long idEntidad, Long idDistritoF, Long idDistritoL, Long idMunicipio) {
+		String select = "select ac.federal_id, ac.local_id, ac.municpio_id, am.nombre, count(ac.id) as casilla "
+				+ "from app_casilla ac inner join app_municipio am on am.id = ac.municpio_id ";
+		
+		String sql = null;
+		String where = "";
+		String group = "";
+		List<Object> para = new ArrayList<Object>();
+		List<Integer> type = new ArrayList<Integer>();
+		
+		if (idEntidad != null) {
+			where = " where am.entidad_id = ? ";
+			para.add(idEntidad);
+			type.add(Types.NUMERIC);
+		}
+
+		if (idDistritoF != null) {
+
+			if (para.size() > 0) {
+				where = where.concat(" and ac.federal_id = ? ");
+			} else {
+				where = " where ac.federal_id = ? ";
+			}
+			para.add(idDistritoF);
+			type.add(Types.NUMERIC);
+		}
+
+		if (idDistritoL != null) {
+			if (para.size() > 0) {
+				where = where.concat(" and ac.local_id = ? ");
+			} else {
+				where = " where ac.local_id = ? ";
+			}
+			para.add(idDistritoL);
+			type.add(Types.NUMERIC);
+		}
+
+		if (idMunicipio != null) {
+
+			if (para.size() > 0) {
+				where = where.concat(" and ac.municpio_id = ? ");
+			} else {
+				where = " where ac.municpio_id = ? ";
+			}
+			para.add(idMunicipio);
+			type.add(Types.NUMERIC);
+		}
+
+		Object[] parametros = new Object[para.size()];
+		int[] types = new int[para.size()];
+
+		for (int i = 0; i < para.size(); i++) {
+			parametros[i] = para.get(i);
+			types[i] = type.get(i);
+		}
+
+		try {
+			group = " group by ac.federal_id, ac.local_id, ac.municpio_id, am.nombre, casilla order by ac.federal_id ";
+			sql = select.concat(where).concat(group);
+			System.out.println(sql);
+
+			return template.queryForObject(sql, parametros, types, new ReporteAsignacionCrgRowMapper());
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}
