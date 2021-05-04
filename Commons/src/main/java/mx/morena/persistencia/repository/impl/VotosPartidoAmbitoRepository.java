@@ -12,21 +12,37 @@ import mx.morena.persistencia.rowmapper.LongRowMapper;
 
 @Repository
 public class VotosPartidoAmbitoRepository implements IVotosPartidoAmbitoRepository {
-	
+
 	@Autowired
 	private JdbcTemplate template;
 
 	@Override
-	public Long getVotosByDistritoAndMunicipioAndPartido(Long idEntidad, Long df, Long idMunicipio, Long idEleccion, Long idPartido) {
+	public Long getVotosByDistritoAndMunicipioAndPartido(Long idEntidad, Long df, Long idMunicipio, Long idEleccion,
+			Long idPartido) {
 		String sql = "select avpa.votos from app_votos_partido_ambito avpa inner join app_casilla ac on ac.id = avpa.id_casilla "
 				+ "where ac.entidad_id = ? and ac.federal_id = ? and ac.municpio_id = ? "
 				+ "and avpa.id_ambito = ? and avpa.id_partido = ? ";
 		try {
-			return template.queryForObject(sql, new Object[] { idEntidad, df, idMunicipio, idEleccion, idPartido }, new int[] 
-					{ Types.NUMERIC, Types.NUMERIC, Types.NUMERIC, Types.NUMERIC, Types.NUMERIC }, new LongRowMapper());
+			return template.queryForObject(sql, new Object[] { idEntidad, df, idMunicipio, idEleccion, idPartido },
+					new int[] { Types.NUMERIC, Types.NUMERIC, Types.NUMERIC, Types.NUMERIC, Types.NUMERIC },
+					new LongRowMapper());
 		} catch (EmptyResultDataAccessException e) {
 			return 0L;
 		}
 	}
-	
+
+	@Override
+	public Long getVotosByEleccionAndPartido(Long idEntidad, Long idEleccion, Long idPartido) {
+		String sql = "select avpa.votos from app_votos_partido_ambito avpa inner join app_casilla ac on ac.id = avpa.id_casilla "
+				+ "where ac.entidad_id = ? "
+				+ "and avpa.id_ambito = ? and avpa.id_partido = ? ";
+		try {
+			return template.queryForObject(sql, new Object[] { idEntidad, idEleccion, idPartido },
+					new int[] { Types.NUMERIC, Types.NUMERIC, Types.NUMERIC },
+					new LongRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return 0L;
+		}
+	}
+
 }

@@ -38,6 +38,7 @@ import mx.morena.persistencia.repository.IReporteCasillasRepository;
 import mx.morena.persistencia.repository.IRepresentantesAsignadosRepository;
 import mx.morena.persistencia.repository.IRutasRepository;
 import mx.morena.persistencia.repository.IUsuarioRepository;
+import mx.morena.persistencia.repository.IVotosPartidoAmbitoRepository;
 import mx.morena.security.servicio.MasterService;
 
 @Service
@@ -69,6 +70,9 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 	
 	@Autowired
 	private IRutasRepository rutasRepository;
+	
+	@Autowired
+	private IVotosPartidoAmbitoRepository votosRepository;
 	
 	private String once = "11:00:00";
 	
@@ -517,6 +521,9 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 			throws CotException, IOException {
 
 		if (perfil == PERFIL_RG) {
+			
+			Usuario user = usuarioRepository.findById(usuario);
+			Long idEntidad = user.getEntidad();
 
 			List<ReporteResultadosDTO> listaDTO = new ArrayList<>();
 			List<DistritoFederal> listDF = null;
@@ -525,6 +532,18 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 
 			listDF = distritoFederalRepository.findAll();
 			System.out.print("Tamaño de lista: " + listDF.size());
+			Long PAN = votosRepository.getVotosByEleccionAndPartido(idEntidad, idReporte, 1L);
+			Long PRI = votosRepository.getVotosByEleccionAndPartido(idEntidad, idReporte, 2L);
+			Long PRD = votosRepository.getVotosByEleccionAndPartido(idEntidad, idReporte, 3L);
+			Long PVEM = votosRepository.getVotosByEleccionAndPartido(idEntidad, idReporte, 4L);
+			Long PT = votosRepository.getVotosByEleccionAndPartido(idEntidad, idReporte, 5L);
+			Long MC = votosRepository.getVotosByEleccionAndPartido(idEntidad, idReporte, 6L);
+			Long MORENA = votosRepository.getVotosByEleccionAndPartido(idEntidad, idReporte, 7L);
+			Long PES = votosRepository.getVotosByEleccionAndPartido(idEntidad, idReporte, 8L);
+			Long RSP = votosRepository.getVotosByEleccionAndPartido(idEntidad, idReporte, 9L);
+			Long FUERZAMEXICO = votosRepository.getVotosByEleccionAndPartido(idEntidad, idReporte, 10L);
+			Long PANAL = votosRepository.getVotosByEleccionAndPartido(idEntidad, idReporte, 11L);
+			System.out.print("Valor de PAN: " + PAN);
 
 			total.setIdFederal(1L);
 			total.setListaNominal(0L);
@@ -566,17 +585,17 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 
 				dto.setIdFederal(items.getId());
 				dto.setListaNominal(20L);
-				dto.setPAN(20L);
-				dto.setPRI(20L);
-				dto.setPRD(20L);
-				dto.setPVEM(20L);
-				dto.setPT(20L);
-				dto.setMC(20L);
-				dto.setMORENA(20L);
-				dto.setPES(20L);
-				dto.setRSP(20L);
-				dto.setFUERZAMEXICO(20L);
-				dto.setPANAL(20L);
+				dto.setPAN(PAN);
+				dto.setPRI(PRI);
+				dto.setPRD(PRD);
+				dto.setPVEM(PVEM);
+				dto.setPT(PT);
+				dto.setMC(MC);
+				dto.setMORENA(MORENA);
+				dto.setPES(PES);
+				dto.setRSP(RSP);
+				dto.setFUERZAMEXICO(FUERZAMEXICO);
+				dto.setPANAL(PANAL);
 				dto.setNulos(50L);
 				dto.setCrg(20L);
 
