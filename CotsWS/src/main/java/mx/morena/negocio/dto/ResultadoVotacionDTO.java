@@ -2,10 +2,12 @@ package mx.morena.negocio.dto;
 
 import java.util.List;
 
-public class ResultadoVotacionDTO {
+public class ResultadoVotacionDTO { 
+	
 	private Long idCasilla;
 	private Integer tipoVotacion;
 	List<VotosPartidoDTO> votos;
+	
 
 	public Long getIdCasilla() {
 		return idCasilla;

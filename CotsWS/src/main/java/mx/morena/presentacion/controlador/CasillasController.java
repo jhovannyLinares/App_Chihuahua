@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import mx.morena.negocio.dto.EnvioActasDTO;
+import mx.morena.negocio.dto.PartidosXAmbitoDTO;
 import mx.morena.negocio.dto.ResultadoOkDTO;
 import mx.morena.negocio.dto.ResultadoVotacionDTO;
 import mx.morena.negocio.dto.VotacionesDTO;
@@ -55,11 +56,31 @@ public class CasillasController extends MasterController{
 	@GetMapping("/{idCasilla}/envioActas")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
 	public List<VotacionesDTO> getActas(HttpServletResponse response, HttpServletRequest request, @PathVariable("idCasilla") Long idCasilla) throws IOException {
+		
 		long perfil = getPerfil(request);
 		long usuario = getUsuario(request);
 
 		try {
 			return casillaService.getActas(idCasilla);
+		} catch (CotException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+			return null;
+		} catch (Exception e ) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			return null;
+		}
+	}
+	
+	@GetMapping("/{idCasilla}/partidos")
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	public List<PartidosXAmbitoDTO> getPartidos(HttpServletResponse response, HttpServletRequest request, @PathVariable("idCasilla") Long idCasilla) throws IOException {
+		long perfil = getPerfil(request);
+		long usuario = getUsuario(request);
+
+		try {
+			return casillaService.getPartidos(idCasilla);
 		} catch (CotException e) {
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
