@@ -7,7 +7,7 @@ public class CierreCasillaDTO {
 	
 	private Long idCasilla;
 	
-	private Time horaCierre;
+	private Timestamp horaCierre;
 
 	public Long getIdCasilla() {
 		return idCasilla;
@@ -17,11 +17,11 @@ public class CierreCasillaDTO {
 		this.idCasilla = idCasilla;
 	}
 
-	public Time getHoraCierre() {
+	public Timestamp getHoraCierre() {
 		return horaCierre;
 	}
 
-	public void setHoraCierre(Time horaCierre) {
+	public void setHoraCierre(Timestamp horaCierre) {
 		this.horaCierre = horaCierre;
 	}
 

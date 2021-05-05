@@ -148,7 +148,7 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 				ReporteCasilla rc = new ReporteCasilla();
 
 				rc.setIdCasilla(dto.getIdCasilla());
-				rc.setHoraReporte(new Time(dto.getHoraReporte().getTime()));
+				rc.setHoraReporte(dto.getHoraReporte());
 				rc.setIdRg(usr.getId());
 				rc.setNumeroVotos(dto.getNumero());
 				rc.setTipoReporte(dto.getTipoReporte());
@@ -431,7 +431,7 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 					if (reporteCasillaDTO.getTipoReporte() == reporteCasilla.getTipoReporte()) {
 
 						reporteCasillaDTO.setCapturado(true);
-						reporteCasillaDTO.setHoraReporte(reporteCasilla.getHoraReporte().toString());
+						reporteCasillaDTO.setHoraReporte(reporteCasilla.getHoraReporte().getTime() + "");
 						reporteCasillaDTO.setTipoReporte(reporteCasilla.getTipoReporte());
 					}
 
