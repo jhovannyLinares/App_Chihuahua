@@ -14,6 +14,7 @@ import mx.morena.negocio.dto.PartidosXAmbitoDTO;
 import mx.morena.negocio.dto.ResultadoOkDTO;
 import mx.morena.negocio.dto.ResultadoVotacionDTO;
 import mx.morena.negocio.dto.VotacionesDTO;
+import mx.morena.negocio.dto.VotosPartidoDTO;
 import mx.morena.negocio.exception.CotException;
 import mx.morena.negocio.servicios.ICasillasService;
 import mx.morena.negocio.servicios.IInstalacionCasillaService;
@@ -21,22 +22,27 @@ import mx.morena.negocio.util.MapperUtil;
 import mx.morena.persistencia.entidad.Casilla;
 import mx.morena.persistencia.entidad.EnvioActas;
 import mx.morena.persistencia.entidad.Partido;
+import mx.morena.persistencia.entidad.Votacion;
 import mx.morena.persistencia.repository.ICasillaRepository;
 import mx.morena.persistencia.repository.IEnvioActasRepository;
 import mx.morena.persistencia.repository.IPartidosRepository;
+import mx.morena.persistencia.repository.IResultadoVotacionRepository;
 import mx.morena.security.servicio.MasterService;
 
 @Service
 public class CasillasServiceImpl extends MasterService implements ICasillasService {
 
 	@Autowired
-	IEnvioActasRepository envioActasRepository;
+	private IEnvioActasRepository envioActasRepository;
 	
 	@Autowired
 	private ICasillaRepository casillaRepository;
 
 	@Autowired
-	IInstalacionCasillaService instalacionCasillaService;
+	private IInstalacionCasillaService instalacionCasillaService;
+	
+	@Autowired
+	private IResultadoVotacionRepository resultadoVotacionRepository;
 	
 	@Autowired
 	private IPartidosRepository partidosRepository;
@@ -98,7 +104,66 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 	@Override
 	public ResultadoOkDTO saveResultados(ResultadoVotacionDTO actas, long perfil, long usuario) throws CotException {
 
-		// Tablas
+		List<Votacion> votaciones = new ArrayList<Votacion>();
+
+		Votacion votacion;
+		
+		for (VotosPartidoDTO voto : actas.getVotos()) {
+
+			consultarVotaciones();
+
+			votacion = new Votacion();
+
+			votacion.setIdCasilla(actas.getIdCasilla());
+			votacion.setIdPartido(voto.getIdPartido());
+			votacion.setTipoVotacion(actas.getTipoVotacion());
+			votacion.setVotos(voto.getVotos());
+
+			Partido stream = new Partido();
+
+			if (votacion.getTipoVotacion() == 1) {
+				stream = gobernador.stream().filter(partido -> voto.getIdPartido() == partido.getId()).findAny()
+						.orElse(null);
+			}
+
+			if (votacion.getTipoVotacion() == 2) {
+				stream = municipal.stream().filter(partido -> voto.getIdPartido() == partido.getId()).findAny()
+						.orElse(null);
+			}
+
+			if (votacion.getTipoVotacion() == 3) {
+				stream = sindico.stream().filter(partido -> voto.getIdPartido() == partido.getId()).findAny()
+						.orElse(null);
+			}
+
+			if (votacion.getTipoVotacion() == 4) {
+				stream = diputadoLocal.stream().filter(partido -> voto.getIdPartido() == partido.getId()).findAny()
+						.orElse(null);
+			}
+
+			if (votacion.getTipoVotacion() == 5) {
+				stream = diputadoFederal.stream().filter(partido -> voto.getIdPartido() == partido.getId()).findAny()
+						.orElse(null);
+			}
+
+//			Coalicion
+
+			if (stream.getTipoPartido() != null && stream.getTipoPartido().length() > 0) {
+				votacion.setCoalicion(true);
+				votacion.setIdCoalicion(0);
+			} else {
+				votacion.setCoalicion(false);
+			}
+
+			try {
+				votaciones.add(votacion);
+			} catch (Exception e) {
+				throw new CotException("Se detecto un problema al guardar los votos", 401);
+			}
+
+		}
+
+		resultadoVotacionRepository.save(votaciones);
 
 		return new ResultadoOkDTO(1, "OK");
 
@@ -181,7 +246,7 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 				dto.setId(2L);
 				dto.setDescripcion("PRESIDENTE MUNICIPAL");
 				
-				dto.setPartidos(getPartidosXCasillas(municipal,casilla.getEntidad()));
+				dto.setPartidos(getPartidosXCasillas(municipal,casilla.getMunicipio()));
 
 				votacionesDTOs.add(dto);
 			}
@@ -192,7 +257,7 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 				dto = new PartidosXAmbitoDTO();
 				dto.setId(3L);
 				dto.setDescripcion("SINDICO");
-				dto.setPartidos(getPartidosXCasillas(sindico,casilla.getEntidad()));
+				dto.setPartidos(getPartidosXCasillas(sindico,casilla.getMunicipio()));
 				votacionesDTOs.add(dto);
 			}
 
@@ -202,7 +267,7 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 				dto = new PartidosXAmbitoDTO();
 				dto.setId(4L);
 				dto.setDescripcion("DIPUTADO LOCAL");
-				dto.setPartidos(getPartidosXCasillas(diputadoLocal,casilla.getEntidad()));
+				dto.setPartidos(getPartidosXCasillas(diputadoLocal,casilla.getFederal()));
 				votacionesDTOs.add(dto);
 			}
 
@@ -212,7 +277,7 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 				dto = new PartidosXAmbitoDTO();
 				dto.setId(5L);
 				dto.setDescripcion("DIPUTADO FEDERAL");
-				dto.setPartidos(getPartidosXCasillas(diputadoFederal,casilla.getEntidad()));
+				dto.setPartidos(getPartidosXCasillas(diputadoFederal,casilla.getFederal()));
 				votacionesDTOs.add(dto);
 			}
 

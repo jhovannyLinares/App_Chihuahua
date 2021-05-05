@@ -2,14 +2,15 @@ package mx.morena.negocio.dto;
 
 public class VotosPartidoDTO {
 
-	private Integer idPartido;
+	private Long idPartido;
+	
 	private Integer votos;
 
-	public Integer getIdPartido() {
+	public Long getIdPartido() {
 		return idPartido;
 	}
 
-	public void setIdPartido(Integer idPartido) {
+	public void setIdPartido(Long idPartido) {
 		this.idPartido = idPartido;
 	}
 

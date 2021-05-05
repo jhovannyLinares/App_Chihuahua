@@ -128,23 +128,5 @@ public class InstalacionCasillaController extends MasterController {
 		}
 	}
 	
-//	@GetMapping("/casillas/votaciones")
-//	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-//	private List<VotacionesDTO> votacionesXCasilla(HttpServletResponse response, HttpServletRequest request, Long idCasilla) throws IOException {
-//		try {
-//
-//			return IService.getVotaciones(idCasilla);
-//			
-//		} catch (CotException e) {
-//			e.printStackTrace();
-//			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
-//			return null;
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
-//			return null;
-//		}
-//	}
-	
 	
 }

@@ -1,6 +1,7 @@
 package mx.morena.persistencia.repository.impl;
 
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +52,13 @@ public class EnvioActasRepository implements IEnvioActasRepository {
 	@Override
 	public List<EnvioActas> getCasilla(Long idCasilla) {
 		String sql = "SELECT id_acta,tipo_votacion,ruta_acta,id_casilla,registro_acta FROM app_envio_actas where id_casilla = ?";
-		return template.queryForObject(sql, new Object[] { idCasilla }, new int[] { Types.NUMERIC}, new ActasRowMapper());
+		try {
+			return template.queryForObject(sql, new Object[] { idCasilla }, new int[] { Types.NUMERIC },
+					new ActasRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return new ArrayList<EnvioActas>();
+		}
+
 	}
 
 	@Override
