@@ -1,10 +1,8 @@
 package mx.morena.persistencia.repository.impl;
 
-import java.beans.FeatureDescriptor;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
-
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -13,7 +11,6 @@ import org.springframework.stereotype.Repository;
 
 import mx.morena.persistencia.entidad.InstalacionCasilla;
 import mx.morena.persistencia.repository.IInstalacionCasillasRepository;
-import mx.morena.persistencia.rowmapper.CasillasRowMapper;
 import mx.morena.persistencia.rowmapper.InstalacionRowMapper;
 import mx.morena.persistencia.rowmapper.LongRowMapper;
 
