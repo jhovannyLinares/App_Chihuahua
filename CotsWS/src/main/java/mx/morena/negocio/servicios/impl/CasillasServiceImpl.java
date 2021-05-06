@@ -149,18 +149,20 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 			}
 
 //			Coalicion
+			votacion.setCoalicion(false);
+			
 
-			if (stream.getTipoPartido() != null && stream.getTipoPartido().length() > 0) {
-				votacion.setCoalicion(true);
-				votacion.setIdCoalicion(0);
-			} else {
-				votacion.setCoalicion(false);
+			if (stream.getTipoPartido() != null) {
+				if (stream.getTipoPartido().length() > 0) {
+					votacion.setCoalicion(true);
+					votacion.setIdCoalicion(0);
+				}
 			}
 
 			try {
 				votaciones.add(votacion);
 			} catch (Exception e) {
-				throw new CotException("Se detecto un problema al guardar los votos", 401);
+				throw new CotException("Se detecto un problema al guardar los votos", 409);
 			}
 
 		}
