@@ -65,7 +65,7 @@ public class MunicipioRepository implements IMunicipioRepository {
 				+ "where am.entidad_id = ? order by am.federal_id";
 		try {
 			return template.queryForObject(sql, new Object[] { idEntidad }, new int[] { Types.NUMERIC },
-					new MunicipiosRowMapper());
+					new MunicipiosGroupRowMapper());
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}
