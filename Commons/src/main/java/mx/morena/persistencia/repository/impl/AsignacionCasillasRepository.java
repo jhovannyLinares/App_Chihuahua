@@ -12,7 +12,6 @@ import org.springframework.stereotype.Repository;
 import mx.morena.persistencia.entidad.AsignacionCasillas;
 import mx.morena.persistencia.repository.IAsignacionCasillasRepository;
 import mx.morena.persistencia.rowmapper.AsignacionCasillaRowMapper;
-import mx.morena.persistencia.rowmapper.AsignacionCasillasRowMapper;
 import mx.morena.persistencia.rowmapper.ListAsignacionCasillaRowMapper;
 import mx.morena.persistencia.rowmapper.LongRowMapper;
 

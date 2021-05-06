@@ -1,6 +1,5 @@
 package mx.morena.negocio.dto;
 
-import java.sql.Time;
 import java.sql.Timestamp;
 
 public class CierreCasillaDTO {

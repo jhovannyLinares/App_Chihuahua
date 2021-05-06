@@ -114,7 +114,7 @@ public class PartidosRepositoryImpl implements IPartidosRepository {
 
 	@Override
 	public List<Partido> getMunicipal() {
-		String sql = "SELECT id, clave_municipio as ubicacion, municipio, tipo_partido, partido, cargo, p_paterno, a_materno, nombres, candidato, id_cargo "
+		String sql = "SELECT id, clave_municipio as ubicacion, municipio, tipo_partido, partido, cargo, a_paterno, a_materno, nombres, candidato, id_cargo "
 				+ " FROM app_partidos_municipio ";
 
 		try {

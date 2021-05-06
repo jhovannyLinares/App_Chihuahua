@@ -4,14 +4,12 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.IdGenerator;
 
 import mx.morena.negocio.dto.ReporteAsistenciaCrgDTO;
 import mx.morena.negocio.dto.ReporteAsistenciaEstatalDTO;
@@ -28,7 +26,6 @@ import mx.morena.persistencia.entidad.AsignacionCasillas;
 import mx.morena.persistencia.entidad.Casilla;
 import mx.morena.persistencia.entidad.DistritoFederal;
 import mx.morena.persistencia.entidad.Municipio;
-import mx.morena.persistencia.entidad.Partido;
 import mx.morena.persistencia.entidad.Rutas;
 import mx.morena.persistencia.entidad.Usuario;
 import mx.morena.persistencia.repository.IAsignacionCasillasRepository;
@@ -36,7 +33,6 @@ import mx.morena.persistencia.repository.ICasillaRepository;
 import mx.morena.persistencia.repository.IDistritoFederalRepository;
 import mx.morena.persistencia.repository.IInstalacionCasillasRepository;
 import mx.morena.persistencia.repository.IMunicipioRepository;
-import mx.morena.persistencia.repository.IPartidosRepository;
 import mx.morena.persistencia.repository.IReporteCasillasRepository;
 import mx.morena.persistencia.repository.IRepresentantesAsignadosRepository;
 import mx.morena.persistencia.repository.IRutasRepository;
@@ -77,8 +73,6 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 	@Autowired
 	private IVotosPartidoAmbitoRepository votosRepository;
 	
-	@Autowired
-	private IPartidosRepository partidoRepository;
 	
 	private String once = "11:00:00";
 	

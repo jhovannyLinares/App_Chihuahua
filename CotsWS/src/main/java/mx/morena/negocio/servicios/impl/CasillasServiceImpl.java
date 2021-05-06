@@ -102,21 +102,23 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 	}
 
 	@Override
-	public ResultadoOkDTO saveResultados(ResultadoVotacionDTO actas, long perfil, long usuario) throws CotException {
+	public ResultadoOkDTO saveResultados(ResultadoVotacionDTO resultadoVotos, long perfil, long usuario) throws CotException {
+		
+		validacionVotos(resultadoVotos);
 
 		List<Votacion> votaciones = new ArrayList<Votacion>();
 
 		Votacion votacion;
 		
-		for (VotosPartidoDTO voto : actas.getVotos()) {
+		for (VotosPartidoDTO voto : resultadoVotos.getVotos()) {
 
 			consultarVotaciones();
 
 			votacion = new Votacion();
 
-			votacion.setIdCasilla(actas.getIdCasilla());
+			votacion.setIdCasilla(resultadoVotos.getIdCasilla());
 			votacion.setIdPartido(voto.getIdPartido());
-			votacion.setTipoVotacion(actas.getTipoVotacion());
+			votacion.setTipoVotacion(resultadoVotos.getTipoVotacion());
 			votacion.setVotos(voto.getVotos());
 
 			Partido stream = new Partido();
@@ -166,6 +168,36 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 		resultadoVotacionRepository.save(votaciones);
 
 		return new ResultadoOkDTO(1, "OK");
+
+	}
+
+	private void validacionVotos(ResultadoVotacionDTO resultadoVotos) throws CotException {
+
+		if (resultadoVotos.getIdCasilla() == null) {
+			throw new CotException("no se encuentra informada la casilla", 409);
+		}
+
+		if (resultadoVotos.getTipoVotacion() == null) {
+			throw new CotException("no se encuentra informada el tipo de votacion", 409);
+		}
+		
+		if (resultadoVotos.getVotos() == null) {
+			throw new CotException("no se encuentra informadas las votaciones", 409);
+		}
+		
+		for (VotosPartidoDTO voto : resultadoVotos.getVotos()) {
+			
+			if (voto.getIdPartido() == null) {
+				throw new CotException("no se encuentra informado el partido", 409);
+			}
+			
+			if (voto.getVotos() == null) {
+				throw new CotException("no se encuentra informado el numero de votos", 409);
+			}
+			
+		}
+		
+		
 
 	}
 

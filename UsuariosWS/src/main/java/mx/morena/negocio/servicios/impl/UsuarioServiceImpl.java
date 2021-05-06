@@ -88,7 +88,7 @@ public class UsuarioServiceImpl extends MasterService implements IUsuarioService
 			}
 		}
 
-		return modulosDTO;
+		return modulosDTO; 
 	}
 
 	private ModuloDTO convert(Modulo modulo) {

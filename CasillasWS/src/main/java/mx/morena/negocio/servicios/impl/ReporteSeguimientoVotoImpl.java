@@ -258,7 +258,7 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 		Usuario usuario = usuarioRepository.findById(idUsuario);
 		Long perfil = usuario.getPerfil();
 		Long idEstado = usuario.getEntidad();
-		Long df = usuario.getFederal();
+//		Long df = usuario.getFederal();
 
 		if (perfil == PERFIL_ESTATAL) {
 			
@@ -349,7 +349,7 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 
 		Usuario usuario = usuarioRepository.findById(idUsuario);
 		Long perfil = usuario.getPerfil();
-		Long idEstado = usuario.getEntidad();
+//		Long idEstado = usuario.getEntidad();
 		Long df = usuario.getFederal();
 		
 		System.out.println(df);
@@ -438,8 +438,8 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 
 		Usuario usuario = usuarioRepository.findById(idUsuario);
 		Long perfil = usuario.getPerfil();
-		Long idEstado = usuario.getEntidad();
-		Long df = usuario.getFederal();
+//		Long idEstado = usuario.getEntidad();
+//		Long df = usuario.getFederal();
 		Long dl = usuario.getDistritoLocal();
 
 		if (perfil == PERFIL_LOCAL) {
@@ -481,7 +481,7 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 				return reporteDistDto;			
 			}else {
 				
-				Long disLocal = seguimientoRepository.getIdLocal(idDistritoFederal, idDistritoLocal, idMunicipal);
+//				Long disLocal = seguimientoRepository.getIdLocal(idDistritoFederal, idDistritoLocal, idMunicipal);
 				dto = new ReporteInstalacionCasillaDTO();
 				
 				Long countCasillas = seguimientoRepository.getCasillasByDistritoFederal(idDistritoFederal, idDistritoLocal,
@@ -531,7 +531,7 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 		Usuario usuario = usuarioRepository.findById(idUsuario);
 		Long perfil = usuario.getPerfil();
 		Long idEstado = usuario.getEntidad();
-		Long df = usuario.getFederal();
+//		Long df = usuario.getFederal();
 		Long mun = usuario.getMunicipio();
 
 		if (perfil == PERFIL_MUNICIPAL) {

@@ -15,11 +15,9 @@ import mx.morena.persistencia.repository.ICasillaRepository;
 import mx.morena.persistencia.rowmapper.AsignacionCasillasRowMapper;
 import mx.morena.persistencia.rowmapper.CasillasLocalesByFederalRowMapper;
 import mx.morena.persistencia.rowmapper.CasillasRowMapper;
-import mx.morena.persistencia.rowmapper.ConvencidosRowMapper;
 import mx.morena.persistencia.rowmapper.CountCasillasRowMapper;
 import mx.morena.persistencia.rowmapper.DistritoLocalGroupRowMapper;
 import mx.morena.persistencia.rowmapper.LongRowMapper;
-import mx.morena.persistencia.rowmapper.StringRowMapper;
 
 @Repository
 public class CasillaRepository implements ICasillaRepository {
