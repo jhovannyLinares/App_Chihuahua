@@ -21,13 +21,13 @@ public interface IConvencidosService {
 
 	boolean findByClaveElector(String claveElector) throws ConvencidosException;
 	
-	List<ReporteDistritalDTO> getReporteDistrital(Long perfil) throws ConvencidosException;
+	List<ReporteDistritalDTO> getReporteDistrital(Long perfil, Long idFederal) throws ConvencidosException;
 	
 	List<ReporteLocalDTO> getReporteLocal(Long perfil) throws ConvencidosException;
 	
 	List<ReporteMunicipalDTO> getReporteMunicipal(long perfil)throws ConvencidosException;
 
-	void getReporteDownload(HttpServletResponse response, long perfil) throws ConvencidosException, IOException;
+	void getReporteDownload(HttpServletResponse response, long perfil, Long idFederal) throws ConvencidosException, IOException;
 	
 	public void getReporteLocalDownload(HttpServletResponse response, Long perfil) throws ConvencidosException, IOException;
 	

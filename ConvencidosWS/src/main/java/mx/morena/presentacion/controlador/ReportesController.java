@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,12 +32,13 @@ public class ReportesController extends MasterController {
 	
 	@GetMapping("/convencidosDistrital")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	private List<ReporteDistritalDTO>getReporteFederal(HttpServletResponse response, HttpServletRequest request) throws IOException{
+	private List<ReporteDistritalDTO>getReporteFederal(HttpServletResponse response, HttpServletRequest request,
+			@RequestParam(value = "idFederal", required = false) Long idFederal) throws IOException{
 		
 		long perfil = getPerfil(request);
 		
 		try {
-			return convencidosService.getReporteDistrital(perfil);
+			return convencidosService.getReporteDistrital(perfil, idFederal);
 		} catch (ConvencidosException e) {
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
@@ -91,12 +93,13 @@ public class ReportesController extends MasterController {
 	
 	@GetMapping("/convencidosDistrital/download")	
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	public void downloadCSV(HttpServletResponse response, HttpServletRequest request) throws IOException {
+	public void downloadCSV(HttpServletResponse response, HttpServletRequest request,
+			@RequestParam(value = "idFederal", required = false) Long idFederal ) throws IOException {
 		
 		try {
 
 			long perfil = getPerfil(request);
-			convencidosService.getReporteDownload(response, perfil);
+			convencidosService.getReporteDownload(response, perfil, idFederal);
 
 		} catch (ConvencidosException e) {
 			e.printStackTrace();

@@ -22,10 +22,12 @@ import mx.morena.negocio.exception.ConvencidosException;
 import mx.morena.negocio.servicio.IConvencidosService;
 import mx.morena.negocio.util.MapperUtil;
 import mx.morena.persistencia.entidad.Convencidos;
+import mx.morena.persistencia.entidad.DistritoFederal;
 import mx.morena.persistencia.entidad.Municipio;
 import mx.morena.persistencia.entidad.SeccionElectoral;
 import mx.morena.persistencia.repository.ICasillaRepository;
 import mx.morena.persistencia.repository.IConvencidosRepository;
+import mx.morena.persistencia.repository.IDistritoFederalRepository;
 import mx.morena.persistencia.repository.IMunicipioRepository;
 import mx.morena.persistencia.repository.ISeccionElectoralRepository;
 import mx.morena.security.servicio.MasterService;
@@ -44,6 +46,9 @@ public class ConvencidosServiceImpl extends MasterService implements IConvencido
 	
 	@Autowired
 	private IMunicipioRepository municipioRepository;
+	
+	@Autowired
+	private IDistritoFederalRepository federalRepository;
 
 	private static final char ESTATUS_ALTA = 'A';
 	private static String sinClave = "No cuenta con Clave Elector";
@@ -131,7 +136,7 @@ public class ConvencidosServiceImpl extends MasterService implements IConvencido
 	}
 
 	@Override
-	public List<ReporteDistritalDTO> getReporteDistrital(Long perfil) throws ConvencidosException {
+	public List<ReporteDistritalDTO> getReporteDistrital(Long perfil, Long idFederal) throws ConvencidosException {
 
 		if (perfil == PERFIL_ESTATAL) {
 
@@ -148,50 +153,97 @@ public class ConvencidosServiceImpl extends MasterService implements IConvencido
 			totales.setCots(0l);
 			totales.setTotalConvencidos(0L);
 			totales.setMetaConvencidos(0L);
+			
+			if (idFederal == null) {
+				
+				lstSeccion = seccionRepository.getDistritos();
 
-			lstSeccion = seccionRepository.getDistritos();
+				for (SeccionElectoral seccion : lstSeccion) {
+					Long countSecciones = seccionRepository.getSecciones(seccion.getDistritoId());
+					Long cots = convencidosRepository.countByDistritoAndTipo(seccion.getDistritoId(), COT,
+							ESTATUS_ALTA);
+					Long urbanas = casillasRepository.countByDistritoAndTipologia(seccion.getDistritoId(), URBANAS);
+					Long noUrbanas = casillasRepository.countByDistritoAndTipologia(seccion.getDistritoId(),
+							NO_URBANAS);
+					Long convencidos = convencidosRepository.countByDistAndTipo(seccion.getDistritoId(), CONVENCIDO);
+					dto = new ReporteDistritalDTO();
 
-			for (SeccionElectoral seccion : lstSeccion) {
-				Long countSecciones = seccionRepository.getSecciones(seccion.getDistritoId());
-				Long cots = convencidosRepository.countByDistritoAndTipo(seccion.getDistritoId(), COT, ESTATUS_ALTA);
-				Long urbanas = casillasRepository.countByDistritoAndTipologia(seccion.getDistritoId(), URBANAS);
-				Long noUrbanas = casillasRepository.countByDistritoAndTipologia(seccion.getDistritoId(), NO_URBANAS);
-				Long convencidos = convencidosRepository.countByDistAndTipo(seccion.getDistritoId(), CONVENCIDO);
+					dto.setIdDistrito(seccion.getDistritoId());
+					dto.setDistrito(seccion.getDistritoId() + "-" + seccion.getNombreDistrito());
+					dto.setSecciones(countSecciones);
+					dto.setUrbanas(urbanas);
+					dto.setNoUrbanas(noUrbanas);
+					dto.setMetaCots(83L);
+					dto.setCots(cots);
+
+					double avanceCots = (cots * 100.0) / dto.getMetaCots();
+					dto.setPorcentajeAvanceCots(dosDecimales(avanceCots).doubleValue());
+
+					dto.setTotalConvencidos(convencidos);
+					dto.setMetaConvencidos(83L);
+
+					double avanceConvencidos = (convencidos * 100.0) / dto.getMetaConvencidos();
+					dto.setPorcentajeAvanceConvencidos(dosDecimales(avanceConvencidos).doubleValue());
+
+					totales.setSecciones(totales.getSecciones() + countSecciones);
+					totales.setUrbanas(totales.getUrbanas() + dto.getUrbanas());
+					totales.setNoUrbanas(totales.getNoUrbanas() + dto.getNoUrbanas());
+					totales.setMetaCots(totales.getMetaCots() + dto.getMetaCots());
+					totales.setCots(totales.getCots() + dto.getCots());
+					totales.setMetaConvencidos(totales.getMetaConvencidos() + dto.getMetaConvencidos());
+					totales.setTotalConvencidos(totales.getTotalConvencidos() + dto.getTotalConvencidos());
+
+					lstDistrito.add(dto);
+				}
+			}else {
+				
+				Long countSecciones = seccionRepository.getSecciones(idFederal);
+				Long cots = convencidosRepository.countByDistritoAndTipo(idFederal, COT,
+						ESTATUS_ALTA);
+				Long urbanas = casillasRepository.countByDistritoAndTipologia(idFederal, URBANAS);
+				Long noUrbanas = casillasRepository.countByDistritoAndTipologia(idFederal,
+						NO_URBANAS);
+				Long convencidos = convencidosRepository.countByDistAndTipo(idFederal, CONVENCIDO);
 				dto = new ReporteDistritalDTO();
+				
+				DistritoFederal distrito = federalRepository.findById(idFederal);
 
-				dto.setIdDistrito(seccion.getDistritoId());
-				dto.setDistrito(seccion.getDistritoId() + "-" + seccion.getNombreDistrito());
+				dto.setIdDistrito(idFederal);
+				dto.setDistrito(distrito.getCabeceraFederal());
 				dto.setSecciones(countSecciones);
 				dto.setUrbanas(urbanas);
 				dto.setNoUrbanas(noUrbanas);
 				dto.setMetaCots(83L);
 				dto.setCots(cots);
-				
-				double avanceCots = (cots*100.0)/dto.getMetaCots();
-     			dto.setPorcentajeAvanceCots(dosDecimales(avanceCots).doubleValue());
-     			
+
+				double avanceCots = (cots * 100.0) / dto.getMetaCots();
+				dto.setPorcentajeAvanceCots(dosDecimales(avanceCots).doubleValue());
+
 				dto.setTotalConvencidos(convencidos);
 				dto.setMetaConvencidos(83L);
-				
-				double avanceConvencidos = (convencidos*100.0)/dto.getMetaConvencidos();
+
+				double avanceConvencidos = (convencidos * 100.0) / dto.getMetaConvencidos();
 				dto.setPorcentajeAvanceConvencidos(dosDecimales(avanceConvencidos).doubleValue());
-				
-				totales.setSecciones(totales.getSecciones()+countSecciones );
-				totales.setUrbanas(totales.getUrbanas()+dto.getUrbanas());
-				totales.setNoUrbanas(totales.getNoUrbanas()+dto.getNoUrbanas());
-				totales.setMetaCots(totales.getMetaCots()+dto.getMetaCots() );
-				totales.setCots(totales.getCots()+dto.getCots() );	
-				totales.setMetaConvencidos(totales.getMetaConvencidos()+dto.getMetaConvencidos());
-				totales.setTotalConvencidos(totales.getTotalConvencidos()+dto.getTotalConvencidos());				
+
+				totales.setSecciones(totales.getSecciones() + countSecciones);
+				totales.setUrbanas(totales.getUrbanas() + dto.getUrbanas());
+				totales.setNoUrbanas(totales.getNoUrbanas() + dto.getNoUrbanas());
+				totales.setMetaCots(totales.getMetaCots() + dto.getMetaCots());
+				totales.setCots(totales.getCots() + dto.getCots());
+				totales.setMetaConvencidos(totales.getMetaConvencidos() + dto.getMetaConvencidos());
+				totales.setTotalConvencidos(totales.getTotalConvencidos() + dto.getTotalConvencidos());
 
 				lstDistrito.add(dto);
+				
 			}
 
-			totales.setPorcentajeAvanceCots(dosDecimales((totales.getCots()*100.0)/ totales.getMetaCots()).doubleValue());
-			totales.setPorcentajeAvanceConvencidos(dosDecimales((totales.getTotalConvencidos()*100.0)/totales.getMetaConvencidos()).doubleValue());
-			
+			totales.setPorcentajeAvanceCots(
+					dosDecimales((totales.getCots() * 100.0) / totales.getMetaCots()).doubleValue());
+			totales.setPorcentajeAvanceConvencidos(
+					dosDecimales((totales.getTotalConvencidos() * 100.0) / totales.getMetaConvencidos()).doubleValue());
+
 			lstDistrito.add(totales);
-			
+
 			return lstDistrito;
 		} else {
 			throw new ConvencidosException("No cuenta con los permisos suficientes para consultar el reporte", 401);
@@ -346,12 +398,12 @@ public class ConvencidosServiceImpl extends MasterService implements IConvencido
 	}
 
 	@Override
-	public void getReporteDownload(HttpServletResponse response, long perfil) throws ConvencidosException, IOException {
+	public void getReporteDownload(HttpServletResponse response, long perfil, Long idFederal) throws ConvencidosException, IOException {
 
 		// Asignacion de nombre al archivo CSV
 		setNameFile(response, CSV_CONV_DIST);
 
-		List<ReporteDistritalDTO> convDTOs = getReporteDistrital(perfil);
+		List<ReporteDistritalDTO> convDTOs = getReporteDistrital(perfil, idFederal);
 
 		//Nombre y orden de los encabezados en el excel
 		String[] header = { "idDistrito", "Distrito", "secciones", "urbanas", "noUrbanas", "metaCots",

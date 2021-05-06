@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import mx.morena.persistencia.entidad.Municipio;
 import mx.morena.persistencia.repository.IMunicipioRepository;
 import mx.morena.persistencia.rowmapper.MunicipioRowMapper;
+import mx.morena.persistencia.rowmapper.MunicipiosGroupRowMapper;
 import mx.morena.persistencia.rowmapper.MunicipiosRowMapper;
 import mx.morena.persistencia.rowmapper.StringRowMapper;
 
@@ -52,7 +53,7 @@ public class MunicipioRepository implements IMunicipioRepository {
 	public List<Municipio> getAll() {
 		String sql = "select id, nombre from app_municipio group by id, nombre order by id";
 		try {
-			return template.queryForObject(sql,	new MunicipiosRowMapper());
+			return template.queryForObject(sql,	new MunicipiosGroupRowMapper());
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}
