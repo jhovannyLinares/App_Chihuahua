@@ -12,6 +12,8 @@ public class Partido {
 
 	private Long ubicacion;
 
+	private Long idCoalicion;
+
 	public Long getId() {
 		return id;
 	}
@@ -50,6 +52,14 @@ public class Partido {
 
 	public void setUbicacion(Long ubicacion) {
 		this.ubicacion = ubicacion;
+	}
+
+	public Long getIdCoalicion() {
+		return idCoalicion;
+	}
+
+	public void setIdCoalicion(Long idCoalicion) {
+		this.idCoalicion = idCoalicion;
 	}
 
 }

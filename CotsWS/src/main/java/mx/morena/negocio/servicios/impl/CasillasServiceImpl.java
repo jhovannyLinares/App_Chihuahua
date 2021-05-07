@@ -155,7 +155,7 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 			if (stream.getTipoPartido() != null) {
 				if (stream.getTipoPartido().length() > 0) {
 					votacion.setCoalicion(true);
-					votacion.setIdCoalicion(0);
+					votacion.setIdCoalicion(stream.getIdCoalicion());
 				}
 			}
 

@@ -22,7 +22,7 @@ public class PartidosRepositoryImpl implements IPartidosRepository {
 	@Override
 	public List<Partido> getGobernador(Long entidad) {
 
-		String sql = "SELECT id, entidad_id, partido, candidato, tipo_partido, cargo, a_paterno, a_materno, nombres FROM app_partidos_entidad "
+		String sql = "SELECT id, entidad_id, partido, candidato, tipo_partido, cargo, a_paterno, a_materno, nombres , id_coalicion FROM app_partidos_entidad "
 				+ " where entidad_id = ? ";
 
 		try {
@@ -37,7 +37,7 @@ public class PartidosRepositoryImpl implements IPartidosRepository {
 
 	@Override
 	public List<Partido> getMunicipal(Long municipio) {
-		String sql = "SELECT id, clave_municipio, municipio, tipo_partido, partido, cargo, p_paterno, a_materno, nombres, candidato, id_cargo "
+		String sql = "SELECT id, clave_municipio, municipio, tipo_partido, partido, cargo, p_paterno, a_materno, nombres, candidato, id_cargo , id_coalicion "
 				+ " FROM app_partidos_municipio "
 				+ " where clave_municipio = ?";
 
@@ -53,7 +53,7 @@ public class PartidosRepositoryImpl implements IPartidosRepository {
 	@Override
 	public List<Partido> getSindico(Long municipio) {
 
-		String sql = "SELECT id, clave_municipio, municipio, tipo_partido, partido, cargo, a_paterno, a_materno, nombres, candidato, id_cargo "
+		String sql = "SELECT id, clave_municipio, municipio, tipo_partido, partido, cargo, a_paterno, a_materno, nombres, candidato, id_cargo , id_coalicion "
 				+ " FROM app_partidos_sindico  "
 				+ " where clave_municipio = ?";
 
@@ -69,7 +69,7 @@ public class PartidosRepositoryImpl implements IPartidosRepository {
 
 	@Override
 	public List<Partido> getDiputadoLocal(Long federal) {
-		String sql = "SELECT id, distrito_federal, tipo_partido, partido, cargo, a_paterno, a_materno, nombres, candidato, id_cargo "
+		String sql = "SELECT id, distrito_federal, tipo_partido, partido, cargo, a_paterno, a_materno, nombres, candidato, id_cargo, id_coalicion "
 				+ " FROM app_partidos_diputado_local "
 				+ " where distrito_federal = ?";
 
@@ -85,7 +85,7 @@ public class PartidosRepositoryImpl implements IPartidosRepository {
 	@Override
 	public List<Partido> getDiputadoFederal(Long federal) {
 		
-		String sql = "SELECT id, distrito_federal, tipo_partido, partido, cargo, a_paterno, a_materno, nombres, candidato, id_cargo "
+		String sql = "SELECT id, distrito_federal, tipo_partido, partido, cargo, a_paterno, a_materno, nombres, candidato, id_cargo, id_coalicion "
 				+ " FROM app_partidos_diputado_federal "
 				+ " where distrito_federal = ?";
 
@@ -101,7 +101,7 @@ public class PartidosRepositoryImpl implements IPartidosRepository {
 	@Override
 	public List<Partido> getGobernador() {
 
-		String sql = "SELECT id, entidad_id as ubicacion, partido, candidato, tipo_partido, cargo, a_paterno, a_materno, nombres FROM app_partidos_entidad ";
+		String sql = "SELECT id, entidad_id as ubicacion, partido, candidato, tipo_partido, cargo, a_paterno, a_materno, nombres, id_coalicion FROM app_partidos_entidad ";
 
 		try {
 			System.out.println(sql);
@@ -114,7 +114,7 @@ public class PartidosRepositoryImpl implements IPartidosRepository {
 
 	@Override
 	public List<Partido> getMunicipal() {
-		String sql = "SELECT id, clave_municipio as ubicacion, municipio, tipo_partido, partido, cargo, a_paterno, a_materno, nombres, candidato, id_cargo "
+		String sql = "SELECT id, clave_municipio as ubicacion, municipio, tipo_partido, partido, cargo, a_paterno, a_materno, nombres, candidato, id_cargo, id_coalicion "
 				+ " FROM app_partidos_municipio ";
 
 		try {
@@ -128,7 +128,7 @@ public class PartidosRepositoryImpl implements IPartidosRepository {
 	@Override
 	public List<Partido> getSindico() {
 
-		String sql = "SELECT id, clave_municipio as ubicacion, municipio, tipo_partido, partido, cargo, a_paterno, a_materno, nombres, candidato, id_cargo "
+		String sql = "SELECT id, clave_municipio as ubicacion, municipio, tipo_partido, partido, cargo, a_paterno, a_materno, nombres, candidato, id_cargo , id_coalicion"
 				+ " FROM app_partidos_sindico  ";
 
 		try {
@@ -142,7 +142,7 @@ public class PartidosRepositoryImpl implements IPartidosRepository {
 
 	@Override
 	public List<Partido> getDiputadoLocal() {
-		String sql = "SELECT id, distrito_federal as ubicacion, tipo_partido, partido, cargo, a_paterno, a_materno, nombres, candidato, id_cargo "
+		String sql = "SELECT id, distrito_federal as ubicacion, tipo_partido, partido, cargo, a_paterno, a_materno, nombres, candidato, id_cargo, id_coalicion "
 				+ " FROM app_partidos_diputado_local ";
 
 		try {
@@ -156,7 +156,7 @@ public class PartidosRepositoryImpl implements IPartidosRepository {
 	@Override
 	public List<Partido> getDiputadoFederal() {
 
-		String sql = "SELECT id, distrito_federal as ubicacion, tipo_partido, partido, cargo, a_paterno, a_materno, nombres, candidato, id_cargo "
+		String sql = "SELECT id, distrito_federal as ubicacion, tipo_partido, partido, cargo, a_paterno, a_materno, nombres, candidato, id_cargo, id_coalicion "
 				+ " FROM app_partidos_diputado_federal ";
 
 		try {
