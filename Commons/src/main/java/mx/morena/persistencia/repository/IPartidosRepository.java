@@ -26,4 +26,13 @@ public interface IPartidosRepository {
 
 	public List<Partido> getDiputadoFederal();
 
+	public List<Partido> getGobernadorByEntidad(Long entidad);
+
+	public List<Partido> getMunicipalByMunicipio(Long municipio);
+
+	public List<Partido> getSindicoByMunicipio(Long municipio);
+
+	public List<Partido> getDiputadoLocalByFederal(Long federal);
+
+	public List<Partido> getDiputadoFederalByFederal(Long federal);
 }
