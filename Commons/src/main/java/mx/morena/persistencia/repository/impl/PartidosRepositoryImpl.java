@@ -170,7 +170,7 @@ public class PartidosRepositoryImpl implements IPartidosRepository {
 	@Override
 	public List<Partido> getGobernadorByEntidad(Long entidad) {
 		String sql = "SELECT id, entidad_id as ubicacion, partido, candidato, tipo_partido, cargo, a_paterno, a_materno, "
-				+ "nombres, id_coalicion, id_coalicion FROM app_partidos_entidad where entidad_id = ? ";
+				+ "nombres, id_coalicion FROM app_partidos_entidad where entidad_id = ? ";
 
 		try {
 			System.out.println(sql);
