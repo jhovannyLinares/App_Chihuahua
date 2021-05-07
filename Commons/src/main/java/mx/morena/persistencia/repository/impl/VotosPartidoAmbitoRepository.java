@@ -20,14 +20,13 @@ public class VotosPartidoAmbitoRepository implements IVotosPartidoAmbitoReposito
 	private JdbcTemplate template;
 
 	@Override
-	public Long getVotosByDistritoAndMunicipioAndPartido(Long idEntidad, Long df, Long idMunicipio, Long idEleccion,
-			Long idPartido) {
+	public Long getVotosByDistritoAndMunicipioAndPartido(Long idEntidad, Long df, Long idMunicipio, Long idEleccion) {
 		String sql = "select SUM(avpa.votos) from app_votos_partido_ambito avpa inner join app_casilla ac on ac.id = avpa.id_casilla "
 				+ "where ac.entidad_id = ? and ac.federal_id = ? and ac.municpio_id = ? "
-				+ "and avpa.id_ambito = ? and avpa.id_partido = ? ";
+				+ "and avpa.id_ambito = ? ";
 		try {
-			return template.queryForObject(sql, new Object[] { idEntidad, df, idMunicipio, idEleccion, idPartido },
-					new int[] { Types.NUMERIC, Types.NUMERIC, Types.NUMERIC, Types.NUMERIC, Types.NUMERIC },
+			return template.queryForObject(sql, new Object[] { idEntidad, df, idMunicipio, idEleccion },
+					new int[] { Types.NUMERIC, Types.NUMERIC, Types.NUMERIC, Types.NUMERIC },
 					new LongRowMapper());
 		} catch (EmptyResultDataAccessException e) {
 			return 0L;

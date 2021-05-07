@@ -6,7 +6,7 @@ import mx.morena.persistencia.entidad.Votacion;
 
 public interface IVotosPartidoAmbitoRepository {
 	
-	Long getVotosByDistritoAndMunicipioAndPartido(Long idEntidad, Long df, Long idMunicipio, Long idEleccion, Long idPartido);
+	Long getVotosByDistritoAndMunicipioAndPartido(Long idEntidad, Long df, Long idMunicipio, Long idEleccion);
 	
 	Long getVotosByEleccionAndPartido(Long idEntidad, Long idEleccion, Long idPartido);
 	

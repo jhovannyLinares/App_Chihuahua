@@ -818,6 +818,7 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 		Long votosPartido = 0L;
 		Long votosCoalicion = 0L;
 		String nombrePartidos = "";
+		Long totalVotos = 0L;
 		dto = new ReporteVotacionMunicipalDTO();
 		//PartidosDTO partidoDto = new PartidosDTO();
 		if (partidos != null) {
@@ -828,6 +829,9 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 				//partido.setVotos(votosRepository.getVotosByDistritoAndMunicipioAndPartido(idEntidad, idDistrito, idMunicipio, idEleccion, partido.getId()));
 				List<Votacion> votos = votosRepository.getByAmbitoAndPartido(idEntidad, idDistrito, idMunicipio, idEleccion, partido.getId());
 				if (votos != null) {
+					//calcular total
+					 totalVotos = votosRepository.getVotosByDistritoAndMunicipioAndPartido(idEntidad, idDistrito, idMunicipio, idEleccion); 
+					
 					for (Votacion votoDto : votos) {//Recorre cada voto del partido de un municipio
 						votosPartido += votoDto.getVotos();
 						//System.out.println(votoDto.isCoalicion());
@@ -839,11 +843,15 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 							coalicion.setPartido(partido.getPartido());
 							coaliciones.add(coalicion);
 						}
+						
+						partido.setVotos(votosPartido);
+						total += partido.getVotos();
+						partido.setPorcentajePartido(dosDecimales((votoDto.getVotos()*100.0)/totalVotos).doubleValue());
+						
+						System.out.println("porcentaje partido "+ partido.getPorcentajePartido());
 					}
 				}
 				
-				partido.setVotos(votosPartido);
-				total += partido.getVotos();
 			}
 		} else {
 			System.out.println("El municipio: " + idMunicipio + ", no tiene elecciones para el ambito " + idEleccion);
@@ -859,7 +867,7 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 		dto.setPartidos(partidosDto);
 		dto.setCoaliciones(coaliciones);
 		dto.setPorcentajeCandidato(null);
-		dto.setTotal(total);
+		dto.setTotal(totalVotos);
 		double porcentajeTotal = (total * 100.0) / listaNominal;
 		dto.setPorcentajeTotal(dosDecimales(porcentajeTotal).doubleValue());
 		
