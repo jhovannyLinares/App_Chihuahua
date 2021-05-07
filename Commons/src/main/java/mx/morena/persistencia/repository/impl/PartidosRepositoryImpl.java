@@ -169,8 +169,8 @@ public class PartidosRepositoryImpl implements IPartidosRepository {
 
 	@Override
 	public List<Partido> getGobernadorByEntidad(Long entidad) {
-		String sql = "SELECT id, entidad_id as ubicacion, partido, candidato, tipo_partido, cargo, a_paterno, a_materno, nombres "
-				+ "FROM app_partidos_entidad where entidad_id = ? ";
+		String sql = "SELECT id, entidad_id as ubicacion, partido, candidato, tipo_partido, cargo, a_paterno, a_materno, "
+				+ "nombres, id_coalicion, id_coalicion FROM app_partidos_entidad where entidad_id = ? ";
 
 		try {
 			System.out.println(sql);
@@ -182,8 +182,8 @@ public class PartidosRepositoryImpl implements IPartidosRepository {
 
 	@Override
 	public List<Partido> getMunicipalByMunicipio(Long municipio) {
-		String sql = "SELECT id, clave_municipio as ubicacion, municipio, tipo_partido, partido, cargo, a_paterno, a_materno, nombres, candidato, id_cargo "
-				+ "FROM app_partidos_municipio where clave_municipio = ? ";
+		String sql = "SELECT id, clave_municipio as ubicacion, municipio, tipo_partido, partido, cargo, a_paterno, a_materno, "
+				+ "nombres, candidato, id_cargo, id_coalicion FROM app_partidos_municipio where clave_municipio = ? ";
 
 		try {
 			return template.queryForObject(sql, new Object[] { municipio }, new int[] { Types.NUMERIC }, new PartidosRowMapper());
@@ -194,8 +194,8 @@ public class PartidosRepositoryImpl implements IPartidosRepository {
 
 	@Override
 	public List<Partido> getSindicoByMunicipio(Long municipio) {
-		String sql = "SELECT id, clave_municipio as ubicacion, municipio, tipo_partido, partido, cargo, a_paterno, a_materno, nombres, candidato, id_cargo "
-				+ "FROM app_partidos_sindico where clave_municipio = ? ";
+		String sql = "SELECT id, clave_municipio as ubicacion, municipio, tipo_partido, partido, cargo, a_paterno, a_materno, "
+				+ "nombres, candidato, id_cargo, id_coalicion FROM app_partidos_sindico where clave_municipio = ? ";
 
 		try {
 			return template.queryForObject(sql, new Object[] { municipio }, new int[] { Types.NUMERIC },new PartidosRowMapper());
@@ -206,8 +206,8 @@ public class PartidosRepositoryImpl implements IPartidosRepository {
 
 	@Override
 	public List<Partido> getDiputadoLocalByFederal(Long federal) {
-		String sql = "SELECT id, distrito_federal as ubicacion, tipo_partido, partido, cargo, a_paterno, a_materno, nombres, candidato, id_cargo "
-				+ "FROM app_partidos_diputado_local where distrito_federal = ? ";
+		String sql = "SELECT id, distrito_federal as ubicacion, tipo_partido, partido, cargo, a_paterno, a_materno, nombres, "
+				+ "candidato, id_cargo, id_coalicion FROM app_partidos_diputado_local where distrito_federal = ? ";
 
 		try {
 			return template.queryForObject(sql, new Object[] { federal }, new int[] { Types.NUMERIC }, new PartidosRowMapper());
@@ -219,8 +219,8 @@ public class PartidosRepositoryImpl implements IPartidosRepository {
 
 	@Override
 	public List<Partido> getDiputadoFederalByFederal(Long federal) {
-		String sql = "SELECT id, distrito_federal as ubicacion, tipo_partido, partido, cargo, a_paterno, a_materno, nombres, candidato, id_cargo "
-				+ "FROM app_partidos_diputado_federal where distrito_federal = ? ";
+		String sql = "SELECT id, distrito_federal as ubicacion, tipo_partido, partido, cargo, a_paterno, a_materno, nombres, "
+				+ "candidato, id_cargo, id_coalicion FROM app_partidos_diputado_federal where distrito_federal = ? ";
 
 		try {
 			return template.queryForObject(sql, new Object[] { federal }, new int[] { Types.NUMERIC }, new PartidosRowMapper());

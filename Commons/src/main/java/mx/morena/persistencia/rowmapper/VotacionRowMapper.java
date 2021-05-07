@@ -24,7 +24,7 @@ public class VotacionRowMapper implements RowMapper<List<Votacion>> {
 			voto.setTipoVotacion(rs.getInt("id_ambito"));
 			voto.setIdPartido(rs.getLong("id_partido"));
 			voto.setVotos(rs.getInt("votos"));
-			voto.setIdCoalicion(rs.getInt("id_coalision"));
+			voto.setIdCoalicion(rs.getLong("id_coalision"));
 			voto.setCoalicion(rs.getBoolean("is_coalision"));
 
 			votaciones.add(voto);
