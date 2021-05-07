@@ -195,6 +195,14 @@ public class ConvencidosServiceImpl extends MasterService implements IConvencido
 
 					lstDistrito.add(dto);
 				}
+				
+				totales.setPorcentajeAvanceCots(
+						dosDecimales((totales.getCots() * 100.0) / totales.getMetaCots()).doubleValue());
+				totales.setPorcentajeAvanceConvencidos(
+						dosDecimales((totales.getTotalConvencidos() * 100.0) / totales.getMetaConvencidos()).doubleValue());
+
+				lstDistrito.add(totales);
+				
 			}else {
 				
 				Long countSecciones = seccionRepository.getSecciones(idFederal);
@@ -225,24 +233,17 @@ public class ConvencidosServiceImpl extends MasterService implements IConvencido
 				double avanceConvencidos = (convencidos * 100.0) / dto.getMetaConvencidos();
 				dto.setPorcentajeAvanceConvencidos(dosDecimales(avanceConvencidos).doubleValue());
 
-				totales.setSecciones(totales.getSecciones() + countSecciones);
-				totales.setUrbanas(totales.getUrbanas() + dto.getUrbanas());
-				totales.setNoUrbanas(totales.getNoUrbanas() + dto.getNoUrbanas());
-				totales.setMetaCots(totales.getMetaCots() + dto.getMetaCots());
-				totales.setCots(totales.getCots() + dto.getCots());
-				totales.setMetaConvencidos(totales.getMetaConvencidos() + dto.getMetaConvencidos());
-				totales.setTotalConvencidos(totales.getTotalConvencidos() + dto.getTotalConvencidos());
+//				totales.setSecciones(totales.getSecciones() + countSecciones);
+//				totales.setUrbanas(totales.getUrbanas() + dto.getUrbanas());
+//				totales.setNoUrbanas(totales.getNoUrbanas() + dto.getNoUrbanas());
+//				totales.setMetaCots(totales.getMetaCots() + dto.getMetaCots());
+//				totales.setCots(totales.getCots() + dto.getCots());
+//				totales.setMetaConvencidos(totales.getMetaConvencidos() + dto.getMetaConvencidos());
+//				totales.setTotalConvencidos(totales.getTotalConvencidos() + dto.getTotalConvencidos());
 
 				lstDistrito.add(dto);
 				
 			}
-
-			totales.setPorcentajeAvanceCots(
-					dosDecimales((totales.getCots() * 100.0) / totales.getMetaCots()).doubleValue());
-			totales.setPorcentajeAvanceConvencidos(
-					dosDecimales((totales.getTotalConvencidos() * 100.0) / totales.getMetaConvencidos()).doubleValue());
-
-			lstDistrito.add(totales);
 
 			return lstDistrito;
 		} else {
