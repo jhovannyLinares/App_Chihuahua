@@ -8,7 +8,7 @@ public class Votacion {
 	private Integer tipoVotacion;
 
 	private boolean isCoalicion;
-	private Integer idCoalicion;
+	private Long idCoalicion;
 
 	public Long getIdPartido() {
 		return idPartido;
@@ -50,11 +50,11 @@ public class Votacion {
 		this.isCoalicion = isCoalicion;
 	}
 
-	public Integer getIdCoalicion() {
+	public Long getIdCoalicion() {
 		return idCoalicion;
 	}
 
-	public void setIdCoalicion(Integer idCoalicion) {
+	public void setIdCoalicion(Long idCoalicion) {
 		this.idCoalicion = idCoalicion;
 	}
 
