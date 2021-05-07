@@ -30,7 +30,6 @@ import mx.morena.persistencia.entidad.Casilla;
 import mx.morena.persistencia.entidad.DistritoFederal;
 import mx.morena.persistencia.entidad.Municipio;
 import mx.morena.persistencia.entidad.Partido;
-import mx.morena.persistencia.entidad.Rutas;
 import mx.morena.persistencia.entidad.Usuario;
 import mx.morena.persistencia.entidad.Votacion;
 import mx.morena.persistencia.repository.IAsignacionCasillasRepository;
@@ -120,7 +119,7 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 			for (DistritoFederal se : lstSeccion) {
 				dto = new ReporteVotacionDTO();
 				
-				Long listaNominal = 0L;
+//				Long listaNominal = 0L;
 				
 				Long votos11 = reporteCasillaRepository.getCountByDistritoAndTipoVotacion(se.getId(), idReporte, once);
 				Long votos15 = reporteCasillaRepository.getCountByDistritoAndTipoVotacion(se.getId(), idReporte, quince);
@@ -270,8 +269,8 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 
 		dto = new ReporteAsistenciaEstatalDTO();
 
-		Long rgMeta;
-		Long rcMeta;
+//		Long rgMeta;
+//		Long rcMeta;
 		Long rgAsistencia = instalacionCasillaRepository.getCountRgByDfAndAsistencia(federal, SI);
 		Long rcAsistencia = instalacionCasillaRepository.getCountRcByDfAndAsistencia(federal, SI);
 
@@ -302,8 +301,8 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 			Usuario usr = usuarioRepository.findById(usuario);
 			distrito = usr.getFederal();
 
-			Long rgMeta = 0L;
-			Long rcMeta = 0L;
+//			Long rgMeta = 0L;
+//			Long rcMeta = 0L;
 			Long rgAsistencia = instalacionCasillaRepository.getCountRgByDfAndAsistencia(distrito, SI);
 			Long rcAsistencia = instalacionCasillaRepository.getCountRcByDfAndAsistencia(distrito, SI);
 
@@ -415,8 +414,8 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 		
 		ReporteAsistenciaLocalDTO dto = new ReporteAsistenciaLocalDTO();
 		
-		Long rgMeta = 0L;
-		Long rcMeta = 0L;
+//		Long rgMeta = 0L;
+//		Long rcMeta = 0L;
 		Long rgAsistencia = instalacionCasillaRepository.getCountRgByLocalAndAsistencia(local, SI, federal, tipo, 0L);
 		Long rcAsistencia = instalacionCasillaRepository.getCountRcByLocalAndAsistencia(local, SI, federal, tipo, 0L);
 
@@ -504,8 +503,8 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 		
 		ReporteAsistenciaMunicipalDTO dto = new ReporteAsistenciaMunicipalDTO();
 		
-		Long rgMeta = 0L;
-		Long rcMeta = 0L;
+//		Long rgMeta = 0L;
+//		Long rcMeta = 0L;
 		Long rgAsistencia = instalacionCasillaRepository.getCountRgByLocalAndAsistencia(local, SI, federal, tipo, municipio);
 		Long rcAsistencia = instalacionCasillaRepository.getCountRcByLocalAndAsistencia(local, SI, federal, tipo, municipio);
 		String nomMunicipio = municipioRepository.getNombreByIdAndDf(municipio, federal);
@@ -817,7 +816,7 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 		Long total = 0L;
 		Long votosPartido = 0L;
 		Long votosCoalicion = 0L;
-		String nombrePartidos = "";
+//		String nombrePartidos = "";
 		Long totalVotos = 0L;
 		dto = new ReporteVotacionMunicipalDTO();
 		//PartidosDTO partidoDto = new PartidosDTO();
@@ -837,7 +836,7 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 						//System.out.println(votoDto.isCoalicion());
 						if (votoDto.isCoalicion()) {
 							votosCoalicion += votosPartido;
-							nombrePartidos += partido.getPartido();
+//							nombrePartidos += partido.getPartido();
 							coalicion = new CoalicionesDTO();
 							coalicion.setTotal(votosCoalicion);
 							coalicion.setPartido(partido.getPartido());
@@ -1061,8 +1060,8 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 		
 		ReporteAsistenciaCrgDTO dto = new ReporteAsistenciaCrgDTO();
 		
-		Long rgMeta = 0L;
-		Long rcMeta = 0L;
+//		Long rgMeta = 0L;
+//		Long rcMeta = 0L;
 		Long rgAsistencia = instalacionCasillaRepository.getCountRgByLocalAndAsistenciaCrg(SI, idCrg, casillaRuta, tipo, federal, municipio);
 		Long rcAsistencia = instalacionCasillaRepository.getCountRcByLocalAndAsistenciaCrg(SI, idCrg, casillaRuta, tipo, federal, municipio);
 		Long casillas = asignacionCasillasRepository.countCasillasByIdCrgAndRuta(idCrg, casillaRuta, tipo, federal, municipio);
@@ -1106,12 +1105,12 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 			List<ReporteAsistenciaRgDTO> lstDto = new ArrayList<>();
 			ReporteAsistenciaRgDTO dto = null;
 			List<AsignacionCasillas> lstAsignacion = null;
-			List<Rutas> lstRutas = null;
-			List<DistritoFederal> lstDistritos = null; 
+//			List<Rutas> lstRutas = null;
+//			List<DistritoFederal> lstDistritos = null; 
 			List<Casilla> lstCasillas = null;
 			
 			Long tipo = 0L;
-			Long local = 0L;
+//			Long local = 0L;
 			Long crg = 0L;
 			Long rg = 0L;
 			
@@ -1152,7 +1151,7 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 		
 		ReporteAsistenciaRgDTO dto = new ReporteAsistenciaRgDTO();
 		
-		Long rcMeta = 0L;
+//		Long rcMeta = 0L;
 		Long rcAsistencia = 0L;
 		
 		if (tipo == 1L) {

@@ -57,8 +57,8 @@ public class CasillasController extends MasterController{
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
 	public List<VotacionesDTO> getActas(HttpServletResponse response, HttpServletRequest request, @PathVariable("idCasilla") Long idCasilla) throws IOException {
 		
-		long perfil = getPerfil(request);
-		long usuario = getUsuario(request);
+//		long perfil = getPerfil(request);
+//		long usuario = getUsuario(request);
 
 		try {
 			return casillaService.getActas(idCasilla);
@@ -77,8 +77,8 @@ public class CasillasController extends MasterController{
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
 	public List<PartidosXAmbitoDTO> getPartidos(HttpServletResponse response, HttpServletRequest request, @PathVariable("idCasilla") Long idCasilla) throws IOException {
 		
-		long perfil = getPerfil(request);
-		long usuario = getUsuario(request);
+//		long perfil = getPerfil(request);
+//		long usuario = getUsuario(request);
 
 		try {
 			return casillaService.getPartidos(idCasilla);

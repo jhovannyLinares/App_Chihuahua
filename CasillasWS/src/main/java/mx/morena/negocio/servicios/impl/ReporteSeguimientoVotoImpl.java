@@ -530,7 +530,7 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 
 		Usuario usuario = usuarioRepository.findById(idUsuario);
 		Long perfil = usuario.getPerfil();
-		Long idEstado = usuario.getEntidad();
+//		Long idEstado = usuario.getEntidad();
 //		Long df = usuario.getFederal();
 		Long mun = usuario.getMunicipio();
 
@@ -621,7 +621,7 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 
 		Usuario usuario = usuarioRepository.findById(idUsuario);
 		Long perfil = usuario.getPerfil();
-		Long idEstado = usuario.getEntidad();
+//		Long idEstado = usuario.getEntidad();
 		Long df = usuario.getFederal();
 
 		if (perfil == PERFIL_CRG) {
@@ -719,7 +719,7 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 
 		Usuario usuario = usuarioRepository.findById(idUsuario);
 		Long perfil = usuario.getPerfil();
-		Long idEstado = usuario.getEntidad();
+//		Long idEstado = usuario.getEntidad();
 		Long df = usuario.getFederal();
 
 		if (perfil == PERFIL_RG) {

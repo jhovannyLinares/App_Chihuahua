@@ -395,7 +395,7 @@ if(perfil == PERFIL_ESTATAL) {
 		
 		Usuario usuario = usuarioRepository.findById(idUsuario);
 		long idDistrito = usuario.getFederal();
-		long perfilUsuario = usuario.getPerfil();
+//		long perfilUsuario = usuario.getPerfil();
 
 		if(perfil == PERFIL_ESTATAL) {
 			lstAsigRg = representanteRepository.getReporteRgEstatal();

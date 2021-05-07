@@ -76,7 +76,7 @@ public class MunicipioRepository implements IMunicipioRepository {
 		String select ="select nombre from app_municipio am  where id = ? and federal_id = ?";
 		
 		String sql = select;
-		String where = "";
+//		String where = "";
 		List<Object> para = new ArrayList<Object>();
 		List<Integer> type = new ArrayList<Integer>();
 		
