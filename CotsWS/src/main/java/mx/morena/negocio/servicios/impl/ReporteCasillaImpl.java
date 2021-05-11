@@ -45,48 +45,48 @@ import mx.morena.security.servicio.MasterService;
 
 @Service
 public class ReporteCasillaImpl extends MasterService implements IReporteCasillaService {
-	
+
 	@Autowired
-	private IReporteCasillasRepository reporteCasillaRepository ;
-		
+	private IReporteCasillasRepository reporteCasillaRepository;
+
 	@Autowired
 	private IDistritoFederalRepository distritoFederalRepository;
-	
+
 	@Autowired
 	private IInstalacionCasillasRepository instalacionCasillaRepository;
-	
+
 	@Autowired
 	private IUsuarioRepository usuarioRepository;
-	
+
 	@Autowired
 	private ICasillaRepository casillasRepository;
-	
+
 	@Autowired
 	private IMunicipioRepository municipioRepository;
-	
+
 	@Autowired
 	private IAsignacionCasillasRepository asignacionCasillasRepository;
-	
+
 	@Autowired
 	private IRepresentantesAsignadosRepository repAsignadosRepository;
-	
+
 	@Autowired
 	private IRutasRepository rutasRepository;
-	
+
 	@Autowired
 	private IVotosPartidoAmbitoRepository votosRepository;
-	
+
 	@Autowired
 	private IPartidosRepository partidoRepository;
-	
+
 	private String once = "11:00:00";
-	
+
 	private String quince = "15:00:00";
-	
+
 	private String dieciocho = "18:00:00";
-	
+
 	private String SI = "si";
-	
+
 //	private String NO = "no";
 
 	@Override
@@ -96,66 +96,74 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 		if (perfil == PERFIL_RG) {
 			if (idReporte >= 1 && idReporte <= 5) {
 
-			List<ReporteVotacionDTO> lstDto = new ArrayList<>();
-			List<DistritoFederal> lstSeccion = null;
-			ReporteVotacionDTO dto = null;
-			ReporteVotacionDTO total = new ReporteVotacionDTO();
-			
+				List<ReporteVotacionDTO> lstDto = new ArrayList<>();
+				List<DistritoFederal> lstSeccion = null;
+				ReporteVotacionDTO dto = null;
+				ReporteVotacionDTO total = new ReporteVotacionDTO();
 
-			lstSeccion = distritoFederalRepository.findAll();
-			System.out.println("**** " + lstSeccion.size());
-			
-			total.setIdFederal(null);
-			total.setListaNominal(0L);
-			total.setVotacion11hrs(0L);
-			total.setPorcentajeVotacion11hrs(0.0);
-			total.setVotacion15hrs(0L);
-			total.setPorcentajeVotacion15hrs(0.0);
-			total.setVotacion18hrs(0L);
-			total.setPorcentajeVotacion18hrs(0.0);
+				lstSeccion = distritoFederalRepository.findAll();
+				System.out.println("**** " + lstSeccion.size());
 
-			for (DistritoFederal se : lstSeccion) {
-				dto = new ReporteVotacionDTO();
-				
+				total.setIdFederal(null);
+				total.setListaNominal(0L);
+				total.setVotacion11hrs(0L);
+				total.setPorcentajeVotacion11hrs(0.0);
+				total.setVotacion15hrs(0L);
+				total.setPorcentajeVotacion15hrs(0.0);
+				total.setVotacion18hrs(0L);
+				total.setPorcentajeVotacion18hrs(0.0);
+
+				for (DistritoFederal se : lstSeccion) {
+					dto = new ReporteVotacionDTO();
+
 //				Long listaNominal = 0L;
-				
-				Long votos11 = reporteCasillaRepository.getCountByDistritoAndTipoVotacion(se.getId(), idReporte, once);
-				Long votos15 = reporteCasillaRepository.getCountByDistritoAndTipoVotacion(se.getId(), idReporte, quince);
-				Long votos18 = reporteCasillaRepository.getCountByDistritoAndTipoVotacion(se.getId(), idReporte, dieciocho);
 
-				dto.setIdFederal(se.getId());
-				dto.setListaNominal(20L);
+					Long votos11 = reporteCasillaRepository.getCountByDistritoAndTipoVotacion(se.getId(), idReporte,
+							once);
+					Long votos15 = reporteCasillaRepository.getCountByDistritoAndTipoVotacion(se.getId(), idReporte,
+							quince);
+					Long votos18 = reporteCasillaRepository.getCountByDistritoAndTipoVotacion(se.getId(), idReporte,
+							dieciocho);
 
-				dto.setVotacion11hrs(votos11);
-				double porcentaje11 = dosDecimales((dto.getVotacion11hrs() * 100.0)/dto.getListaNominal()).doubleValue();
-				dto.setPorcentajeVotacion11hrs(porcentaje11);
+					dto.setIdFederal(se.getId());
+					dto.setListaNominal(20L);
 
-				dto.setVotacion15hrs(votos15);
-				double porcentaje15 = dosDecimales((dto.getVotacion15hrs() * 100.0)/dto.getListaNominal()).doubleValue();
-				dto.setPorcentajeVotacion15hrs(porcentaje15);
+					dto.setVotacion11hrs(votos11);
+					double porcentaje11 = dosDecimales((dto.getVotacion11hrs() * 100.0) / dto.getListaNominal())
+							.doubleValue();
+					dto.setPorcentajeVotacion11hrs(porcentaje11);
 
-				dto.setVotacion18hrs(votos18);
-				double porcentaje18 = dosDecimales((dto.getVotacion18hrs() * 100.0)/dto.getListaNominal()).doubleValue();
-				dto.setPorcentajeVotacion18hrs(porcentaje18);
-				
-				lstDto.add(dto);
-				
-				total.setListaNominal(total.getListaNominal() + dto.getListaNominal());
-				total.setVotacion11hrs(total.getVotacion11hrs() + dto.getVotacion11hrs());
-				total.setVotacion15hrs(total.getVotacion15hrs() + dto.getVotacion15hrs());
-				total.setVotacion18hrs(total.getVotacion18hrs() + dto.getVotacion18hrs());
+					dto.setVotacion15hrs(votos15);
+					double porcentaje15 = dosDecimales((dto.getVotacion15hrs() * 100.0) / dto.getListaNominal())
+							.doubleValue();
+					dto.setPorcentajeVotacion15hrs(porcentaje15);
 
-			}
-			
-			total.setPorcentajeVotacion11hrs(dosDecimales((total.getVotacion11hrs() * 100.0)/total.getListaNominal()).doubleValue());
-			total.setPorcentajeVotacion15hrs(dosDecimales((total.getVotacion15hrs() * 100.0)/total.getListaNominal()).doubleValue());
-			total.setPorcentajeVotacion18hrs(dosDecimales((total.getVotacion18hrs() * 100.0)/total.getListaNominal()).doubleValue());
-			
-			lstDto.add(total);
-			
-			return lstDto;
-			
-			}else {
+					dto.setVotacion18hrs(votos18);
+					double porcentaje18 = dosDecimales((dto.getVotacion18hrs() * 100.0) / dto.getListaNominal())
+							.doubleValue();
+					dto.setPorcentajeVotacion18hrs(porcentaje18);
+
+					lstDto.add(dto);
+
+					total.setListaNominal(total.getListaNominal() + dto.getListaNominal());
+					total.setVotacion11hrs(total.getVotacion11hrs() + dto.getVotacion11hrs());
+					total.setVotacion15hrs(total.getVotacion15hrs() + dto.getVotacion15hrs());
+					total.setVotacion18hrs(total.getVotacion18hrs() + dto.getVotacion18hrs());
+
+				}
+
+				total.setPorcentajeVotacion11hrs(
+						dosDecimales((total.getVotacion11hrs() * 100.0) / total.getListaNominal()).doubleValue());
+				total.setPorcentajeVotacion15hrs(
+						dosDecimales((total.getVotacion15hrs() * 100.0) / total.getListaNominal()).doubleValue());
+				total.setPorcentajeVotacion18hrs(
+						dosDecimales((total.getVotacion18hrs() * 100.0) / total.getListaNominal()).doubleValue());
+
+				lstDto.add(total);
+
+				return lstDto;
+
+			} else {
 				throw new CotException("No existe el id del reporte a consultar", 400);
 			}
 		} else {
@@ -163,7 +171,7 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 		}
 
 	}
-	
+
 	public BigDecimal dosDecimales(double numero) {
 
 		BigDecimal bd = new BigDecimal(numero);
@@ -219,17 +227,19 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 
 					dto = getAsistenciaEstatal(df.getId());
 					lstDto.add(dto);
-					
+
 					total.setRgMeta(total.getRgMeta() + dto.getRgMeta());
 					total.setRcMeta(total.getRcMeta() + dto.getRcMeta());
 					total.setRgAsistencia(total.getRgAsistencia() + dto.getRgAsistencia());
 					total.setRcAsistencia(total.getRcAsistencia() + dto.getRcAsistencia());
 
 				}
-				
-				total.setRgPorcentaje(dosDecimales((total.getRgAsistencia() * 100.0) / total.getRgMeta()).doubleValue());
-				total.setRcPorcentaje(dosDecimales((total.getRcAsistencia() * 100.0) / total.getRcMeta()).doubleValue());
-				
+
+				total.setRgPorcentaje(
+						dosDecimales((total.getRgAsistencia() * 100.0) / total.getRgMeta()).doubleValue());
+				total.setRcPorcentaje(
+						dosDecimales((total.getRcAsistencia() * 100.0) / total.getRcMeta()).doubleValue());
+
 				lstDto.add(total);
 
 				return lstDto;
@@ -248,19 +258,19 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 	}
 
 	@Override
-	public void getReporteAsistenciaEstatalDownload(HttpServletResponse response, Long usuario, Long perfil, Long idFederal)
-			throws CotException, IOException {
+	public void getReporteAsistenciaEstatalDownload(HttpServletResponse response, Long usuario, Long perfil,
+			Long idFederal) throws CotException, IOException {
 
-			setNameFile(response, CSV_ASISTENCIA_ESTATAL);
+		setNameFile(response, CSV_ASISTENCIA_ESTATAL);
 
-			List<ReporteAsistenciaEstatalDTO> reporteDTOs = getReporteAsistenciaEstatal(usuario, perfil, idFederal);
+		List<ReporteAsistenciaEstatalDTO> reporteDTOs = getReporteAsistenciaEstatal(usuario, perfil, idFederal);
 
-			String[] header = { "idFederal", "rgMeta", "rcMeta", "rgAsistencia", "rgPorcentaje", "rcAsistencia", 
-					"rcPorcentaje" };
+		String[] header = { "idFederal", "rgMeta", "rcMeta", "rgAsistencia", "rgPorcentaje", "rcAsistencia",
+				"rcPorcentaje" };
 
-			setWriterFile(response, reporteDTOs, header);
+		setWriterFile(response, reporteDTOs, header);
 	}
-	
+
 	public ReporteAsistenciaEstatalDTO getAsistenciaEstatal(Long federal) {
 		List<ReporteAsistenciaEstatalDTO> lstDto = new ArrayList<>();
 		ReporteAsistenciaEstatalDTO dto = new ReporteAsistenciaEstatalDTO();
@@ -323,13 +333,14 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 	}
 
 	@Override
-	public void getReporteAsistenciaDistritalDownload(HttpServletResponse response, Long usuario, Long perfil) throws CotException, IOException {
+	public void getReporteAsistenciaDistritalDownload(HttpServletResponse response, Long usuario, Long perfil)
+			throws CotException, IOException {
 
 		setNameFile(response, CSV_ASISTENCIA_DISTRITAL);
 
 		List<ReporteAsistenciaFederalDTO> reporteDTOs = getReporteAsistenciaDistrital(usuario, perfil);
 
-		String[] header = { "idFederal", "rgMeta", "rcMeta", "rgAsistencia", "rgPorcentaje", "rcAsistencia", 
+		String[] header = { "idFederal", "rgMeta", "rcMeta", "rgAsistencia", "rgPorcentaje", "rcAsistencia",
 				"rcPorcentaje" };
 
 		setWriterFile(response, reporteDTOs, header);
@@ -339,7 +350,6 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 	@Override
 	public List<ReporteAsistenciaLocalDTO> getReporteAsistenciaLocal(Long usuario, Long perfil, Long idFederal,
 			Long idLocal) throws CotException, IOException {
-
 
 		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_LOCAL) {
 
@@ -359,7 +369,7 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 			total.setRcAsistencia(0L);
 			total.setRgPorcentaje(0.0);
 			total.setRcPorcentaje(0.0);
-			
+
 			if (perfil == PERFIL_LOCAL) {
 				Usuario usr = usuarioRepository.findById(usuario);
 				local = usr.getDistritoLocal();
@@ -367,7 +377,7 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 				dto = getAsistenciaLocales(local, federal, tipo);
 				lstDto.add(dto);
 			}
-			
+
 			if (perfil == PERFIL_ESTATAL) {
 
 				if (idLocal != null) {
@@ -381,27 +391,29 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 					System.out.println("**** " + lstCasilla.size());
 					for (Casilla casilla : lstCasilla) {
 						dto = getAsistenciaLocales(casilla.getLocal(), idFederal, tipo);
-						
+
 						total.setRgMeta(total.getRgMeta() + dto.getRgMeta());
 						total.setRcMeta(total.getRcMeta() + dto.getRcMeta());
 						total.setRgAsistencia(total.getRgAsistencia() + dto.getRgAsistencia());
 						total.setRcAsistencia(total.getRcAsistencia() + dto.getRcAsistencia());
-						
+
 						lstDto.add(dto);
 					}
-					
-					total.setRgPorcentaje(dosDecimales((total.getRgAsistencia() * 100.0) / total.getRgMeta()).doubleValue());
-					total.setRcPorcentaje(dosDecimales((total.getRcAsistencia() * 100.0) / total.getRcMeta()).doubleValue());
-					
+
+					total.setRgPorcentaje(
+							dosDecimales((total.getRgAsistencia() * 100.0) / total.getRgMeta()).doubleValue());
+					total.setRcPorcentaje(
+							dosDecimales((total.getRcAsistencia() * 100.0) / total.getRcMeta()).doubleValue());
+
 					lstDto.add(total);
-					
+
 					return lstDto;
 				}
 			}
 
 			System.out.println("Lista return " + lstDto.size());
 			return lstDto;
-			
+
 		} else {
 			throw new CotException("No cuenta con los permisos suficientes para consultar el reporte", 401);
 		}
@@ -409,9 +421,9 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 
 	public ReporteAsistenciaLocalDTO getAsistenciaLocales(Long local, Long federal, Long tipo) {
 		List<ReporteAsistenciaLocalDTO> lstDto = new ArrayList<>();
-		
+
 		ReporteAsistenciaLocalDTO dto = new ReporteAsistenciaLocalDTO();
-		
+
 //		Long rgMeta = 0L;
 //		Long rcMeta = 0L;
 		Long rgAsistencia = instalacionCasillaRepository.getCountRgByLocalAndAsistencia(local, SI, federal, tipo, 0L);
@@ -437,7 +449,7 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 
 		List<ReporteAsistenciaLocalDTO> reporteDTOs = getReporteAsistenciaLocal(usuario, perfil, idFederal, idLocal);
 
-		String[] header = { "idLocal", "rgMeta", "rcMeta", "rgAsistencia", "rgPorcentaje", "rcAsistencia", 
+		String[] header = { "idLocal", "rgMeta", "rcMeta", "rgAsistencia", "rgPorcentaje", "rcAsistencia",
 				"rcPorcentaje" };
 
 		setWriterFile(response, reporteDTOs, header);
@@ -461,9 +473,9 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 				lstDto.add(dto);
 
 			}
-			
+
 			if (perfil == PERFIL_ESTATAL) {
-				
+
 				if (idFederal == null && idMunicipio == null) {
 					tipo = 6L;
 					lstMunicipio = municipioRepository.findAll();
@@ -498,15 +510,17 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 
 	public ReporteAsistenciaMunicipalDTO getAsistenciaMunicipal(Long local, Long federal, Long tipo, Long municipio) {
 		List<ReporteAsistenciaMunicipalDTO> lstDto = new ArrayList<>();
-		
+
 		ReporteAsistenciaMunicipalDTO dto = new ReporteAsistenciaMunicipalDTO();
-		
+
 //		Long rgMeta = 0L;
 //		Long rcMeta = 0L;
-		Long rgAsistencia = instalacionCasillaRepository.getCountRgByLocalAndAsistencia(local, SI, federal, tipo, municipio);
-		Long rcAsistencia = instalacionCasillaRepository.getCountRcByLocalAndAsistencia(local, SI, federal, tipo, municipio);
+		Long rgAsistencia = instalacionCasillaRepository.getCountRgByLocalAndAsistencia(local, SI, federal, tipo,
+				municipio);
+		Long rcAsistencia = instalacionCasillaRepository.getCountRcByLocalAndAsistencia(local, SI, federal, tipo,
+				municipio);
 		String nomMunicipio = municipioRepository.getNombreByIdAndDf(municipio, federal);
-		
+
 		dto.setMunicipio(nomMunicipio);
 		dto.setRgMeta(50L);
 		dto.setRcMeta(50L);
@@ -519,14 +533,13 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 
 		return dto;
 	}
-	
 
 	@Override
 	public List<ReporteResultadosDTO> getReporteResultados(Long usuario, Long perfil, Long idReporte, Long idUbicacion)
 			throws CotException, IOException {
 
 		if (perfil == PERFIL_RG) {
-			
+
 			Usuario user = usuarioRepository.findById(usuario);
 			Long idEntidad = user.getEntidad();
 
@@ -535,20 +548,22 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 			List<Partido> lstPartidos = null;
 			ReporteResultadosDTO dto = null;
 			ReporteResultadosDTO total = new ReporteResultadosDTO();
-			
+
 			listDF = distritoFederalRepository.findAll();
-			
+
 			for (DistritoFederal items : listDF) {
-			
-				if(idReporte == 1 ) {
+
+				if (idReporte == 1) {
 					lstPartidos = votosRepository.getPartidosGobernador();
-				}else if(idReporte == 2 ) {
-					lstPartidos = votosRepository.getPartidosFederal();
-				}else if(idReporte == 3 ) {
+				} else if (idReporte == 2) {
+					throw new CotException("No se encontraron datos para el reporte en el Ambito Distrito Federal",401);
+					//lstPartidos = votosRepository.getPartidosFederal();
+					
+				} else if (idReporte == 3) {
 					lstPartidos = votosRepository.getPartidosLocal(items.getId());
-				}else if(idReporte == 4 ) {
+				} else if (idReporte == 4) {
 					lstPartidos = votosRepository.getPartidosMunicipal(idUbicacion);
-				}else if(idReporte == 5 ) {
+				} else if (idReporte == 5) {
 					lstPartidos = votosRepository.getPartidosSindico(idUbicacion);
 				}
 			}
@@ -566,151 +581,182 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 			Long p11 = 0L;
 			Long p12 = 0L;
 			Long p13 = 0L;
-			
+
 			listDF = distritoFederalRepository.findAll();
-			
+
 			if (idReporte == 1 || idReporte == 2 || idReporte == 3) {
-			
-			for (DistritoFederal items : listDF) {
-				
-				dto = new ReporteResultadosDTO();
-				
-				
-					if(lstPartidos.size() >= 1)
-						p1 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte, lstPartidos.get(0).getId());
-					if(lstPartidos.size() >= 2)
-						p2 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte, lstPartidos.get(1).getId());
-					if(lstPartidos.size() >= 3)
-						p3 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte, lstPartidos.get(2).getId());
-					if(lstPartidos.size() >= 4)
-						p4 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte, lstPartidos.get(3).getId());
-					if(lstPartidos.size() >= 5)
-						p5 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte, lstPartidos.get(4).getId());
-					if(lstPartidos.size() >= 6)
-						p6 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte, lstPartidos.get(5).getId());
-					if(lstPartidos.size() >= 7)
-						p7 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte, lstPartidos.get(6).getId());
-					if(lstPartidos.size() >= 8)
-						p8 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte, lstPartidos.get(7).getId());
-					if(lstPartidos.size() >= 9)
-						p9 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte, lstPartidos.get(8).getId());
-					if(lstPartidos.size() >= 10)
-						p10 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte, lstPartidos.get(9).getId());
-					if(lstPartidos.size() >= 11)
-						p11 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte, lstPartidos.get(10).getId());
-					if(lstPartidos.size() >= 12)
-						p12 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte, lstPartidos.get(11).getId());
-					if(lstPartidos.size() >= 13)
-						p13 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte, lstPartidos.get(12).getId());
-				
-				Long listaNominal = 2000000L;
-				
-				
-				dto.setIdFederal(items.getId());
-				dto.setListaNominal(listaNominal);
-				dto.setPartido1(p1);
-				dto.setPartido2(p2);
-				dto.setPartido3(p3);
-				dto.setPartido4(p4);
-				dto.setPartido5(p5);
-				dto.setPartido6(p6);
-				dto.setPartido7(p7);
-				dto.setPartido8(p8);
-				dto.setPartido9(p9);
-				dto.setPartido10(p10);
-				dto.setPartido11(p11);
-				dto.setPartido12(p12);
-				dto.setPartido13(p13);
-				dto.setTotal(p1+p2+p3+p4+p5+p6+p7+p8+p9+p10+p11+p12+p13);
-				
-				if (dto.getTotal() != 0) {
-					dto.setPorcentajePartido1(dosDecimales((dto.getPartido1() * 100.00) / dto.getTotal()).doubleValue());
-					dto.setPorcentajePartido2(dosDecimales((dto.getPartido2() * 100.00) / dto.getTotal()).doubleValue());
-					dto.setPorcentajePartido3(dosDecimales((dto.getPartido3() * 100.00) / dto.getTotal()).doubleValue());
-					dto.setPorcentajePartido4(dosDecimales((dto.getPartido4() * 100.00) / dto.getTotal()).doubleValue());
-					dto.setPorcentajePartido5(dosDecimales((dto.getPartido5() * 100.00) / dto.getTotal()).doubleValue());
-					dto.setPorcentajePartido6(dosDecimales((dto.getPartido6() * 100.00) / dto.getTotal()).doubleValue());
-					dto.setPorcentajePartido7(dosDecimales((dto.getPartido7() * 100.00) / dto.getTotal()).doubleValue());
-					dto.setPorcentajePartido8(dosDecimales((dto.getPartido8() * 100.00) / dto.getTotal()).doubleValue());
-					dto.setPorcentajePartido9(dosDecimales((dto.getPartido9() * 100.00) / dto.getTotal()).doubleValue());
-					dto.setPorcentajePartido10(dosDecimales((dto.getPartido10() * 100.00) / dto.getTotal()).doubleValue());
-					dto.setPorcentajePartido11(dosDecimales((dto.getPartido11() * 100.00) / dto.getTotal()).doubleValue());
-					dto.setPorcentajePartido12(dosDecimales((dto.getPartido12() * 100.00) / dto.getTotal()).doubleValue());
-					dto.setPorcentajePartido13(dosDecimales((dto.getPartido13() * 100.00) / dto.getTotal()).doubleValue());
+
+				for (DistritoFederal items : listDF) {
+
+					dto = new ReporteResultadosDTO();
+
+
+						if (lstPartidos.size() >= 1)
+							p1 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte,
+									lstPartidos.get(0).getId());
+						if (lstPartidos.size() >= 2)
+							p2 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte,
+									lstPartidos.get(1).getId());
+						if (lstPartidos.size() >= 3)
+							p3 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte,
+									lstPartidos.get(2).getId());
+						if (lstPartidos.size() >= 4)
+							p4 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte,
+									lstPartidos.get(3).getId());
+						if (lstPartidos.size() >= 5)
+							p5 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte,
+									lstPartidos.get(4).getId());
+						if (lstPartidos.size() >= 6)
+							p6 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte,
+									lstPartidos.get(5).getId());
+						if (lstPartidos.size() >= 7)
+							p7 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte,
+									lstPartidos.get(6).getId());
+						if (lstPartidos.size() >= 8)
+							p8 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte,
+									lstPartidos.get(7).getId());
+						if (lstPartidos.size() >= 9)
+							p9 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte,
+									lstPartidos.get(8).getId());
+						if (lstPartidos.size() >= 10)
+							p10 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte,
+									lstPartidos.get(9).getId());
+						if (lstPartidos.size() >= 11)
+							p11 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte,
+									lstPartidos.get(10).getId());
+						if (lstPartidos.size() >= 12)
+							p12 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte,
+									lstPartidos.get(11).getId());
+						if (lstPartidos.size() >= 13)
+							p13 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte,
+									lstPartidos.get(12).getId());
+
+					
+
+					Long listaNominal = 2000000L;
+
+					dto.setIdFederal(items.getId());
+					dto.setListaNominal(listaNominal);
+					dto.setPartido1(p1);
+					dto.setPartido2(p2);
+					dto.setPartido3(p3);
+					dto.setPartido4(p4);
+					dto.setPartido5(p5);
+					dto.setPartido6(p6);
+					dto.setPartido7(p7);
+					dto.setPartido8(p8);
+					dto.setPartido9(p9);
+					dto.setPartido10(p10);
+					dto.setPartido11(p11);
+					dto.setPartido12(p12);
+					dto.setPartido13(p13);
+					dto.setTotal(p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8 + p9 + p10 + p11 + p12 + p13);
+
+					if (dto.getTotal() != 0) {
+						dto.setPorcentajePartido1(
+								dosDecimales((dto.getPartido1() * 100.00) / dto.getTotal()).doubleValue());
+						dto.setPorcentajePartido2(
+								dosDecimales((dto.getPartido2() * 100.00) / dto.getTotal()).doubleValue());
+						dto.setPorcentajePartido3(
+								dosDecimales((dto.getPartido3() * 100.00) / dto.getTotal()).doubleValue());
+						dto.setPorcentajePartido4(
+								dosDecimales((dto.getPartido4() * 100.00) / dto.getTotal()).doubleValue());
+						dto.setPorcentajePartido5(
+								dosDecimales((dto.getPartido5() * 100.00) / dto.getTotal()).doubleValue());
+						dto.setPorcentajePartido6(
+								dosDecimales((dto.getPartido6() * 100.00) / dto.getTotal()).doubleValue());
+						dto.setPorcentajePartido7(
+								dosDecimales((dto.getPartido7() * 100.00) / dto.getTotal()).doubleValue());
+						dto.setPorcentajePartido8(
+								dosDecimales((dto.getPartido8() * 100.00) / dto.getTotal()).doubleValue());
+						dto.setPorcentajePartido9(
+								dosDecimales((dto.getPartido9() * 100.00) / dto.getTotal()).doubleValue());
+						dto.setPorcentajePartido10(
+								dosDecimales((dto.getPartido10() * 100.00) / dto.getTotal()).doubleValue());
+						dto.setPorcentajePartido11(
+								dosDecimales((dto.getPartido11() * 100.00) / dto.getTotal()).doubleValue());
+						dto.setPorcentajePartido12(
+								dosDecimales((dto.getPartido12() * 100.00) / dto.getTotal()).doubleValue());
+						dto.setPorcentajePartido13(
+								dosDecimales((dto.getPartido13() * 100.00) / dto.getTotal()).doubleValue());
+					}
+
+					dto.setIdFederal(items.getId());
+					dto.setListaNominal(listaNominal);
+
+					dto.setCoalicion1(votosRepository.getCoalicionByCoalicion(items.getId(), idReporte, 1L));
+					dto.setCoalicion2(votosRepository.getCoalicionByCoalicion(items.getId(), idReporte, 2L));
+					dto.setCoalicion3(votosRepository.getCoalicionByCoalicion(items.getId(), idReporte, 3L));
+					dto.setCoalicion4(votosRepository.getCoalicionByCoalicion(items.getId(), idReporte, 4L));
+					dto.setCoalicion5(votosRepository.getCoalicionByCoalicion(items.getId(), idReporte, 5L));
+
+					dto.setIdCoalicion1(1L);
+					dto.setIdCoalicion2(2L);
+					dto.setIdCoalicion3(3L);
+					dto.setIdCoalicion4(4L);
+					dto.setIdCoalicion5(5L);
+
+					if (dto.getCoalicion1() > 0)
+						dto.setPorcentajeCoalicion1(
+								dosDecimales((dto.getCoalicion1() * 100.0) / dto.getTotal()).doubleValue());
+
+					if (dto.getCoalicion2() > 0)
+						dto.setPorcentajeCoalicion2(
+								dosDecimales((dto.getCoalicion2() * 100.0) / dto.getTotal()).doubleValue());
+
+					if (dto.getCoalicion3() > 0)
+						dto.setPorcentajeCoalicion3(
+								dosDecimales((dto.getCoalicion3() * 100.0) / dto.getTotal()).doubleValue());
+
+					if (dto.getCoalicion4() > 0)
+						dto.setPorcentajeCoalicion4(
+								dosDecimales((dto.getCoalicion4() * 100.0) / dto.getTotal()).doubleValue());
+
+					if (dto.getCoalicion5() > 0)
+						dto.setPorcentajeCoalicion5(
+								dosDecimales((dto.getCoalicion5() * 100.0) / dto.getTotal()).doubleValue());
+
+					dto.setTotal(dto.getTotal());
+					double porcentajeTotal = (dto.getTotal() * 100.0) / listaNominal;
+					dto.setPorcentajeTotal(dosDecimales(porcentajeTotal).doubleValue());
+
+					listaDTO.add(dto);
+
 				}
-				
-				dto.setIdFederal(items.getId());
-				dto.setListaNominal(listaNominal);
 
-				dto.setCoalicion1(votosRepository.getCoalicionByCoalicion(items.getId(), idReporte, 1L));
-				dto.setCoalicion2(votosRepository.getCoalicionByCoalicion(items.getId(), idReporte, 2L));
-				dto.setCoalicion3(votosRepository.getCoalicionByCoalicion(items.getId(), idReporte, 3L));
-				dto.setCoalicion4(votosRepository.getCoalicionByCoalicion(items.getId(), idReporte, 4L));
-				dto.setCoalicion5(votosRepository.getCoalicionByCoalicion(items.getId(), idReporte, 5L));
+			} else {
 
-				dto.setIdCoalicion1(1L);
-				dto.setIdCoalicion2(2L);
-				dto.setIdCoalicion3(3L);
-				dto.setIdCoalicion4(4L);
-				dto.setIdCoalicion5(5L);
-
-				if (dto.getCoalicion1() > 0)
-					dto.setPorcentajeCoalicion1(dosDecimales((dto.getCoalicion1() * 100.0) / dto.getTotal()).doubleValue());
-
-				if (dto.getCoalicion2() > 0)
-					dto.setPorcentajeCoalicion2(dosDecimales((dto.getCoalicion2() * 100.0) / dto.getTotal()).doubleValue());
-
-				if (dto.getCoalicion3() > 0)
-					dto.setPorcentajeCoalicion3(dosDecimales((dto.getCoalicion3() * 100.0) / dto.getTotal()).doubleValue());
-
-				if (dto.getCoalicion4() > 0)
-					dto.setPorcentajeCoalicion4(dosDecimales((dto.getCoalicion4() * 100.0) / dto.getTotal()).doubleValue());
-
-				if (dto.getCoalicion5() > 0)
-					dto.setPorcentajeCoalicion5(dosDecimales((dto.getCoalicion5() * 100.0) / dto.getTotal()).doubleValue());
-
-				dto.setTotal(dto.getTotal());
-				double porcentajeTotal = (dto.getTotal() * 100.0) / listaNominal;
-				dto.setPorcentajeTotal(dosDecimales(porcentajeTotal).doubleValue());
-
-								
-				listaDTO.add(dto);
-				
-			}
-			
-			}else {
-				
 				dto = new ReporteResultadosDTO();
-				
-				if(lstPartidos.size() >= 1)
+
+				if (lstPartidos.size() >= 1)
 					p1 = votosRepository.getVotosByPartido(idReporte, lstPartidos.get(0).getId());
-				if(lstPartidos.size() >= 2)
-					p2 = votosRepository.getVotosByPartido( idReporte, lstPartidos.get(1).getId());
-				if(lstPartidos.size() >= 3)
-					p3 = votosRepository.getVotosByPartido( idReporte, lstPartidos.get(2).getId());
-				if(lstPartidos.size() >= 4)
-					p4 = votosRepository.getVotosByPartido( idReporte, lstPartidos.get(3).getId());
-				if(lstPartidos.size() >= 5)
+				if (lstPartidos.size() >= 2)
+					p2 = votosRepository.getVotosByPartido(idReporte, lstPartidos.get(1).getId());
+				if (lstPartidos.size() >= 3)
+					p3 = votosRepository.getVotosByPartido(idReporte, lstPartidos.get(2).getId());
+				if (lstPartidos.size() >= 4)
+					p4 = votosRepository.getVotosByPartido(idReporte, lstPartidos.get(3).getId());
+				if (lstPartidos.size() >= 5)
 					p5 = votosRepository.getVotosByPartido(idReporte, lstPartidos.get(4).getId());
-				if(lstPartidos.size() >= 6)
+				if (lstPartidos.size() >= 6)
 					p6 = votosRepository.getVotosByPartido(idReporte, lstPartidos.get(5).getId());
-				if(lstPartidos.size() >= 7)
+				if (lstPartidos.size() >= 7)
 					p7 = votosRepository.getVotosByPartido(idReporte, lstPartidos.get(6).getId());
-				if(lstPartidos.size() >= 8)
+				if (lstPartidos.size() >= 8)
 					p8 = votosRepository.getVotosByPartido(idReporte, lstPartidos.get(7).getId());
-				if(lstPartidos.size() >= 9)
+				if (lstPartidos.size() >= 9)
 					p9 = votosRepository.getVotosByPartido(idReporte, lstPartidos.get(8).getId());
-				if(lstPartidos.size() >= 10)
+				if (lstPartidos.size() >= 10)
 					p10 = votosRepository.getVotosByPartido(idReporte, lstPartidos.get(9).getId());
-				if(lstPartidos.size() >= 11)
+				if (lstPartidos.size() >= 11)
 					p11 = votosRepository.getVotosByPartido(idReporte, lstPartidos.get(10).getId());
-				if(lstPartidos.size() >= 12)
+				if (lstPartidos.size() >= 12)
 					p12 = votosRepository.getVotosByPartido(idReporte, lstPartidos.get(11).getId());
-				if(lstPartidos.size() >= 13)
+				if (lstPartidos.size() >= 13)
 					p13 = votosRepository.getVotosByPartido(idReporte, lstPartidos.get(12).getId());
-				
+
 				Long listaNominal = 2000000L;
-				
+
 				dto.setIdFederal(idUbicacion);
 				dto.setListaNominal(listaNominal);
 				dto.setPartido1(p1);
@@ -727,24 +773,37 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 				dto.setPartido12(p12);
 				dto.setPartido13(p13);
 
-				dto.setTotal(p1+p2+p3+p4+p5+p6+p7+p8+p9+p10+p11+p12+p13);
-				
+				dto.setTotal(p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8 + p9 + p10 + p11 + p12 + p13);
+
 				if (dto.getTotal() != 0) {
-					dto.setPorcentajePartido1(dosDecimales((dto.getPartido1() * 100.00) / dto.getTotal()).doubleValue());
-					dto.setPorcentajePartido2(dosDecimales((dto.getPartido2() * 100.00) / dto.getTotal()).doubleValue());
-					dto.setPorcentajePartido3(dosDecimales((dto.getPartido3() * 100.00) / dto.getTotal()).doubleValue());
-					dto.setPorcentajePartido4(dosDecimales((dto.getPartido4() * 100.00) / dto.getTotal()).doubleValue());
-					dto.setPorcentajePartido5(dosDecimales((dto.getPartido5() * 100.00) / dto.getTotal()).doubleValue());
-					dto.setPorcentajePartido6(dosDecimales((dto.getPartido6() * 100.00) / dto.getTotal()).doubleValue());
-					dto.setPorcentajePartido7(dosDecimales((dto.getPartido7() * 100.00) / dto.getTotal()).doubleValue());
-					dto.setPorcentajePartido8(dosDecimales((dto.getPartido8() * 100.00) / dto.getTotal()).doubleValue());
-					dto.setPorcentajePartido9(dosDecimales((dto.getPartido9() * 100.00) / dto.getTotal()).doubleValue());
-					dto.setPorcentajePartido10(dosDecimales((dto.getPartido10() * 100.00) / dto.getTotal()).doubleValue());
-					dto.setPorcentajePartido11(dosDecimales((dto.getPartido11() * 100.00) / dto.getTotal()).doubleValue());
-					dto.setPorcentajePartido12(dosDecimales((dto.getPartido12() * 100.00) / dto.getTotal()).doubleValue());
-					dto.setPorcentajePartido13(dosDecimales((dto.getPartido13() * 100.00) / dto.getTotal()).doubleValue());
+					dto.setPorcentajePartido1(
+							dosDecimales((dto.getPartido1() * 100.00) / dto.getTotal()).doubleValue());
+					dto.setPorcentajePartido2(
+							dosDecimales((dto.getPartido2() * 100.00) / dto.getTotal()).doubleValue());
+					dto.setPorcentajePartido3(
+							dosDecimales((dto.getPartido3() * 100.00) / dto.getTotal()).doubleValue());
+					dto.setPorcentajePartido4(
+							dosDecimales((dto.getPartido4() * 100.00) / dto.getTotal()).doubleValue());
+					dto.setPorcentajePartido5(
+							dosDecimales((dto.getPartido5() * 100.00) / dto.getTotal()).doubleValue());
+					dto.setPorcentajePartido6(
+							dosDecimales((dto.getPartido6() * 100.00) / dto.getTotal()).doubleValue());
+					dto.setPorcentajePartido7(
+							dosDecimales((dto.getPartido7() * 100.00) / dto.getTotal()).doubleValue());
+					dto.setPorcentajePartido8(
+							dosDecimales((dto.getPartido8() * 100.00) / dto.getTotal()).doubleValue());
+					dto.setPorcentajePartido9(
+							dosDecimales((dto.getPartido9() * 100.00) / dto.getTotal()).doubleValue());
+					dto.setPorcentajePartido10(
+							dosDecimales((dto.getPartido10() * 100.00) / dto.getTotal()).doubleValue());
+					dto.setPorcentajePartido11(
+							dosDecimales((dto.getPartido11() * 100.00) / dto.getTotal()).doubleValue());
+					dto.setPorcentajePartido12(
+							dosDecimales((dto.getPartido12() * 100.00) / dto.getTotal()).doubleValue());
+					dto.setPorcentajePartido13(
+							dosDecimales((dto.getPartido13() * 100.00) / dto.getTotal()).doubleValue());
 				}
-				
+
 				dto.setListaNominal(listaNominal);
 
 				dto.setCoalicion1(votosRepository.getCoalicion(idUbicacion, idReporte, 1L));
@@ -760,26 +819,31 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 				dto.setIdCoalicion5(5L);
 
 				if (dto.getCoalicion1() > 0)
-					dto.setPorcentajeCoalicion1(dosDecimales((dto.getCoalicion1() * 100.0) / dto.getTotal()).doubleValue());
+					dto.setPorcentajeCoalicion1(
+							dosDecimales((dto.getCoalicion1() * 100.0) / dto.getTotal()).doubleValue());
 
 				if (dto.getCoalicion2() > 0)
-					dto.setPorcentajeCoalicion2(dosDecimales((dto.getCoalicion2() * 100.0) / dto.getTotal()).doubleValue());
+					dto.setPorcentajeCoalicion2(
+							dosDecimales((dto.getCoalicion2() * 100.0) / dto.getTotal()).doubleValue());
 
 				if (dto.getCoalicion3() > 0)
-					dto.setPorcentajeCoalicion3(dosDecimales((dto.getCoalicion3() * 100.0) / dto.getTotal()).doubleValue());
+					dto.setPorcentajeCoalicion3(
+							dosDecimales((dto.getCoalicion3() * 100.0) / dto.getTotal()).doubleValue());
 
 				if (dto.getCoalicion4() > 0)
-					dto.setPorcentajeCoalicion4(dosDecimales((dto.getCoalicion4() * 100.0) / dto.getTotal()).doubleValue());
+					dto.setPorcentajeCoalicion4(
+							dosDecimales((dto.getCoalicion4() * 100.0) / dto.getTotal()).doubleValue());
 
 				if (dto.getCoalicion5() > 0)
-					dto.setPorcentajeCoalicion5(dosDecimales((dto.getCoalicion5() * 100.0) / dto.getTotal()).doubleValue());
+					dto.setPorcentajeCoalicion5(
+							dosDecimales((dto.getCoalicion5() * 100.0) / dto.getTotal()).doubleValue());
 
 				dto.setTotal(dto.getTotal());
 				double porcentajeTotal = (dto.getTotal() * 100.0) / listaNominal;
 				dto.setPorcentajeTotal(dosDecimales(porcentajeTotal).doubleValue());
-				
+
 				listaDTO.add(dto);
-				
+
 			}
 
 			return listaDTO;
@@ -790,8 +854,8 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 	}
 
 	@Override
-	public void getReporteResultadosDownload(HttpServletResponse response, Long usuario, Long perfil, Long idReporte, Long idUbicacion)
-			throws CotException, IOException {
+	public void getReporteResultadosDownload(HttpServletResponse response, Long usuario, Long perfil, Long idReporte,
+			Long idUbicacion) throws CotException, IOException {
 
 		if (perfil == PERFIL_RG) {
 			if (idReporte >= 1 && idReporte <= 5) {
@@ -824,17 +888,17 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 		Long idEntidad = usuario.getEntidad();
 		Long idDf = usuario.getFederal();
 		Long idMunicipio = usuario.getMunicipio();
-		
+
 		List<ReporteVotacionMunicipalDTO> resultados = new ArrayList<ReporteVotacionMunicipalDTO>();
 		ReporteVotacionMunicipalDTO dto = null;
-		
+
 		ReporteVotacionMunicipalDTO totales = new ReporteVotacionMunicipalDTO();
 		totales.setIdFederal(null);
 		totales.setMunicipio("Total");
 		totales.setListaNominal(0L);
-		
+
 		List<Municipio> municipios = new ArrayList<Municipio>();
-		
+
 		if (perfil == PERFIL_ESTATAL) {
 			municipios = municipioRepository.getByEstadoAndDfAndMunicipio(idEntidad, null, null);
 		} else if (perfil == PERFIL_FEDERAL || perfil == PERFIL_LOCAL) {
@@ -844,36 +908,44 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 		} else {
 			throw new CotException("No cuenta con los permisos suficientes para consultar el reporte", 401);
 		}
-		
+
 		if (municipios != null) {
 			for (Municipio municipio : municipios) {
 				dto = new ReporteVotacionMunicipalDTO();
-				dto = calcularReporteResultados(idEntidad, municipio.getFederalId(), municipio.getId(), municipio.getDescripcion(), idEleccion);
-				
+				dto = calcularReporteResultados(idEntidad, municipio.getFederalId(), municipio.getId(),
+						municipio.getDescripcion(), idEleccion);
+
 				resultados.add(dto);
 				/*
-				totales.setPanal(totales.getPanal() + dto.getPanal());
-				totales.setNulos(totales.getNulos() + dto.getNulos());
-				totales.setCrg(totales.getCrg() + dto.getCrg());
-				totales.setTotal(totales.getTotal() + dto.getTotal());
-				totales.setCandidato1(totales.getCandidato1() + dto.getCandidato1());
-				totales.setListaNominal(totales.getListaNominal() + dto.getListaNominal());*/
+				 * totales.setPanal(totales.getPanal() + dto.getPanal());
+				 * totales.setNulos(totales.getNulos() + dto.getNulos());
+				 * totales.setCrg(totales.getCrg() + dto.getCrg());
+				 * totales.setTotal(totales.getTotal() + dto.getTotal());
+				 * totales.setCandidato1(totales.getCandidato1() + dto.getCandidato1());
+				 * totales.setListaNominal(totales.getListaNominal() + dto.getListaNominal());
+				 */
 			}
 			/*
-			totales.setPorcentajePanal(dosDecimales((totales.getPanal()*100.00)/totales.getTotal()).doubleValue());
-			totales.setPorcentajeNulos(dosDecimales((totales.getNulos()*100.00)/totales.getTotal()).doubleValue());
-			totales.setPorcentajeCrg(dosDecimales((totales.getCrg()*100.00)/totales.getTotal()).doubleValue());
-			totales.setPorcentajeTotal(dosDecimales((totales.getTotal()*100.00)/totales.getListaNominal()).doubleValue());
-			totales.setPorcentajeCandidato1(dosDecimales((totales.getCandidato1()*100.00)/totales.getTotal()).doubleValue());
-				
-			resultados.add(totales);*/
+			 * totales.setPorcentajePanal(dosDecimales((totales.getPanal()*100.00)/totales.
+			 * getTotal()).doubleValue());
+			 * totales.setPorcentajeNulos(dosDecimales((totales.getNulos()*100.00)/totales.
+			 * getTotal()).doubleValue());
+			 * totales.setPorcentajeCrg(dosDecimales((totales.getCrg()*100.00)/totales.
+			 * getTotal()).doubleValue());
+			 * totales.setPorcentajeTotal(dosDecimales((totales.getTotal()*100.00)/totales.
+			 * getListaNominal()).doubleValue());
+			 * totales.setPorcentajeCandidato1(dosDecimales((totales.getCandidato1()*100.00)
+			 * /totales.getTotal()).doubleValue());
+			 * 
+			 * resultados.add(totales);
+			 */
 		} else {
 			throw new CotException("No se encontraron datos", 404);
 		}
 		System.out.println("**************** " + resultados.size());
 		return resultados;
 	}
-	
+
 	public ReporteVotacionMunicipalDTO calcularReporteResultados(Long idEntidad, Long idDistrito, Long idMunicipio,
 			String municipio, Long idEleccion) throws CotException {
 		List<Partido> partidos = new ArrayList<Partido>();
@@ -988,8 +1060,6 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 
 			Long nulos = votosRepository.getNulosByMunicipio(idMunicipio, idDistrito, idEleccion, partidoNulos);
 			totalVotos = p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8 + p9 + p10 + p11 + p12 + p13 + nulos;
-			
-			
 
 			Double porcentajeNulos = 0.0;
 			if (nulos > 0) {
@@ -1077,36 +1147,42 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 			dto.setPorcentajeTotal(dosDecimales(porcentajeTotal).doubleValue());
 
 		} else {
-			throw new CotException("El municipio: " + idMunicipio + ", no tiene elecciones para el ambito " + idEleccion, 400);
+			throw new CotException(
+					"El municipio: " + idMunicipio + ", no tiene elecciones para el ambito " + idEleccion, 400);
 		}
 		return dto;
 
 	}
-	
+
 	@Override
-	public void getReporteMunicipioDownload(HttpServletResponse response, Long idUsuario, Long perfil, Long idEleccion) throws CotException, IOException {
-		
+	public void getReporteMunicipioDownload(HttpServletResponse response, Long idUsuario, Long perfil, Long idEleccion)
+			throws CotException, IOException {
+
 		if (perfil >= PERFIL_ESTATAL && perfil < PERFIL_RC) {
 			if (idEleccion >= 1 && idEleccion <= 5) {
-					setNameFile(response, CSV_REPORTE_RESULTADOS_PMUNICIPAL);
-					List<ReporteVotacionMunicipalDTO> dto = getReporteMunicipal(idUsuario, idEleccion);
-							
-					String[] header = { "idFederal", "municipio", "listaNominal", "pan", "porcentajePan", "pri", "porcentajePri", "prd", "porcentajePrd", "pvem", "porcentajePvem", "pt",
-							"porcentajePt", "mc", "porcentajeMc", "morena", "porcentajeMorena", "pes", "porcentajePes", "rsp", "porcentajeRsp", "fuerzaMexico", "porcentajeFuerzaMexico",
-							"panal", "porcentajePanal", "nulos", "porcentajeNulos", "crg", "porcentajeCrg", "total", "porcentajeTotal", "candidato1", "porcentajeCandidato1", "candidato2",
-							"porcentajeCandidato2" };
-					
-					String[] header2 = { "No. Federal", "Municipio", "Lista Nominal", "PAN", "Porcentaje PAN", "PRI", "Porcentaje PRI", "PRD", "Porcentaje PRD", "PVEM", "Porcentaje PVEM", "PT",
-							"Porcentaje PT", "MC", "Porcentaje MC", "MORENA", "Porcentaje MORENA", "PES", "Porcentaje PES", "RSP", "Porcentaje RSP", "FUERZA POR MEXICO", "Porcentaje FUERZA MEXICO",
-							"PANAL", "Porcentaje PANAL", "Nulos", "Porcentaje Nulos", "Crg", "Porcentaje Crg", "Total", "Porcentaje Total", "candidato1", "porcentajeCandidato1", "candidato2",
-							"porcentajeCandidato2" };
-			
-					setWriterFile(response, dto, header, header2);
-				
+				setNameFile(response, CSV_REPORTE_RESULTADOS_PMUNICIPAL);
+				List<ReporteVotacionMunicipalDTO> dto = getReporteMunicipal(idUsuario, idEleccion);
+
+				String[] header = { "idFederal", "municipio", "listaNominal", "pan", "porcentajePan", "pri",
+						"porcentajePri", "prd", "porcentajePrd", "pvem", "porcentajePvem", "pt", "porcentajePt", "mc",
+						"porcentajeMc", "morena", "porcentajeMorena", "pes", "porcentajePes", "rsp", "porcentajeRsp",
+						"fuerzaMexico", "porcentajeFuerzaMexico", "panal", "porcentajePanal", "nulos",
+						"porcentajeNulos", "crg", "porcentajeCrg", "total", "porcentajeTotal", "candidato1",
+						"porcentajeCandidato1", "candidato2", "porcentajeCandidato2" };
+
+				String[] header2 = { "No. Federal", "Municipio", "Lista Nominal", "PAN", "Porcentaje PAN", "PRI",
+						"Porcentaje PRI", "PRD", "Porcentaje PRD", "PVEM", "Porcentaje PVEM", "PT", "Porcentaje PT",
+						"MC", "Porcentaje MC", "MORENA", "Porcentaje MORENA", "PES", "Porcentaje PES", "RSP",
+						"Porcentaje RSP", "FUERZA POR MEXICO", "Porcentaje FUERZA MEXICO", "PANAL", "Porcentaje PANAL",
+						"Nulos", "Porcentaje Nulos", "Crg", "Porcentaje Crg", "Total", "Porcentaje Total", "candidato1",
+						"porcentajeCandidato1", "candidato2", "porcentajeCandidato2" };
+
+				setWriterFile(response, dto, header, header2);
+
 			} else {
 				throw new CotException("No existe el id del reporte a consultar", 404);
 			}
-			
+
 		} else {
 			throw new CotException("No cuenta con los permisos suficientes para consultar el reporte", 401);
 		}
@@ -1118,9 +1194,10 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 			Long idFederal, Long idLocal, Long idMunicipio) throws CotException, IOException {
 		setNameFile(response, CSV_ASISTENCIA_MUNICIPAL);
 
-		List<ReporteAsistenciaMunicipalDTO> reporteDTOs = getReporteAsistenciaMunicipal(usuario, perfil, idFederal, idLocal, idMunicipio);
+		List<ReporteAsistenciaMunicipalDTO> reporteDTOs = getReporteAsistenciaMunicipal(usuario, perfil, idFederal,
+				idLocal, idMunicipio);
 
-		String[] header = { "municipio", "rgMeta", "rcMeta", "rgAsistencia", "rgPorcentaje", "rcAsistencia", 
+		String[] header = { "municipio", "rgMeta", "rcMeta", "rgAsistencia", "rgPorcentaje", "rcAsistencia",
 				"rcPorcentaje" };
 
 		setWriterFile(response, reporteDTOs, header);
@@ -1243,22 +1320,26 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 
 		return null;
 	}
-	
-	public ReporteAsistenciaCrgDTO getAsistenciaCrg(Long local, Long federal, Long tipo, Long municipio, Long idCrg, Long casillaId, Long casillaIdFederal, Long casillaRuta) {
+
+	public ReporteAsistenciaCrgDTO getAsistenciaCrg(Long local, Long federal, Long tipo, Long municipio, Long idCrg,
+			Long casillaId, Long casillaIdFederal, Long casillaRuta) {
 		List<ReporteAsistenciaCrgDTO> lstDto = new ArrayList<>();
-		
+
 		ReporteAsistenciaCrgDTO dto = new ReporteAsistenciaCrgDTO();
-		
+
 //		Long rgMeta = 0L;
 //		Long rcMeta = 0L;
-		Long rgAsistencia = instalacionCasillaRepository.getCountRgByLocalAndAsistenciaCrg(SI, idCrg, casillaRuta, tipo, federal, municipio);
-		Long rcAsistencia = instalacionCasillaRepository.getCountRcByLocalAndAsistenciaCrg(SI, idCrg, casillaRuta, tipo, federal, municipio);
-		Long casillas = asignacionCasillasRepository.countCasillasByIdCrgAndRuta(idCrg, casillaRuta, tipo, federal, municipio);
-		
+		Long rgAsistencia = instalacionCasillaRepository.getCountRgByLocalAndAsistenciaCrg(SI, idCrg, casillaRuta, tipo,
+				federal, municipio);
+		Long rcAsistencia = instalacionCasillaRepository.getCountRcByLocalAndAsistenciaCrg(SI, idCrg, casillaRuta, tipo,
+				federal, municipio);
+		Long casillas = asignacionCasillasRepository.countCasillasByIdCrgAndRuta(idCrg, casillaRuta, tipo, federal,
+				municipio);
+
 		dto.setIdFederal(casillaIdFederal);
 		dto.setRuta(casillaRuta);
 		dto.setCasillas(casillas);
-		
+
 		dto.setRgMeta(50L);
 		dto.setRcMeta(50L);
 		dto.setRgAsistencia(rgAsistencia);
@@ -1276,10 +1357,11 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 			Long idLocal, Long idMunicipio) throws CotException, IOException {
 		setNameFile(response, CSV_ASISTENCIA_CRG);
 
-		List<ReporteAsistenciaCrgDTO> reporteDTOs = getReporteAsistenciaCrg(usuario, perfil, idFederal, idLocal, idMunicipio);
+		List<ReporteAsistenciaCrgDTO> reporteDTOs = getReporteAsistenciaCrg(usuario, perfil, idFederal, idLocal,
+				idMunicipio);
 
-		String[] header = {"idFederal", "ruta", "casillas", "rgMeta", "rcMeta", "rgAsistencia", "rgPorcentaje", "rcAsistencia", 
-				"rcPorcentaje" };
+		String[] header = { "idFederal", "ruta", "casillas", "rgMeta", "rcMeta", "rgAsistencia", "rgPorcentaje",
+				"rcAsistencia", "rcPorcentaje" };
 
 		setWriterFile(response, reporteDTOs, header);
 	}
@@ -1287,62 +1369,64 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 	@Override
 	public List<ReporteAsistenciaRgDTO> getReporteAsistenciaRg(Long usuario, Long perfil, Long idFederal, Long idLocal,
 			Long idMunicipio, String idRutaRg) throws CotException, IOException {
-		
-		
-		if(perfil == PERFIL_ESTATAL || perfil == PERFIL_RG) {
-			
+
+		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_RG) {
+
 			List<ReporteAsistenciaRgDTO> lstDto = new ArrayList<>();
 			ReporteAsistenciaRgDTO dto = null;
 			List<AsignacionCasillas> lstAsignacion = null;
 //			List<Rutas> lstRutas = null;
 //			List<DistritoFederal> lstDistritos = null; 
 			List<Casilla> lstCasillas = null;
-			
+
 			Long tipo = 0L;
 //			Long local = 0L;
 			Long crg = 0L;
 			Long rg = 0L;
-			
-			
+
 			if (perfil == PERFIL_RG) {
 				Long rutaId = repAsignadosRepository.getRutaIdByRepresentante(usuario);
 				String RutaRg = rutasRepository.getIdRuraById(rutaId);
 				lstAsignacion = asignacionCasillasRepository.getTipoCasillasByRutaRg(RutaRg);
 				tipo = 1L;
-				
+
 				for (AsignacionCasillas aCAsillas : lstAsignacion) {
-					dto = getAsistenciaRg(tipo, aCAsillas.getFederalId(), 0L, 0L, aCAsillas.getSeccionId(), crg, rg, aCAsillas.getIdCasilla(), aCAsillas.getTipoCasilla(), RutaRg);
+					dto = getAsistenciaRg(tipo, aCAsillas.getFederalId(), 0L, 0L, aCAsillas.getSeccionId(), crg, rg,
+							aCAsillas.getIdCasilla(), aCAsillas.getTipoCasilla(), RutaRg);
 					lstDto.add(dto);
 				}
-			
+
 			}
-			
+
 			if (perfil == PERFIL_ESTATAL) {
-				
+
 				tipo = 2L;
-				lstCasillas = casillasRepository.getCasillasAsistencia(idFederal, idLocal, idMunicipio, crg, rg, idRutaRg);
-				
+				lstCasillas = casillasRepository.getCasillasAsistencia(idFederal, idLocal, idMunicipio, crg, rg,
+						idRutaRg);
+
 				for (Casilla casillas : lstCasillas) {
-					dto = getAsistenciaRg(tipo, casillas.getFederal(), casillas.getLocal(),  casillas.getMunicipio(), casillas.getSeccionElectoral(), crg, rg, casillas.getId(), casillas.getTipo(), idRutaRg);
+					dto = getAsistenciaRg(tipo, casillas.getFederal(), casillas.getLocal(), casillas.getMunicipio(),
+							casillas.getSeccionElectoral(), crg, rg, casillas.getId(), casillas.getTipo(), idRutaRg);
 					lstDto.add(dto);
 				}
-				
+
 			}
-			
+
 			return lstDto;
-		}else {
+		} else {
 			throw new CotException("No cuenta con los permisos suficientes para consultar el reporte", 401);
 		}
 	}
-	
-	public ReporteAsistenciaRgDTO getAsistenciaRg(Long tipo, Long federal, Long local,  Long municipio, Long seccion, Long crg, Long rg, Long IdCAsilla, String tipoCasilla, String idRutaRg) {
+
+	public ReporteAsistenciaRgDTO getAsistenciaRg(Long tipo, Long federal, Long local, Long municipio, Long seccion,
+			Long crg, Long rg, Long IdCAsilla, String tipoCasilla, String idRutaRg) {
 		List<ReporteAsistenciaRgDTO> lstDto = new ArrayList<>();
-		
+
 		ReporteAsistenciaRgDTO dto = new ReporteAsistenciaRgDTO();
-		
+
 //		Long rcMeta = 0L;
 		Long rcAsistencia = 0L;
-		
+
 		if (tipo == 1L) {
 			rcAsistencia = instalacionCasillaRepository.getCountRcByRutaRg(SI, federal, local, municipio, seccion, crg,
 					rg, tipo, tipoCasilla, idRutaRg);
@@ -1351,15 +1435,15 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 			rcAsistencia = instalacionCasillaRepository.getCountRcByAll(SI, federal, local, municipio, seccion, crg, rg,
 					tipo, tipoCasilla, idRutaRg);
 		}
-		
+
 		Long idMunicipio = casillasRepository.getIdMunicipioByIdCasilla(IdCAsilla);
 		String nomMunicipio = municipioRepository.getNombreByIdAndDf(idMunicipio, federal);
-		
+
 		dto.setMunicipio(nomMunicipio);
 		dto.setIdFederal(federal);
 		dto.setSecion(seccion);
 		dto.setCasillas(tipoCasilla);
-		
+
 		dto.setRcMeta(50L);
 		dto.setRcAsistencia(rcAsistencia);
 		dto.setRcPorcentaje(dosDecimales((dto.getRcAsistencia() * 100.0) / dto.getRcMeta()).doubleValue());
@@ -1368,7 +1452,6 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 
 		return dto;
 	}
-	
 
 	@Override
 	public void getReporteAsistenciaRgDownload(HttpServletResponse response, long usuario, long perfil, Long idFederal,
@@ -1376,12 +1459,12 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 
 		setNameFile(response, CSV_ASISTENCIA_RG);
 
-		List<ReporteAsistenciaRgDTO> reporteDTOs = getReporteAsistenciaRg(usuario, perfil, idFederal, idLocal, idMunicipio, idRutaRg);
+		List<ReporteAsistenciaRgDTO> reporteDTOs = getReporteAsistenciaRg(usuario, perfil, idFederal, idLocal,
+				idMunicipio, idRutaRg);
 
-		String[] header = {"municipio", "idFederal", "secion", "casillas", "rcMeta", "rcAsistencia", 
-				"rcPorcentaje" };
+		String[] header = { "municipio", "idFederal", "secion", "casillas", "rcMeta", "rcAsistencia", "rcPorcentaje" };
 
 		setWriterFile(response, reporteDTOs, header);
-		
+
 	}
 }
