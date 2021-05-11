@@ -8,9 +8,11 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import mx.morena.persistencia.entidad.Partido;
 import mx.morena.persistencia.entidad.Votacion;
 import mx.morena.persistencia.repository.IVotosPartidoAmbitoRepository;
 import mx.morena.persistencia.rowmapper.LongRowMapper;
+import mx.morena.persistencia.rowmapper.PartidosRowMapper;
 import mx.morena.persistencia.rowmapper.VotacionRowMapper;
 
 @Repository
@@ -34,12 +36,13 @@ public class VotosPartidoAmbitoRepository implements IVotosPartidoAmbitoReposito
 	}
 
 	@Override
-	public Long getVotosByEleccionAndPartido(Long idEntidad, Long idEleccion, Long idPartido) {
-		String sql = "select avpa.votos from app_votos_partido_ambito avpa inner join app_casilla ac on ac.id = avpa.id_casilla "
-				+ "where ac.entidad_id = ? "
+	public Long getVotosByEleccionAndPartido(Long idFederal, Long idEleccion, Long idPartido) {
+		String sql = "select sum(votos) from app_votos_partido_ambito avpa "
+				+ "inner join app_casilla ac on ac.id = avpa.id_casilla "
+				+ "where ac.federal_id = ? "
 				+ "and avpa.id_ambito = ? and avpa.id_partido = ? ";
 		try {
-			return template.queryForObject(sql, new Object[] { idEntidad, idEleccion, idPartido },
+			return template.queryForObject(sql, new Object[] { idFederal, idEleccion, idPartido },
 					new int[] { Types.NUMERIC, Types.NUMERIC, Types.NUMERIC },
 					new LongRowMapper());
 		} catch (EmptyResultDataAccessException e) {
@@ -134,6 +137,127 @@ public class VotosPartidoAmbitoRepository implements IVotosPartidoAmbitoReposito
 		try {
 			return template.queryForObject(sql, new Object[] { idMunicipio, idDistrito, idEleccion, idCoalicion }, new int[] 
 					{ Types.NUMERIC, Types.NUMERIC, Types.NUMERIC, Types.NUMERIC}, new LongRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+
+	@Override
+	public List<Partido> getPartidosGobernador() {
+		String sql = "select id, partido, tipo_partido, candidato, entidad_id as ubicacion, id_coalicion from app_partidos_entidad ape";
+		try {
+			return template.queryForObject(sql, new Object[] { },
+					new int[] { },
+					new PartidosRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+
+	@Override
+	public List<Partido> getPartidosFederal() {
+	
+		String sql = "select id, partido, tipo_partido, candidato, distrito_federal as ubicacion, id_coalicion from app_partidos_diputado_federal apdf";
+		try {
+			return template.queryForObject(sql, new Object[] { },
+					new int[] { },
+					new PartidosRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		} 
+	}
+
+	@Override
+	public List<Partido> getPartidosLocal(Long idFederal) {
+		
+		String sql = "select id, partido, tipo_partido, candidato, distrito_federal as ubicacion, id_coalicion "
+				+ "from app_partidos_diputado_local apdl "
+				+ "where distrito_federal = ?";
+		try {
+			return template.queryForObject(sql, new Object[] { idFederal },
+					new int[] { Types.NUMERIC },
+					new PartidosRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		} 
+	}
+
+	@Override
+	public List<Partido> getPartidosMunicipal(Long idUbicacion) {
+
+		String sql = "select apm.id, partido, tipo_partido, candidato, clave_municipio as ubicacion, id_coalicion "
+				+ "from app_partidos_municipio apm "
+				+ "where clave_municipio = ?";
+		try {
+			return template.queryForObject(sql, new Object[] { idUbicacion },
+					new int[] { Types.NUMERIC },
+					new PartidosRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		} 
+	}
+
+	@Override
+	public List<Partido> getPartidosSindico(Long idUbicacion) {
+		
+		String sql = "select aps.id, partido, tipo_partido, candidato, clave_municipio as ubicacion, id_coalicion "
+				+ "	from app_partidos_sindico aps "
+				+ "	where clave_municipio = ?";
+		try {
+			return template.queryForObject(sql, new Object[] { idUbicacion },
+					new int[] { Types.NUMERIC },
+					new PartidosRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		} 
+	}
+
+	@Override
+	public Long getVotosByPartido(Long idEleccion, Long idPartido) {
+		
+		String sql = "select sum(votos) from app_votos_partido_ambito avpa "
+				+ "inner join app_casilla ac on ac.id = avpa.id_casilla "
+				+ "where avpa.id_ambito = ? and avpa.id_partido = ? ";
+		try {
+			return template.queryForObject(sql, new Object[] { idEleccion, idPartido },
+					new int[] { Types.NUMERIC, Types.NUMERIC },
+					new LongRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return 0L;
+		}
+	}
+
+	@Override
+	public Long getCoalicionByCoalicion(Long idDistrito, Long idEleccion, Long idCoalicion) {
+		
+		String sql = "select case "
+				+ "when sum(votos) is null then 0 " 
+				+ "else sum(votos) " 
+				+ "end "
+				+ "from app_votos_partido_ambito avpa "
+				+ "inner join app_casilla ac on ac.id = avpa.id_casilla " 
+				+ "where ac.federal_id = ? and avpa.id_ambito = ? and avpa.id_coalision = ? ";
+		try {
+			return template.queryForObject(sql, new Object[] { idDistrito, idEleccion, idCoalicion }, new int[] 
+					{ Types.NUMERIC, Types.NUMERIC, Types.NUMERIC}, new LongRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+
+	@Override
+	public Long getCoalicion(Long idMunicipio, Long idEleccion, Long idCoalicion) {
+		
+		String sql = "select case "
+				+ "when sum(votos) is null then 0 " 
+				+ "else sum(votos) " 
+				+ "end "
+				+ "from app_votos_partido_ambito avpa "
+				+ "inner join app_casilla ac on ac.id = avpa.id_casilla " 
+				+ "where ac.municpio_id = ? and avpa.id_ambito = ? and avpa.id_coalision = ? ";
+		try {
+			return template.queryForObject(sql, new Object[] { idMunicipio, idEleccion, idCoalicion }, new int[] 
+					{ Types.NUMERIC, Types.NUMERIC, Types.NUMERIC}, new LongRowMapper());
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}

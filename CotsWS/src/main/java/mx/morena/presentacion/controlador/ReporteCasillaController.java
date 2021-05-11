@@ -255,13 +255,14 @@ public class ReporteCasillaController extends MasterController {
 	@GetMapping("/resultados")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
 	private List<ReporteResultadosDTO> getReporteResultados(HttpServletResponse response, HttpServletRequest request,
-			@RequestParam(value = "idReporte", required = false) Long idReporte) throws IOException {
+			@RequestParam(value = "idAmbito", required = false) Long idReporte,
+			@RequestParam(value = "idUbicacion", required = false) Long idUbicacion) throws IOException {
 		try {
 
 			Long usuario = getUsuario(request);
 			Long perfil = getPerfil(request);
 
-			return reporteCasillaService.getReporteResultados(usuario, perfil, idReporte);
+			return reporteCasillaService.getReporteResultados(usuario, perfil, idReporte, idUbicacion);
 
 		} catch (CotException e) {
 			e.printStackTrace();
@@ -277,12 +278,13 @@ public class ReporteCasillaController extends MasterController {
 	@GetMapping("/resultados/download")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
 	public void downloadResultados(HttpServletResponse response, HttpServletRequest request,
-			@RequestParam(value = "idReporte", required = false) Long idReporte) throws IOException {
+			@RequestParam(value = "idReporte", required = false) Long idReporte,
+			@RequestParam(value = "idUbicacion", required = false) Long idUbicacion) throws IOException {
 
 		try {
 			Long usuario = getUsuario(request);
 			long perfil = getPerfil(request);
-			reporteCasillaService.getReporteResultadosDownload(response, usuario, perfil, idReporte);
+			reporteCasillaService.getReporteResultadosDownload(response, usuario, perfil, idReporte, idUbicacion);
 
 		} catch (CotException e) {
 			e.printStackTrace();

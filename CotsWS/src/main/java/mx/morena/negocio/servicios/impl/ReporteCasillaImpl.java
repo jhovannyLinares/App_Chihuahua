@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import mx.morena.negocio.dto.CoalicionesDTO;
 import mx.morena.negocio.dto.PartidosDTO;
 import mx.morena.negocio.dto.ReporteAsistenciaCrgDTO;
 import mx.morena.negocio.dto.ReporteAsistenciaEstatalDTO;
@@ -22,7 +21,6 @@ import mx.morena.negocio.dto.ReporteAsistenciaRgDTO;
 import mx.morena.negocio.dto.ReporteResultadosDTO;
 import mx.morena.negocio.dto.ReporteVotacionDTO;
 import mx.morena.negocio.dto.ReporteVotacionMunicipalDTO;
-import mx.morena.negocio.dto.VotosPartidoDTO;
 import mx.morena.negocio.exception.CotException;
 import mx.morena.negocio.servicios.IReporteCasillaService;
 import mx.morena.negocio.util.MapperUtil;
@@ -32,7 +30,6 @@ import mx.morena.persistencia.entidad.DistritoFederal;
 import mx.morena.persistencia.entidad.Municipio;
 import mx.morena.persistencia.entidad.Partido;
 import mx.morena.persistencia.entidad.Usuario;
-import mx.morena.persistencia.entidad.Votacion;
 import mx.morena.persistencia.repository.IAsignacionCasillasRepository;
 import mx.morena.persistencia.repository.ICasillaRepository;
 import mx.morena.persistencia.repository.IDistritoFederalRepository;
@@ -525,7 +522,7 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 	
 
 	@Override
-	public List<ReporteResultadosDTO> getReporteResultados(Long usuario, Long perfil, Long idReporte)
+	public List<ReporteResultadosDTO> getReporteResultados(Long usuario, Long perfil, Long idReporte, Long idUbicacion)
 			throws CotException, IOException {
 
 		if (perfil == PERFIL_RG) {
@@ -535,170 +532,255 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 
 			List<ReporteResultadosDTO> listaDTO = new ArrayList<>();
 			List<DistritoFederal> listDF = null;
+			List<Partido> lstPartidos = null;
 			ReporteResultadosDTO dto = null;
 			ReporteResultadosDTO total = new ReporteResultadosDTO();
-
+			
 			listDF = distritoFederalRepository.findAll();
-			System.out.print("Tamaño de lista: " + listDF.size());
-			Long PAN = votosRepository.getVotosByEleccionAndPartido(idEntidad, idReporte, 1L);
-			Long PRI = votosRepository.getVotosByEleccionAndPartido(idEntidad, idReporte, 2L);
-			Long PRD = votosRepository.getVotosByEleccionAndPartido(idEntidad, idReporte, 3L);
-			Long PVEM = votosRepository.getVotosByEleccionAndPartido(idEntidad, idReporte, 4L);
-			Long PT = votosRepository.getVotosByEleccionAndPartido(idEntidad, idReporte, 5L);
-			Long MC = votosRepository.getVotosByEleccionAndPartido(idEntidad, idReporte, 6L);
-			Long MORENA = votosRepository.getVotosByEleccionAndPartido(idEntidad, idReporte, 7L);
-			Long PES = votosRepository.getVotosByEleccionAndPartido(idEntidad, idReporte, 8L);
-			Long RSP = votosRepository.getVotosByEleccionAndPartido(idEntidad, idReporte, 9L);
-			Long FUERZAMEXICO = votosRepository.getVotosByEleccionAndPartido(idEntidad, idReporte, 10L);
-			Long PANAL = votosRepository.getVotosByEleccionAndPartido(idEntidad, idReporte, 11L);
-			System.out.print("Valor de PAN: " + PAN);
-
-			total.setIdFederal(1L);
-			total.setListaNominal(0L);
-			total.setPAN(20L);
-			total.setPorcentajePAN(0.0);
-			total.setPRI(0L);
-			total.setPorcentajePRI(0.0);
-			total.setPRD(0L);
-			total.setPorcentajePRD(0.0);
-			total.setPVEM(0L);
-			total.setPorcentajePVEM(0.0);
-			total.setPT(0L);
-			total.setPorcentajePT(0.0);
-			total.setMC(0L);
-			total.setPorcentajeMC(0.0);
-			total.setMORENA(0L);
-			total.setPorcentajeMORENA(0.0);
-			total.setPES(0L);
-			total.setPorcentajePES(0.0);
-			total.setRSP(0L);
-			total.setPorcentajeRSP(0.0);
-			total.setFUERZAMEXICO(0L);
-			total.setPorcentajeFUERZAMEXICO(0.0);
-			total.setPANAL(0L);
-			total.setPorcentajePANAL(0.0);
-			total.setNulos(0L);
-			total.setPorcentajeNulos(0.0);
-			total.setCrg(0L);
-			total.setPorcentajeCrg(0.0);
-			total.setTotal(20L);
-			total.setPorcentajeTotal(0.0);
-			total.setCandidato1(0L);
-			total.setPorcentajeCandidato1(0.0);
-			total.setCandidato2(0L);
-			total.setPorcentajeCandidato2(0.0);
-
+			
 			for (DistritoFederal items : listDF) {
-				dto = new ReporteResultadosDTO();
-
-				dto.setIdFederal(items.getId());
-				dto.setListaNominal(20L);
-				dto.setPAN(PAN);
-				dto.setPRI(PRI);
-				dto.setPRD(PRD);
-				dto.setPVEM(PVEM);
-				dto.setPT(PT);
-				dto.setMC(MC);
-				dto.setMORENA(MORENA);
-				dto.setPES(PES);
-				dto.setRSP(RSP);
-				dto.setFUERZAMEXICO(FUERZAMEXICO);
-				dto.setPANAL(PANAL);
-				dto.setNulos(50L);
-				dto.setCrg(20L);
-
-				dto.setTotal(dto.getPAN() + dto.getPRI() + dto.getPRD() + dto.getPRD() + dto.getPVEM() + dto.getPT()
-						+ dto.getMC() + dto.getMORENA() + dto.getPES() + dto.getRSP() + dto.getFUERZAMEXICO()
-						+ dto.getPANAL() + dto.getNulos() + dto.getCrg());
-
-				double porcentajePartido1 = dosDecimales((dto.getPAN() * 100) / dto.getTotal()).doubleValue();
-				dto.setPorcentajePAN(porcentajePartido1);
-
-				double porcentajePartido2 = dosDecimales((dto.getPRI() * 100) / dto.getTotal()).doubleValue();
-				dto.setPorcentajePRI(porcentajePartido2);
-
-				double porcentajePartido3 = dosDecimales((dto.getPRD() * 100) / dto.getTotal()).doubleValue();
-				dto.setPorcentajePRD(porcentajePartido3);
-
-				double porcentajePartido4 = dosDecimales((dto.getPVEM() * 100) / dto.getTotal()).doubleValue();
-				dto.setPorcentajePVEM(porcentajePartido4);
-
-				double porcentajePartido5 = dosDecimales((dto.getPT() * 100) / dto.getTotal()).doubleValue();
-				dto.setPorcentajePT(porcentajePartido5);
-
-				double porcentajePartido6 = dosDecimales((dto.getMC() * 100) / dto.getTotal()).doubleValue();
-				dto.setPorcentajeMC(porcentajePartido6);
-
-				double porcentajePartido7 = dosDecimales((dto.getMORENA() * 100) / dto.getTotal()).doubleValue();
-				dto.setPorcentajeMORENA(porcentajePartido7);
-
-				double porcentajePartido8 = dosDecimales((dto.getPES() * 100) / dto.getTotal()).doubleValue();
-				dto.setPorcentajePES(porcentajePartido8);
-
-				double porcentajePartido9 = dosDecimales((dto.getRSP() * 100) / dto.getTotal()).doubleValue();
-				dto.setPorcentajeRSP(porcentajePartido9);
-
-				double porcentajePartido10 = dosDecimales((dto.getFUERZAMEXICO() * 100) / dto.getTotal()).doubleValue();
-				dto.setPorcentajeFUERZAMEXICO(porcentajePartido10);
-
-				double porcentajePartido11 = dosDecimales((dto.getPANAL() * 100) / dto.getTotal()).doubleValue();
-				dto.setPorcentajePANAL(porcentajePartido11);
-
-				double porcentajeNulos = dosDecimales((dto.getNulos() * 100) / dto.getTotal()).doubleValue();
-				dto.setPorcentajeNulos(porcentajeNulos);
-
-				double porcentajeCrg = dosDecimales((dto.getCrg() * 100) / dto.getTotal()).doubleValue();
-				dto.setPorcentajeCrg(porcentajeCrg);
-
-				double porcentajeTotal = dosDecimales((dto.getTotal() / dto.getListaNominal() * 100)).doubleValue();
-				dto.setPorcentajeTotal(porcentajeTotal);
-				dto.setCandidato1(500L);
-				double porcentajeCandidato1 = dosDecimales((dto.getCandidato1() / dto.getTotal() * 100)).doubleValue();
-				dto.setPorcentajeCandidato1(porcentajeCandidato1);
-				dto.setCandidato2(454L);
-				double porcentajeCandidato2 = dosDecimales((dto.getCandidato2() / dto.getTotal() * 100)).doubleValue();
-				dto.setPorcentajeCandidato2(porcentajeCandidato2);
-
-				listaDTO.add(dto);
-
-				total.setIdFederal(null);
-				total.setListaNominal(total.getListaNominal() + dto.getListaNominal());
-				total.setPAN(total.getPAN() + dto.getPAN());
-				total.setPorcentajePAN(total.getPorcentajePAN() + dto.getPorcentajePAN());
-				total.setPRI(total.getPRI() + dto.getPRI());
-				total.setPorcentajePRI(total.getPorcentajePRI() + dto.getPorcentajePRI());
-				total.setPRD(total.getPRD() + dto.getPRD());
-				total.setPorcentajePRD(total.getPorcentajePRD() + dto.getPorcentajePRD());
-				total.setPVEM(total.getPVEM() + dto.getPVEM());
-				total.setPorcentajePVEM(total.getPorcentajePVEM() + dto.getPorcentajePVEM());
-				total.setPT(total.getPT() + dto.getPT());
-				total.setPorcentajePT(total.getPorcentajePT() + dto.getPorcentajePT());
-				total.setMC(total.getMC() + dto.getMC());
-				total.setPorcentajeMC(total.getPorcentajeMC() + dto.getPorcentajeMC());
-				total.setMORENA(total.getMORENA() + dto.getMORENA());
-				total.setPorcentajeMORENA(total.getPorcentajeMORENA() + dto.getPorcentajeMORENA());
-				total.setPES(total.getPES() + dto.getPES());
-				total.setPorcentajePES(total.getPorcentajePES() + dto.getPorcentajePES());
-				total.setRSP(total.getRSP() + dto.getRSP());
-				total.setPorcentajeRSP(total.getPorcentajeRSP() + dto.getPorcentajeRSP());
-				total.setFUERZAMEXICO(total.getFUERZAMEXICO() + dto.getFUERZAMEXICO());
-				total.setPorcentajeFUERZAMEXICO(total.getPorcentajeFUERZAMEXICO() + dto.getPorcentajeFUERZAMEXICO());
-				total.setPANAL(total.getPANAL() + dto.getPANAL());
-				total.setPorcentajePANAL(total.getPorcentajePANAL() + dto.getPorcentajePANAL());
-				total.setNulos(total.getNulos() + dto.getNulos());
-				total.setPorcentajeNulos(total.getPorcentajeNulos() + dto.getPorcentajeNulos());
-				total.setCrg(total.getCrg() + dto.getCrg());
-				total.setPorcentajeCrg(total.getPorcentajeCrg() + dto.getPorcentajeCrg());
-				total.setTotal(total.getTotal() + dto.getTotal());
-				total.setPorcentajeTotal(total.getPorcentajeTotal() + dto.getPorcentajeTotal());
-				total.setCandidato1(total.getCandidato1() + dto.getCandidato1());
-				total.setPorcentajeCandidato1(total.getCandidato1() + dto.getPorcentajeCandidato1());
-				total.setCandidato2(total.getCandidato2() + dto.getCandidato2());
-				total.setPorcentajeCandidato2(total.getPorcentajeCandidato2() + dto.getPorcentajeCandidato2());
-
+			
+				if(idReporte == 1 ) {
+					lstPartidos = votosRepository.getPartidosGobernador();
+				}else if(idReporte == 2 ) {
+					lstPartidos = votosRepository.getPartidosFederal();
+				}else if(idReporte == 3 ) {
+					lstPartidos = votosRepository.getPartidosLocal(items.getId());
+				}else if(idReporte == 4 ) {
+					lstPartidos = votosRepository.getPartidosMunicipal(idUbicacion);
+				}else if(idReporte == 5 ) {
+					lstPartidos = votosRepository.getPartidosSindico(idUbicacion);
+				}
 			}
 
-			listaDTO.add(total);
+			Long p1 = 0L;
+			Long p2 = 0L;
+			Long p3 = 0L;
+			Long p4 = 0L;
+			Long p5 = 0L;
+			Long p6 = 0L;
+			Long p7 = 0L;
+			Long p8 = 0L;
+			Long p9 = 0L;
+			Long p10 = 0L;
+			Long p11 = 0L;
+			Long p12 = 0L;
+			Long p13 = 0L;
+			
+			listDF = distritoFederalRepository.findAll();
+			
+			if (idReporte == 1 || idReporte == 2 || idReporte == 3) {
+			
+			for (DistritoFederal items : listDF) {
+				
+				dto = new ReporteResultadosDTO();
+				
+				
+					if(lstPartidos.size() >= 1)
+						p1 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte, lstPartidos.get(0).getId());
+					if(lstPartidos.size() >= 2)
+						p2 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte, lstPartidos.get(1).getId());
+					if(lstPartidos.size() >= 3)
+						p3 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte, lstPartidos.get(2).getId());
+					if(lstPartidos.size() >= 4)
+						p4 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte, lstPartidos.get(3).getId());
+					if(lstPartidos.size() >= 5)
+						p5 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte, lstPartidos.get(4).getId());
+					if(lstPartidos.size() >= 6)
+						p6 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte, lstPartidos.get(5).getId());
+					if(lstPartidos.size() >= 7)
+						p7 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte, lstPartidos.get(6).getId());
+					if(lstPartidos.size() >= 8)
+						p8 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte, lstPartidos.get(7).getId());
+					if(lstPartidos.size() >= 9)
+						p9 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte, lstPartidos.get(8).getId());
+					if(lstPartidos.size() >= 10)
+						p10 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte, lstPartidos.get(9).getId());
+					if(lstPartidos.size() >= 11)
+						p11 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte, lstPartidos.get(10).getId());
+					if(lstPartidos.size() >= 12)
+						p12 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte, lstPartidos.get(11).getId());
+					if(lstPartidos.size() >= 13)
+						p13 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte, lstPartidos.get(12).getId());
+				
+				Long listaNominal = 2000000L;
+				
+				
+				dto.setIdFederal(items.getId());
+				dto.setListaNominal(listaNominal);
+				dto.setPartido1(p1);
+				dto.setPartido2(p2);
+				dto.setPartido3(p3);
+				dto.setPartido4(p4);
+				dto.setPartido5(p5);
+				dto.setPartido6(p6);
+				dto.setPartido7(p7);
+				dto.setPartido8(p8);
+				dto.setPartido9(p9);
+				dto.setPartido10(p10);
+				dto.setPartido11(p11);
+				dto.setPartido12(p12);
+				dto.setPartido13(p13);
+				dto.setTotal(p1+p2+p3+p4+p5+p6+p7+p8+p9+p10+p11+p12+p13);
+				
+				if (dto.getTotal() != 0) {
+					dto.setPorcentajePartido1(dosDecimales((dto.getPartido1() * 100.00) / dto.getTotal()).doubleValue());
+					dto.setPorcentajePartido2(dosDecimales((dto.getPartido2() * 100.00) / dto.getTotal()).doubleValue());
+					dto.setPorcentajePartido3(dosDecimales((dto.getPartido3() * 100.00) / dto.getTotal()).doubleValue());
+					dto.setPorcentajePartido4(dosDecimales((dto.getPartido4() * 100.00) / dto.getTotal()).doubleValue());
+					dto.setPorcentajePartido5(dosDecimales((dto.getPartido5() * 100.00) / dto.getTotal()).doubleValue());
+					dto.setPorcentajePartido6(dosDecimales((dto.getPartido6() * 100.00) / dto.getTotal()).doubleValue());
+					dto.setPorcentajePartido7(dosDecimales((dto.getPartido7() * 100.00) / dto.getTotal()).doubleValue());
+					dto.setPorcentajePartido8(dosDecimales((dto.getPartido8() * 100.00) / dto.getTotal()).doubleValue());
+					dto.setPorcentajePartido9(dosDecimales((dto.getPartido9() * 100.00) / dto.getTotal()).doubleValue());
+					dto.setPorcentajePartido10(dosDecimales((dto.getPartido10() * 100.00) / dto.getTotal()).doubleValue());
+					dto.setPorcentajePartido11(dosDecimales((dto.getPartido11() * 100.00) / dto.getTotal()).doubleValue());
+					dto.setPorcentajePartido12(dosDecimales((dto.getPartido12() * 100.00) / dto.getTotal()).doubleValue());
+					dto.setPorcentajePartido13(dosDecimales((dto.getPartido13() * 100.00) / dto.getTotal()).doubleValue());
+				}
+				
+				dto.setIdFederal(items.getId());
+				dto.setListaNominal(listaNominal);
+
+				dto.setCoalicion1(votosRepository.getCoalicionByCoalicion(items.getId(), idReporte, 1L));
+				dto.setCoalicion2(votosRepository.getCoalicionByCoalicion(items.getId(), idReporte, 2L));
+				dto.setCoalicion3(votosRepository.getCoalicionByCoalicion(items.getId(), idReporte, 3L));
+				dto.setCoalicion4(votosRepository.getCoalicionByCoalicion(items.getId(), idReporte, 4L));
+				dto.setCoalicion5(votosRepository.getCoalicionByCoalicion(items.getId(), idReporte, 5L));
+
+				dto.setIdCoalicion1(1L);
+				dto.setIdCoalicion2(2L);
+				dto.setIdCoalicion3(3L);
+				dto.setIdCoalicion4(4L);
+				dto.setIdCoalicion5(5L);
+
+				if (dto.getCoalicion1() > 0)
+					dto.setPorcentajeCoalicion1(dosDecimales((dto.getCoalicion1() * 100.0) / dto.getTotal()).doubleValue());
+
+				if (dto.getCoalicion2() > 0)
+					dto.setPorcentajeCoalicion2(dosDecimales((dto.getCoalicion2() * 100.0) / dto.getTotal()).doubleValue());
+
+				if (dto.getCoalicion3() > 0)
+					dto.setPorcentajeCoalicion3(dosDecimales((dto.getCoalicion3() * 100.0) / dto.getTotal()).doubleValue());
+
+				if (dto.getCoalicion4() > 0)
+					dto.setPorcentajeCoalicion4(dosDecimales((dto.getCoalicion4() * 100.0) / dto.getTotal()).doubleValue());
+
+				if (dto.getCoalicion5() > 0)
+					dto.setPorcentajeCoalicion5(dosDecimales((dto.getCoalicion5() * 100.0) / dto.getTotal()).doubleValue());
+
+				dto.setTotal(dto.getTotal());
+				double porcentajeTotal = (dto.getTotal() * 100.0) / listaNominal;
+				dto.setPorcentajeTotal(dosDecimales(porcentajeTotal).doubleValue());
+
+								
+				listaDTO.add(dto);
+				
+			}
+			
+			}else {
+				
+				dto = new ReporteResultadosDTO();
+				
+				if(lstPartidos.size() >= 1)
+					p1 = votosRepository.getVotosByPartido(idReporte, lstPartidos.get(0).getId());
+				if(lstPartidos.size() >= 2)
+					p2 = votosRepository.getVotosByPartido( idReporte, lstPartidos.get(1).getId());
+				if(lstPartidos.size() >= 3)
+					p3 = votosRepository.getVotosByPartido( idReporte, lstPartidos.get(2).getId());
+				if(lstPartidos.size() >= 4)
+					p4 = votosRepository.getVotosByPartido( idReporte, lstPartidos.get(3).getId());
+				if(lstPartidos.size() >= 5)
+					p5 = votosRepository.getVotosByPartido(idReporte, lstPartidos.get(4).getId());
+				if(lstPartidos.size() >= 6)
+					p6 = votosRepository.getVotosByPartido(idReporte, lstPartidos.get(5).getId());
+				if(lstPartidos.size() >= 7)
+					p7 = votosRepository.getVotosByPartido(idReporte, lstPartidos.get(6).getId());
+				if(lstPartidos.size() >= 8)
+					p8 = votosRepository.getVotosByPartido(idReporte, lstPartidos.get(7).getId());
+				if(lstPartidos.size() >= 9)
+					p9 = votosRepository.getVotosByPartido(idReporte, lstPartidos.get(8).getId());
+				if(lstPartidos.size() >= 10)
+					p10 = votosRepository.getVotosByPartido(idReporte, lstPartidos.get(9).getId());
+				if(lstPartidos.size() >= 11)
+					p11 = votosRepository.getVotosByPartido(idReporte, lstPartidos.get(10).getId());
+				if(lstPartidos.size() >= 12)
+					p12 = votosRepository.getVotosByPartido(idReporte, lstPartidos.get(11).getId());
+				if(lstPartidos.size() >= 13)
+					p13 = votosRepository.getVotosByPartido(idReporte, lstPartidos.get(12).getId());
+				
+				Long listaNominal = 2000000L;
+				
+				dto.setIdFederal(idUbicacion);
+				dto.setListaNominal(listaNominal);
+				dto.setPartido1(p1);
+				dto.setPartido2(p2);
+				dto.setPartido3(p3);
+				dto.setPartido4(p4);
+				dto.setPartido5(p5);
+				dto.setPartido6(p6);
+				dto.setPartido7(p7);
+				dto.setPartido8(p8);
+				dto.setPartido9(p9);
+				dto.setPartido10(p10);
+				dto.setPartido11(p11);
+				dto.setPartido12(p12);
+				dto.setPartido13(p13);
+
+				dto.setTotal(p1+p2+p3+p4+p5+p6+p7+p8+p9+p10+p11+p12+p13);
+				
+				if (dto.getTotal() != 0) {
+					dto.setPorcentajePartido1(dosDecimales((dto.getPartido1() * 100.00) / dto.getTotal()).doubleValue());
+					dto.setPorcentajePartido2(dosDecimales((dto.getPartido2() * 100.00) / dto.getTotal()).doubleValue());
+					dto.setPorcentajePartido3(dosDecimales((dto.getPartido3() * 100.00) / dto.getTotal()).doubleValue());
+					dto.setPorcentajePartido4(dosDecimales((dto.getPartido4() * 100.00) / dto.getTotal()).doubleValue());
+					dto.setPorcentajePartido5(dosDecimales((dto.getPartido5() * 100.00) / dto.getTotal()).doubleValue());
+					dto.setPorcentajePartido6(dosDecimales((dto.getPartido6() * 100.00) / dto.getTotal()).doubleValue());
+					dto.setPorcentajePartido7(dosDecimales((dto.getPartido7() * 100.00) / dto.getTotal()).doubleValue());
+					dto.setPorcentajePartido8(dosDecimales((dto.getPartido8() * 100.00) / dto.getTotal()).doubleValue());
+					dto.setPorcentajePartido9(dosDecimales((dto.getPartido9() * 100.00) / dto.getTotal()).doubleValue());
+					dto.setPorcentajePartido10(dosDecimales((dto.getPartido10() * 100.00) / dto.getTotal()).doubleValue());
+					dto.setPorcentajePartido11(dosDecimales((dto.getPartido11() * 100.00) / dto.getTotal()).doubleValue());
+					dto.setPorcentajePartido12(dosDecimales((dto.getPartido12() * 100.00) / dto.getTotal()).doubleValue());
+					dto.setPorcentajePartido13(dosDecimales((dto.getPartido13() * 100.00) / dto.getTotal()).doubleValue());
+				}
+				
+				dto.setListaNominal(listaNominal);
+
+				dto.setCoalicion1(votosRepository.getCoalicion(idUbicacion, idReporte, 1L));
+				dto.setCoalicion2(votosRepository.getCoalicion(idUbicacion, idReporte, 2L));
+				dto.setCoalicion3(votosRepository.getCoalicion(idUbicacion, idReporte, 3L));
+				dto.setCoalicion4(votosRepository.getCoalicion(idUbicacion, idReporte, 4L));
+				dto.setCoalicion5(votosRepository.getCoalicion(idUbicacion, idReporte, 5L));
+
+				dto.setIdCoalicion1(1L);
+				dto.setIdCoalicion2(2L);
+				dto.setIdCoalicion3(3L);
+				dto.setIdCoalicion4(4L);
+				dto.setIdCoalicion5(5L);
+
+				if (dto.getCoalicion1() > 0)
+					dto.setPorcentajeCoalicion1(dosDecimales((dto.getCoalicion1() * 100.0) / dto.getTotal()).doubleValue());
+
+				if (dto.getCoalicion2() > 0)
+					dto.setPorcentajeCoalicion2(dosDecimales((dto.getCoalicion2() * 100.0) / dto.getTotal()).doubleValue());
+
+				if (dto.getCoalicion3() > 0)
+					dto.setPorcentajeCoalicion3(dosDecimales((dto.getCoalicion3() * 100.0) / dto.getTotal()).doubleValue());
+
+				if (dto.getCoalicion4() > 0)
+					dto.setPorcentajeCoalicion4(dosDecimales((dto.getCoalicion4() * 100.0) / dto.getTotal()).doubleValue());
+
+				if (dto.getCoalicion5() > 0)
+					dto.setPorcentajeCoalicion5(dosDecimales((dto.getCoalicion5() * 100.0) / dto.getTotal()).doubleValue());
+
+				dto.setTotal(dto.getTotal());
+				double porcentajeTotal = (dto.getTotal() * 100.0) / listaNominal;
+				dto.setPorcentajeTotal(dosDecimales(porcentajeTotal).doubleValue());
+				
+				listaDTO.add(dto);
+				
+			}
 
 			return listaDTO;
 
@@ -708,7 +790,7 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 	}
 
 	@Override
-	public void getReporteResultadosDownload(HttpServletResponse response, Long usuario, Long perfil, Long idReporte)
+	public void getReporteResultadosDownload(HttpServletResponse response, Long usuario, Long perfil, Long idReporte, Long idUbicacion)
 			throws CotException, IOException {
 
 		if (perfil == PERFIL_RG) {
@@ -716,7 +798,7 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 
 				setNameFile(response, CSV_REPORTE_RESULTADOS);
 
-				List<ReporteResultadosDTO> reporteDTOs = getReporteResultados(usuario, perfil, idReporte);
+				List<ReporteResultadosDTO> reporteDTOs = getReporteResultados(usuario, perfil, idReporte, idUbicacion);
 
 				String[] header = { "idFederal", "listaNominal", "PAN", "porcentajePAN", "PRI", "porcentajePRI", "PRD",
 						"porcentajePRD", "PVEM", "porcentajePVEM", "PT", "porcentajePT", "MC", "porcentajeMC", "MORENA",
