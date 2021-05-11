@@ -1163,21 +1163,17 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 			if (idEleccion >= 1 && idEleccion <= 5) {
 				setNameFile(response, CSV_REPORTE_RESULTADOS_PMUNICIPAL);
 				List<ReporteVotacionMunicipalDTO> dto = getReporteMunicipal(idUsuario, idEleccion);
-
-				String[] header = { "idFederal", "municipio", "listaNominal", "pan", "porcentajePan", "pri",
-						"porcentajePri", "prd", "porcentajePrd", "pvem", "porcentajePvem", "pt", "porcentajePt", "mc",
-						"porcentajeMc", "morena", "porcentajeMorena", "pes", "porcentajePes", "rsp", "porcentajeRsp",
-						"fuerzaMexico", "porcentajeFuerzaMexico", "panal", "porcentajePanal", "nulos",
-						"porcentajeNulos", "crg", "porcentajeCrg", "total", "porcentajeTotal", "candidato1",
-						"porcentajeCandidato1", "candidato2", "porcentajeCandidato2" };
-
-				String[] header2 = { "No. Federal", "Municipio", "Lista Nominal", "PAN", "Porcentaje PAN", "PRI",
-						"Porcentaje PRI", "PRD", "Porcentaje PRD", "PVEM", "Porcentaje PVEM", "PT", "Porcentaje PT",
-						"MC", "Porcentaje MC", "MORENA", "Porcentaje MORENA", "PES", "Porcentaje PES", "RSP",
-						"Porcentaje RSP", "FUERZA POR MEXICO", "Porcentaje FUERZA MEXICO", "PANAL", "Porcentaje PANAL",
-						"Nulos", "Porcentaje Nulos", "Crg", "Porcentaje Crg", "Total", "Porcentaje Total", "candidato1",
-						"porcentajeCandidato1", "candidato2", "porcentajeCandidato2" };
-
+				
+				String[] header = { "idFederal", "municipio", "listaNominal", "partido1", "porcentajePartido1", "partido2", "porcentajePartido2", "partido3", "porcentajePartido3", "partido4", "porcentajePartido4",
+						"partido5", "porcentajePartido5", "partido6", "porcentajePartido6", "partido7", "porcentajePartido7", "partido8", "porcentajePartido8", "partido9", "porcentajePartido9", "partido10", "porcentajePartido10",
+						"partido11", "porcentajePartido11", "partido12", "porcentajePartido12", "partido13", "porcentajePartido13", "nulos", "porcentajeNulos", "total", "porcentajeTotal", 
+						"Coalicion1", "porcentajeCoalicion1", "Coalicion2", "porcentajeCoalicion2", "Coalicion3", "porcentajeCoalicion3", "Coalicion4", "porcentajeCoalicion4", "Coalicion5", "porcentajeCoalicion5" };
+				
+				String[] header2 = { "No. Federal", "Municipio", "Lista Nominal", "PAN", "Porcentaje PAN", "PRI", "Porcentaje PRI", "PRD", "Porcentaje PRD", "PVEM", "Porcentaje PVEM", "PT",
+						"Porcentaje PT", "MC", "Porcentaje MC", "MORENA", "Porcentaje MORENA", "PES", "Porcentaje PES", "RSP", "Porcentaje RSP", "FUERZA POR MEXICO", "Porcentaje FUERZA MEXICO",
+						"PANAL", "Porcentaje PANAL", "MORENA-PT-PANAL", "Porcentaje MORENA-PT-PANAL", "PAN-PRD", "Porcentaje PAN-PRD", "Nulos", "Porcentaje Nulos", "Total", "Porcentaje Total",
+						"Coalicion 1", "Porcentaje Coalicion 1", "Coalicion 2", "Porcentaje Coalicion 2", "Coalicion 3", "Porcentaje Coalicion 3", "Coalicion 4", "Porcentaje Coalicion 4", "Coalicion 5", "Porcentaje Coalicion 5" };
+		
 				setWriterFile(response, dto, header, header2);
 
 			} else {
