@@ -61,4 +61,82 @@ public class VotosPartidoAmbitoRepository implements IVotosPartidoAmbitoReposito
 		}
 	}
 
+	@Override
+	public Long getVotosPartidoByDistrito(Long idMunicipio, Long idDistrito, Long idEleccion, Long idPartido) {
+//		String sql ="select sum(votos) from app_votos_partido_ambito avpa " + 
+//				"inner join app_casilla ac " + 
+//				"on ac.id = avpa.id_casilla " + 
+//				"where ac.municpio_id = ? and ac.federal_id = ? and avpa.id_ambito = ? and avpa.id_partido = ?";
+		
+		
+		String sql ="select case "  
+				+ "when sum(votos) is null then 0 " 
+				+ "else sum(votos) " 
+				+ "end "
+				+ "from app_votos_partido_ambito avpa "  
+				+ "inner join app_casilla ac " 
+				+ "on ac.id = avpa.id_casilla "  
+				+ "where ac.municpio_id = ? and ac.federal_id = ? and avpa.id_ambito = ? and avpa.id_partido = ?";
+		try {
+			return template.queryForObject(sql, new Object[] { idMunicipio, idDistrito, idEleccion, idPartido }, new int[] 
+					{ Types.NUMERIC, Types.NUMERIC, Types.NUMERIC, Types.NUMERIC}, new LongRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+
+	@Override
+	public Long getNulosByMunicipio(Long idMunicipio, Long idFederal, Long idEleccion, String partido) {
+		
+		String inner = null;
+		
+		if (idEleccion ==1) 
+			inner =" inner join app_partidos_entidad ape ";
+		
+		if (idEleccion ==2) 
+			inner =" inner join app_partidos_municipio ape ";
+			
+		if (idEleccion ==3) 
+			inner =" inner join app_partidos_sindico ape ";
+				
+		if (idEleccion ==4) 
+			inner =" inner join app_partidos_diputado_local ape ";
+					
+		if (idEleccion ==5) 
+			inner =" inner join app_partidos_diputado_federal ape ";
+		
+			
+
+		String sql = "select sum(votos) from app_votos_partido_ambito avpa "  
+				+ "inner join app_casilla ac " 
+				+ "on avpa.id_casilla = ac.id "  
+				+ inner  
+				+ "on avpa.id_partido = ape.id "  
+				+ "where ac.municpio_id = ? and ac.federal_id = ? and avpa.id_ambito  = ? and ape.partido = ? ";
+
+		try {
+			return template.queryForObject(sql, new Object[] { idMunicipio, idFederal, idEleccion, partido }, new int[] 
+					{ Types.NUMERIC, Types.NUMERIC, Types.NUMERIC, Types.VARCHAR}, new LongRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+
+	@Override
+	public Long getCoalicionByIdCoalicion(Long idMunicipio, Long idDistrito, Long idEleccion, Long idCoalicion) {
+		String sql = "select case "
+				+ "when sum(votos) is null then 0 " 
+				+ "else sum(votos) " 
+				+ "end "
+				+ "from app_votos_partido_ambito avpa "
+				+ "inner join app_casilla ac on ac.id = avpa.id_casilla " 
+				+ "where  ac.municpio_id = ? and ac.federal_id = ? and avpa.id_ambito = ? and avpa.id_coalision = ? ";
+		try {
+			return template.queryForObject(sql, new Object[] { idMunicipio, idDistrito, idEleccion, idCoalicion }, new int[] 
+					{ Types.NUMERIC, Types.NUMERIC, Types.NUMERIC, Types.NUMERIC}, new LongRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+
 }

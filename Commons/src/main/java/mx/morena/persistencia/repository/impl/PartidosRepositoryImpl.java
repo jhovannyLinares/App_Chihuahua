@@ -173,7 +173,7 @@ public class PartidosRepositoryImpl implements IPartidosRepository {
 				+ "nombres, id_coalicion FROM app_partidos_entidad where entidad_id = ? ";
 
 		try {
-			System.out.println(sql);
+//			System.out.println(sql);
 			return template.queryForObject(sql, new Object[] { entidad }, new int[] { Types.NUMERIC }, new PartidosRowMapper());
 		} catch (EmptyResultDataAccessException e) {
 			return null;
