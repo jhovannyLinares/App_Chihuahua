@@ -556,9 +556,10 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 				if (idReporte == 1) {
 					lstPartidos = votosRepository.getPartidosGobernador();
 				} else if (idReporte == 2) {
-					throw new CotException("No se encontraron datos para el reporte en el Ambito Distrito Federal",401);
-					//lstPartidos = votosRepository.getPartidosFederal();
-					
+					throw new CotException("No se encontraron datos para el reporte en el Ambito Distrito Federal",
+							401);
+					// lstPartidos = votosRepository.getPartidosFederal();
+
 				} else if (idReporte == 3) {
 					lstPartidos = votosRepository.getPartidosLocal(items.getId());
 				} else if (idReporte == 4) {
@@ -590,48 +591,45 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 
 					dto = new ReporteResultadosDTO();
 
-
-						if (lstPartidos.size() >= 1)
-							p1 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte,
-									lstPartidos.get(0).getId());
-						if (lstPartidos.size() >= 2)
-							p2 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte,
-									lstPartidos.get(1).getId());
-						if (lstPartidos.size() >= 3)
-							p3 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte,
-									lstPartidos.get(2).getId());
-						if (lstPartidos.size() >= 4)
-							p4 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte,
-									lstPartidos.get(3).getId());
-						if (lstPartidos.size() >= 5)
-							p5 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte,
-									lstPartidos.get(4).getId());
-						if (lstPartidos.size() >= 6)
-							p6 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte,
-									lstPartidos.get(5).getId());
-						if (lstPartidos.size() >= 7)
-							p7 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte,
-									lstPartidos.get(6).getId());
-						if (lstPartidos.size() >= 8)
-							p8 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte,
-									lstPartidos.get(7).getId());
-						if (lstPartidos.size() >= 9)
-							p9 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte,
-									lstPartidos.get(8).getId());
-						if (lstPartidos.size() >= 10)
-							p10 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte,
-									lstPartidos.get(9).getId());
-						if (lstPartidos.size() >= 11)
-							p11 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte,
-									lstPartidos.get(10).getId());
-						if (lstPartidos.size() >= 12)
-							p12 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte,
-									lstPartidos.get(11).getId());
-						if (lstPartidos.size() >= 13)
-							p13 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte,
-									lstPartidos.get(12).getId());
-
-					
+					if (lstPartidos.size() >= 1)
+						p1 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte,
+								lstPartidos.get(0).getId());
+					if (lstPartidos.size() >= 2)
+						p2 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte,
+								lstPartidos.get(1).getId());
+					if (lstPartidos.size() >= 3)
+						p3 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte,
+								lstPartidos.get(2).getId());
+					if (lstPartidos.size() >= 4)
+						p4 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte,
+								lstPartidos.get(3).getId());
+					if (lstPartidos.size() >= 5)
+						p5 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte,
+								lstPartidos.get(4).getId());
+					if (lstPartidos.size() >= 6)
+						p6 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte,
+								lstPartidos.get(5).getId());
+					if (lstPartidos.size() >= 7)
+						p7 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte,
+								lstPartidos.get(6).getId());
+					if (lstPartidos.size() >= 8)
+						p8 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte,
+								lstPartidos.get(7).getId());
+					if (lstPartidos.size() >= 9)
+						p9 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte,
+								lstPartidos.get(8).getId());
+					if (lstPartidos.size() >= 10)
+						p10 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte,
+								lstPartidos.get(9).getId());
+					if (lstPartidos.size() >= 11)
+						p11 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte,
+								lstPartidos.get(10).getId());
+					if (lstPartidos.size() >= 12)
+						p12 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte,
+								lstPartidos.get(11).getId());
+					if (lstPartidos.size() >= 13)
+						p13 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte,
+								lstPartidos.get(12).getId());
 
 					Long listaNominal = 2000000L;
 
@@ -864,12 +862,15 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 
 				List<ReporteResultadosDTO> reporteDTOs = getReporteResultados(usuario, perfil, idReporte, idUbicacion);
 
-				String[] header = { "idFederal", "listaNominal", "PAN", "porcentajePAN", "PRI", "porcentajePRI", "PRD",
-						"porcentajePRD", "PVEM", "porcentajePVEM", "PT", "porcentajePT", "MC", "porcentajeMC", "MORENA",
-						"porcentajeMORENA", "PES", "porcentajePES", "RSP", "porcentajeRSP", "FUERZAMEXICO",
-						"porcentajeFUERZAMEXICO", "PANAL", "porcentajePANAL", "nulos", "porcentajeNulos", "crg",
-						"porcentajeCrg", "total", "porcentajeTotal", "candidato1", "porcentajeCandidato1", "candidato2",
-						"porcentajeCandidato2" };
+				String[] header = { "idFederal", "listaNominal", "partido1", "porcentajePartido1", "partido2",
+						"porcentajePartido2", "partido3", "porcentajePartido3", "partido4", "porcentajePartido4",
+						"partido5", "porcentajePartido5", "partido6", "porcentajePartido6", "partido7",
+						"porcentajePartido7", "partido8", "porcentajePartido8", "partido9", "porcentajePartido9",
+						"partido10", "porcentajePartido10", "partido11", "porcentajePartido11", "partido12",
+						"porcentajePartido12", "partido13", "porcentajePartido13", "idCoalicion1", "coalicion1",
+						"porcentajeCoalicion1", "idCoalicion2", "coalicion2", "porcentajeCoalicion2", "idCoalicion3",
+						"coalicion3", "porcentajeCoalicion3", "idCoalicion4", "coalicion4", "porcentajeCoalicion4",
+						"idCoalicion5", "coalicion5", "porcentajeCoalicion5", "total", "porcentajeTotal"};
 
 				setWriterFile(response, reporteDTOs, header);
 			} else {
