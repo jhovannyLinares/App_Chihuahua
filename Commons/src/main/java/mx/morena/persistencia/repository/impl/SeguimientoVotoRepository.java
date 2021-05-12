@@ -1521,4 +1521,14 @@ public class SeguimientoVotoRepository implements ISeguimientoVotoRepository {
 				new LongRowMapper());
 	}
 
+	@Override
+	public Long getConvencidosByFederal(Long idDistrito) {
+		
+		String sql = "select meta_convencidos "
+				+ "from app_metas_federales amf "
+				+ "where distrito_federal_id = ? ";
+		return template.queryForObject(sql, new Object[] { idDistrito }, new int[] { Types.NUMERIC },
+				new LongRowMapper());
+	}
+
 }

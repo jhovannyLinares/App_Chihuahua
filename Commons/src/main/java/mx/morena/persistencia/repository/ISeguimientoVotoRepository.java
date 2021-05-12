@@ -135,5 +135,7 @@ Long getCasillasByDistritoFederal(Long idDistritoFederal, Long idDistritoLocal, 
 	Long getTotalCasillasInstaladasRg(Long descripcion);
 	
 	Long getCasillasBySeccion(Long descripcion);
+	
+	Long getConvencidosByFederal(Long idDistrito);
 
 }

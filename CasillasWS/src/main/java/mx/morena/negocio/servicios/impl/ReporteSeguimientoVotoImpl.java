@@ -81,7 +81,7 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 				Long urbanas = casillasRepository.countByDistritoAndTipologia(seccion.getDistritoId(), URBANAS);
 				Long noUrbanas = casillasRepository.countByDistritoAndTipologia(seccion.getDistritoId(), NO_URBANAS);
 				Long convencidos = seguimientoRepository.countByLocalAndTipo(seccion.getDistritoId(), CONVENCIDO);
-				Long metaCon = 45L;
+				Long metaCon = seguimientoRepository.getConvencidosByFederal(seccion.getDistritoId());
 				Long notificados = seguimientoRepository.countNotificados(seccion.getDistritoId());
 				dto = new ReporteSeguimintoVotoDTO();
 
