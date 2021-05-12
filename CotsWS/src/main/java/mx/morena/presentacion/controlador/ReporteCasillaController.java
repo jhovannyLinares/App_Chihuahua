@@ -255,7 +255,7 @@ public class ReporteCasillaController extends MasterController {
 	@GetMapping("/resultados")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
 	private List<ReporteResultadosDTO> getReporteResultados(HttpServletResponse response, HttpServletRequest request,
-			@RequestParam(value = "idAmbito", required = false) Long idReporte,
+			@RequestParam(value = "idAmbito", required = true) Long idReporte,
 			@RequestParam(value = "idUbicacion", required = false) Long idUbicacion) throws IOException {
 		try {
 
