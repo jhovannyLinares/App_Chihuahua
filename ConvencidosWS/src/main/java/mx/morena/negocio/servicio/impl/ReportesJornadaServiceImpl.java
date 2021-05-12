@@ -18,9 +18,11 @@ import mx.morena.negocio.dto.ReporteCapacitacionRgDTO;
 import mx.morena.negocio.exception.JornadaException;
 import mx.morena.negocio.servicio.IReportesJornadaService;
 import mx.morena.persistencia.entidad.DistritoFederal;
+import mx.morena.persistencia.entidad.Metas;
 import mx.morena.persistencia.entidad.Usuario;
 import mx.morena.persistencia.repository.ICapacitacionRepository;
 import mx.morena.persistencia.repository.IDistritoFederalRepository;
+import mx.morena.persistencia.repository.IMetasFederalRepository;
 import mx.morena.persistencia.repository.IUsuarioRepository;
 import mx.morena.security.servicio.MasterService;
 
@@ -35,6 +37,9 @@ public class ReportesJornadaServiceImpl extends MasterService implements IReport
 	
 	@Autowired
 	private ICapacitacionRepository capacitacionRepository;
+	
+	@Autowired
+	private IMetasFederalRepository metaFedralRepository;
 	
 	@Override
 	public List<ReporteCapacitacionEstatalDTO> getReporteCapEstatal(Long idUsuario, Long idEntidad, Long idDistritoFederal) throws JornadaException {
@@ -255,10 +260,14 @@ public class ReportesJornadaServiceImpl extends MasterService implements IReport
 		
 		if (perfil != PERFIL_RC) {
 			
+			Metas metas = new Metas();
+			
 			if(idEstatal != null && idFederal != null) {
 			
 				List<ReporteCapacitacionDistritalDTO> reporteDistDto = new ArrayList<ReporteCapacitacionDistritalDTO>();
 				ReporteCapacitacionDistritalDTO dto = null;
+				
+				
 	
 					dto = new ReporteCapacitacionDistritalDTO();
 					String dist = distritoRepository.findDstritoFederal(idFederal);
@@ -267,21 +276,20 @@ public class ReportesJornadaServiceImpl extends MasterService implements IReport
 					Long nombramientoRg = capacitacionRepository.getNombramientoByDfAndRepresentante(idEstado, idFederal, PERFIL_RG, true);
 					Long capacitacionRc = capacitacionRepository.getCapacitacionByDfAndRepresentante(idEstado, idFederal, PERFIL_RC, SI_TOMO_CAPACITACION);
 					Long nombramientoRc = capacitacionRepository.getNombramientoByDfAndRepresentante(idEstado, idFederal, PERFIL_RC, true);
-					Long metaRg = capacitacionRepository.getMetaRg(idFederal);
-					Long metaRc = capacitacionRepository.getMetaRc(idFederal);
+					metas = metaFedralRepository.getMetasByFederal(idFederal);
 	
 					dto.setNumero(idFederal);
 					dto.setDistritoFederal(idFederal+"-"+dist);
-					dto.setMetaRG(metaRg);
+					dto.setMetaRG(metas.getMetaRg());
 					dto.setAvanceCapacitacionRG(capacitacionRg);
-					dto.setPorcentajeCapacitacionRG(dosDecimales((capacitacionRg * 100.00)/ metaRg).doubleValue());
+					dto.setPorcentajeCapacitacionRG(dosDecimales((capacitacionRg * 100.00)/ metas.getMetaRg()).doubleValue());
 					dto.setAvanceEntregaNombramientoRG(nombramientoRg);
-					dto.setPorcentajeAvanceEntregaRG(dosDecimales((nombramientoRg * 100.00)/ metaRg).doubleValue());
-					dto.setMetaRC(metaRc);
+					dto.setPorcentajeAvanceEntregaRG(dosDecimales((nombramientoRg * 100.00)/ metas.getMetaRg()).doubleValue());
+					dto.setMetaRC(metas.getMetaRc());
 					dto.setAvanceCapacitacionRC(capacitacionRc);
-					dto.setPorcentajeCapacitacionRC(dosDecimales((capacitacionRc * 100.00)/ metaRc).doubleValue());
+					dto.setPorcentajeCapacitacionRC(dosDecimales((capacitacionRc * 100.00)/ metas.getMetaRc()).doubleValue());
 					dto.setAvanceEntregaNombramientoRC(nombramientoRc);
-					dto.setPorcentajeAvanceEntregaRC(dosDecimales((nombramientoRc * 100.00)/ metaRc).doubleValue());
+					dto.setPorcentajeAvanceEntregaRC(dosDecimales((nombramientoRc * 100.00)/ metas.getMetaRc()).doubleValue());
 					reporteDistDto.add(dto);
 				
 				return reporteDistDto;
@@ -314,21 +322,20 @@ public class ReportesJornadaServiceImpl extends MasterService implements IReport
 						Long nombramientoRg = capacitacionRepository.getNombramientoByDfAndRepresentante(idEstado, df1.getId(), PERFIL_RG, true);
 						Long capacitacionRc = capacitacionRepository.getCapacitacionByDfAndRepresentante(idEstado, df1.getId(), PERFIL_RC, SI_TOMO_CAPACITACION);
 						Long nombramientoRc = capacitacionRepository.getNombramientoByDfAndRepresentante(idEstado, df1.getId(), PERFIL_RC, true);
-						Long metaRg = capacitacionRepository.getMetaRg(df1.getId());
-						Long metaRc = capacitacionRepository.getMetaRc(df1.getId());
+						metas = metaFedralRepository.getMetasByFederal(df1.getId());
 		
 						dto.setNumero(df1.getId());
 						dto.setDistritoFederal(df1.getCabeceraFederal());
-						dto.setMetaRG(metaRg);
+						dto.setMetaRG(metas.getMetaRg());
 						dto.setAvanceCapacitacionRG(capacitacionRg);
-						dto.setPorcentajeCapacitacionRG(dosDecimales((capacitacionRg * 100.00)/ metaRg).doubleValue());
+						dto.setPorcentajeCapacitacionRG(dosDecimales((capacitacionRg * 100.00)/ metas.getMetaRg()).doubleValue());
 						dto.setAvanceEntregaNombramientoRG(nombramientoRg);
-						dto.setPorcentajeAvanceEntregaRG(dosDecimales((nombramientoRg * 100.00)/ metaRg).doubleValue());
-						dto.setMetaRC(metaRc);
+						dto.setPorcentajeAvanceEntregaRG(dosDecimales((nombramientoRg * 100.00)/ metas.getMetaRg()).doubleValue());
+						dto.setMetaRC(metas.getMetaRc());
 						dto.setAvanceCapacitacionRC(capacitacionRc);
-						dto.setPorcentajeCapacitacionRC(dosDecimales((capacitacionRc * 100.00)/ metaRc).doubleValue());
+						dto.setPorcentajeCapacitacionRC(dosDecimales((capacitacionRc * 100.00)/ metas.getMetaRc()).doubleValue());
 						dto.setAvanceEntregaNombramientoRC(nombramientoRc);
-						dto.setPorcentajeAvanceEntregaRC(dosDecimales((nombramientoRc * 100.00)/ metaRc).doubleValue());
+						dto.setPorcentajeAvanceEntregaRC(dosDecimales((nombramientoRc * 100.00)/ metas.getMetaRc()).doubleValue());
 						
 						reporteDto.add(dto);
 						
@@ -365,21 +372,20 @@ public class ReportesJornadaServiceImpl extends MasterService implements IReport
 						Long nombramientoRg = capacitacionRepository.getNombramientoByDfAndRepresentante(idEstado, df, PERFIL_RG, true);
 						Long capacitacionRc = capacitacionRepository.getCapacitacionByDfAndRepresentante(idEstado, df, PERFIL_RC, SI_TOMO_CAPACITACION);
 						Long nombramientoRc = capacitacionRepository.getNombramientoByDfAndRepresentante(idEstado, df, PERFIL_RC, true);
-						Long metaRg = capacitacionRepository.getMetaRg(df);
-						Long metaRc = capacitacionRepository.getMetaRc(df);
+						metas = metaFedralRepository.getMetasByFederal(df);
 		
 						dto.setNumero(df);
 						dto.setDistritoFederal(df+"-"+dist);
-						dto.setMetaRG(metaRg);
+						dto.setMetaRG(metas.getMetaRg());
 						dto.setAvanceCapacitacionRG(capacitacionRg);
-						dto.setPorcentajeCapacitacionRG(dosDecimales((capacitacionRg * 100.00)/ metaRg).doubleValue());
+						dto.setPorcentajeCapacitacionRG(dosDecimales((capacitacionRg * 100.00)/ metas.getMetaRg()).doubleValue());
 						dto.setAvanceEntregaNombramientoRG(nombramientoRg);
-						dto.setPorcentajeAvanceEntregaRG(dosDecimales((nombramientoRg * 100.00)/ metaRg).doubleValue());
-						dto.setMetaRC(metaRc);
+						dto.setPorcentajeAvanceEntregaRG(dosDecimales((nombramientoRg * 100.00)/ metas.getMetaRg()).doubleValue());
+						dto.setMetaRC(metas.getMetaRc());
 						dto.setAvanceCapacitacionRC(capacitacionRc);
-						dto.setPorcentajeCapacitacionRC(dosDecimales((capacitacionRc * 100.00)/ metaRc).doubleValue());
+						dto.setPorcentajeCapacitacionRC(dosDecimales((capacitacionRc * 100.00)/ metas.getMetaRc()).doubleValue());
 						dto.setAvanceEntregaNombramientoRC(nombramientoRc);
-						dto.setPorcentajeAvanceEntregaRC(dosDecimales((nombramientoRc * 100.00)/ metaRc).doubleValue());
+						dto.setPorcentajeAvanceEntregaRC(dosDecimales((nombramientoRc * 100.00)/ metas.getMetaRc()).doubleValue());
 						reporteDistDto.add(dto);
 					
 					return reporteDistDto;
