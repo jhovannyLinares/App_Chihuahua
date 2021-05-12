@@ -27,6 +27,7 @@ import mx.morena.negocio.util.MapperUtil;
 import mx.morena.persistencia.entidad.AsignacionCasillas;
 import mx.morena.persistencia.entidad.Casilla;
 import mx.morena.persistencia.entidad.DistritoFederal;
+import mx.morena.persistencia.entidad.Metas;
 import mx.morena.persistencia.entidad.Municipio;
 import mx.morena.persistencia.entidad.Partido;
 import mx.morena.persistencia.entidad.Usuario;
@@ -34,6 +35,7 @@ import mx.morena.persistencia.repository.IAsignacionCasillasRepository;
 import mx.morena.persistencia.repository.ICasillaRepository;
 import mx.morena.persistencia.repository.IDistritoFederalRepository;
 import mx.morena.persistencia.repository.IInstalacionCasillasRepository;
+import mx.morena.persistencia.repository.IMetasFederalRepository;
 import mx.morena.persistencia.repository.IMunicipioRepository;
 import mx.morena.persistencia.repository.IPartidosRepository;
 import mx.morena.persistencia.repository.IReporteCasillasRepository;
@@ -78,6 +80,9 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 
 	@Autowired
 	private IPartidosRepository partidoRepository;
+	
+	@Autowired
+	private IMetasFederalRepository metaRepository;
 
 	private String once = "11:00:00";
 
@@ -94,6 +99,9 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 			throws CotException, IOException {
 
 		if (perfil == PERFIL_RG) {
+			
+			Metas metas = new Metas();
+			
 			if (idReporte >= 1 && idReporte <= 5) {
 
 				List<ReporteVotacionDTO> lstDto = new ArrayList<>();
@@ -124,9 +132,10 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 							quince);
 					Long votos18 = reporteCasillaRepository.getCountByDistritoAndTipoVotacion(se.getId(), idReporte,
 							dieciocho);
+					metas = metaRepository.getMetasByFederal(se.getId());
 
 					dto.setIdFederal(se.getId());
-					dto.setListaNominal(20L);
+					dto.setListaNominal(metas.getListaNominal());
 
 					dto.setVotacion11hrs(votos11);
 					double porcentaje11 = dosDecimales((dto.getVotacion11hrs() * 100.0) / dto.getListaNominal())
@@ -276,15 +285,17 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 		ReporteAsistenciaEstatalDTO dto = new ReporteAsistenciaEstatalDTO();
 
 		dto = new ReporteAsistenciaEstatalDTO();
+		Metas metas = new Metas();
 
 //		Long rgMeta;
 //		Long rcMeta;
 		Long rgAsistencia = instalacionCasillaRepository.getCountRgByDfAndAsistencia(federal, SI);
 		Long rcAsistencia = instalacionCasillaRepository.getCountRcByDfAndAsistencia(federal, SI);
+		metas = metaRepository.getMetasByFederal(federal);
 
 		dto.setIdFederal(federal);
-		dto.setRgMeta(100L);
-		dto.setRcMeta(100L);
+		dto.setRgMeta(metas.getMetaRg());
+		dto.setRcMeta(metas.getMetaRc());
 		dto.setRgAsistencia(rgAsistencia);
 		dto.setRcAsistencia(rcAsistencia);
 		dto.setRgPorcentaje(dosDecimales((dto.getRgAsistencia() * 100.0) / dto.getRgMeta()).doubleValue());
@@ -300,6 +311,8 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 			throws CotException, IOException {
 
 		if (perfil == PERFIL_FEDERAL) {
+			
+			Metas metas = new Metas();
 
 			List<ReporteAsistenciaFederalDTO> lstDto = new ArrayList<ReporteAsistenciaFederalDTO>();
 			ReporteAsistenciaFederalDTO dto = new ReporteAsistenciaFederalDTO();
@@ -313,10 +326,11 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 //			Long rcMeta = 0L;
 			Long rgAsistencia = instalacionCasillaRepository.getCountRgByDfAndAsistencia(distrito, SI);
 			Long rcAsistencia = instalacionCasillaRepository.getCountRcByDfAndAsistencia(distrito, SI);
+			metas = metaRepository.getMetasByFederal(distrito);
 
 			dto.setIdFederal(distrito);
-			dto.setRgMeta(50L);
-			dto.setRcMeta(50L);
+			dto.setRgMeta(metas.getMetaRg());
+			dto.setRcMeta(metas.getMetaRc());
 			dto.setRgAsistencia(rgAsistencia);
 			dto.setRcAsistencia(rcAsistencia);
 			dto.setRgPorcentaje(dosDecimales((dto.getRgAsistencia() * 100.0) / dto.getRgMeta()).doubleValue());
@@ -539,6 +553,8 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 			throws CotException, IOException {
 
 		if (perfil == PERFIL_RG) {
+			
+			Metas metas = new Metas();
 
 			if (idReporte >= 1 && idReporte <= 5) {
 
@@ -639,7 +655,9 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 							p13 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte,
 									lstPartidos.get(12).getId());
 
-						Long listaNominal = 2000000L;
+						metas = metaRepository.getMetasByFederal(items.getId());
+						
+						Long listaNominal = metas.getListaNominal();
 
 						dto.setIdFederal(items.getId());
 						dto.setListaNominal(listaNominal);
@@ -761,7 +779,9 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 					if (lstPartidos.size() >= 13)
 						p13 = votosRepository.getVotosByPartido(idReporte, lstPartidos.get(12).getId());
 
-					Long listaNominal = 2000000L;
+					metas = metaRepository.getMetasByMunicipio(idUbicacion); 
+					
+					Long listaNominal = metas.getListaNominal();
 
 					dto.setIdFederal(idUbicacion);
 					dto.setListaNominal(listaNominal);
