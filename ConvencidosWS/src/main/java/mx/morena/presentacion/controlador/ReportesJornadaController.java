@@ -166,8 +166,8 @@ public class ReportesJornadaController extends MasterController {
 	@GetMapping("/crg")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
 	public List<ReporteCapacitacionCrgDTO> getReporteCapacitacionCrg(HttpServletResponse response, HttpServletRequest request,
-			@RequestParam(value = "idEntidad", required = false) Long idEntidad,
-			@RequestParam(value = "idFederal", required = false) Long idFederal) throws IOException{
+			@RequestParam(value = "idEntidad", required = true) Long idEntidad,
+			@RequestParam(value = "idFederal", required = true) Long idFederal) throws IOException{
 		
 		try {
 			Long idUsuario = getUsuario(request);

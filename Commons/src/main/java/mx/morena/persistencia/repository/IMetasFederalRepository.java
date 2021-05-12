@@ -5,5 +5,7 @@ import mx.morena.persistencia.entidad.Metas;
 public interface IMetasFederalRepository {
 	
 	Metas getMetasByFederal(Long idFederal);
+	
+	Metas getMetasByLocal(Long idFederal);
 
 }
