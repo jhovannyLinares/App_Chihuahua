@@ -438,14 +438,14 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 
 		ReporteAsistenciaLocalDTO dto = new ReporteAsistenciaLocalDTO();
 
-//		Long rgMeta = 0L;
-//		Long rcMeta = 0L;
+		Metas metas = metaRepository.getMetasByLocal(local);
+
 		Long rgAsistencia = instalacionCasillaRepository.getCountRgByLocalAndAsistencia(local, SI, federal, tipo, 0L);
 		Long rcAsistencia = instalacionCasillaRepository.getCountRcByLocalAndAsistencia(local, SI, federal, tipo, 0L);
 
 		dto.setIdLocal(local);
-		dto.setRgMeta(50L);
-		dto.setRcMeta(50L);
+		dto.setRgMeta(metas.getMetaRg());
+		dto.setRcMeta(metas.getMetaRc());
 		dto.setRgAsistencia(rgAsistencia);
 		dto.setRcAsistencia(rcAsistencia);
 		dto.setRgPorcentaje(dosDecimales((dto.getRgAsistencia() * 100.0) / dto.getRgMeta()).doubleValue());
@@ -527,17 +527,18 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 
 		ReporteAsistenciaMunicipalDTO dto = new ReporteAsistenciaMunicipalDTO();
 
-//		Long rgMeta = 0L;
-//		Long rcMeta = 0L;
+		Metas metas =  metaRepository.getMetasByMunicipio(municipio);
+
 		Long rgAsistencia = instalacionCasillaRepository.getCountRgByLocalAndAsistencia(local, SI, federal, tipo,
 				municipio);
 		Long rcAsistencia = instalacionCasillaRepository.getCountRcByLocalAndAsistencia(local, SI, federal, tipo,
 				municipio);
-		String nomMunicipio = municipioRepository.getNombreByIdAndDf(municipio, federal);
+
+		String nomMunicipio = municipioRepository.getNombreByIdGroup(municipio);
 
 		dto.setMunicipio(nomMunicipio);
-		dto.setRgMeta(50L);
-		dto.setRcMeta(50L);
+		dto.setRgMeta(metas.getMetaRg());
+		dto.setRcMeta(metas.getMetaRc());
 		dto.setRgAsistencia(rgAsistencia);
 		dto.setRcAsistencia(rcAsistencia);
 		dto.setRgPorcentaje(dosDecimales((dto.getRgAsistencia() * 100.0) / dto.getRgMeta()).doubleValue());
@@ -1275,12 +1276,15 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 			if (perfil == PERFIL_CRG) {
 				Usuario usr = usuarioRepository.findById(usuario);
 				lstCasillas = asignacionCasillasRepository.getRutasByIdCrg(usr.getId());
+				if (lstCasillas == null) {
+					throw new CotException("No se encontraron datos para el usuario.", 404);
+				}
 				tipo = 1L;
 
 				for (AsignacionCasillas aCasillas : lstCasillas) {
 
-					dto = getAsistenciaCrg(idLocal, idFederal, tipo, idMunicipio, usr.getId(), aCasillas.getId(),
-							aCasillas.getFederalId(), aCasillas.getRuta());
+					dto = getAsistenciaCrg(idLocal, aCasillas.getFederalId(), tipo, idMunicipio, usr.getId(), aCasillas.getId(),
+							 aCasillas.getRuta());
 
 					total.setCasillas(total.getCasillas() + dto.getCasillas());
 					total.setRgMeta(total.getRgMeta() + dto.getRgMeta());
@@ -1309,8 +1313,7 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 					lstCasillas = asignacionCasillasRepository.getAll();
 					System.out.println("***** " + lstCasillas.size());
 					for (AsignacionCasillas aCasillas : lstCasillas) {
-						dto = getAsistenciaCrg(idLocal, aCasillas.getFederalId(), tipo, idMunicipio, 0L, 0L,
-								aCasillas.getFederalId(), aCasillas.getRuta());
+						dto = getAsistenciaCrg(idLocal, aCasillas.getFederalId(), tipo, idMunicipio, 0L, 0L, aCasillas.getRuta());
 
 						total.setCasillas(total.getCasillas() + dto.getCasillas());
 						total.setRgMeta(total.getRgMeta() + dto.getRgMeta());
@@ -1333,7 +1336,7 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 					lstCasillas = asignacionCasillasRepository.getRutasByFederal(idFederal);
 //					System.out.println("***** " + lstCasillas.size());
 					for (AsignacionCasillas aCasillas : lstCasillas) {
-						dto = getAsistenciaCrg(idLocal, idFederal, tipo, idMunicipio, 0L, 0L, idFederal,
+						dto = getAsistenciaCrg(idLocal, idFederal, tipo, idMunicipio, 0L, 0L,
 								aCasillas.getRuta());
 
 						total.setCasillas(total.getCasillas() + dto.getCasillas());
@@ -1355,7 +1358,7 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 
 				if (idFederal != null && idMunicipio != null) {
 					tipo = 4L;
-					dto = getAsistenciaCrg(idLocal, idFederal, tipo, idMunicipio, 0L, 0L, idFederal, 0L);
+					dto = getAsistenciaCrg(idLocal, idFederal, tipo, idMunicipio, 0L, 0L, 0L);
 					lstDto.add(dto);
 				}
 
@@ -1370,7 +1373,7 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 	}
 
 	public ReporteAsistenciaCrgDTO getAsistenciaCrg(Long local, Long federal, Long tipo, Long municipio, Long idCrg,
-			Long casillaId, Long casillaIdFederal, Long casillaRuta) {
+			Long casillaId, Long casillaRuta) {
 		List<ReporteAsistenciaCrgDTO> lstDto = new ArrayList<>();
 
 		ReporteAsistenciaCrgDTO dto = new ReporteAsistenciaCrgDTO();
@@ -1384,12 +1387,20 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 		Long casillas = asignacionCasillasRepository.countCasillasByIdCrgAndRuta(idCrg, casillaRuta, tipo, federal,
 				municipio);
 
-		dto.setIdFederal(casillaIdFederal);
+		dto.setIdFederal(federal);
 		dto.setRuta(casillaRuta);
 		dto.setCasillas(casillas);
+		
+		Metas metas = null;
+		if (tipo == 4) {
+			 metas = metaRepository.getMetasByMunicipio(municipio);
+		}else {
+		 metas = metaRepository.getMetasByFederal(federal);
+		}
 
-		dto.setRgMeta(50L);
-		dto.setRcMeta(50L);
+		dto.setRgMeta(metas.getMetaRg());
+		dto.setRcMeta(metas.getMetaRc());
+		
 		dto.setRgAsistencia(rgAsistencia);
 		dto.setRcAsistencia(rcAsistencia);
 		dto.setRgPorcentaje(dosDecimales((dto.getRgAsistencia() * 100.0) / dto.getRgMeta()).doubleValue());

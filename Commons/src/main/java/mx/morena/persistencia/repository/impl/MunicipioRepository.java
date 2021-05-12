@@ -177,4 +177,16 @@ public class MunicipioRepository implements IMunicipioRepository {
 			return null;
 		}
 	}
+
+	@Override
+	public String getNombreByIdGroup(Long municipio) {
+
+		String sql = "select nombre from app_municipio am  where id = ? group by nombre";
+		try {
+			return template.queryForObject(sql, new Object[] { municipio }, new int[] { Types.NUMERIC },
+					new StringRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
 }

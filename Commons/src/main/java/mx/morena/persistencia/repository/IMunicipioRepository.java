@@ -21,4 +21,6 @@ public interface IMunicipioRepository {
 	String getNombreById(Long idMunicipio);
 	
 	List<Municipio> getByEstadoAndDfAndMunicipio(Long idEstado, Long df, Long idMunicipio);
+
+	String getNombreByIdGroup(Long municipio);
 }
