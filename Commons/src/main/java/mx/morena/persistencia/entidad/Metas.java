@@ -4,7 +4,7 @@ public class Metas {
 	
 	private Long listaNominal;
 	
-	private Long metaCRg;
+	private Long metaCrg;
 	
 	private Long metaRg;
 	
@@ -20,12 +20,12 @@ public class Metas {
 		this.listaNominal = listaNominal;
 	}
 
-	public Long getMetaCRg() {
-		return metaCRg;
+	public Long getMetaCrg() {
+		return metaCrg;
 	}
 
-	public void setMetaCRg(Long metaCRg) {
-		this.metaCRg = metaCRg;
+	public void setMetaCrg(Long metaCrg) {
+		this.metaCrg = metaCrg;
 	}
 
 	public Long getMetaRg() {
