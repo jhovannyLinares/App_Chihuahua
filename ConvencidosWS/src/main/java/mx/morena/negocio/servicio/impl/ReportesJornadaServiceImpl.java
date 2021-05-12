@@ -209,7 +209,9 @@ public class ReportesJornadaServiceImpl extends MasterService implements IReport
 		ReporteCapacitacionRgDTO dto = new ReporteCapacitacionRgDTO();
 		List<ReporteCapacitacionRgDTO> lstDto = new ArrayList<ReporteCapacitacionRgDTO>();
 
-		dto.setMetaRC(45L);
+		Metas metas = metaFedralRepository.getMetasByFederal(idFederal);
+		
+		dto.setMetaRC(metas.getMetaRc());
 		long avanceCapacitacion = capacitacionRepository.getCountCapacitacionRC(idEntidad, idFederal, PERFIL_RC);
 		dto.setAvanceCapacitacionRC(avanceCapacitacion);
 
