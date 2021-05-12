@@ -494,8 +494,11 @@ public class ReportesJornadaServiceImpl extends MasterService implements IReport
 		String[] header = { "metaRG", "avanceCapacitacionRG", "porcentajeCapacitacionRG", "avanceEntregaNombramientoRG",
 				"porcentajeAvanceEntregaRG", "metaRC", "avanceCapacitacionRC", "porcentajeCapacitacionRC",
 				"avanceEntregaNombramientoRC", "porcentajeAvanceEntregaRC" };
+		
+		String [] encabezadoCSV = { "RG META", "RG AVANCE CAPACITACION", "% CAPACITACION", "RG AVANCE CON ENTREGA DE NOMBRAMIENTO",
+				"% AVANCE ENTREGA", "RC META", "RC AVANCE CAPACITACION", "% CAPACITACION", "RC AVANCE CON ENTREGA DE NOMBRAMIENTO", "% AVANCE ENTREGA"};
 
-		setWriterFile(response, capacitacionCrgDTOs, header);
+		setWriterFile(response, capacitacionCrgDTOs, header, encabezadoCSV);
 
 	}
 	
