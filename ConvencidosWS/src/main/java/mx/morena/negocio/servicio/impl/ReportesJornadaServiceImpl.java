@@ -445,8 +445,9 @@ public class ReportesJornadaServiceImpl extends MasterService implements IReport
 		totales.setAvanceEntregaNombramientoRC(0L);
 		totales.setPorcentajeAvanceEntregaRC(0.0);
 
-		
+		Metas metas = new Metas();
 			dto = new ReporteCapacitacionCrgDTO();
+			metas = metaFedralRepository.getMetasByFederal(idFederal);
 			Long capacitacionRg = capacitacionRepository.getCapacitacionByDfAndRepresentante(idEstado, idDistrito,
 					PERFIL_CRG, SI_TOMO_CAPACITACION);
 			Long nombramientoRg = capacitacionRepository.getNombramientoByDfAndRepresentante(idEstado, idDistrito,
@@ -456,14 +457,14 @@ public class ReportesJornadaServiceImpl extends MasterService implements IReport
 			Long nombramientoRc = capacitacionRepository.getNombramientoByDfAndRepresentante(idEstado, idDistrito,
 					PERFIL_CRG, true);
 
-			dto.setMetaRG(30L);
+			dto.setMetaRG(metas.getMetaRg());
 			dto.setAvanceCapacitacionRG(capacitacionRg);
 			double porcentajeCapRG = (dto.getAvanceCapacitacionRG() * 100.0) / dto.getMetaRG();
 			dto.setPorcentajeCapacitacionRG(dosDecimales(porcentajeCapRG).doubleValue());
 			dto.setAvanceEntregaNombramientoRG(nombramientoRg);
 			double porcentajeCapAvace = (dto.getAvanceEntregaNombramientoRG() * 100.0) / dto.getMetaRG();
 			dto.setPorcentajeAvanceEntregaRG(dosDecimales(porcentajeCapAvace).doubleValue());
-			dto.setMetaRC(40L);
+			dto.setMetaRC(metas.getMetaRc());
 			dto.setAvanceCapacitacionRC(capacitacionRc);
 			double porcentajeCapRC = (dto.getAvanceCapacitacionRC() * 100.0) / dto.getMetaRC();
 			dto.setPorcentajeCapacitacionRC(dosDecimales(porcentajeCapRC).doubleValue());
