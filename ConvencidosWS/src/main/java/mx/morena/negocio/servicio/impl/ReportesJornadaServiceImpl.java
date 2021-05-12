@@ -161,19 +161,18 @@ public class ReportesJornadaServiceImpl extends MasterService implements IReport
 		Long nombramientoRg = capacitacionRepository.getNombramientoByDfAndRepresentante(idEstado, idDf, PERFIL_RG, true);
 		Long capacitacionRc = capacitacionRepository.getCapacitacionByDfAndRepresentante(idEstado, idDf, PERFIL_RC, SI_TOMO_CAPACITACION);
 		Long nombramientoRc = capacitacionRepository.getNombramientoByDfAndRepresentante(idEstado, idDf, PERFIL_RC, true);
-		Long metaRg = 30L;
-		Long metaRc = 40L;
+		Metas metas = metaFedralRepository.getMetasByFederal(idDf);
 		
 		dto.setNumero(idDf);
 		dto.setDistritoFederal(df);
-		dto.setMetaRG(metaRg);
+		dto.setMetaRG(metas.getMetaRg());
 		dto.setAvanceCapacitacionRG(capacitacionRg);
 		double porcentajeCapRG = (dto.getAvanceCapacitacionRG() * 100.0) / dto.getMetaRG();
 		dto.setPorcentajeCapacitacionRG(dosDecimales(porcentajeCapRG).doubleValue());
 		dto.setAvanceEntregaNombramientoRG(nombramientoRg);
 		double porcentajeEntregaRG = (dto.getAvanceEntregaNombramientoRG() * 100.0) / dto.getMetaRG();
 		dto.setPorcentajeAvanceEntregaRG(dosDecimales(porcentajeEntregaRG).doubleValue());
-		dto.setMetaRC(metaRc);
+		dto.setMetaRC(metas.getMetaRc());
 		dto.setAvanceCapacitacionRC(capacitacionRc);
 		double porcentajeCapRC = (dto.getAvanceCapacitacionRC() * 100.0) / dto.getMetaRC();
 		dto.setPorcentajeCapacitacionRC(dosDecimales(porcentajeCapRC).doubleValue());
@@ -196,7 +195,10 @@ public class ReportesJornadaServiceImpl extends MasterService implements IReport
 			String[] header = { "numero", "distritoFederal", "metaRG", "avanceCapacitacionRG", "porcentajeCapacitacionRG", "avanceEntregaNombramientoRG",
 					"porcentajeAvanceEntregaRG", "metaRC", "avanceCapacitacionRC", "porcentajeCapacitacionRC", "avanceEntregaNombramientoRC", "porcentajeAvanceEntregaRC" };
 
-			setWriterFile(response, reporteDTOs, header);
+			String[] header2 = { "NO", "DISTRITO FEDERAL", "RG META", "RG AVANCE CAPACITACION", "% CAPACITACION", "RG AVANCE ENTREGA DE NOMBRAMIENTO",
+					"% AVANCE ENTREGA", "RC META", "RC AVANCE CAPACITACION", "% CAPACITACION", "RC AVANCE ENTREGA DE NOMBRAMIENTO", "% AVANCE ENTREGA" };
+
+			setWriterFile(response, reporteDTOs, header, header2);
 		} else {
 			throw new JornadaException("No cuenta con los permisos suficientes para consultar el reporte", 401);
 		}
@@ -248,9 +250,6 @@ public class ReportesJornadaServiceImpl extends MasterService implements IReport
 				setWriterFile(response, convDTOs, header);
 		
 	}
-
-
-
 
 	@Override
 	public List<ReporteCapacitacionDistritalDTO> getReporteCapDistrital(Long idUsuario, Long idEstatal, Long idFederal) throws JornadaException {

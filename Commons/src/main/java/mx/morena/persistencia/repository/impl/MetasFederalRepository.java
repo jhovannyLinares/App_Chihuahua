@@ -45,7 +45,17 @@ public class MetasFederalRepository implements IMetasFederalRepository{
 			return null;
 		}
 	}
-	
-	
+
+	@Override
+	public Metas getMetasByMunicipio(Long idMunicipio) {
+		String sql = "select listado_nominal as listado_nominal, suma_crg_ps as meta_crg, suma_rg as meta_rg, suma_rc as meta_rc, "
+				+ "convencidos as meta_convencidos from app_metas_municipios where clave_municipio = ? ";
+		try {
+			return template.queryForObject(sql, new Object[] { idMunicipio }, 
+					new int[] { Types.NUMERIC }, new MetasRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
 
 }

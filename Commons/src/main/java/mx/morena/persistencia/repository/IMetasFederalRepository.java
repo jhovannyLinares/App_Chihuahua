@@ -8,4 +8,5 @@ public interface IMetasFederalRepository {
 	
 	Metas getMetasByLocal(Long idFederal);
 
+	Metas getMetasByMunicipio(Long idMunicipio);
 }
