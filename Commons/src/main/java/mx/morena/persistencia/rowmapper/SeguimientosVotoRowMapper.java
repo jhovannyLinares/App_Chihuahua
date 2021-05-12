@@ -17,11 +17,10 @@ public class SeguimientosVotoRowMapper implements RowMapper<List<Convencidos>> {
 		do {
 			seccion = new Convencidos();
 
-			seccion.setNombre(rs.getString("nombre"));
-			seccion.setApellidoPaterno(rs.getString("apellido_paterno"));
-			seccion.setApellidoMaterno(rs.getString("apellido_Materno"));
-			seccion.setColonia_casilla(rs.getString("colonia"));
-			seccion.setReferencia_casilla(rs.getString("referencia"));
+			seccion.setNombre(rs.getString("nombre_completo"));
+			seccion.setCalle(rs.getString("Domicilio"));
+			seccion.setColonia_casilla(rs.getString("ubicacion_casilla"));
+			seccion.setReferencia_casilla(rs.getString("referencia_casilla"));
 			seccion.setIsNotificado(rs.getBoolean("is_notificado"));
 			
 			secciones.add(seccion);

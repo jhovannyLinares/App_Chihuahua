@@ -141,11 +141,10 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 //			SeguimientoVotoDTO dto = null;
 			SeguimientoVotoDTO totales = new SeguimientoVotoDTO();
 
-			totales.setNombre("");
-			totales.setApellidoPaterno("");
-			totales.setApellidoMaterno("");
-			totales.setColonia("");
-			totales.setReferencia("");
+			totales.setNombreCompleto("");
+			totales.setDomicilio("");
+			totales.setUbicacionCasilla("");
+			totales.setReferenciaCasilla("");
 			totales.setIsNotificado(false);
 
 			if (idSeccion != null) {
@@ -173,11 +172,10 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 	public SeguimientoVotoDTO convertirADto(Convencidos con) {
 		SeguimientoVotoDTO convencidosDto = new SeguimientoVotoDTO();
 
-		convencidosDto.setNombre(con.getNombre());
-		convencidosDto.setApellidoPaterno(con.getApellidoPaterno());
-		convencidosDto.setApellidoMaterno(con.getApellidoMaterno());
-		convencidosDto.setColonia(con.getColonia_casilla());
-		convencidosDto.setReferencia(con.getReferencia_casilla());
+		convencidosDto.setNombreCompleto(con.getNombre());
+		convencidosDto.setDomicilio(con.getCalle());
+		convencidosDto.setUbicacionCasilla(con.getColonia_casilla());
+		convencidosDto.setReferenciaCasilla(con.getReferencia_casilla());
 		convencidosDto.setIsNotificado(con.getIsNotificado());
 
 		return convencidosDto;

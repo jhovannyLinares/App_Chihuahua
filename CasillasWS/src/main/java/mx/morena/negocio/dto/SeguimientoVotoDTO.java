@@ -2,42 +2,36 @@ package mx.morena.negocio.dto;
 
 public class SeguimientoVotoDTO {
 	
-	private String nombre;
-	private String apellidoMaterno;
-	private String apellidoPaterno;
-	private String colonia;
-	private String referencia;
+	private String nombreCompleto;
+	private String domicilio;
+	private String ubicacionCasilla;
+	private String referenciaCasilla;
 	private Boolean isNotificado;
 	
-	public String getNombre() {
-		return nombre;
+	public String getNombreCompleto() {
+		return nombreCompleto;
 	}
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
+	public void setNombreCompleto(String nombreCompleto) {
+		this.nombreCompleto = nombreCompleto;
 	}
-	public String getApellidoMaterno() {
-		return apellidoMaterno;
+	 
+	public String getDomicilio() {
+		return domicilio;
 	}
-	public void setApellidoMaterno(String apellidoMaterno) {
-		this.apellidoMaterno = apellidoMaterno;
+	public void setDomicilio(String domicilio) {
+		this.domicilio = domicilio;
 	}
-	public String getApellidoPaterno() {
-		return apellidoPaterno;
+	public String getUbicacionCasilla() {
+		return ubicacionCasilla;
 	}
-	public void setApellidoPaterno(String apellidoPaterno) {
-		this.apellidoPaterno = apellidoPaterno;
+	public void setUbicacionCasilla(String ubicacionCasilla) {
+		this.ubicacionCasilla = ubicacionCasilla;
 	}
-	public String getColonia() {
-		return colonia;
+	public String getReferenciaCasilla() {
+		return referenciaCasilla;
 	}
-	public void setColonia(String colonia) {
-		this.colonia = colonia;
-	}
-	public String getReferencia() {
-		return referencia;
-	}
-	public void setReferencia(String referencia) {
-		this.referencia = referencia;
+	public void setReferenciaCasilla(String referenciaCasilla) {
+		this.referenciaCasilla = referenciaCasilla;
 	}
 	public Boolean getIsNotificado() {
 		return isNotificado;
@@ -46,10 +40,4 @@ public class SeguimientoVotoDTO {
 		this.isNotificado = isNotificado;
 	}
 	
-	
-	
-	
-	
-	
-
 }
