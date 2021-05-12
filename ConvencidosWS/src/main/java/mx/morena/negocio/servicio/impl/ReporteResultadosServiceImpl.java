@@ -138,8 +138,11 @@ public class ReporteResultadosServiceImpl extends MasterService implements IRepo
 					
 			String[] header = { "idFederal", "casillas", "actasGobernador", "porcentajeActasGobernador", "actasPresidenteMunicipal", "porcentajeActasMunicipal",
 					"actasSindico", "porcentajeActasSindico", "actasDiputadoLocal", "porcentajeActasDiputadoLocal", "actasDiputadoFederal", "porcentajeActasDiputadoFederal" };
-	
-			setWriterFile(response, dto, header);
+			
+			String[] header2 = { "DTTO FED", "CASILLAS", "ACTAS GOBERNADOR", "% ACTAS", "ACTAS PRESIDENTE MUNICIPAL", "% ACTAS",
+					"ACTAS SINDICO", "% ACTAS", "ACTAS DIPUTADO LOCAL", "% ACTAS", "ACTAS DIPUTADO FEDERAL", "% ACTAS" };
+
+			setWriterFile(response, dto, header, header2);
 		} else {
 			throw new ConvencidosException("No cuenta con los permisos suficientes para consultar el reporte", 401);
 		}
