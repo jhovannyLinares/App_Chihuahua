@@ -267,8 +267,8 @@ public class ReportesJornadaServiceImpl extends MasterService implements IReport
 					Long nombramientoRg = capacitacionRepository.getNombramientoByDfAndRepresentante(idEstado, idFederal, PERFIL_RG, true);
 					Long capacitacionRc = capacitacionRepository.getCapacitacionByDfAndRepresentante(idEstado, idFederal, PERFIL_RC, SI_TOMO_CAPACITACION);
 					Long nombramientoRc = capacitacionRepository.getNombramientoByDfAndRepresentante(idEstado, idFederal, PERFIL_RC, true);
-					Long metaRg = 30L;
-					Long metaRc = 40L;
+					Long metaRg = capacitacionRepository.getMetaRg(idFederal);
+					Long metaRc = capacitacionRepository.getMetaRc(idFederal);
 	
 					dto.setNumero(idFederal);
 					dto.setDistritoFederal(idFederal+"-"+dist);
@@ -314,8 +314,8 @@ public class ReportesJornadaServiceImpl extends MasterService implements IReport
 						Long nombramientoRg = capacitacionRepository.getNombramientoByDfAndRepresentante(idEstado, df1.getId(), PERFIL_RG, true);
 						Long capacitacionRc = capacitacionRepository.getCapacitacionByDfAndRepresentante(idEstado, df1.getId(), PERFIL_RC, SI_TOMO_CAPACITACION);
 						Long nombramientoRc = capacitacionRepository.getNombramientoByDfAndRepresentante(idEstado, df1.getId(), PERFIL_RC, true);
-						Long metaRg = 30L;
-						Long metaRc = 40L;
+						Long metaRg = capacitacionRepository.getMetaRg(df1.getId());
+						Long metaRc = capacitacionRepository.getMetaRc(df1.getId());
 		
 						dto.setNumero(df1.getId());
 						dto.setDistritoFederal(df1.getCabeceraFederal());
@@ -365,8 +365,8 @@ public class ReportesJornadaServiceImpl extends MasterService implements IReport
 						Long nombramientoRg = capacitacionRepository.getNombramientoByDfAndRepresentante(idEstado, df, PERFIL_RG, true);
 						Long capacitacionRc = capacitacionRepository.getCapacitacionByDfAndRepresentante(idEstado, df, PERFIL_RC, SI_TOMO_CAPACITACION);
 						Long nombramientoRc = capacitacionRepository.getNombramientoByDfAndRepresentante(idEstado, df, PERFIL_RC, true);
-						Long metaRg = 30L;
-						Long metaRc = 40L;
+						Long metaRg = capacitacionRepository.getMetaRg(df);
+						Long metaRc = capacitacionRepository.getMetaRc(df);
 		
 						dto.setNumero(df);
 						dto.setDistritoFederal(df+"-"+dist);

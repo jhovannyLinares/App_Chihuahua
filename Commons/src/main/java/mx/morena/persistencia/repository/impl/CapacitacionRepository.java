@@ -179,4 +179,32 @@ public class CapacitacionRepository implements ICapacitacionRepository{
 			return null;
 		}
 	}
+
+	@Override
+	public Long getMetaRg(Long idFederal) {
+		
+		String sql = "select meta_rg "
+				+ "from app_metas_federales amf "
+				+ "where distrito_federal_id = ? ";
+		try {
+			return template.queryForObject(sql, new Object[] { idFederal }, 
+					new int[] { Types.NUMERIC }, new LongRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+
+	@Override
+	public Long getMetaRc(Long idFederal) {
+		
+		String sql = "select meta_rc "
+				+ "from app_metas_federales amf "
+				+ "where distrito_federal_id = ?";
+		try {
+			return template.queryForObject(sql, new Object[] { idFederal }, 
+					new int[] { Types.NUMERIC }, new LongRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
 }
