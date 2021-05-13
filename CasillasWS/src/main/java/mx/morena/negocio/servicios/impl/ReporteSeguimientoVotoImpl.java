@@ -141,6 +141,7 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 //			SeguimientoVotoDTO dto = null;
 			SeguimientoVotoDTO totales = new SeguimientoVotoDTO();
 
+			totales.setId(0L);
 			totales.setNombreCompleto("");
 			totales.setDomicilio("");
 			totales.setUbicacionCasilla("");
@@ -172,6 +173,7 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 	public SeguimientoVotoDTO convertirADto(Convencidos con) {
 		SeguimientoVotoDTO convencidosDto = new SeguimientoVotoDTO();
 
+		convencidosDto.setId(con.getId());
 		convencidosDto.setNombreCompleto(con.getNombre());
 		convencidosDto.setDomicilio(con.getCalle());
 		convencidosDto.setUbicacionCasilla(con.getColonia_casilla());

@@ -83,7 +83,7 @@ public class SeguimientoVotoRepository implements ISeguimientoVotoRepository {
 
 	@Override
 	public List<Convencidos> getConvencidos(Long idSeccion) {
-		String sql = "select ac.nombre || ' ' || ac.apellido_paterno || ' ' || ac.apellido_materno as nombre_completo , ac.calle || ' ' || ac.colonia as Domicilio , "
+		String sql = "select ac.id, ac.nombre || ' ' || ac.apellido_paterno || ' ' || ac.apellido_materno as nombre_completo , ac.calle || ' ' || ac.colonia as Domicilio , "
 				+ "ac2.calle || ' ' || ac.colonia as ubicacion_casilla,  ac.referencia_casilla, ac.is_notificado "
 				+ "from public.app_convencidos ac inner join app_secciones as2 "
 				+ "on ac.seccion_id = as2.id inner join app_casilla ac2 on as2.id = ac2.id where as2.id = ? "
