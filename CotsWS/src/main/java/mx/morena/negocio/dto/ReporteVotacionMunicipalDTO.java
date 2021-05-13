@@ -1,7 +1,5 @@
 package mx.morena.negocio.dto;
 
-import java.util.List;
-
 public class ReporteVotacionMunicipalDTO {
 
 	private Long idFederal;

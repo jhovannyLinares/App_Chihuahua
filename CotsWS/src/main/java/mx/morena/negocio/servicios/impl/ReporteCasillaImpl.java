@@ -986,7 +986,7 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 		} else {
 			throw new CotException("No se encontraron datos", 404);
 		}
-		System.out.println("**************** " + resultados.size());
+//		System.out.println("**************** " + resultados.size());
 		return resultados;
 	}
 
@@ -1153,7 +1153,8 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 
 //			System.out.println("Total: " + totalVotos);
 
-			Long listaNominal = 1000L;
+			Metas metas = metaRepository.getMetasByMunicipio(idMunicipio);
+			Long listaNominal = metas.getListaNominal();
 			dto.setIdFederal(idDistrito);
 			dto.setMunicipio(municipio);
 			dto.setListaNominal(listaNominal);
@@ -1217,19 +1218,19 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 						"Coalicion2", "porcentajeCoalicion2", "Coalicion3", "porcentajeCoalicion3", "Coalicion4",
 						"porcentajeCoalicion4", "Coalicion5", "porcentajeCoalicion5" };
 
-				String[] header2 = { "No. Federal", "Municipio", "Lista Nominal", "PAN", "Porcentaje PAN", "PRI",
-						"Porcentaje PRI", "PRD", "Porcentaje PRD", "PVEM", "Porcentaje PVEM", "PT", "Porcentaje PT",
-						"MC", "Porcentaje MC", "MORENA", "Porcentaje MORENA", "PES", "Porcentaje PES", "RSP",
-						"Porcentaje RSP", "FUERZA POR MEXICO", "Porcentaje FUERZA MEXICO", "PANAL", "Porcentaje PANAL",
-						"MORENA-PT-PANAL", "Porcentaje MORENA-PT-PANAL", "PAN-PRD", "Porcentaje PAN-PRD", "Nulos",
-						"Porcentaje Nulos", "Total", "Porcentaje Total", "Coalicion 1", "Porcentaje Coalicion 1",
-						"Coalicion 2", "Porcentaje Coalicion 2", "Coalicion 3", "Porcentaje Coalicion 3", "Coalicion 4",
-						"Porcentaje Coalicion 4", "Coalicion 5", "Porcentaje Coalicion 5" };
+				String[] header2 = { "NO FEDERAL", "MUNICIPIO", "LISTA NOMINAL", "PAN", "% PAN", "PRI",
+						"% PRI", "PRD", "% PRD", "PVEM", "% PVEM", "PT", "% PT",
+						"MC", "% MC", "MORENA", "% MORENA", "PES", "% PES", "RSP",
+						"% RSP", "FUERZA POR MEXICO", "% FUERZA POR MEXICO", "PANAL", "% PANAL",
+						"MORENA-PT-PANAL", "% MORENA-PT-PANAL", "PAN-PRD", "% PAN-PRD", "NULOS",
+						"% NULOS", "TOTAL", "% TOTAL", "COALICION 1", "% COALICION 1",
+						"COALICION 2", "% COALICION 2", "COALICION 3", "% COALICION 3", "COALICION 4",
+						"% COALICION 4", "COALICION 5", "% COALICION 5" };
 
 				setWriterFile(response, dto, header, header2);
 
 			} else {
-				throw new CotException("No existe el id del reporte a consultar", 404);
+				throw new CotException("Ingrese un ambito valido", 404);
 			}
 
 		} else {

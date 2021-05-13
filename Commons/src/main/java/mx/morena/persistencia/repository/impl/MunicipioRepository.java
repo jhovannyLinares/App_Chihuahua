@@ -170,7 +170,6 @@ public class MunicipioRepository implements IMunicipioRepository {
 
 		try {
 			sql = select.concat(where).concat(order);
-			System.out.println(sql);
 
 			return template.queryForObject(sql, parametros, types, new MunicipiosRowMapper());
 		} catch (EmptyResultDataAccessException e) {
