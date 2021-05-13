@@ -406,6 +406,19 @@ public class CatalogoServiceImpl extends MasterService implements ICatalogoServi
 		return dtos;
 	}
 
+	@Override
+	public List<SeccionDTO> getSeccionByBrigadista(Long idUsuario) throws CatalogoException {
+		
+		
+		List<SeccionElectoral> seccion = seccionRepository.getSeccionByUser(idUsuario);
+
+		List<SeccionDTO> dtos = new ArrayList<SeccionDTO>();
+
+		dtos = MapperUtil.mapAll(seccion, SeccionDTO.class);
+
+		return dtos;
+	}
+
 //	@Override
 //	public List<ZonaDTO> getZonas(long usuario, long idPerfil, Long idFederal) throws CatalogoException {
 //		

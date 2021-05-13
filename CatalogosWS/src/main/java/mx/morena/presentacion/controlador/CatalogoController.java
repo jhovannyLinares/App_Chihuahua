@@ -192,4 +192,27 @@ public class CatalogoController extends MasterController {
 			return null;
 		}
 	}
+	
+	/* ICJ - Generacion del catalogo para mostrar las secciones de acuerdo al usuario brigadista*/
+	
+	@GetMapping("/seccion")
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	private List<SeccionDTO> getSeccion(HttpServletResponse response, HttpServletRequest request) throws IOException{
+		
+		long usuario = getUsuario(request);
+		//long idPerfil = getPerfil(request);
+		System.out.println("Valor de usuario = " + usuario);
+		
+		try {
+			return ICatService.getSeccionByBrigadista(usuario);
+		} catch (CatalogoException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+			return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			return null;
+		}
+	}
 }

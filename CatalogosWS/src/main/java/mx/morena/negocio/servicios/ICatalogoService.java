@@ -41,5 +41,7 @@ public interface ICatalogoService {
 	List<IncidenciaDTO> getIncidencias()throws CatalogoException;
 	
 	List<EleccionDTO>getEleccion()throws CatalogoException;;
+	
+	List<SeccionDTO>getSeccionByBrigadista(Long idUsuario)throws CatalogoException;
 
 }
