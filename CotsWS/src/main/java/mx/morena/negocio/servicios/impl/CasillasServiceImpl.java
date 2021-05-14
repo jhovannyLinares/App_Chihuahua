@@ -68,6 +68,11 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 			actas.setRutaActa(actaDto.getRutaActa());
 			actas.setIdCasilla(actaDto.getIdCasilla());
 			actas.setRegistroActa((new Timestamp(new Date().getTime())));
+			actas.setTipoActa(actaDto.getTipoActa());
+			actas.setCopiaRespuestaGobernador(actaDto.isCopiaRespuestaGobernador());
+			actas.setCopiaRespuestaDiputadoLocal(actaDto.isCopiaRespuestaDiputadoLocal());
+			actas.setCopiaRespuestaSindico(actaDto.isCopiaRespuestaSindico());
+			actas.setCopiaRespuestaDiputadoFederal(actaDto.isCopiaRespuestaDiputadoFederal());
 
 			if (actas.getTipoVotacion() != null && actas.getTipoVotacion() > 0) {
 			} else {
