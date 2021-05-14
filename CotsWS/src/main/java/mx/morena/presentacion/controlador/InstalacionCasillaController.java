@@ -15,12 +15,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import mx.morena.negocio.dto.CasillasDTO;
 import mx.morena.negocio.dto.CierreCasillaDTO;
+import mx.morena.negocio.dto.DatosRcDTO;
 import mx.morena.negocio.dto.IncidenciasCasillasDTO;
 import mx.morena.negocio.dto.InstalacionCasillasDTO;
 import mx.morena.negocio.dto.ReporteCasillaDTO;
@@ -128,5 +130,42 @@ public class InstalacionCasillaController extends MasterController {
 		}
 	}
 	
+//	@GetMapping("/instalacionCasillas")
+//	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+//	public InstalacionCasillasDTO getIstalacionCasilla(HttpServletResponse response, HttpServletRequest request, 
+//			@RequestParam(value = "idCasilla", required = true) Long idCasilla) throws IOException {
+//		long perfil = getPerfil(request);
+//		long usuario = getUsuario(request);
+// 
+//		try {
+//			return IService.getInstalacionCasilla( perfil, usuario, idCasilla);
+//		} catch (CotException e) {
+//			e.printStackTrace();
+//			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+//			return null;
+//		} catch (Exception e ) {
+//			e.printStackTrace();
+//			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+//			return null;
+//		}
+//	}
 	
+//	@GetMapping("/DatosRc")
+//	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+//	public DatosRcDTO getDatosRc(HttpServletResponse response, HttpServletRequest request ) throws IOException {
+//		long perfil = getPerfil(request);
+//		long usuario = getUsuario(request);
+// 
+//		try {
+//			return IService.getDatosRc(perfil, usuario);
+//		} catch (CotException e) {
+//			e.printStackTrace();
+//			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+//			return null;
+//		} catch (Exception e ) {
+//			e.printStackTrace();
+//			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+//			return null;
+//		}
+//	}
 }

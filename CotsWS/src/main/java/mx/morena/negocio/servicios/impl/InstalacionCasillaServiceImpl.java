@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import mx.morena.negocio.dto.CasillasDTO;
 import mx.morena.negocio.dto.CierreCasillaDTO;
+import mx.morena.negocio.dto.DatosRcDTO;
 import mx.morena.negocio.dto.IncidenciasCasillasDTO;
 import mx.morena.negocio.dto.InstalacionCasillasDTO;
 import mx.morena.negocio.dto.ReporteCasillaDTO;
@@ -80,7 +81,7 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 	public Long saveInstalacionCasilla(InstalacionCasillasDTO dto, long perfil, long usuario)
 			throws CotException, IOException {
 
-		if (perfil == PERFIL_RG || perfil == PERFIL_RC) {
+		if (perfil == PERFIL_RC) {
 
 			List<InstalacionCasilla> casillas = casillasRepository.getById(dto.getIdCasilla());
 
@@ -444,6 +445,52 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 
 		return reporteCasillaDTOs;
 
+	}
+
+	@Override
+	public InstalacionCasillasDTO getInstalacionCasilla(long perfil, long usuario, Long idCasilla) throws CotException {
+		
+		if (perfil == PERFIL_RC) {
+			
+			InstalacionCasilla casilla = casillasRepository.getCasillaById(idCasilla);
+			
+			if (casilla != null) {
+				
+			InstalacionCasillasDTO dto = new InstalacionCasillasDTO();
+			
+			MapperUtil.map(casilla, dto);
+			
+			return dto;
+			}else {
+				throw new CotException("La casilla seleccionada no esta registrada", 404);
+			}
+		} else {
+			throw new CotException("No cuenta con los permisos suficientes para realizar la operacion", 401);
+		}
+		
+	}
+
+	@Override
+	public DatosRcDTO getDatosRc(long perfil, long usuario) throws CotException {
+
+		RepresentantesAsignados representante = representanteAsignadoRepository.getRepresentanteById(usuario);
+
+		if (representante != null) {
+
+			DatosRcDTO dto = new DatosRcDTO();
+
+			dto.setIdUsuario(usuario);
+			dto.setEntidad(representante.getEntidadId());
+			dto.setDistFederal(representante.getDistritoFederalId());
+			dto.setDistLocal(representante.getDistritoLocalId());
+			dto.setSeccion(representante.getSeccionElectoralId());
+			dto.setCasilla(representante.getCasillaId());
+
+			return dto;
+
+		} else {
+			throw new CotException("No se encontro el usuario registrado con el id " + usuario, 404);
+		}
 	}
 
 }

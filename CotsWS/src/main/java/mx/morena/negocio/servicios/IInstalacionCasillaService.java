@@ -5,6 +5,7 @@ import java.util.List;
 
 import mx.morena.negocio.dto.CasillasDTO;
 import mx.morena.negocio.dto.CierreCasillaDTO;
+import mx.morena.negocio.dto.DatosRcDTO;
 import mx.morena.negocio.dto.IncidenciasCasillasDTO;
 import mx.morena.negocio.dto.InstalacionCasillasDTO;
 import mx.morena.negocio.dto.ReporteCasillaDTO;
@@ -24,5 +25,9 @@ public interface IInstalacionCasillaService {
 	List<ReporteCasillaDTO> getInformeVotacion(Long idCasilla, long idUsuario) throws CotException;
 
 	List<VotacionesDTO> getVotaciones(Long idCasilla) throws CotException;
+
+	InstalacionCasillasDTO getInstalacionCasilla(long perfil, long usuario, Long idCasilla) throws CotException;
+
+	DatosRcDTO getDatosRc(long perfil, long usuario) throws CotException;
 	
 }

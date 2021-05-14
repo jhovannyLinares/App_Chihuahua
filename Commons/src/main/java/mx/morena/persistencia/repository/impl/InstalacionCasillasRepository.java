@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import mx.morena.persistencia.entidad.InstalacionCasilla;
 import mx.morena.persistencia.repository.IInstalacionCasillasRepository;
+import mx.morena.persistencia.rowmapper.GetInstalacionCasillaRowMapper;
 import mx.morena.persistencia.rowmapper.InstalacionRowMapper;
 import mx.morena.persistencia.rowmapper.LongRowMapper;
 
@@ -23,13 +24,36 @@ public class InstalacionCasillasRepository implements IInstalacionCasillasReposi
 	@Override
 	public int save(InstalacionCasilla ic) {
 		String sql = "INSERT INTO app_instalacion_casilla (id, " + "id_casilla, " + "hora_instalacion, " + "llegaron_funcionarios, " + "funcionarios_de_fila, " 
-				+ " paquete_completo, " + "llego_rg, " + "desayuno, " + "inicio_votacion," + "llego_rc) "
-				+ " VALUES (COALESCE((SELECT MAX(id) FROM app_instalacion_casilla), 0)+1, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
+				+ " paquete_completo, " + "llego_rg, " + "desayuno, " + "inicio_votacion," + "llego_rc, "  //) "
+				
+				+ "instalo_casilla, "                       + "instalo_lugar_distinto, "             + "causa_lugar_distinto, " 
+				+ "boletas_gobernador, "                    + "folio_inicial_gobernador, "           + "folio_final_gobernador, " 
+				+ "boletas_diputado_local, "                + "folio_inicial_diputado_local, "       + "folio_final_diputado_local, " 
+				+ "boletas_presidente_municipal, "          + "folio_inicial_presidente_municipal, " + "folio_final_presidente_municipal, " 
+				+ "boletas_sindico, "                       + "folio_inicial_sindico, "              + "folio_final_sindico, "
+				+ "boletas_diputado_federal, "              + "folio_inicial_diputado_federal, "     + "folio_final_diputado_federal, " 
+				+ "sellaron_boletas, "                      + "id_partido_sello, " 
+				+ "nombre_presidente, "                     + "nombre_secretario, "                  + "nombre_escrutador_1, " 
+				+ "nombre_escrutador_2, "                   + "nombre_escrutador_3 )"
+				
+				+ " VALUES (COALESCE((SELECT MAX(id) FROM app_instalacion_casilla), 0)+1, ?, ?, ?, ?, ?, ?, ?, ?, ?, " // )";
+				+ " ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
 		try {
 		template.update(sql, new Object[] {ic.getIdCasilla(), ic.getHoraInstalacion(), ic.getLlegaronFuncionarios(), ic.getFuncionariosFila(),
-				 ic.getPaqueteCompleto(), ic.getLlegoRg(), ic.getDesayuno(), ic.getInicioVotacion(), ic.getLlegoRc()});
+				 ic.getPaqueteCompleto(), ic.getLlegoRg(), ic.getDesayuno(), ic.getInicioVotacion(), ic.getLlegoRc(), //});
+				 
+		         ic.getInstaloCasilla(),             ic.getInstaloLugarDistinto(),        ic.getCausaLugarDistinto(),
+		         ic.getBoletasGobernador(),          ic.getFolioIniGobernador(),          ic.getFolioFinGobernador(),
+		         ic.getBoletasDipLocal(),            ic.getFolioIniDipLocal(),            ic.getFolioFinDipLocal(),
+		         ic.getBoletasPresidenteMunicipal(), ic.getFolioIniPresidenteMunicipal(), ic.getFolioFinPresidenteMunicipal(),
+		         ic.getBoletasSindico(),             ic.getFolioIniSindico(),             ic.getFolioFinSindico(),
+		         ic.getBoletasDipFederal(),          ic.getFolioIniDipFederal(),          ic.getFolioFinDipFederal(),
+		         ic.getSellaronBoletas(),            ic.getIdPartidoSello(),
+		         ic.getNombrePresidente(),           ic.getNombreSecretario(),            ic.getNombreEscrutador1(),
+		         ic.getNombreEscrutador2(),          ic.getNombreEscrutador3()});
 		return 1;
 		} catch (Exception e) {
+//			System.out.println(e);
 			return 0;
 		}
 	
@@ -497,5 +521,19 @@ public class InstalacionCasillasRepository implements IInstalacionCasillasReposi
 			return null;
 		}
 
+	}
+
+	@Override
+	public InstalacionCasilla getCasillaById(Long idCasilla) {
+		String sql = "select * from app_instalacion_casilla aic where id_casilla = ?";
+		try {
+
+			return template.queryForObject(sql, new Object[] { idCasilla }, new int[] { Types.NUMERIC },
+					new GetInstalacionCasillaRowMapper());
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 }

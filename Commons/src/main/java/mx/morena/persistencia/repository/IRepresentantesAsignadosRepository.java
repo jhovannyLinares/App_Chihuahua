@@ -11,4 +11,6 @@ public interface IRepresentantesAsignadosRepository {
 	List<RepresentantesAsignados> getByEntidadAndIdRepresentante(Long entidad, Long id);
 
 	Long getRutaIdByRepresentante(Long usuario);
+
+	RepresentantesAsignados getRepresentanteById(long usuario);
 }
