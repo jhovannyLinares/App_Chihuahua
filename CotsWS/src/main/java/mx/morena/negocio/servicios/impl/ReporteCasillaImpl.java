@@ -80,7 +80,7 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 
 	@Autowired
 	private IPartidosRepository partidoRepository;
-	
+
 	@Autowired
 	private IMetasFederalRepository metaRepository;
 
@@ -99,9 +99,9 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 			throws CotException, IOException {
 
 		if (perfil == PERFIL_RG) {
-			
+
 			Metas metas = new Metas();
-			
+
 			if (idReporte >= 1 && idReporte <= 5) {
 
 				List<ReporteVotacionDTO> lstDto = new ArrayList<>();
@@ -311,7 +311,7 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 			throws CotException, IOException {
 
 		if (perfil == PERFIL_FEDERAL) {
-			
+
 			Metas metas = new Metas();
 
 			List<ReporteAsistenciaFederalDTO> lstDto = new ArrayList<ReporteAsistenciaFederalDTO>();
@@ -527,7 +527,7 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 
 		ReporteAsistenciaMunicipalDTO dto = new ReporteAsistenciaMunicipalDTO();
 
-		Metas metas =  metaRepository.getMetasByMunicipio(municipio);
+		Metas metas = metaRepository.getMetasByMunicipio(municipio);
 
 		Long rgAsistencia = instalacionCasillaRepository.getCountRgByLocalAndAsistencia(local, SI, federal, tipo,
 				municipio);
@@ -554,7 +554,7 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 			throws CotException, IOException {
 
 		if (perfil == PERFIL_RG) {
-			
+
 			Metas metas = new Metas();
 
 			if (idReporte >= 1 && idReporte <= 5) {
@@ -607,6 +607,8 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 				Long p11 = 0L;
 				Long p12 = 0L;
 				Long p13 = 0L;
+				Long nulos = 0L;
+				Long totalVotos = 0L;
 
 				listDF = distritoFederalRepository.findAll();
 
@@ -655,9 +657,21 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 						if (lstPartidos.size() >= 13)
 							p13 = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte,
 									lstPartidos.get(12).getId());
+						if (lstPartidos.size() >= 14)
+							nulos = votosRepository.getVotosByEleccionAndPartido(items.getId(), idReporte,
+									lstPartidos.get(13).getId());
+
+						totalVotos = p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8 + p9 + p10 + p11 + p12 + p13 + nulos;
+
+						Double porcentajeNulos = 0.0;
+						if (nulos > 0) {
+
+							porcentajeNulos = dosDecimales((nulos * 100.0) / totalVotos).doubleValue();
+							dto.setPorcentajeNulos(porcentajeNulos);
+						}
 
 						metas = metaRepository.getMetasByFederal(items.getId());
-						
+
 						Long listaNominal = metas.getListaNominal();
 
 						dto.setIdFederal(items.getId());
@@ -676,6 +690,8 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 						dto.setPartido12(p12);
 						dto.setPartido13(p13);
 						dto.setTotal(p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8 + p9 + p10 + p11 + p12 + p13);
+						dto.setNulos(nulos);
+						dto.setPorcentajeNulos(porcentajeNulos);
 
 						if (dto.getTotal() != 0) {
 							dto.setPorcentajePartido1(
@@ -779,9 +795,20 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 						p12 = votosRepository.getVotosByPartido(idReporte, lstPartidos.get(11).getId());
 					if (lstPartidos.size() >= 13)
 						p13 = votosRepository.getVotosByPartido(idReporte, lstPartidos.get(12).getId());
+					if (lstPartidos.size() >= 14)
+						nulos = votosRepository.getVotosByPartido(idReporte, lstPartidos.get(13).getId());
 
-					metas = metaRepository.getMetasByMunicipio(idUbicacion); 
-					
+					totalVotos = p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8 + p9 + p10 + p11 + p12 + p13 + nulos;
+
+					Double porcentajeNulos = 0.0;
+					if (nulos > 0) {
+
+						porcentajeNulos = dosDecimales((nulos * 100.0) / totalVotos).doubleValue();
+						dto.setPorcentajeNulos(porcentajeNulos);
+					}
+
+					metas = metaRepository.getMetasByMunicipio(idUbicacion);
+
 					Long listaNominal = metas.getListaNominal();
 
 					dto.setIdFederal(idUbicacion);
@@ -799,8 +826,9 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 					dto.setPartido11(p11);
 					dto.setPartido12(p12);
 					dto.setPartido13(p13);
-
 					dto.setTotal(p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8 + p9 + p10 + p11 + p12 + p13);
+					dto.setNulos(nulos);
+					dto.setPorcentajeNulos(porcentajeNulos);
 
 					if (dto.getTotal() != 0) {
 						dto.setPorcentajePartido1(
@@ -910,19 +938,17 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 						"partido5", "porcentajePartido5", "partido6", "porcentajePartido6", "partido7",
 						"porcentajePartido7", "partido8", "porcentajePartido8", "partido9", "porcentajePartido9",
 						"partido10", "porcentajePartido10", "partido11", "porcentajePartido11", "partido12",
-						"porcentajePartido12", "partido13", "porcentajePartido13", "idCoalicion1", "coalicion1",
-						"porcentajeCoalicion1", "idCoalicion2", "coalicion2", "porcentajeCoalicion2", "idCoalicion3",
-						"coalicion3", "porcentajeCoalicion3", "idCoalicion4", "coalicion4", "porcentajeCoalicion4",
-						"idCoalicion5", "coalicion5", "porcentajeCoalicion5", "total", "porcentajeTotal" };
-				
-				String[] encabezadoCSV = { "NO FEDERAL","LISTA NOMINAL", "PAN", "% PAN", "PRI",
-						"% PRI", "PRD", "% PRD", "PVEM", "% PVEM", "PT", "% PT",
-						"MC", "% MC", "MORENA", "% MORENA", "PES", "% PES", "RSP",
-						"% RSP", "FUERZA POR MEXICO", "% FUERZA POR MEXICO", "PANAL", "% PANAL",
-						"MORENA-PT-PANAL", "% MORENA-PT-PANAL", "PAN-PRD", "% PAN-PRD", "NULOS",
-						"% NULOS", "TOTAL", "% TOTAL", "COALICION 1", "% COALICION 1",
-						"COALICION 2", "% COALICION 2", "COALICION 3", "% COALICION 3", "COALICION 4",
-						"% COALICION 4", "COALICION 5", "% COALICION 5" };
+						"porcentajePartido12", "partido13", "porcentajePartido13", "nulos", "porcentajeNulos",
+						"coalicion1", "porcentajeCoalicion1", "coalicion2", "porcentajeCoalicion2", "coalicion3",
+						"porcentajeCoalicion3", "coalicion4", "porcentajeCoalicion4", "coalicion5",
+						"porcentajeCoalicion5", "total", "porcentajeTotal" };
+
+				String[] encabezadoCSV = { "NO FEDERAL", "LISTA NOMINAL", "PAN", "% PAN", "PRI", "% PRI", "PRD",
+						"% PRD", "PVEM", "% PVEM", "PT", "% PT", "MC", "% MC", "MORENA", "% MORENA", "PES", "% PES",
+						"RSP", "% RSP", "FUERZA POR MEXICO", "% FUERZA POR MEXICO", "PANAL", "% PANAL",
+						"MORENA-PT-PANAL", "% MORENA-PT-PANAL", "PAN-PRD", "% PAN-PRD", "NULOS", "% NULOS",
+						"COALICION 1", "% COALICION 1", "COALICION 2", "% COALICION 2", "COALICION 3", "% COALICION 3",
+						"COALICION 4", "% COALICION 4", "COALICION 5", "% COALICION 5", "TOTAL", "% TOTAL" };
 
 				setWriterFile(response, reporteDTOs, header, encabezadoCSV);
 			} else {
@@ -1227,14 +1253,12 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 						"Coalicion2", "porcentajeCoalicion2", "Coalicion3", "porcentajeCoalicion3", "Coalicion4",
 						"porcentajeCoalicion4", "Coalicion5", "porcentajeCoalicion5" };
 
-				String[] header2 = { "NO FEDERAL", "MUNICIPIO", "LISTA NOMINAL", "PAN", "% PAN", "PRI",
-						"% PRI", "PRD", "% PRD", "PVEM", "% PVEM", "PT", "% PT",
-						"MC", "% MC", "MORENA", "% MORENA", "PES", "% PES", "RSP",
-						"% RSP", "FUERZA POR MEXICO", "% FUERZA POR MEXICO", "PANAL", "% PANAL",
-						"MORENA-PT-PANAL", "% MORENA-PT-PANAL", "PAN-PRD", "% PAN-PRD", "NULOS",
-						"% NULOS", "TOTAL", "% TOTAL", "COALICION 1", "% COALICION 1",
-						"COALICION 2", "% COALICION 2", "COALICION 3", "% COALICION 3", "COALICION 4",
-						"% COALICION 4", "COALICION 5", "% COALICION 5" };
+				String[] header2 = { "NO FEDERAL", "MUNICIPIO", "LISTA NOMINAL", "PAN", "% PAN", "PRI", "% PRI", "PRD",
+						"% PRD", "PVEM", "% PVEM", "PT", "% PT", "MC", "% MC", "MORENA", "% MORENA", "PES", "% PES",
+						"RSP", "% RSP", "FUERZA POR MEXICO", "% FUERZA POR MEXICO", "PANAL", "% PANAL",
+						"MORENA-PT-PANAL", "% MORENA-PT-PANAL", "PAN-PRD", "% PAN-PRD", "NULOS", "% NULOS", "TOTAL",
+						"% TOTAL", "COALICION 1", "% COALICION 1", "COALICION 2", "% COALICION 2", "COALICION 3",
+						"% COALICION 3", "COALICION 4", "% COALICION 4", "COALICION 5", "% COALICION 5" };
 
 				setWriterFile(response, dto, header, header2);
 
@@ -1293,8 +1317,8 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 
 				for (AsignacionCasillas aCasillas : lstCasillas) {
 
-					dto = getAsistenciaCrg(idLocal, aCasillas.getFederalId(), tipo, idMunicipio, usr.getId(), aCasillas.getId(),
-							 aCasillas.getRuta());
+					dto = getAsistenciaCrg(idLocal, aCasillas.getFederalId(), tipo, idMunicipio, usr.getId(),
+							aCasillas.getId(), aCasillas.getRuta());
 
 					total.setCasillas(total.getCasillas() + dto.getCasillas());
 					total.setRgMeta(total.getRgMeta() + dto.getRgMeta());
@@ -1323,7 +1347,8 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 					lstCasillas = asignacionCasillasRepository.getAll();
 					System.out.println("***** " + lstCasillas.size());
 					for (AsignacionCasillas aCasillas : lstCasillas) {
-						dto = getAsistenciaCrg(idLocal, aCasillas.getFederalId(), tipo, idMunicipio, 0L, 0L, aCasillas.getRuta());
+						dto = getAsistenciaCrg(idLocal, aCasillas.getFederalId(), tipo, idMunicipio, 0L, 0L,
+								aCasillas.getRuta());
 
 						total.setCasillas(total.getCasillas() + dto.getCasillas());
 						total.setRgMeta(total.getRgMeta() + dto.getRgMeta());
@@ -1346,8 +1371,7 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 					lstCasillas = asignacionCasillasRepository.getRutasByFederal(idFederal);
 //					System.out.println("***** " + lstCasillas.size());
 					for (AsignacionCasillas aCasillas : lstCasillas) {
-						dto = getAsistenciaCrg(idLocal, idFederal, tipo, idMunicipio, 0L, 0L,
-								aCasillas.getRuta());
+						dto = getAsistenciaCrg(idLocal, idFederal, tipo, idMunicipio, 0L, 0L, aCasillas.getRuta());
 
 						total.setCasillas(total.getCasillas() + dto.getCasillas());
 						total.setRgMeta(total.getRgMeta() + dto.getRgMeta());
@@ -1400,17 +1424,17 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 		dto.setIdFederal(federal);
 		dto.setRuta(casillaRuta);
 		dto.setCasillas(casillas);
-		
+
 		Metas metas = null;
 		if (tipo == 4) {
-			 metas = metaRepository.getMetasByMunicipio(municipio);
-		}else {
-		 metas = metaRepository.getMetasByFederal(federal);
+			metas = metaRepository.getMetasByMunicipio(municipio);
+		} else {
+			metas = metaRepository.getMetasByFederal(federal);
 		}
 
 		dto.setRgMeta(metas.getMetaRg());
 		dto.setRcMeta(metas.getMetaRc());
-		
+
 		dto.setRgAsistencia(rgAsistencia);
 		dto.setRcAsistencia(rcAsistencia);
 		dto.setRgPorcentaje(dosDecimales((dto.getRgAsistencia() * 100.0) / dto.getRgMeta()).doubleValue());
