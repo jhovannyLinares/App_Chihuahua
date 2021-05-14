@@ -34,19 +34,19 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 
 	@Autowired
 	private IEnvioActasRepository envioActasRepository;
-	
+
 	@Autowired
 	private ICasillaRepository casillaRepository;
 
 	@Autowired
 	private IInstalacionCasillaService instalacionCasillaService;
-	
+
 	@Autowired
 	private IResultadoVotacionRepository resultadoVotacionRepository;
-	
+
 	@Autowired
 	private IPartidosRepository partidosRepository;
-	
+
 	private List<Partido> gobernador;
 	private List<Partido> municipal;
 	private List<Partido> sindico;
@@ -87,8 +87,19 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 			} else {
 				throw new CotException("El campo Id Casilla es Requerido", 400);
 			}
+			if (actas.getTipoActa() > 0 && actas.getTipoActa() != null) {
+
+			} else {
+				throw new CotException("El campo Tipo Acta es Requerido", 400);
+			}
+			if(actas.isCopiaRespuestaGobernador() == true && actas.isCopiaRespuestaDiputadoFederal() == true && actas.isCopiaRespuestaDiputadoLocal() == true && actas.isCopiaRespuestaSindico() == true) {
+			}else {
+				throw new CotException("Favor de revisar las preguntas, todas son obligatorias", 400);
+			}
 			if (actas.getTipoVotacion() != null && actas.getTipoVotacion() > 0 && actas.getRutaActa() != null
-					&& actas.getRutaActa() != " " && actas.getIdCasilla() > 0 && actas.getIdCasilla() != null) {
+					&& actas.getRutaActa() != " " && actas.getIdCasilla() > 0 && actas.getIdCasilla() != null
+					&& actas.isCopiaRespuestaGobernador() == true && actas.isCopiaRespuestaDiputadoFederal() == true 
+					&& actas.isCopiaRespuestaDiputadoLocal() == true && actas.isCopiaRespuestaSindico() == true) {
 
 				Long duplicate = envioActasRepository.validaDuplicidadActa(actas.getTipoVotacion(),
 						actas.getIdCasilla());
@@ -107,14 +118,15 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 	}
 
 	@Override
-	public ResultadoOkDTO saveResultados(ResultadoVotacionDTO resultadoVotos, long perfil, long usuario) throws CotException {
-		
+	public ResultadoOkDTO saveResultados(ResultadoVotacionDTO resultadoVotos, long perfil, long usuario)
+			throws CotException {
+
 		validacionVotos(resultadoVotos);
 
 		List<Votacion> votaciones = new ArrayList<Votacion>();
 
 		Votacion votacion;
-		
+
 		for (VotosPartidoDTO voto : resultadoVotos.getVotos()) {
 
 			consultarVotaciones();
@@ -155,7 +167,6 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 
 //			Coalicion
 			votacion.setCoalicion(false);
-			
 
 			if (stream.getTipoPartido() != null) {
 				if (stream.getTipoPartido().length() > 0) {
@@ -187,24 +198,22 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 		if (resultadoVotos.getTipoVotacion() == null) {
 			throw new CotException("no se encuentra informada el tipo de votacion", 409);
 		}
-		
+
 		if (resultadoVotos.getVotos() == null) {
 			throw new CotException("no se encuentra informadas las votaciones", 409);
 		}
-		
+
 		for (VotosPartidoDTO voto : resultadoVotos.getVotos()) {
-			
+
 			if (voto.getIdPartido() == null) {
 				throw new CotException("no se encuentra informado el partido", 409);
 			}
-			
+
 			if (voto.getVotos() == null) {
 				throw new CotException("no se encuentra informado el numero de votos", 409);
 			}
-			
+
 		}
-		
-		
 
 	}
 
@@ -237,7 +246,7 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 
 		return votacionesDTOs;
 	}
-	
+
 	private void consultarVotaciones() {
 
 		if (gobernador == null)
@@ -273,7 +282,7 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 				dto.setId(1L);
 				dto.setDescripcion("GOBERNADOR");
 
-				dto.setPartidos(getPartidosXCasillas(gobernador,casilla.getEntidad()));
+				dto.setPartidos(getPartidosXCasillas(gobernador, casilla.getEntidad()));
 
 				votacionesDTOs.add(dto);
 			}
@@ -284,8 +293,8 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 				dto = new PartidosXAmbitoDTO();
 				dto.setId(2L);
 				dto.setDescripcion("PRESIDENTE MUNICIPAL");
-				
-				dto.setPartidos(getPartidosXCasillas(municipal,casilla.getMunicipio()));
+
+				dto.setPartidos(getPartidosXCasillas(municipal, casilla.getMunicipio()));
 
 				votacionesDTOs.add(dto);
 			}
@@ -296,7 +305,7 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 				dto = new PartidosXAmbitoDTO();
 				dto.setId(3L);
 				dto.setDescripcion("SINDICO");
-				dto.setPartidos(getPartidosXCasillas(sindico,casilla.getMunicipio()));
+				dto.setPartidos(getPartidosXCasillas(sindico, casilla.getMunicipio()));
 				votacionesDTOs.add(dto);
 			}
 
@@ -306,7 +315,7 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 				dto = new PartidosXAmbitoDTO();
 				dto.setId(4L);
 				dto.setDescripcion("DIPUTADO LOCAL");
-				dto.setPartidos(getPartidosXCasillas(diputadoLocal,casilla.getFederal()));
+				dto.setPartidos(getPartidosXCasillas(diputadoLocal, casilla.getFederal()));
 				votacionesDTOs.add(dto);
 			}
 
@@ -316,7 +325,7 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 				dto = new PartidosXAmbitoDTO();
 				dto.setId(5L);
 				dto.setDescripcion("DIPUTADO FEDERAL");
-				dto.setPartidos(getPartidosXCasillas(diputadoFederal,casilla.getFederal()));
+				dto.setPartidos(getPartidosXCasillas(diputadoFederal, casilla.getFederal()));
 				votacionesDTOs.add(dto);
 			}
 
@@ -327,7 +336,7 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 	}
 
 	private List<PartidoDTO> getPartidosXCasillas(List<Partido> partidosX, Long ubicacion) {
-		
+
 		List<Partido> partidos = new ArrayList<Partido>();
 
 		for (Partido partido : partidosX) {
@@ -337,7 +346,7 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 		}
 
 		return MapperUtil.mapAll(partidos, PartidoDTO.class);
-		
+
 	}
 
 }

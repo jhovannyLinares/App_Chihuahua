@@ -9,6 +9,51 @@ public class EnvioActas {
 	private String rutaActa;
 	private Long idCasilla;
 	private Timestamp registroActa;
+	private Long tipoActa;
+	private boolean copiaRespuestaGobernador;
+	private boolean copiaRespuestaDiputadoLocal;
+	private boolean copiaRespuestaSindico;
+	private boolean copiaRespuestaDiputadoFederal;
+
+	public Long getTipoActa() {
+		return tipoActa;
+	}
+
+	public void setTipoActa(Long tipoActa) {
+		this.tipoActa = tipoActa;
+	}
+
+	public boolean isCopiaRespuestaGobernador() {
+		return copiaRespuestaGobernador;
+	}
+
+	public void setCopiaRespuestaGobernador(boolean copiaRespuestaGobernador) {
+		this.copiaRespuestaGobernador = copiaRespuestaGobernador;
+	}
+
+	public boolean isCopiaRespuestaDiputadoLocal() {
+		return copiaRespuestaDiputadoLocal;
+	}
+
+	public void setCopiaRespuestaDiputadoLocal(boolean copiaRespuestaDiputadoLocal) {
+		this.copiaRespuestaDiputadoLocal = copiaRespuestaDiputadoLocal;
+	}
+
+	public boolean isCopiaRespuestaSindico() {
+		return copiaRespuestaSindico;
+	}
+
+	public void setCopiaRespuestaSindico(boolean copiaRespuestaSindico) {
+		this.copiaRespuestaSindico = copiaRespuestaSindico;
+	}
+
+	public boolean isCopiaRespuestaDiputadoFederal() {
+		return copiaRespuestaDiputadoFederal;
+	}
+
+	public void setCopiaRespuestaDiputadoFederal(boolean copiaRespuestaDiputadoFederal) {
+		this.copiaRespuestaDiputadoFederal = copiaRespuestaDiputadoFederal;
+	}
 
 	public Long getIdActa() {
 		return idActa;

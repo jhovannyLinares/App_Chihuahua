@@ -939,16 +939,16 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 						"porcentajePartido7", "partido8", "porcentajePartido8", "partido9", "porcentajePartido9",
 						"partido10", "porcentajePartido10", "partido11", "porcentajePartido11", "partido12",
 						"porcentajePartido12", "partido13", "porcentajePartido13", "nulos", "porcentajeNulos",
-						"coalicion1", "porcentajeCoalicion1", "coalicion2", "porcentajeCoalicion2", "coalicion3",
-						"porcentajeCoalicion3", "coalicion4", "porcentajeCoalicion4", "coalicion5",
+						"idCoalicion1","coalicion1", "porcentajeCoalicion1", "idCoalicion2", "coalicion2", "porcentajeCoalicion2", "idCoalicion3", "coalicion3",
+						"porcentajeCoalicion3", "idCoalicion4", "coalicion4", "porcentajeCoalicion4", "idCoalicion5", "coalicion5",
 						"porcentajeCoalicion5", "total", "porcentajeTotal" };
 
 				String[] encabezadoCSV = { "NO FEDERAL", "LISTA NOMINAL", "PAN", "% PAN", "PRI", "% PRI", "PRD",
 						"% PRD", "PVEM", "% PVEM", "PT", "% PT", "MC", "% MC", "MORENA", "% MORENA", "PES", "% PES",
 						"RSP", "% RSP", "FUERZA POR MEXICO", "% FUERZA POR MEXICO", "PANAL", "% PANAL",
 						"MORENA-PT-PANAL", "% MORENA-PT-PANAL", "PAN-PRD", "% PAN-PRD", "NULOS", "% NULOS",
-						"COALICION 1", "% COALICION 1", "COALICION 2", "% COALICION 2", "COALICION 3", "% COALICION 3",
-						"COALICION 4", "% COALICION 4", "COALICION 5", "% COALICION 5", "TOTAL", "% TOTAL" };
+						"ID_COALICION 1","COALICION 1", "% COALICION 1","ID_COALICION 2", "COALICION 2", "% COALICION 2", "ID_COALICION 3", "COALICION 3", "% COALICION 3",
+						"ID_COALICION 4", "COALICION 4", "% COALICION 4", "ID_COALICION 5", "COALICION 5", "% COALICION 5", "TOTAL", "% TOTAL" };
 
 				setWriterFile(response, reporteDTOs, header, encabezadoCSV);
 			} else {

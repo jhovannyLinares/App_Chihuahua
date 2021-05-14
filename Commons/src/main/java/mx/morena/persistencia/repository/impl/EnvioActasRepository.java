@@ -21,14 +21,17 @@ public class EnvioActasRepository implements IEnvioActasRepository {
 	@Autowired
 	private JdbcTemplate template;
 	
-	private String campos = " tipo_votacion,ruta_acta,id_casilla,registro_acta ";
+	private String campos = " tipo_votacion,ruta_acta,id_casilla,registro_acta,tipo_acta,copia_resultados_gobernador,copia_resultados_diputado_local,"
+							+ "copia_resultados_sindico,copia_resultados_diputado_federal";
 
 	@Override
 	public void save(EnvioActas actas) {
-		String sql = " INSERT INTO app_envio_actas ( " + campos +" ) VALUES(?,?,?,?)";
+		String sql = " INSERT INTO app_envio_actas ( " + campos +" ) VALUES(?,?,?,?,?,?,?,?,?)";
 		
 		template.update(sql, 
-				new Object[] { actas.getTipoVotacion(), actas.getRutaActa(), actas.getIdCasilla(), actas.getRegistroActa() });
+				new Object[] { actas.getTipoVotacion(), actas.getRutaActa(), actas.getIdCasilla(), actas.getRegistroActa(), 
+						actas.getTipoActa(), actas.isCopiaRespuestaGobernador(), actas.isCopiaRespuestaDiputadoLocal(),
+						actas.isCopiaRespuestaSindico(), actas.isCopiaRespuestaDiputadoFederal()});
 	}
 
 	@Override
