@@ -26,7 +26,7 @@ import mx.morena.negocio.dto.DatosRcDTO;
 import mx.morena.negocio.dto.IncidenciasCasillasDTO;
 import mx.morena.negocio.dto.InstalacionCasillasDTO;
 import mx.morena.negocio.dto.ReporteCasillaDTO;
-import mx.morena.negocio.dto.UbicacionCasillaDTO;
+//import mx.morena.negocio.dto.UbicacionCasillaDTO;
 import mx.morena.negocio.exception.CotException;
 import mx.morena.negocio.servicios.IInstalacionCasillaService;
 import mx.morena.security.controller.MasterController;
