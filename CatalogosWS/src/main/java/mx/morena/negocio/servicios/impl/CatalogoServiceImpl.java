@@ -14,6 +14,7 @@ import mx.morena.negocio.dto.IncidenciaDTO;
 import mx.morena.negocio.dto.MunicipioDTO;
 import mx.morena.negocio.dto.RepresentanteDTO;
 import mx.morena.negocio.dto.SeccionDTO;
+import mx.morena.negocio.dto.SeccionUserDTO;
 import mx.morena.negocio.dto.offline.CatalogoDTOOffline;
 import mx.morena.negocio.dto.offline.DistritoFederalDTOOffline;
 import mx.morena.negocio.dto.offline.EntidadDTOOffline;
@@ -407,14 +408,14 @@ public class CatalogoServiceImpl extends MasterService implements ICatalogoServi
 	}
 
 	@Override
-	public List<SeccionDTO> getSeccionByBrigadista(Long idUsuario) throws CatalogoException {
+	public List<SeccionUserDTO> getSeccionByBrigadista(Long idUsuario) throws CatalogoException {
 		
 		
 		List<SeccionElectoral> seccion = seccionRepository.getSeccionByUser(idUsuario);
 
-		List<SeccionDTO> dtos = new ArrayList<SeccionDTO>();
+		List<SeccionUserDTO> dtos = new ArrayList<SeccionUserDTO>();
 
-		dtos = MapperUtil.mapAll(seccion, SeccionDTO.class);
+		dtos = MapperUtil.mapAll(seccion, SeccionUserDTO.class);
 
 		return dtos;
 	}

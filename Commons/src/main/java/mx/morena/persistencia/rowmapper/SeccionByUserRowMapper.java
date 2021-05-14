@@ -20,7 +20,6 @@ public class SeccionByUserRowMapper implements RowMapper<List<SeccionElectoral>>
 			seccion = new SeccionElectoral();
 
 			seccion.setId(rs.getLong("Secciones"));
-			seccion.setDescripcion(rs.getString("descripcion"));
 
 			secciones.add(seccion);
 		} while (rs.next());

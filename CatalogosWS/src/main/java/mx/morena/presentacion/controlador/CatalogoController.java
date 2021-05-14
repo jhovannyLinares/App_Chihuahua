@@ -24,6 +24,7 @@ import mx.morena.negocio.dto.IncidenciaDTO;
 import mx.morena.negocio.dto.MunicipioDTO;
 import mx.morena.negocio.dto.RepresentanteDTO;
 import mx.morena.negocio.dto.SeccionDTO;
+import mx.morena.negocio.dto.SeccionUserDTO;
 import mx.morena.negocio.dto.offline.CatalogoDTOOffline;
 import mx.morena.negocio.exception.CatalogoException;
 import mx.morena.negocio.servicios.ICatalogoService;
@@ -197,11 +198,9 @@ public class CatalogoController extends MasterController {
 	
 	@GetMapping("/seccion")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	private List<SeccionDTO> getSeccion(HttpServletResponse response, HttpServletRequest request) throws IOException{
+	private List<SeccionUserDTO> getSeccion(HttpServletResponse response, HttpServletRequest request) throws IOException{
 		
 		long usuario = getUsuario(request);
-		//long idPerfil = getPerfil(request);
-		System.out.println("Valor de usuario = " + usuario);
 		
 		try {
 			return ICatService.getSeccionByBrigadista(usuario);
