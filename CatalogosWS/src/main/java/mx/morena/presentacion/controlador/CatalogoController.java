@@ -25,6 +25,7 @@ import mx.morena.negocio.dto.MunicipioDTO;
 import mx.morena.negocio.dto.RepresentanteDTO;
 import mx.morena.negocio.dto.SeccionDTO;
 import mx.morena.negocio.dto.SeccionUserDTO;
+import mx.morena.negocio.dto.TipoActasDTO;
 import mx.morena.negocio.dto.offline.CatalogoDTOOffline;
 import mx.morena.negocio.exception.CatalogoException;
 import mx.morena.negocio.servicios.ICatalogoService;
@@ -204,6 +205,25 @@ public class CatalogoController extends MasterController {
 		
 		try {
 			return ICatService.getSeccionByBrigadista(usuario);
+		} catch (CatalogoException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+			return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			return null;
+		}
+	}
+	
+	@GetMapping("/tipoActas")
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	private List<TipoActasDTO> getTipoActas(HttpServletResponse response, HttpServletRequest request) throws IOException{
+		
+		long idPerfil = getPerfil(request);
+		
+		try {
+			return ICatService.getTipoActas(idPerfil);
 		} catch (CatalogoException e) {
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());

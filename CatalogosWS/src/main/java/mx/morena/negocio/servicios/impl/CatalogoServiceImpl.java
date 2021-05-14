@@ -15,6 +15,7 @@ import mx.morena.negocio.dto.MunicipioDTO;
 import mx.morena.negocio.dto.RepresentanteDTO;
 import mx.morena.negocio.dto.SeccionDTO;
 import mx.morena.negocio.dto.SeccionUserDTO;
+import mx.morena.negocio.dto.TipoActasDTO;
 import mx.morena.negocio.dto.offline.CatalogoDTOOffline;
 import mx.morena.negocio.dto.offline.DistritoFederalDTOOffline;
 import mx.morena.negocio.dto.offline.EntidadDTOOffline;
@@ -31,6 +32,7 @@ import mx.morena.persistencia.entidad.Entidad;
 import mx.morena.persistencia.entidad.Incidencias;
 import mx.morena.persistencia.entidad.Municipio;
 import mx.morena.persistencia.entidad.SeccionElectoral;
+import mx.morena.persistencia.entidad.TipoActas;
 import mx.morena.persistencia.entidad.Usuario;
 import mx.morena.persistencia.repository.ICargosRepository;
 import mx.morena.persistencia.repository.ICasillaRepository;
@@ -418,6 +420,22 @@ public class CatalogoServiceImpl extends MasterService implements ICatalogoServi
 		dtos = MapperUtil.mapAll(seccion, SeccionUserDTO.class);
 
 		return dtos;
+	}
+
+	@Override
+	public List<TipoActasDTO> getTipoActas(Long idPerfil) throws CatalogoException {
+		
+		if(idPerfil == PERFIL_RC) {
+			List<TipoActas> actas = eleccionRepository.findAllActas();
+	
+			List<TipoActasDTO> dtos = new ArrayList<TipoActasDTO>();
+	
+			dtos = MapperUtil.mapAll(actas, TipoActasDTO.class);
+	
+			return dtos;
+		}else {
+			throw new CatalogoException("No tiene permisos suficientes para consultar el catalogo", 401);
+		}
 	}
 
 //	@Override

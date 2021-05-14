@@ -37,7 +37,7 @@ public class ReportesSeguimientoVotoController extends MasterController{
 	private List<ReporteSeguimintoVotoDTO>getReporteVoto(HttpServletResponse response, HttpServletRequest request) throws IOException{
 		
 		long idUsuario = getUsuario(request);
-		long perfil = getUsuario(request);
+		long perfil = getPerfil(request);
 		
 		try {
 			return reportesService.getSeguimeitoVoto(perfil, idUsuario);

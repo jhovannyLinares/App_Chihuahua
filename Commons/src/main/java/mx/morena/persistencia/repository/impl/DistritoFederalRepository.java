@@ -58,4 +58,15 @@ public class DistritoFederalRepository implements IDistritoFederalRepository {
 		return template.queryForObject(sql, new Object[] { idDistrito }, new int[] { Types.NUMERIC }, new StringRowMapper());
 	}
 
+	@Override
+	public Long findDstMunicipio(Long municipal) {
+		
+		String sql = "select am.federal_id from app_representantes ar "
+				+ "inner join app_municipio am "
+				+ "on ar.municipio_id = am.id "
+				+ "where  ar.municipio_id = ? group by am.federal_id ";
+
+		return template.queryForObject(sql, new Object[] { municipal }, new int[] { Types.NUMERIC }, new LongRowMapper());
+	}
+
 }

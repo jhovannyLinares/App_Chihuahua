@@ -15,5 +15,7 @@ public interface IDistritoFederalRepository {
 	Long findDstFederal(Long idUsuario);
 	
 	String findDstritoFederal(Long idDistrito);
+	
+	Long findDstMunicipio(Long municipal);
 
 }

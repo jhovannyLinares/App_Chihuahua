@@ -56,23 +56,31 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 
 	@Override
 	public List<ReporteSeguimintoVotoDTO> getSeguimeitoVoto(Long perfil, Long usuario) throws SeguimientoVotoException {
-		if (perfil != PERFIL_RG) {
-
-			List<ReporteSeguimintoVotoDTO> lstvoto = new ArrayList<ReporteSeguimintoVotoDTO>();
-			List<SeccionElectoral> lstSeccion = null;
-			ReporteSeguimintoVotoDTO dto = null;
-			ReporteSeguimintoVotoDTO totales = new ReporteSeguimintoVotoDTO();
-			totales.setIdDistrito(0L);
-			totales.setDistrito("Totales");
-			totales.setSecciones(0L);
-			totales.setUrbanas(0L);
-			totales.setNoUrbanas(0L);
-			totales.setMetaConvencidos(0L);
-			totales.setTotalConvencidos(0L);
-			totales.setPorcentajeAvanceConvencidos(0.00);
-			totales.setNotificado(0L);
-			totales.setPorcentajeAvanceNotificado(0.00);
-
+		
+		Usuario idUsuario = usuarioRepository.findById(usuario);
+		Long federal = idUsuario.getFederal();
+		Long local = idUsuario.getDistritoLocal();
+		Long municipal = idUsuario.getMunicipio();
+		
+		
+		List<ReporteSeguimintoVotoDTO> lstvoto = new ArrayList<ReporteSeguimintoVotoDTO>();
+		List<SeccionElectoral> lstSeccion = null;
+		ReporteSeguimintoVotoDTO dto = null;
+		ReporteSeguimintoVotoDTO totales = new ReporteSeguimintoVotoDTO();
+		
+		totales.setIdDistrito(0L);
+		totales.setDistrito("Totales");
+		totales.setSecciones(0L);
+		totales.setUrbanas(0L);
+		totales.setNoUrbanas(0L);
+		totales.setMetaConvencidos(0L);
+		totales.setTotalConvencidos(0L);
+		totales.setPorcentajeAvanceConvencidos(0.00);
+		totales.setNotificado(0L);
+		totales.setPorcentajeAvanceNotificado(0.00);
+		
+		if (perfil == PERFIL_ESTATAL) {
+			
 			lstSeccion = seccionRepository.getDistritos();
 
 			for (SeccionElectoral seccion : lstSeccion) {
@@ -118,7 +126,71 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 			lstvoto.add(totales);
 
 			return lstvoto;
-		} else {
+		}else if(perfil == PERFIL_FEDERAL || perfil == PERFIL_LOCAL) {
+			
+//			if(perfil == PERFIL_LOCAL) {
+//				
+//				Long df = distritoRepository.findDstMunicipio(municipal);
+//				
+//				federal = df;
+//			}
+			
+			String distrito = distritoRepository.findDstritoFederal(federal);
+			
+			Long countSecciones = seccionRepository.getSecciones(federal);
+			Long urbanas = casillasRepository.countByDistritoAndTipologia(federal, URBANAS);
+			Long noUrbanas = casillasRepository.countByDistritoAndTipologia(federal, NO_URBANAS);
+			Long convencidos = seguimientoRepository.countByLocalAndTipo(federal, CONVENCIDO);
+			Long metaCon = seguimientoRepository.getConvencidosByFederal(federal);
+			Long notificados = seguimientoRepository.countNotificados(federal);
+			dto = new ReporteSeguimintoVotoDTO();
+
+			dto.setIdDistrito(federal);
+			dto.setDistrito(federal + "-" + distrito);
+			dto.setSecciones(countSecciones);
+			dto.setUrbanas(urbanas);
+			dto.setNoUrbanas(noUrbanas);
+			dto.setMetaConvencidos(metaCon);
+			dto.setTotalConvencidos(convencidos);
+			double sub2 = (convencidos * 100.00) / dto.getMetaConvencidos();
+			dto.setPorcentajeAvanceConvencidos(dosDecimales(sub2).doubleValue());
+			dto.setNotificado(notificados);
+			double sub1 = (notificados * 100.00) / dto.getTotalConvencidos();
+			dto.setPorcentajeAvanceNotificado(dosDecimales(sub1).doubleValue());
+
+			lstvoto.add(dto);
+
+		return lstvoto;
+
+		}else if(perfil == PERFIL_MUNICIPAL) {
+			String distrito = distritoRepository.findDstritoFederal(federal);
+			
+			Long countSecciones = seccionRepository.getSeccionesByMunicipio(municipal);
+			Long urbanas = casillasRepository.countByMunicipioAndTipologia(municipal, URBANAS);
+			Long noUrbanas = casillasRepository.countByMunicipioAndTipologia(municipal, NO_URBANAS);
+			Long convencidos = seguimientoRepository.countByMunicipioAndTipo(municipal, CONVENCIDO);
+			Long metaCon = seguimientoRepository.getConvencidosByMunicipal(municipal);
+			Long notificados = seguimientoRepository.countNotificadosMunicipal(municipal);
+			dto = new ReporteSeguimintoVotoDTO();
+
+			dto.setIdDistrito(federal);
+			dto.setDistrito(federal + "-" + distrito);
+			dto.setSecciones(countSecciones);
+			dto.setUrbanas(urbanas);
+			dto.setNoUrbanas(noUrbanas);
+			dto.setMetaConvencidos(metaCon);
+			dto.setTotalConvencidos(convencidos);
+			double sub2 = (convencidos * 100.00) / dto.getMetaConvencidos();
+			dto.setPorcentajeAvanceConvencidos(dosDecimales(sub2).doubleValue());
+			dto.setNotificado(notificados);
+			double sub1 = (notificados * 100.00) / dto.getTotalConvencidos();
+			dto.setPorcentajeAvanceNotificado(dosDecimales(sub1).doubleValue());
+
+			lstvoto.add(dto);
+
+		return lstvoto;
+
+		}else {
 			throw new SeguimientoVotoException("No cuenta con los permisos suficientes para consultar el reporte", 401);
 		}
 	}
@@ -190,7 +262,7 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 	@Override
 	public void getReporteSeguimientoVotoDownload(HttpServletResponse response, Long perfil, Long usuario)
 			throws SeguimientoVotoException, IOException {
-		if (perfil != PERFIL_RG) {
+		if (perfil == PERFIL_ESTATAL || perfil == PERFIL_FEDERAL || perfil == PERFIL_LOCAL || perfil == PERFIL_MUNICIPAL) {
 			setNameFile(response, CSV_SEGUIMIENTOVOTO);
 
 			List<ReporteSeguimintoVotoDTO> seguimientoDTOs = getSeguimeitoVoto(perfil, usuario);
@@ -201,7 +273,7 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 			setWriterFile(response, seguimientoDTOs, header);
 
 		} else {
-			throw new SeguimientoVotoException("No cuenta con los permisos suficientes para descargr el reporte", 401);
+			throw new SeguimientoVotoException("No cuenta con los permisos suficientes para descargar el reporte", 401);
 		}
 	}
 

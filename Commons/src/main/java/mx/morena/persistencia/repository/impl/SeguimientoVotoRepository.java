@@ -72,7 +72,7 @@ public class SeguimientoVotoRepository implements ISeguimientoVotoRepository {
 
 	@Override
 	public Long countNotificados(Long distritoId) {
-		String sql = "select COUNT(*) from app_convencidos ac where distrito_federal_id = ? and is_notificado = true";
+		String sql = "select COUNT(*) from app_convencidos ac where distrito_federal_id = ? and is_notificado = true and tipo = 1";
 		try {
 			return template.queryForObject(sql, new Object[] { distritoId }, new int[] { Types.NUMERIC },
 					new LongRowMapper());
@@ -98,6 +98,47 @@ public class SeguimientoVotoRepository implements ISeguimientoVotoRepository {
 			return null;
 		}
 	}
+	
+	@Override
+	public Long countByMunicipioAndTipo(Long municipal, Long tipo) {
+		
+		String sql = "select COUNT(*) from app_convencidos ac where municipio_id = ? and is_notificado = true and tipo = 1";
+		try {
+			return template.queryForObject(sql, new Object[] { municipal }, new int[] { Types.NUMERIC },
+					new LongRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+
+	@Override
+	public Long getConvencidosByMunicipal(Long municipal) {
+		
+		String sql = "select convencidos "
+				+ "from app_metas_municipios amm "
+				+ "where clave_municipio = ?";
+		try {
+			return template.queryForObject(sql, new Object[] { municipal }, new int[] { Types.NUMERIC },
+					new LongRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+		
+		
+
+	}
+
+	@Override
+	public Long countNotificadosMunicipal(Long municipal) {
+		String sql = "select COUNT(*) from app_convencidos ac where municipio_id = ? and is_notificado = true and tipo = 1";
+		try {
+			return template.queryForObject(sql, new Object[] { municipal }, new int[] { Types.NUMERIC },
+					new LongRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+	
 
 	// -------------Reporte-----------------------------------------------
 
