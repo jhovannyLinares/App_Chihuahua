@@ -26,6 +26,7 @@ import mx.morena.negocio.dto.DatosRcDTO;
 import mx.morena.negocio.dto.IncidenciasCasillasDTO;
 import mx.morena.negocio.dto.InstalacionCasillasDTO;
 import mx.morena.negocio.dto.ReporteCasillaDTO;
+import mx.morena.negocio.dto.UbicacionCasillaDTO;
 import mx.morena.negocio.exception.CotException;
 import mx.morena.negocio.servicios.IInstalacionCasillaService;
 import mx.morena.security.controller.MasterController;
@@ -130,42 +131,25 @@ public class InstalacionCasillaController extends MasterController {
 		}
 	}
 	
-//	@GetMapping("/instalacionCasillas")
-//	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-//	public InstalacionCasillasDTO getIstalacionCasilla(HttpServletResponse response, HttpServletRequest request, 
-//			@RequestParam(value = "idCasilla", required = true) Long idCasilla) throws IOException {
-//		long perfil = getPerfil(request);
-//		long usuario = getUsuario(request);
-// 
-//		try {
-//			return IService.getInstalacionCasilla( perfil, usuario, idCasilla);
-//		} catch (CotException e) {
-//			e.printStackTrace();
-//			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
-//			return null;
-//		} catch (Exception e ) {
-//			e.printStackTrace();
-//			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
-//			return null;
-//		}
-//	}
+	@GetMapping("/instalacionCasillas")
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	public InstalacionCasillasDTO getIstalacionCasilla(HttpServletResponse response, HttpServletRequest request, 
+			@RequestParam(value = "idCasilla", required = true) Long idCasilla) throws IOException {
+		long perfil = getPerfil(request);
+		long usuario = getUsuario(request);
+ 
+		try {
+			return IService.getInstalacionCasilla( perfil, usuario, idCasilla);
+		} catch (CotException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+			return null;
+		} catch (Exception e ) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			return null;
+		}
+	}
 	
-//	@GetMapping("/DatosRc")
-//	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-//	public DatosRcDTO getDatosRc(HttpServletResponse response, HttpServletRequest request ) throws IOException {
-//		long perfil = getPerfil(request);
-//		long usuario = getUsuario(request);
-// 
-//		try {
-//			return IService.getDatosRc(perfil, usuario);
-//		} catch (CotException e) {
-//			e.printStackTrace();
-//			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
-//			return null;
-//		} catch (Exception e ) {
-//			e.printStackTrace();
-//			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
-//			return null;
-//		}
-//	}
+
 }
