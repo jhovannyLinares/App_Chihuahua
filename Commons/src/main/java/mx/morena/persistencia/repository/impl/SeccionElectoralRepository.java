@@ -139,7 +139,7 @@ public class SeccionElectoralRepository implements ISeccionElectoralRepository {
 
 	@Override
 	public List<SeccionElectoral> getSeccionByUser(Long idUsuario) {
-		String sql = "select ara.seccion_electoral_id as Secciones from app_usuario au "
+		String sql = "select ara.seccion_electoral_id as secciones from app_usuario au "
 				+ "inner join app_representantes_asignados ara on ara.representante_id = au.id_representante "
 				+ "where au.id = ? ";
 
