@@ -914,8 +914,17 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 						"porcentajeCoalicion1", "idCoalicion2", "coalicion2", "porcentajeCoalicion2", "idCoalicion3",
 						"coalicion3", "porcentajeCoalicion3", "idCoalicion4", "coalicion4", "porcentajeCoalicion4",
 						"idCoalicion5", "coalicion5", "porcentajeCoalicion5", "total", "porcentajeTotal" };
+				
+				String[] encabezadoCSV = { "NO FEDERAL","LISTA NOMINAL", "PAN", "% PAN", "PRI",
+						"% PRI", "PRD", "% PRD", "PVEM", "% PVEM", "PT", "% PT",
+						"MC", "% MC", "MORENA", "% MORENA", "PES", "% PES", "RSP",
+						"% RSP", "FUERZA POR MEXICO", "% FUERZA POR MEXICO", "PANAL", "% PANAL",
+						"MORENA-PT-PANAL", "% MORENA-PT-PANAL", "PAN-PRD", "% PAN-PRD", "NULOS",
+						"% NULOS", "TOTAL", "% TOTAL", "COALICION 1", "% COALICION 1",
+						"COALICION 2", "% COALICION 2", "COALICION 3", "% COALICION 3", "COALICION 4",
+						"% COALICION 4", "COALICION 5", "% COALICION 5" };
 
-				setWriterFile(response, reporteDTOs, header);
+				setWriterFile(response, reporteDTOs, header, encabezadoCSV);
 			} else {
 				throw new CotException("No existe el id del reporte a consultar", 404);
 			}
