@@ -83,11 +83,13 @@ public class SeguimientoVotoRepository implements ISeguimientoVotoRepository {
 
 	@Override
 	public List<Convencidos> getConvencidos(Long idSeccion) {
-		String sql = "select ac.id, ac.nombre || ' ' || ac.apellido_paterno || ' ' || ac.apellido_materno as nombre_completo , ac.calle || ' ' || ac.colonia as Domicilio , "
-				+ "ac2.calle || ' ' || ac.colonia as ubicacion_casilla,  ac.referencia_casilla, ac.is_notificado "
-				+ "from public.app_convencidos ac inner join app_secciones as2 "
-				+ "on ac.seccion_id = as2.id inner join app_casilla ac2 on as2.id = ac2.id where as2.id = ? "
-				+ "and ac.tipo = 1 ";
+		String sql = "select ac.id, ac.nombre || ' ' || ac.apellido_paterno || ' ' || ac.apellido_materno as nombre_completo , ac.calle || ' Col. ' || ac.colonia as domicilio, "
+				+ "ac.telefono_celular as telefono, "
+				+ "ac2.calle || ',' || ac2.colonia as ubicacion_casilla, ac2.referencia as referencia_casilla , ac2.tipo_casilla, ac.is_notificado "
+				+ "from public.app_convencidos ac "
+				+ "inner join app_secciones as2 on ac.seccion_id = as2.id "
+				+ "inner join app_casilla ac2 on as2.id = ac2.seccion_id where ac.tipo = 1 "
+				+ "and ac.seccion_id = ? ";
 		try {
 			return template.queryForObject(sql, new Object[] { idSeccion }, new int[] { Types.NUMERIC },
 					new SeguimientosVotoRowMapper());

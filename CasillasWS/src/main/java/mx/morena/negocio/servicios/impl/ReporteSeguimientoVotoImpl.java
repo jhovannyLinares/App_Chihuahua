@@ -144,8 +144,10 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 			totales.setId(0L);
 			totales.setNombreCompleto("");
 			totales.setDomicilio("");
+			totales.setTelefono("");
 			totales.setUbicacionCasilla("");
 			totales.setReferenciaCasilla("");
+			totales.setTipoCasilla("");
 			totales.setIsNotificado(false);
 
 			if (idSeccion != null) {
@@ -176,8 +178,10 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 		convencidosDto.setId(con.getId());
 		convencidosDto.setNombreCompleto(con.getNombre());
 		convencidosDto.setDomicilio(con.getCalle());
+		convencidosDto.setTelefono(con.getTelCelular());
 		convencidosDto.setUbicacionCasilla(con.getColonia_casilla());
 		convencidosDto.setReferenciaCasilla(con.getReferencia_casilla());
+		convencidosDto.setTipoCasilla(con.getNombreSeccion());
 		convencidosDto.setIsNotificado(con.getIsNotificado());
 
 		return convencidosDto;
