@@ -4,6 +4,8 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -27,6 +29,8 @@ import mx.morena.persistencia.rowmapper.TipoRepresentanteRowMapper;
 
 @Repository
 public class RepresentantesRepository implements IRepresentanteRepository {
+	
+	Logger logger = LoggerFactory.getLogger(RepresentantesRepository.class);
 
 	@Autowired
 	private JdbcTemplate template;
@@ -592,7 +596,7 @@ public class RepresentantesRepository implements IRepresentanteRepository {
 		try {
 			group = " group by ac.federal_id, ac.local_id, ac.municpio_id, am.nombre, casilla order by ac.federal_id ";
 			sql = select.concat(where).concat(group);
-			System.out.println(sql);
+			logger.debug(sql);
 
 			return template.queryForObject(sql, parametros, types, new ReporteAsignacionCrgRowMapper());
 		} catch (EmptyResultDataAccessException e) {

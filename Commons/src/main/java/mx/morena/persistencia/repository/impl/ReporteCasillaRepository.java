@@ -3,6 +3,8 @@ package mx.morena.persistencia.repository.impl;
 import java.sql.Types;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -16,6 +18,8 @@ import mx.morena.persistencia.rowmapper.ReporteCasillaRowMapper;
 @Repository
 public class ReporteCasillaRepository implements IReporteCasillasRepository {
 	
+	Logger logger = LoggerFactory.getLogger(ReporteCasillaRepository.class);
+	
 	@Autowired
 	private JdbcTemplate template;
 
@@ -28,7 +32,7 @@ public class ReporteCasillaRepository implements IReporteCasillasRepository {
 			template.update(sql, new Object[] {rc.getIdCasilla(), rc.getHoraReporte(), rc.getIdRg(), rc.getNumeroVotos(),rc.getTipoReporte()});
 			return 1;
 		} catch (Exception e) {
-			System.out.println(e);
+			e.printStackTrace();
 			return 0;
 		}
 	}
@@ -51,7 +55,7 @@ public class ReporteCasillaRepository implements IReporteCasillasRepository {
 		String sql = "select id, id_casilla, hora_reporte, id_rg, numero_votos, hora_cierre, tipo_votacion, tipo_reporte from app_reporte_casillas arc where id_casilla = ? ";
 
 		try {
-			System.out.println(sql);
+			logger.debug(sql);
 			return template.queryForObject(sql, new Object[] { idCasilla },
 					new int[] { Types.NUMERIC}, new ReporteCasillaRowMapper());
 		} catch (EmptyResultDataAccessException e) {

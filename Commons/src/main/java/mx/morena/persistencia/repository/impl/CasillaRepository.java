@@ -4,6 +4,8 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -21,6 +23,8 @@ import mx.morena.persistencia.rowmapper.LongRowMapper;
 
 @Repository
 public class CasillaRepository implements ICasillaRepository {
+	
+	Logger logger = LoggerFactory.getLogger(CasillaRepository.class);
 
 	@Autowired
 	private JdbcTemplate template;
@@ -131,7 +135,7 @@ public class CasillaRepository implements ICasillaRepository {
 				"where  aac.id_casilla = ? " 
 				+ "and aac.ruta != 0 ";
 		try {
-			System.out.println(sql);
+			logger.debug(sql);
 			return template.queryForObject(sql, new Object[] { idCasilla }, new int[] { Types.NUMERIC },
 				new AsignacionCasillasRowMapper());
 		} catch (EmptyResultDataAccessException e) {
@@ -202,7 +206,7 @@ public class CasillaRepository implements ICasillaRepository {
 //		try {
 //			sql = select.concat(where);
 //			sql = sql.concat(order);
-//			System.out.println("***** " + sql);
+//			logger.debug("***** " + sql);
 //			return template.queryForObject(sql, parametros, types, new CasillasRowMapper());
 //		} catch (EmptyResultDataAccessException e) {
 //			return null;

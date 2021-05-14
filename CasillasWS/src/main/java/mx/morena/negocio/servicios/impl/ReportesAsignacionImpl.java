@@ -65,8 +65,8 @@ public class ReportesAsignacionImpl extends MasterService implements IReportesAs
 		long idDistrito = usuario.getFederal();
 		long perfilUsuario = usuario.getPerfil();
 		
-		System.out.println("distrito " + idDistrito);
-		System.out.println("perfil " + perfilUsuario);
+		logger.debug("distrito " + idDistrito);
+		logger.debug("perfil " + perfilUsuario);
 		
 		
 		dto = new ReporteAsignacionDistritalDTO();

@@ -127,7 +127,7 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 
 				List<listIncidenciasDTO> lstIn = dto.getIncidencia();
 
-				System.out.println(" numero incidencias " + lstIn.size());
+				logger.debug(" numero incidencias " + lstIn.size());
 				IncidenciasCasillas ic = null;
 
 				Usuario usr = usuarioRepository.findById(usuario);

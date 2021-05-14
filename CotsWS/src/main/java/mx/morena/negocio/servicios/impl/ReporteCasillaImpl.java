@@ -110,7 +110,7 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 				ReporteVotacionDTO total = new ReporteVotacionDTO();
 
 				lstSeccion = distritoFederalRepository.findAll();
-				System.out.println("**** " + lstSeccion.size());
+				logger.debug("**** " + lstSeccion.size());
 
 				total.setIdFederal(null);
 				total.setListaNominal(0L);
@@ -402,7 +402,7 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 				} else {
 					tipo = 3L;
 					lstCasilla = casillasRepository.getAllDistritosLocales();
-					System.out.println("**** " + lstCasilla.size());
+					logger.debug("**** " + lstCasilla.size());
 					for (Casilla casilla : lstCasilla) {
 						dto = getAsistenciaLocales(casilla.getLocal(), idFederal, tipo);
 
@@ -425,7 +425,7 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 				}
 			}
 
-			System.out.println("Lista return " + lstDto.size());
+			logger.debug("Lista return " + lstDto.size());
 			return lstDto;
 
 		} else {
@@ -559,14 +559,14 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 
 			if (idReporte >= 1 && idReporte <= 5) {
 
-				Usuario user = usuarioRepository.findById(usuario);
-				Long idEntidad = user.getEntidad();
+//				Usuario user = usuarioRepository.findById(usuario);
+//				Long idEntidad = user.getEntidad();
 
 				List<ReporteResultadosDTO> listaDTO = new ArrayList<>();
 				List<DistritoFederal> listDF = null;
 				List<Partido> lstPartidos = null;
 				ReporteResultadosDTO dto = null;
-				ReporteResultadosDTO total = new ReporteResultadosDTO();
+//				ReporteResultadosDTO total = new ReporteResultadosDTO();
 
 				listDF = distritoFederalRepository.findAll();
 
@@ -915,7 +915,7 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 	@Override
 	public void getReporteResultadosDownload(HttpServletResponse response, Long usuario, Long perfil, Long idReporte,
 			Long idUbicacion) throws CotException, IOException {
-		System.out.println("Valor de idUbicacion: " + idUbicacion);
+		logger.debug("Valor de idUbicacion: " + idUbicacion);
 		if (perfil == PERFIL_RG) {
 			if (idReporte >= 1 && idReporte <= 5) {
 
@@ -1021,7 +1021,7 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 		} else {
 			throw new CotException("No se encontraron datos", 404);
 		}
-//		System.out.println("**************** " + resultados.size());
+//		logger.debug("**************** " + resultados.size());
 		return resultados;
 	}
 
@@ -1186,7 +1186,7 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 			if (p13 > 0)
 				dto.setPorcentajePartido13(dosDecimales((p13 * 100.0) / totalVotos).doubleValue());
 
-//			System.out.println("Total: " + totalVotos);
+//			logger.debug("Total: " + totalVotos);
 
 			Metas metas = metaRepository.getMetasByMunicipio(idMunicipio);
 			Long listaNominal = metas.getListaNominal();
@@ -1345,7 +1345,7 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 				if (idFederal == null && idMunicipio == null) {
 					tipo = 2L;
 					lstCasillas = asignacionCasillasRepository.getAll();
-					System.out.println("***** " + lstCasillas.size());
+					logger.debug("***** " + lstCasillas.size());
 					for (AsignacionCasillas aCasillas : lstCasillas) {
 						dto = getAsistenciaCrg(idLocal, aCasillas.getFederalId(), tipo, idMunicipio, 0L, 0L,
 								aCasillas.getRuta());
@@ -1369,7 +1369,7 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 				if (idFederal != null && idMunicipio == null) {
 					tipo = 3L;
 					lstCasillas = asignacionCasillasRepository.getRutasByFederal(idFederal);
-//					System.out.println("***** " + lstCasillas.size());
+//					logger.debug("***** " + lstCasillas.size());
 					for (AsignacionCasillas aCasillas : lstCasillas) {
 						dto = getAsistenciaCrg(idLocal, idFederal, tipo, idMunicipio, 0L, 0L, aCasillas.getRuta());
 

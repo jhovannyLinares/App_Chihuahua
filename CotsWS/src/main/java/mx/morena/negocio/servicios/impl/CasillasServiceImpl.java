@@ -22,6 +22,7 @@ import mx.morena.negocio.util.MapperUtil;
 import mx.morena.persistencia.entidad.Casilla;
 import mx.morena.persistencia.entidad.EnvioActas;
 import mx.morena.persistencia.entidad.Partido;
+import mx.morena.persistencia.entidad.Preguntas;
 import mx.morena.persistencia.entidad.Votacion;
 import mx.morena.persistencia.repository.ICasillaRepository;
 import mx.morena.persistencia.repository.IEnvioActasRepository;
@@ -121,17 +122,25 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 		List<Votacion> votaciones = new ArrayList<Votacion>();
 
 		Votacion votacion;
-
+		Preguntas preguntas = new Preguntas();
+		
+		MapperUtil.map(resultadoVotos.getCuestionario(), preguntas);
+		
+		preguntas.setIdCasilla(resultadoVotos.getIdCasilla());
+		preguntas.setTipoVotacion(resultadoVotos.getTipoVotacion());
+		
 		for (VotosPartidoDTO voto : resultadoVotos.getVotos()) {
 
 			consultarVotaciones();
 
 			votacion = new Votacion();
+			
+			MapperUtil.map(voto, votacion);
 
 			votacion.setIdCasilla(resultadoVotos.getIdCasilla());
-			votacion.setIdPartido(voto.getIdPartido());
+//			votacion.setIdPartido(voto.getIdPartido());
 			votacion.setTipoVotacion(resultadoVotos.getTipoVotacion());
-			votacion.setVotos(voto.getVotos());
+//			votacion.setVotos(voto.getVotos());
 
 			Partido stream = new Partido();
 
@@ -177,8 +186,16 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 			}
 
 		}
+		
+		try {
 
-		resultadoVotacionRepository.save(votaciones);
+			resultadoVotacionRepository.save(votaciones);
+			resultadoVotacionRepository.save(preguntas);
+			
+		} catch (Exception e) {
+			throw new CotException("Se detecto un problema al guardar en BBDD ", 500);
+		}
+		
 
 		return new ResultadoOkDTO(1, "OK");
 

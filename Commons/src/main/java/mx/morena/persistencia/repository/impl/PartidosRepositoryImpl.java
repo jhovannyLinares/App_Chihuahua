@@ -4,6 +4,8 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -15,6 +17,8 @@ import mx.morena.persistencia.rowmapper.PartidosRowMapper;
 
 @Repository
 public class PartidosRepositoryImpl implements IPartidosRepository {
+	
+	Logger logger = LoggerFactory.getLogger(PartidosRepositoryImpl.class);
 
 	@Autowired
 	private JdbcTemplate template;
@@ -26,7 +30,7 @@ public class PartidosRepositoryImpl implements IPartidosRepository {
 				+ " where entidad_id = ? ";
 
 		try {
-			System.out.println(sql);
+			logger.debug(sql);
 			return template.queryForObject(sql, new Object[] { entidad }, new int[] { Types.NUMERIC },
 					new PartidosRowMapper());
 
@@ -104,7 +108,7 @@ public class PartidosRepositoryImpl implements IPartidosRepository {
 		String sql = "SELECT id, entidad_id as ubicacion, partido, candidato, tipo_partido, cargo, a_paterno, a_materno, nombres, id_coalicion FROM app_partidos_entidad ";
 
 		try {
-			System.out.println(sql);
+			logger.debug(sql);
 			return template.queryForObject(sql, new PartidosRowMapper());
 
 		} catch (EmptyResultDataAccessException e) {
@@ -173,7 +177,7 @@ public class PartidosRepositoryImpl implements IPartidosRepository {
 				+ "nombres, id_coalicion FROM app_partidos_entidad where entidad_id = ? ";
 
 		try {
-//			System.out.println(sql);
+//			logger.debug(sql);
 			return template.queryForObject(sql, new Object[] { entidad }, new int[] { Types.NUMERIC }, new PartidosRowMapper());
 		} catch (EmptyResultDataAccessException e) {
 			return null;

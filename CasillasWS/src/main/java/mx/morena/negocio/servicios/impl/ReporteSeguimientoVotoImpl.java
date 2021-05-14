@@ -428,8 +428,8 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 //		Long idEstado = usuario.getEntidad();
 		Long df = usuario.getFederal();
 		
-		System.out.println(df);
-		System.out.println(idUsuario);
+		logger.debug(df);
+		logger.debug(idUsuario);
 
 		if (perfil == PERFIL_FEDERAL) {
 
@@ -520,9 +520,9 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 
 		if (perfil == PERFIL_LOCAL) {
 			
-			System.out.println("local "+ dl);
-			System.out.println("perfil "+ perfil);
-			System.out.println("usuario "+ idUsuario);
+			logger.debug("local "+ dl);
+			logger.debug("perfil "+ perfil);
+			logger.debug("usuario "+ idUsuario);
 
 			List<ReporteInstalacionCasillaDTO> reporteDistDto = new ArrayList<ReporteInstalacionCasillaDTO>();
 			ReporteInstalacionCasillaDTO dto = null;

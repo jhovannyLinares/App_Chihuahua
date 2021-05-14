@@ -64,7 +64,7 @@ public class ConvencidosServiceImpl extends MasterService implements IConvencido
 			lstConv = convencidosRepository.getConvencidos(distritoFederalId,idMunicipio, idSeccion, claveElector, CONVENCIDO);
 
 		if (lstConv != null) {
-			System.out.println("**** " + lstConv.size());
+			logger.debug("**** " + lstConv.size());
 			lstDto = MapperUtil.mapAll(lstConv, ConvencidosResponseDTO.class);
 			return lstDto;
 
@@ -275,7 +275,7 @@ public class ConvencidosServiceImpl extends MasterService implements IConvencido
 			totales.setSecciones(0L);
 			
 			for (Municipio municipio : municipios) {
-				System.out.println(municipio.getId() + " " + municipio.getDescripcion());
+				logger.debug(municipio.getId() + " " + municipio.getDescripcion());
 				
 				Long cots = convencidosRepository.countByMunicipioAndTipo(municipio.getId(), COT, ESTATUS_ALTA);
 				Long urbanas = casillasRepository.countByMunicipioAndTipologia(municipio.getId(), URBANAS);

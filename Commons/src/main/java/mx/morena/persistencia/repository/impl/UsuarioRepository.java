@@ -4,6 +4,8 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -20,6 +22,8 @@ import mx.morena.persistencia.rowmapper.UsuarioRowMapper;
 
 @Repository
 public class UsuarioRepository implements IUsuarioRepository {
+	
+	Logger logger = LoggerFactory.getLogger(UsuarioRepository.class);
 
 	@Autowired
 	private JdbcTemplate template;
@@ -97,7 +101,7 @@ public class UsuarioRepository implements IUsuarioRepository {
 				+ "on ar.id = au.id_representante "
 				+ "where au.id = ?";
 		
-		System.out.println(sql);
+		logger.debug(sql);
 		try {
 			return template.queryForObject(sql, new Object[] { usuario }, new int[] { Types.NUMERIC },
 					new StringRowMapper());

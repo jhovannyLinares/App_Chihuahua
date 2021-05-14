@@ -338,7 +338,7 @@ public class CotServiceImpl extends MasterService implements ICotService {
 							personaCot.setIdSeccion(cotDto.getIdSeccion());
 							personaCot.setTipo(COT);
 
-							System.out.println(personaCot);
+							logger.debug(personaCot);
 							cotRepository.update(personaCot);
 
 							return "Cot editado correctamente " + cotDto.getNombre();

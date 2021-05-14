@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -20,6 +22,8 @@ import mx.morena.persistencia.rowmapper.IdMaxConvencidos;
 
 @Repository
 public class ConvencidosRepository implements IConvencidosRepository {
+	
+	Logger logger = LoggerFactory.getLogger(ConvencidosRepository.class);
 
 	@Autowired
 	private JdbcTemplate template;
@@ -56,7 +60,7 @@ public class ConvencidosRepository implements IConvencidosRepository {
 				+ " inner join app_localidad al on ac.seccion_id = al.id "
 				+ " where ac.clave_elector = ? ";
 		
-		System.out.println(sql);
+		logger.debug(sql);
 		try {
 			return template.queryForObject(sql, new Object[] { claveElector }, new int[] { Types.VARCHAR },
 					new ConvencidosRowMapper());
@@ -71,7 +75,7 @@ public class ConvencidosRepository implements IConvencidosRepository {
 				+ " FROM app_convencidos ac "
 				+ " where ac.clave_elector = ? ";
 		
-		System.out.println(sql);
+		logger.debug(sql);
 		try {
 			return template.queryForObject(sql, new Object[] { claveElector }, new int[] { Types.VARCHAR },
 					new ConvencidosValRowMapper());
@@ -267,13 +271,13 @@ public class ConvencidosRepository implements IConvencidosRepository {
 
 		try {
 
-			System.out.println("\n");
+			logger.debug("\n");
 
 			sql = select.concat(where);
-			System.out.println(sql);
+			logger.debug(sql);
 
-			System.out.println("*************    convencidos ");
-			System.out.println("\n");
+			logger.debug("*************    convencidos ");
+			logger.debug("\n");
 
 			return template.queryForObject(sql, parametros, types, new ConvencidosRowMapper());
 		} catch (EmptyResultDataAccessException e) {

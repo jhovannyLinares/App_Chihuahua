@@ -53,7 +53,7 @@ public class InstalacionCasillasRepository implements IInstalacionCasillasReposi
 		         ic.getNombreEscrutador2(),          ic.getNombreEscrutador3()});
 		return 1;
 		} catch (Exception e) {
-//			System.out.println(e);
+//			logger.debug(e);
 			return 0;
 		}
 	
@@ -514,7 +514,7 @@ public class InstalacionCasillasRepository implements IInstalacionCasillasReposi
 
 
 			sql = select.concat(where);
-//			System.out.println("xx " + sql);
+//			logger.debug("xx " + sql);
 
 			return template.queryForObject(sql, parametros, types, new LongRowMapper());
 		} catch (EmptyResultDataAccessException e) {

@@ -122,7 +122,7 @@ public class RutasServiceImpl extends MasterService implements IRutasService {
 
 					lstRutas = rutasRepository.getTipoCasilla(rutas.getIdRutaRg(), rutas.getSeccionId());
 
-					System.out.println(rutas.getIdRutaRg() + "  .   " + rutas.getSeccionId());
+					logger.debug(rutas.getIdRutaRg() + "  .   " + rutas.getSeccionId());
 					
 					if (lstRutas != null) {
 
@@ -186,7 +186,7 @@ public class RutasServiceImpl extends MasterService implements IRutasService {
 
 			List<Rutas> lstRutas = rutasRepository.getRutasByZonas(zona.getZonaCrg(), zona.getIdZonaCrg());
 			lstDto = MapperUtil.mapAll(lstRutas, RutaCatalogoDto.class);
-			System.out.println("***  rutas by zona " + lstDto.size());
+			logger.debug("***  rutas by zona " + lstDto.size());
 			return lstDto;
 //		}
 //		return null;
@@ -201,7 +201,7 @@ public class RutasServiceImpl extends MasterService implements IRutasService {
 
 			List<Rutas> lstRutas = rutasRepository.getCasillaByRuta(ruta.getIdRutaRg());
 			lstDto = MapperUtil.mapAll(lstRutas, CasillasCatalogoDto.class);
-			System.out.println("***  casillas by ruta " + lstDto.size());
+			logger.debug("***  casillas by ruta " + lstDto.size());
 			return lstDto;
 //		}
 //		return null;

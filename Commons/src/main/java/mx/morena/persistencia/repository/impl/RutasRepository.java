@@ -4,6 +4,8 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -29,6 +31,8 @@ import mx.morena.persistencia.rowmapper.ZonasByDfRowMapper;
 
 @Repository
 public class RutasRepository implements IRutasRepository {
+	
+	Logger logger = LoggerFactory.getLogger(RutasRepository.class);
 
 	@Autowired
 	private JdbcTemplate template;
@@ -342,7 +346,7 @@ public class RutasRepository implements IRutasRepository {
 		
 		try {
 			sql = sql.concat(where).concat(" group by ar.distrito_federal_id, ar.nombre_distrito, ar.zona , ar.id_zona , ar.ruta, ar.id_ruta_rg ");
-			System.out.println(sql);
+			logger.debug(sql);
 			
 			return template.queryForObject(sql, parametros, types,
 					new RutaConsultaRowMapper());

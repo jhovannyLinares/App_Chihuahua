@@ -26,7 +26,7 @@
 //
 //	// write data to csv
 //	private ByteArrayInputStream writeDataToCsv(final List<ResidentDTO> residents) {
-//		System.out.println("Writing data to the csv printer");
+//		logger.debug("Writing data to the csv printer");
 //
 //		try (final ByteArrayOutputStream stream = new ByteArrayOutputStream();
 //				final CSVPrinter printer = new CSVPrinter(new PrintWriter(stream), FORMAT)) {
