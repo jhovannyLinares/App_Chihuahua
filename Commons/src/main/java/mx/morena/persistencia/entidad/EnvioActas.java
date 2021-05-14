@@ -14,6 +14,15 @@ public class EnvioActas {
 	private boolean copiaRespuestaDiputadoLocal;
 	private boolean copiaRespuestaSindico;
 	private boolean copiaRespuestaDiputadoFederal;
+	private boolean copiaRespuestaPresidenteMunicipal;
+
+	public boolean isCopiaRespuestaPresidenteMunicipal() {
+		return copiaRespuestaPresidenteMunicipal;
+	}
+
+	public void setCopiaRespuestaPresidenteMunicipal(boolean copiaRespuestaPresidenteMunicipal) {
+		this.copiaRespuestaPresidenteMunicipal = copiaRespuestaPresidenteMunicipal;
+	}
 
 	public Long getTipoActa() {
 		return tipoActa;

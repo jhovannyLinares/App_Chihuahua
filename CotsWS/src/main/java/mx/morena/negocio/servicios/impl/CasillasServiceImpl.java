@@ -56,7 +56,7 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 	@Override
 	public Long save(EnvioActasDTO actaDto, long perfil, long idUsuario) throws CotException {
 
-		if (perfil != PERFIL_RG) {
+		if (perfil != PERFIL_RG && perfil != PERFIL_RC) {
 
 			throw new CotException("No cuenta con los servicios suficientes", 401);
 
@@ -71,6 +71,7 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 			actas.setTipoActa(actaDto.getTipoActa());
 			actas.setCopiaRespuestaGobernador(actaDto.isCopiaRespuestaGobernador());
 			actas.setCopiaRespuestaDiputadoLocal(actaDto.isCopiaRespuestaDiputadoLocal());
+			actas.setCopiaRespuestaPresidenteMunicipal(actaDto.isCopiaRespuestaPresidenteMunicipal());
 			actas.setCopiaRespuestaSindico(actaDto.isCopiaRespuestaSindico());
 			actas.setCopiaRespuestaDiputadoFederal(actaDto.isCopiaRespuestaDiputadoFederal());
 
@@ -92,14 +93,8 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 			} else {
 				throw new CotException("El campo Tipo Acta es Requerido", 400);
 			}
-			if(actas.isCopiaRespuestaGobernador() == true && actas.isCopiaRespuestaDiputadoFederal() == true && actas.isCopiaRespuestaDiputadoLocal() == true && actas.isCopiaRespuestaSindico() == true) {
-			}else {
-				throw new CotException("Favor de revisar las preguntas, todas son obligatorias", 400);
-			}
 			if (actas.getTipoVotacion() != null && actas.getTipoVotacion() > 0 && actas.getRutaActa() != null
-					&& actas.getRutaActa() != " " && actas.getIdCasilla() > 0 && actas.getIdCasilla() != null
-					&& actas.isCopiaRespuestaGobernador() == true && actas.isCopiaRespuestaDiputadoFederal() == true 
-					&& actas.isCopiaRespuestaDiputadoLocal() == true && actas.isCopiaRespuestaSindico() == true) {
+					&& actas.getRutaActa() != " " && actas.getIdCasilla() > 0 && actas.getIdCasilla() != null) {
 
 				Long duplicate = envioActasRepository.validaDuplicidadActa(actas.getTipoVotacion(),
 						actas.getIdCasilla());
