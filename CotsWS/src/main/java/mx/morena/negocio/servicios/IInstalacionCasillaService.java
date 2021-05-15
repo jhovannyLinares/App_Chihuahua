@@ -10,6 +10,7 @@ import mx.morena.negocio.dto.CierreCasillaDTO;
 import mx.morena.negocio.dto.DatosRcDTO;
 import mx.morena.negocio.dto.EstadoVotacionDTO;
 import mx.morena.negocio.dto.IncidenciasCasillasDTO;
+import mx.morena.negocio.dto.IncidenciasCasillasRespDTO;
 import mx.morena.negocio.dto.InstalacionCasillasDTO;
 import mx.morena.negocio.dto.ReporteCasillaDTO;
 import mx.morena.negocio.dto.ResultadoOkDTO;
@@ -49,4 +50,5 @@ public interface IInstalacionCasillaService {
 
 	String saveAfluenciaVotos(AfluenciaVotosDTO dto, long perfil, long usuario) throws CotException, IOException;
 	
+	List<IncidenciasCasillasRespDTO> getRegistrosVotaciones(Long idUsuario, Long perfil) throws CotException;
 }

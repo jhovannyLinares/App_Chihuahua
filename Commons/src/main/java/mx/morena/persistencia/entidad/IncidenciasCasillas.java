@@ -7,6 +7,8 @@ public class IncidenciasCasillas {
 	private Long idCasilla;
 
 	private Long idIncidencia;
+	
+	private Integer tipoReporte;
 
 	public Long getId() {
 		return id;
@@ -32,4 +34,12 @@ public class IncidenciasCasillas {
 		this.idIncidencia = idIncidencia;
 	}
 
+	public Integer getTipoReporte() {
+		return tipoReporte;
+	}
+
+	public void setTipoReporte(Integer tipoReporte) {
+		this.tipoReporte = tipoReporte;
+	}
+	
 }

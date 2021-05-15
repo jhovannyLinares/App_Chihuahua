@@ -20,6 +20,7 @@ import mx.morena.persistencia.rowmapper.ActasVotosRowMapper;
 import mx.morena.persistencia.rowmapper.AfluenciaVotoRowMapper;
 import mx.morena.persistencia.rowmapper.EstadoVotacionRowMapper;
 import mx.morena.persistencia.rowmapper.LongRowMapper;
+import mx.morena.persistencia.rowmapper.ReporteCasillaResponseRowMapper;
 import mx.morena.persistencia.rowmapper.ReporteCasillaRowMapper;
 
 @Repository
@@ -202,6 +203,19 @@ public class ReporteCasillaRepository implements IReporteCasillasRepository {
 			return 1;
 		} catch (Exception e) {
 			return 0;
+		}
+	}
+
+	@Override
+	public List<ReporteCasilla> getRegistrosByIdRc(Long idRc) {
+		String sql = "select id, id_casilla, hora_reporte, hora_cierre, tipo_reporte, cantidad_personas_han_votado, boletas_utilizadas, "
+				+ "recibio_visita_representante, is_rc, id_rc "
+				+ "from app_reporte_casillas arc where is_rc = true and id_rc = ? ";
+
+		try {
+			return template.queryForObject(sql, new Object[] { idRc }, new int[] { Types.NUMERIC}, new ReporteCasillaResponseRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
 		}
 	}
 }

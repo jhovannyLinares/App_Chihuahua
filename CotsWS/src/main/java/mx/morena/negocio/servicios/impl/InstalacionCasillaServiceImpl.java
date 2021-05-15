@@ -20,9 +20,12 @@ import mx.morena.negocio.dto.CierreCasillaDTO;
 import mx.morena.negocio.dto.DatosRcDTO;
 import mx.morena.negocio.dto.EstadoVotacionDTO;
 import mx.morena.negocio.dto.IncidenciasCasillasDTO;
+import mx.morena.negocio.dto.IncidenciasCasillasRespDTO;
+import mx.morena.negocio.dto.IncidenciasResponseDTO;
 import mx.morena.negocio.dto.InstalacionCasillasDTO;
 import mx.morena.negocio.dto.ReporteCasillaDTO;
 import mx.morena.negocio.dto.RepresentantePartidosDTO;
+import mx.morena.negocio.dto.RepresentantePartidosRespDTO;
 import mx.morena.negocio.dto.ResultadoOkDTO;
 import mx.morena.negocio.dto.UbicacionCasillaDTO;
 import mx.morena.negocio.dto.VotacionesDTO;
@@ -35,11 +38,13 @@ import mx.morena.persistencia.entidad.AfluenciaVotos;
 import mx.morena.persistencia.entidad.AsignacionCasillas;
 import mx.morena.persistencia.entidad.Casilla;
 import mx.morena.persistencia.entidad.EstadoVotacion;
+import mx.morena.persistencia.entidad.Incidencias;
 import mx.morena.persistencia.entidad.IncidenciasCasillas;
 import mx.morena.persistencia.entidad.InstalacionCasilla;
 import mx.morena.persistencia.entidad.Partido;
 import mx.morena.persistencia.entidad.PartidosReporteCasilla;
 import mx.morena.persistencia.entidad.ReporteCasilla;
+import mx.morena.persistencia.entidad.RepresentacionPartidos;
 import mx.morena.persistencia.entidad.Representantes;
 import mx.morena.persistencia.entidad.RepresentantesAsignados;
 import mx.morena.persistencia.entidad.Usuario;
@@ -89,8 +94,6 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 	private List<Partido> sindico;
 	private List<Partido> diputadoLocal;
 	private List<Partido> diputadoFederal;
-	
-	
 
 	@Override
 	@Transactional(rollbackFor = { CotException.class })
@@ -160,6 +163,7 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 
 						ic.setIdCasilla(dto.getIdCasilla());
 						ic.setIdIncidencia(incidencia.getId());
+						ic.setTipoReporte(dto.getTipoReporte());
 
 						if (incidenciasRepository.save(ic) == 0) {
 							throw new CotException("No se guardo la incidencia con éxito.", 409);
@@ -189,6 +193,7 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 					rc.setRc(true);
 					rc.setIdRg(null);
 					rc.setIdRc(usr.getId());
+					rc.setNumeroVotos(0L);
 					
 					if (dto.getCantidadPersonasHanVotado() == null || dto.getBoletasUtilizadas() == null) {
 						throw new CotException("Todas las preguntas son obligatorias", 400);
@@ -210,7 +215,7 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 					List<RepresentantePartidosDTO> partidos = dto.getPartidos();
 						
 					for (RepresentantePartidosDTO partido : partidos) {
-						if (partido.getIdPartido() != null) {
+						if (partido.getIdPartido() != null || partido.getIdPartido() != 0) {
 							partidoCasilla = new PartidosReporteCasilla();
 							
 							partidoCasilla.setIdCasilla(dto.getIdCasilla());
@@ -766,6 +771,49 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 		
 		
 		
+	}
+
+	@Override
+	public List<IncidenciasCasillasRespDTO> getRegistrosVotaciones(Long idUsuario, Long perfil) throws CotException {
+		
+		if (perfil == PERFIL_RC) {
+
+			List<ReporteCasilla> reporteCasillas = reporteRepository.getRegistrosByIdRc(idUsuario);
+	
+			List<IncidenciasCasillasRespDTO> reporteCasillaDTOs = new ArrayList<IncidenciasCasillasRespDTO>();
+			List<Incidencias> incidencias = new ArrayList<Incidencias>();
+			List<IncidenciasResponseDTO> incidenciasDto = new ArrayList<IncidenciasResponseDTO>();
+			
+			List<RepresentacionPartidos> partidos = new ArrayList<RepresentacionPartidos>();
+			List<RepresentantePartidosRespDTO> partidosDto = new ArrayList<RepresentantePartidosRespDTO>();
+
+			if (reporteCasillas != null) {
+				//reporteCasillas.stream().map(this::formatoFecha).collect(Collectors.toList());
+				reporteCasillaDTOs = MapperUtil.mapAll(reporteCasillas, IncidenciasCasillasRespDTO.class);
+				
+				for (IncidenciasCasillasRespDTO reporteCasilla : reporteCasillaDTOs) {
+					incidencias = incidenciasRepository.getByIdCasilla(reporteCasilla.getIdCasilla(), reporteCasilla.getTipoReporte());
+					if (incidencias != null) {
+						incidenciasDto = MapperUtil.mapAll(incidencias, IncidenciasResponseDTO.class);
+						reporteCasilla.setIncidencia(incidenciasDto);
+					}
+					
+					partidos = partidoVotacionRepository.getPartidosByIdCasillaAndReporte(reporteCasilla.getIdCasilla(), reporteCasilla.getTipoReporte());
+					if (partidos != null) {
+						partidosDto = MapperUtil.mapAll(partidos, RepresentantePartidosRespDTO.class);
+						reporteCasilla.setPartidos(partidosDto);
+					}
+					
+//					reporteCasilla.setHoraReporte(new Time(reporteCasillas.forEach(a -> a.getHoraReporte().getTime().toString())));
+				}
+				
+			}
+	
+			return reporteCasillaDTOs;
+			
+		} else {
+			throw new CotException("No se cuenta con los permisos suficientes para consultar la informacion. ", 401);
+		}
 	}
 
 }

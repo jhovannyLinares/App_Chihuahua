@@ -10,4 +10,6 @@ public interface IPartidoVotacionRepository {
 	List<RepresentacionPartidos> getPartidos();
 	
 	int save(PartidosReporteCasilla partidos);
+	
+	List<RepresentacionPartidos> getPartidosByIdCasillaAndReporte(Long idCasilla, Integer tipoReporte);
 }

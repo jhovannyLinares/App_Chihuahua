@@ -27,6 +27,7 @@ import mx.morena.negocio.dto.CierreCasillaDTO;
 import mx.morena.negocio.dto.DatosRcDTO;
 import mx.morena.negocio.dto.EstadoVotacionDTO;
 import mx.morena.negocio.dto.IncidenciasCasillasDTO;
+import mx.morena.negocio.dto.IncidenciasCasillasRespDTO;
 import mx.morena.negocio.dto.InstalacionCasillasDTO;
 import mx.morena.negocio.dto.ReporteCasillaDTO;
 import mx.morena.negocio.dto.ResultadoOkDTO;
@@ -276,6 +277,33 @@ public class InstalacionCasillaController extends MasterController {
 
 		try {
 			return IService.saveActas(dto, perfil, usuario);
+		} catch (CotException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+			return null;
+		} catch (Exception e ) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			return null;
+		}
+	}
+	
+	/**
+	 * @param response
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 * 
+	 * Consulta de informacion registrada por el Rc
+	 */
+	@GetMapping("/registrosRc")
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	public List<IncidenciasCasillasRespDTO> getRegistrosVotacionRc(HttpServletResponse response, HttpServletRequest request ) throws IOException {
+		long usuario = getUsuario(request);
+		long perfil = getPerfil(request);
+ 
+		try {
+			return IService.getRegistrosVotaciones(usuario, perfil);
 		} catch (CotException e) {
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());

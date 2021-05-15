@@ -1,5 +1,6 @@
 package mx.morena.persistencia.repository.impl;
 
+import java.sql.Types;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,17 @@ public class PartidoVotacionRepository implements IPartidoVotacionRepository {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return 0;
+		}
+	}
+
+	@Override
+	public List<RepresentacionPartidos> getPartidosByIdCasillaAndReporte(Long idCasilla, Integer tipoReporte) {
+		String sql = "select aprc.id_partido as id, arp.partido from app_partidos_reporte_casillas aprc inner join app_representacion_partidos arp "
+				+ "on arp.id = aprc.id_partido where aprc.id_casilla = ? and aprc.tipo_reporte = ? ";
+		try {
+			return template.queryForObject(sql, new Object[] { idCasilla, tipoReporte }, new int[] { Types.NUMERIC, Types.NUMERIC }, new RepresentacionPartidoRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
 		}
 	}
 
