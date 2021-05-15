@@ -16,6 +16,8 @@ public interface ICasillasService {
 	public ResultadoOkDTO saveResultados(ResultadoVotacionDTO actas, long perfil, long usuario) throws CotException;
 
 	public List<VotacionesDTO> getActas(Long idCasilla) throws CotException;
+	
+	public List<EnvioActasDTO> getActasByTipo(Long idTipoActa, Long perfil) throws CotException;
 
 	public List<PartidosXAmbitoDTO> getPartidos(Long idCasilla) throws CotException;
 

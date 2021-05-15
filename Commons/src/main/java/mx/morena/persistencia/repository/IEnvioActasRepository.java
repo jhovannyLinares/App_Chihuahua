@@ -16,5 +16,7 @@ public interface IEnvioActasRepository {
 	
 	Long validaDuplicidadActa(Long tipo, Long casila);
 	
+	List<EnvioActas> getActaByTipo(Long idTipoActa);
+	
 	
 }

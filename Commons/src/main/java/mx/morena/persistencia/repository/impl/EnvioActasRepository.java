@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import mx.morena.persistencia.entidad.EnvioActas;
 import mx.morena.persistencia.repository.IEnvioActasRepository;
+import mx.morena.persistencia.rowmapper.ActasByTipoRowMapper;
 import mx.morena.persistencia.rowmapper.ActasRowMapper;
 import mx.morena.persistencia.rowmapper.IdMaxEnvioActasRowMapper;
 import mx.morena.persistencia.rowmapper.LongRowMapper;
@@ -73,6 +74,19 @@ public class EnvioActasRepository implements IEnvioActasRepository {
 					new LongRowMapper());
 		} catch (EmptyResultDataAccessException e) {
 			return null;
+		}
+	}
+
+	@Override
+	public List<EnvioActas> getActaByTipo(Long idTipoActa) {
+		String sql = "select id_acta,tipo_votacion,ruta_acta,id_casilla,registro_acta, tipo_acta, copia_resultados_gobernador, copia_resultados_diputado_local, "
+				+ "copia_resultados_sindico, copia_resultados_diputado_federal, copia_resultados_presidente_municipal from app_envio_actas aea "
+				+ "where tipo_acta = ?";
+		try {
+			return template.queryForObject(sql, new Object[] { idTipoActa }, new int[] { Types.NUMERIC },
+					new ActasByTipoRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return new ArrayList<EnvioActas>();
 		}
 	}
 

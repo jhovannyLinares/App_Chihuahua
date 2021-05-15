@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -131,6 +132,28 @@ public class CasillasController extends MasterController{
 //			return null;
 //		}
 //	}
+	
+	/* ICJ - Servicio para consultar actas por tipo de acta */
+	
+	@GetMapping("/consultaActas")
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	public List<EnvioActasDTO> getActasByTipo(HttpServletResponse response, HttpServletRequest request, 
+			@RequestParam(value = "idTipoActa", required = true) Long idTipoActa) throws IOException {
+			
+		long perfil = getPerfil(request);
+		
+		try {
+			return casillaService.getActasByTipo(idTipoActa, perfil);
+		} catch (CotException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+			return null;
+		} catch (Exception e ) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			return null;
+		}
+	}
 
 	
 }

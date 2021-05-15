@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -57,7 +58,7 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 	@Override
 	public Long save(EnvioActasDTO actaDto, long perfil, long idUsuario) throws CotException {
 
-		if (perfil != PERFIL_RG && perfil != PERFIL_RC) {
+		if (perfil != PERFIL_RC) {
 
 			throw new CotException("No cuenta con los servicios suficientes", 401);
 
@@ -123,18 +124,18 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 
 		Votacion votacion;
 		Preguntas preguntas = new Preguntas();
-		
+
 		MapperUtil.map(resultadoVotos.getCuestionario(), preguntas);
-		
+
 		preguntas.setIdCasilla(resultadoVotos.getIdCasilla());
 		preguntas.setTipoVotacion(resultadoVotos.getTipoVotacion());
-		
+
 		for (VotosPartidoDTO voto : resultadoVotos.getVotos()) {
 
 			consultarVotaciones();
 
 			votacion = new Votacion();
-			
+
 			MapperUtil.map(voto, votacion);
 
 			votacion.setIdCasilla(resultadoVotos.getIdCasilla());
@@ -186,19 +187,18 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 			}
 
 		}
-		
+
 		try {
 
 			resultadoVotacionRepository.save(votaciones);
 			logger.debug(preguntas.toString());
 			resultadoVotacionRepository.save(preguntas);
-			
+
 		} catch (Exception e) {
-			
+
 			e.printStackTrace();
 			throw new CotException("Se detecto un problema al guardar en BBDD ", 500);
 		}
-		
 
 		return new ResultadoOkDTO(1, "OK");
 
@@ -370,5 +370,42 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 //		
 //		return null;
 //	}
+
+	@Override
+	public List<EnvioActasDTO> getActasByTipo(Long idTipoActa, Long perfil) throws CotException {
+
+		if (perfil != PERFIL_RC) {
+			throw new CotException("Error: solo el perfil RC tiene acceso a este servicio", 400);
+		} else {
+			if (idTipoActa < 0 || idTipoActa > 3) {
+				throw new CotException("Solo se permite un rango del 1 al 3 para el tipo de acta", 400);
+			} else {
+				List<EnvioActas> actasDTOs = envioActasRepository.getActaByTipo(idTipoActa);
+				List<EnvioActasDTO> dto = new ArrayList<EnvioActasDTO>();
+
+				if (actasDTOs != null) {
+					dto = actasDTOs.stream().map(this::converDto).collect(Collectors.toList());
+				}
+
+				return dto;
+			}
+		}
+	}
+
+	public EnvioActasDTO converDto(EnvioActas actas) {
+		EnvioActasDTO actasDto = new EnvioActasDTO();
+
+		actasDto.setTipoVotacion(actas.getTipoVotacion());
+		actasDto.setIdCasilla(actas.getIdCasilla());
+		actasDto.setTipoActa(actas.getTipoActa());
+		actasDto.setRutaActa(actas.getRutaActa());
+		actasDto.setCopiaRespuestaGobernador(actas.isCopiaRespuestaGobernador());
+		actasDto.setCopiaRespuestaDiputadoLocal(actas.isCopiaRespuestaDiputadoLocal());
+		actasDto.setCopiaRespuestaDiputadoFederal(actas.isCopiaRespuestaDiputadoFederal());
+		actasDto.setCopiaRespuestaSindico(actas.isCopiaRespuestaSindico());
+		actasDto.setCopiaRespuestaPresidenteMunicipal(actas.isCopiaRespuestaPresidenteMunicipal());
+
+		return actasDto;
+	}
 
 }
