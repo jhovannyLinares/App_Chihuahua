@@ -375,10 +375,10 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 	public List<EnvioActasDTO> getActasByTipo(Long idTipoActa, Long perfil) throws CotException {
 
 		if (perfil != PERFIL_RC) {
-			throw new CotException("Error: solo el perfil RC tiene acceso a este servicio", 403);
+			throw new CotException("Error: solo el perfil RC tiene acceso a este servicio", 401);
 		} else {
 			if (idTipoActa < 0 || idTipoActa > 3) {
-				throw new CotException("Solo se permite un rango del 1 al 3 para el tipo de acta", 407);
+				throw new CotException("Solo se permite un rango del 1 al 3 para el tipo de acta", 401);
 			} else {
 				List<EnvioActas> actasDTOs = envioActasRepository.getActaByTipo(idTipoActa);
 				List<EnvioActasDTO> dto = new ArrayList<EnvioActasDTO>();
