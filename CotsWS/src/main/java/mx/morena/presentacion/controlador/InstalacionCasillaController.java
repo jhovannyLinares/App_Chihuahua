@@ -24,12 +24,13 @@ import mx.morena.negocio.dto.ActasVotacionDTO;
 import mx.morena.negocio.dto.AfluenciaVotosDTO;
 import mx.morena.negocio.dto.CasillasDTO;
 import mx.morena.negocio.dto.CierreCasillaDTO;
+import mx.morena.negocio.dto.DatosRcDTO;
 import mx.morena.negocio.dto.EstadoVotacionDTO;
 import mx.morena.negocio.dto.IncidenciasCasillasDTO;
 import mx.morena.negocio.dto.InstalacionCasillasDTO;
 import mx.morena.negocio.dto.ReporteCasillaDTO;
 import mx.morena.negocio.dto.ResultadoOkDTO;
-//import mx.morena.negocio.dto.UbicacionCasillaDTO;
+import mx.morena.negocio.dto.UbicacionCasillaDTO;
 import mx.morena.negocio.exception.CotException;
 import mx.morena.negocio.servicios.IInstalacionCasillaService;
 import mx.morena.security.controller.MasterController;
@@ -43,6 +44,15 @@ public class InstalacionCasillaController extends MasterController {
 	@Autowired
 	private IInstalacionCasillaService IService;
 	
+	/**
+	 * @param response
+	 * @param request
+	 * @param dto
+	 * @return
+	 * @throws IOException
+	 * 
+	 * Guardado de informacion de la instalacion de la casilla
+	 */
 	@PostMapping("/instalacionCasillas")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
 	public Long saveIstalacionCasilla(HttpServletResponse response, HttpServletRequest request, @RequestBody InstalacionCasillasDTO dto) throws IOException {
@@ -134,6 +144,15 @@ public class InstalacionCasillaController extends MasterController {
 		}
 	}
 	
+	/**
+	 * @param response
+	 * @param request
+	 * @param idCasilla
+	 * @return
+	 * @throws IOException
+	 * 
+	 * Consulta de informacion de instalacion de la casilla
+	 */
 	@GetMapping("/instalacionCasillas")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
 	public InstalacionCasillasDTO getIstalacionCasilla(HttpServletResponse response, HttpServletRequest request, 
@@ -162,6 +181,63 @@ public class InstalacionCasillaController extends MasterController {
 
 		try {
 			return IService.saveEstadoP(dto, perfil, usuario);
+		} catch (CotException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+			return null;
+		} catch (Exception e ) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			return null;
+		}
+	}
+	
+	/**
+	 * @param response
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 * 
+	 * Consulta de informacion del RC logueado
+	 */
+	@GetMapping("/DatosRc")
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	public DatosRcDTO getDatosRc(HttpServletResponse response, HttpServletRequest request ) throws IOException {
+		long perfil = getPerfil(request);
+		long usuario = getUsuario(request);
+ 
+		try {
+			return IService.getDatosRc(perfil, usuario);
+		} catch (CotException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+			return null;
+		} catch (Exception e ) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			return null;
+		}
+	}
+	
+	/**
+	 * 
+	 * @param response
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 * 
+	 * Metodo get de consulta de ubicacion de la casilla.
+	 */
+	@GetMapping("/UbicacionCasilla")
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	public UbicacionCasillaDTO getDatosCasilla(HttpServletResponse response, HttpServletRequest request)throws IOException {
+//			,@RequestParam (value = "idCasilla", required = true) Long idCasilla) throws IOException {
+		long perfil = getPerfil(request);
+		long usuario = getUsuario(request);
+		long idCasilla = 0L;
+ 
+		try {
+			return IService.getDatosCasilla(perfil, usuario, idCasilla);
 		} catch (CotException e) {
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());

@@ -20,6 +20,7 @@ import mx.morena.persistencia.rowmapper.CasillasRowMapper;
 import mx.morena.persistencia.rowmapper.CountCasillasRowMapper;
 import mx.morena.persistencia.rowmapper.DistritoLocalGroupRowMapper;
 import mx.morena.persistencia.rowmapper.LongRowMapper;
+import mx.morena.persistencia.rowmapper.UbicacionCasillaRowMapper;
 
 @Repository
 public class CasillaRepository implements ICasillaRepository {
@@ -311,6 +312,28 @@ public class CasillaRepository implements ICasillaRepository {
 				return null;
 			}
 
+	}
+
+	/**
+	 * Metodo de consulta de informacion de ubicacion de la casilla
+	 */
+	@Override
+	public Casilla getUbicacionById(Long usuario) {
+
+       String sql = "select ac.calle, ac.numero, ac.colonia, ac.ubicacion " 
+		   + "from app_casilla ac  " 
+		   + "inner join app_representantes_asignados ara " 
+		   + "on ara.casilla_id = ac.id " 
+		   + "where representante_id = ?";
+//       	   + "where ac.id = ?";	
+
+       try {
+			return template.queryForObject(sql, new Object[] { usuario }, new int[] { Types.NUMERIC },
+					new UbicacionCasillaRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+
+		}
 	}
 
 }

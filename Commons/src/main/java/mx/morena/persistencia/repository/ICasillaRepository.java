@@ -45,4 +45,6 @@ public interface ICasillaRepository {
 
 	public List<Casilla> getCasillasAsistencia(Long idFederal, Long idLocal, Long idMunicipio, Long crg, Long rg,
 			String idRutaRg);
+
+	public Casilla getUbicacionById(Long usuario);
 }

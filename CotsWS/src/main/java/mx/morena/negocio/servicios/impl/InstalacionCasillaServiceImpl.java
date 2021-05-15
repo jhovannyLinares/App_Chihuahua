@@ -2,7 +2,10 @@ package mx.morena.negocio.servicios.impl;
 
 import java.io.IOException;
 import java.sql.Time;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,6 +24,7 @@ import mx.morena.negocio.dto.InstalacionCasillasDTO;
 import mx.morena.negocio.dto.ReporteCasillaDTO;
 import mx.morena.negocio.dto.RepresentantePartidosDTO;
 import mx.morena.negocio.dto.ResultadoOkDTO;
+import mx.morena.negocio.dto.UbicacionCasillaDTO;
 import mx.morena.negocio.dto.VotacionesDTO;
 import mx.morena.negocio.dto.listIncidenciasDTO;
 import mx.morena.negocio.exception.CotException;
@@ -526,16 +530,17 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 			
 			if (casilla != null) {
 				
-			InstalacionCasillasDTO dto = new InstalacionCasillasDTO();
+				InstalacionCasillasDTO dto = new InstalacionCasillasDTO();
 			
 			MapperUtil.map(casilla, dto);
-			
+						
 			return dto;
+			
 			}else {
-				throw new CotException("La casilla seleccionada no esta registrada", 404);
+				throw new CotException("La casilla seleccionada no esta registrada.", 404);
 			}
 		} else {
-			throw new CotException("No cuenta con los permisos suficientes para realizar la operacion", 401);
+			throw new CotException("No cuenta con los permisos suficientes para realizar la operacion.", 401);
 		}
 		
 	}
@@ -559,7 +564,7 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 			return dto;
 
 		} else {
-			throw new CotException("No se encontro el usuario registrado con el id " + usuario, 404);
+			throw new CotException("No se encontro informacion del usuario registrado con el id " + usuario, 404);
 		}
 	}
 
@@ -725,6 +730,34 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 			
 		}
 		return new ResultadoOkDTO(1, "OK");
+	}
+
+	/**
+	 * Metodo de consulta de informacion de ubicacion de la casilla
+	 */
+	@Override
+	public UbicacionCasillaDTO getDatosCasilla(long perfil, long usuario, Long idCasilla) throws CotException {
+		
+		if (perfil == PERFIL_RC) {
+			
+			Casilla ca = casillaRepository.getUbicacionById(usuario);
+			
+			if (ca != null) {
+				
+				UbicacionCasillaDTO dto = new UbicacionCasillaDTO();
+				MapperUtil.map(ca, dto);
+				return dto;
+				
+			}else {
+				throw new CotException("No se encontro informacion de la casilla. ", 404);
+			}
+			
+		}else {
+			throw new CotException("No se cuenta con los permisos suficientes para consultar la informacion. ", 401);
+		}
+		
+		
+		
 	}
 
 }

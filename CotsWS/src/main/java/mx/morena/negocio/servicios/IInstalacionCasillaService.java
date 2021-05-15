@@ -13,6 +13,7 @@ import mx.morena.negocio.dto.IncidenciasCasillasDTO;
 import mx.morena.negocio.dto.InstalacionCasillasDTO;
 import mx.morena.negocio.dto.ReporteCasillaDTO;
 import mx.morena.negocio.dto.ResultadoOkDTO;
+import mx.morena.negocio.dto.UbicacionCasillaDTO;
 import mx.morena.negocio.dto.VotacionesDTO;
 import mx.morena.negocio.exception.CotException;
 
@@ -33,6 +34,8 @@ public interface IInstalacionCasillaService {
 	InstalacionCasillasDTO getInstalacionCasilla(long perfil, long usuario, Long idCasilla) throws CotException;
 
 	DatosRcDTO getDatosRc(long perfil, long usuario) throws CotException;
+
+	UbicacionCasillaDTO getDatosCasilla(long perfil, long usuario, Long idCasilla) throws CotException;
 	
 	String saveEstadoVotacion(EstadoVotacionDTO dto, long perfil, long usuario)throws CotException, IOException;
 	
