@@ -27,6 +27,8 @@ public class ReporteCasilla {
 	
 	private boolean isRc;
 
+	private Long idRc;
+	
 	public Long getId() {
 		return id;
 	}
@@ -113,6 +115,14 @@ public class ReporteCasilla {
 
 	public void setRc(boolean isRc) {
 		this.isRc = isRc;
+	}
+
+	public Long getIdRc() {
+		return idRc;
+	}
+
+	public void setIdRc(Long idRc) {
+		this.idRc = idRc;
 	}
 	
 }

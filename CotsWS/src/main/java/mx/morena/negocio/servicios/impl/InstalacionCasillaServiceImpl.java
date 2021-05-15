@@ -172,6 +172,7 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 				rc.setCantidadPersonasHanVotado(null);
 				rc.setBoletasUtilizadas(null);
 				rc.setRc(false);
+				rc.setIdRc(null);
 				
 				if (perfil == PERFIL_RC) {
 					
@@ -179,6 +180,7 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 					rc.setRecibioVisitaRepresentante(dto.isRecibioVisitaRepresentante());
 					rc.setRc(true);
 					rc.setIdRg(null);
+					rc.setIdRc(usr.getId());
 					
 					if (dto.getCantidadPersonasHanVotado() == null || dto.getBoletasUtilizadas() == null) {
 						throw new CotException("Todas las preguntas son obligatorias", 400);
