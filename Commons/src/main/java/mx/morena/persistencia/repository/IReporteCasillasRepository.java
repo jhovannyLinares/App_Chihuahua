@@ -21,5 +21,5 @@ public interface IReporteCasillasRepository {
 	
 	int insertEstadoVotacion(EstadoVotacion ev);
 	
-
+	List<ReporteCasilla> getReporteByIdCasillaAndRc(Long idCasilla, boolean isRc);
 }

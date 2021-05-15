@@ -8,6 +8,7 @@ import mx.morena.negocio.dto.EleccionDTO;
 import mx.morena.negocio.dto.EntidadDTO;
 import mx.morena.negocio.dto.IncidenciaDTO;
 import mx.morena.negocio.dto.MunicipioDTO;
+import mx.morena.negocio.dto.RepresentacionPartidosDTO;
 import mx.morena.negocio.dto.RepresentanteDTO;
 import mx.morena.negocio.dto.SeccionDTO;
 import mx.morena.negocio.dto.SeccionUserDTO;
@@ -42,10 +43,11 @@ public interface ICatalogoService {
 	
 	List<IncidenciaDTO> getIncidencias()throws CatalogoException;
 	
-	List<EleccionDTO>getEleccion()throws CatalogoException;;
+	List<EleccionDTO>getEleccion()throws CatalogoException;
 	
 	List<SeccionUserDTO>getSeccionByBrigadista(Long idUsuario)throws CatalogoException;
 	
 	List<TipoActasDTO>getTipoActas(Long idPerfil)throws CatalogoException;
 
+	List<RepresentacionPartidosDTO> getRepresentacionPartidos()throws CatalogoException;
 }

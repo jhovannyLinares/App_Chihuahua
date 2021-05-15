@@ -27,11 +27,13 @@ public class ReporteCasillaRepository implements IReporteCasillasRepository {
 
 	@Override
 	public int save(ReporteCasilla rc) {
-		String sql = "insert into app_reporte_casillas (id, id_casilla, hora_reporte, id_rg, numero_votos,tipo_reporte)" 
-				+ "values (COALESCE((SELECT MAX(id) FROM app_reporte_casillas), 0)+1, ?, ?, ?, ?,?)";
+		String sql = "insert into app_reporte_casillas (id, id_casilla, hora_reporte, id_rg, numero_votos,tipo_reporte, cantidad_personas_han_votado, "
+				+ "boletas_utilizadas, recibio_visita_representante)" 
+				+ "values (COALESCE((SELECT MAX(id) FROM app_reporte_casillas), 0)+1, ?, ?, ?, ?, ?, ?, ?, ?)";
 //				+ "values ((SELECT MAX(id)+1 FROM app_reporte_casillas), ?, ?, ?, ?);";
 		try {
-			template.update(sql, new Object[] {rc.getIdCasilla(), rc.getHoraReporte(), rc.getIdRg(), rc.getNumeroVotos(),rc.getTipoReporte()});
+			template.update(sql, new Object[] { rc.getIdCasilla(), rc.getHoraReporte(), rc.getIdRg(), rc.getNumeroVotos(),rc.getTipoReporte(),
+			rc.getCantidadPersonasHanVotado(), rc.getBoletasUtilizadas(), rc.isRecibioVisitaRepresentante() });
 			return 1;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -124,4 +126,17 @@ public class ReporteCasillaRepository implements IReporteCasillasRepository {
 		}
 	}
 
+	@Override
+	public List<ReporteCasilla> getReporteByIdCasillaAndRc(Long idCasilla, boolean isRc) {
+		String sql = "select * from app_reporte_casillas arc where id_casilla = ? and is_rc = ? ";
+
+		try {
+			logger.debug(sql);
+			return template.queryForObject(sql, new Object[] { idCasilla, isRc },
+					new int[] { Types.NUMERIC, Types.BOOLEAN }, new ReporteCasillaRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			
+			return null;
+		}
+	}
 }

@@ -12,6 +12,7 @@ import mx.morena.negocio.dto.EleccionDTO;
 import mx.morena.negocio.dto.EntidadDTO;
 import mx.morena.negocio.dto.IncidenciaDTO;
 import mx.morena.negocio.dto.MunicipioDTO;
+import mx.morena.negocio.dto.RepresentacionPartidosDTO;
 import mx.morena.negocio.dto.RepresentanteDTO;
 import mx.morena.negocio.dto.SeccionDTO;
 import mx.morena.negocio.dto.SeccionUserDTO;
@@ -31,6 +32,7 @@ import mx.morena.persistencia.entidad.Eleccion;
 import mx.morena.persistencia.entidad.Entidad;
 import mx.morena.persistencia.entidad.Incidencias;
 import mx.morena.persistencia.entidad.Municipio;
+import mx.morena.persistencia.entidad.RepresentacionPartidos;
 import mx.morena.persistencia.entidad.SeccionElectoral;
 import mx.morena.persistencia.entidad.TipoActas;
 import mx.morena.persistencia.entidad.Usuario;
@@ -42,6 +44,7 @@ import mx.morena.persistencia.repository.IEleccionRepository;
 import mx.morena.persistencia.repository.IEntidadRepository;
 import mx.morena.persistencia.repository.IIncidenciasRepository;
 import mx.morena.persistencia.repository.IMunicipioRepository;
+import mx.morena.persistencia.repository.IPartidoVotacionRepository;
 import mx.morena.persistencia.repository.ISeccionElectoralRepository;
 import mx.morena.persistencia.repository.IUsuarioRepository;
 import mx.morena.security.servicio.MasterService;
@@ -78,6 +81,9 @@ public class CatalogoServiceImpl extends MasterService implements ICatalogoServi
 	
 	@Autowired
 	private IEleccionRepository eleccionRepository;
+	
+	@Autowired
+	private IPartidoVotacionRepository partidoVotacionRepository;
 
 	@Override
 	public List<EntidadDTO> getEntidades() {
@@ -436,6 +442,17 @@ public class CatalogoServiceImpl extends MasterService implements ICatalogoServi
 		}else {
 			throw new CatalogoException("No tiene permisos suficientes para consultar el catalogo", 401);
 		}
+	}
+
+	@Override
+	public List<RepresentacionPartidosDTO> getRepresentacionPartidos() throws CatalogoException {
+		List<RepresentacionPartidos> partidos = partidoVotacionRepository.getPartidos();
+		
+		List<RepresentacionPartidosDTO> dtos = new ArrayList<RepresentacionPartidosDTO>();
+
+		dtos = MapperUtil.mapAll(partidos, RepresentacionPartidosDTO.class);
+
+		return dtos;
 	}
 
 //	@Override

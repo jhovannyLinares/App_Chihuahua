@@ -22,6 +22,7 @@ import mx.morena.negocio.dto.EleccionDTO;
 import mx.morena.negocio.dto.EntidadDTO;
 import mx.morena.negocio.dto.IncidenciaDTO;
 import mx.morena.negocio.dto.MunicipioDTO;
+import mx.morena.negocio.dto.RepresentacionPartidosDTO;
 import mx.morena.negocio.dto.RepresentanteDTO;
 import mx.morena.negocio.dto.SeccionDTO;
 import mx.morena.negocio.dto.SeccionUserDTO;
@@ -224,6 +225,23 @@ public class CatalogoController extends MasterController {
 		
 		try {
 			return ICatService.getTipoActas(idPerfil);
+		} catch (CatalogoException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+			return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			return null;
+		}
+	}
+	
+	@GetMapping("/representantePartidos")
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	private List<RepresentacionPartidosDTO> getRepresentacionPartidos(HttpServletResponse response, HttpServletRequest request) throws IOException{
+		
+		try {
+			return ICatService.getRepresentacionPartidos();
 		} catch (CatalogoException e) {
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
