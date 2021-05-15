@@ -13,7 +13,6 @@ import mx.morena.negocio.dto.ReporteCasillaDTO;
 import mx.morena.negocio.dto.ResultadoOkDTO;
 import mx.morena.negocio.dto.VotacionesDTO;
 import mx.morena.negocio.exception.CotException;
-import mx.morena.persistencia.entidad.EstadoVotacion;
 
 public interface IInstalacionCasillaService {
 

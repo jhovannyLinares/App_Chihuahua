@@ -59,7 +59,7 @@ public class ReporteSeguimientoVotoImpl extends MasterService implements IReport
 		
 		Usuario idUsuario = usuarioRepository.findById(usuario);
 		Long federal = idUsuario.getFederal();
-		Long local = idUsuario.getDistritoLocal();
+//		Long local = idUsuario.getDistritoLocal();
 		Long municipal = idUsuario.getMunicipio();
 		
 		

@@ -10,4 +10,6 @@ public interface IResultadoVotacionRepository {
 	public void save(List<Votacion> votaciones);
 
 	public void save(Preguntas preguntas);
+
+	public List<Preguntas> getByIdCasilla(Long idCasilla);
 }

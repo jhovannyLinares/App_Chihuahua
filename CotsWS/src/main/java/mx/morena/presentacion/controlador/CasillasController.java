@@ -25,6 +25,7 @@ import mx.morena.negocio.dto.ResultadoVotacionDTO;
 import mx.morena.negocio.dto.VotacionesDTO;
 import mx.morena.negocio.exception.CotException;
 import mx.morena.negocio.servicios.ICasillasService;
+import mx.morena.negocio.servicios.impl.PreguntasCasillaDTO;
 import mx.morena.security.controller.MasterController;
 
 @RestController
@@ -114,24 +115,25 @@ public class CasillasController extends MasterController{
 		}
 	}
 	
-//	@GetMapping("/{idCasilla}/formulario")
-//	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-//	public ResultadoOkDTO getFormulario(HttpServletResponse response, HttpServletRequest request,  @PathVariable("idCasilla") Long idCasilla) throws IOException {
+	@GetMapping("/{idCasilla}/formulario")
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	public List<PreguntasCasillaDTO> getFormulario(HttpServletResponse response, HttpServletRequest request,  @PathVariable("idCasilla") Long idCasilla) throws IOException {
+		
 //		long perfil = getPerfil(request);
 //		long usuario = getUsuario(request);
-//
-//		try {
-//			return casillaService.getFormulario(idCasilla);
-//		} catch (CotException e) {
-//			e.printStackTrace();
-//			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
-//			return null;
-//		} catch (Exception e ) {
-//			e.printStackTrace();
-//			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
-//			return null;
-//		}
-//	}
+
+		try {
+			return casillaService.getFormulario(idCasilla);
+		} catch (CotException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+			return null;
+		} catch (Exception e ) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			return null;
+		}
+	}
 	
 	/* ICJ - Servicio para consultar actas por tipo de acta */
 	

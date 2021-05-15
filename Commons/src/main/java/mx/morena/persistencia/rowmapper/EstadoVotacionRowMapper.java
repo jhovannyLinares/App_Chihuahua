@@ -8,7 +8,6 @@ import java.util.List;
 import org.springframework.jdbc.core.RowMapper;
 
 import mx.morena.persistencia.entidad.EstadoVotacion;
-import mx.morena.persistencia.entidad.ReporteCasilla;
 
 public class EstadoVotacionRowMapper implements RowMapper<List<EstadoVotacion>>{
 

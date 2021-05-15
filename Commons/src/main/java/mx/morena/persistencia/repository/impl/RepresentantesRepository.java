@@ -96,7 +96,7 @@ public class RepresentantesRepository implements IRepresentanteRepository {
 
 	@Override
 	public List<Representantes> getAllCrg(Long tipoRepresentante) {
-		System.out.print("repository tipo_rep" +tipoRepresentante);
+		logger.debug("repository tipo_rep" +tipoRepresentante);
 		String sql = "SELECT ar.id, ar.nombre, ar.apellido_paterno, ar.apellido_materno, ar.tipo_representante from app_representantes ar where ar.tipo_representante = ?";
 		try {
 			return template.queryForObject(sql, new Object[] {tipoRepresentante }, new int[] { Types.NUMERIC },

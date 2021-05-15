@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
 import mx.morena.persistencia.entidad.SeccionElectoral;
 import mx.morena.persistencia.repository.ISeccionElectoralRepository;
 import mx.morena.persistencia.rowmapper.CountSeccionesRowMapper;
-import mx.morena.persistencia.rowmapper.EleccionRowMapper;
 import mx.morena.persistencia.rowmapper.SeccionByUserRowMapper;
 import mx.morena.persistencia.rowmapper.SeccionConvencidosRowMapper;
 import mx.morena.persistencia.rowmapper.SeccionCotsRowMapper;

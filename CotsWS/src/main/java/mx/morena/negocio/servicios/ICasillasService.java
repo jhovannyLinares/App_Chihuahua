@@ -8,6 +8,7 @@ import mx.morena.negocio.dto.ResultadoOkDTO;
 import mx.morena.negocio.dto.ResultadoVotacionDTO;
 import mx.morena.negocio.dto.VotacionesDTO;
 import mx.morena.negocio.exception.CotException;
+import mx.morena.negocio.servicios.impl.PreguntasCasillaDTO;
 
 public interface ICasillasService {
 
@@ -21,6 +22,6 @@ public interface ICasillasService {
 
 	public List<PartidosXAmbitoDTO> getPartidos(Long idCasilla) throws CotException;
 
-//	public ResultadoOkDTO getFormulario(Long idCasilla) throws CotException;
+	public List<PreguntasCasillaDTO> getFormulario(Long idCasilla) throws CotException;
 	
 }

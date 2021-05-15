@@ -364,13 +364,6 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 
 	}
 
-//	@Override
-//	public PreguntasCasillaDTO getFormulario(Long idCasilla) throws CotException {
-//
-//		
-//		return null;
-//	}
-
 	@Override
 	public List<EnvioActasDTO> getActasByTipo(Long idTipoActa, Long perfil) throws CotException {
 
@@ -392,7 +385,7 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 		}
 	}
 
-	public EnvioActasDTO converDto(EnvioActas actas) {
+	private EnvioActasDTO converDto(EnvioActas actas) {
 		EnvioActasDTO actasDto = new EnvioActasDTO();
 
 		actasDto.setTipoVotacion(actas.getTipoVotacion());
@@ -406,6 +399,21 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 		actasDto.setCopiaRespuestaPresidenteMunicipal(actas.isCopiaRespuestaPresidenteMunicipal());
 
 		return actasDto;
+	}
+
+	@Override
+	public List<PreguntasCasillaDTO> getFormulario(Long idCasilla) throws CotException {
+
+		List<PreguntasCasillaDTO> preguntasCasillaDTOs = new ArrayList<PreguntasCasillaDTO>();
+		List<Preguntas> list = resultadoVotacionRepository.getByIdCasilla(idCasilla);
+
+		if (list != null) {
+			
+			preguntasCasillaDTOs = MapperUtil.mapAll(list, PreguntasCasillaDTO.class);
+		}
+
+		return preguntasCasillaDTOs;
+
 	}
 
 }
