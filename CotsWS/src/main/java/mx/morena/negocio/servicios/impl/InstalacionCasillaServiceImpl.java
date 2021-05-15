@@ -112,9 +112,16 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 	@Transactional(rollbackFor = { CotException.class })
 	public Long saveIncidenciasCasilla(IncidenciasCasillasDTO dto, long perfil, long usuario) throws CotException {
 
-		if (perfil == PERFIL_RG) {
-
-			List<ReporteCasilla> reportes = reporteRepository.getReporteByIdCasilla(dto.getIdCasilla());
+		if (perfil == PERFIL_RG || perfil == PERFIL_RC) {
+			boolean is_rc;
+			
+			if(perfil == PERFIL_RG) {
+				is_rc = false;
+			} else {
+				is_rc = true;
+			}
+			
+			List<ReporteCasilla> reportes = reporteRepository.getReporteByIdCasillaAndRc(dto.getIdCasilla(), is_rc);
 			
 			if (reportes != null) {
 				for (ReporteCasilla reporteCasilla : reportes) {
@@ -157,6 +164,35 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 				rc.setNumeroVotos(dto.getNumero());
 				rc.setTipoReporte(dto.getTipoReporte());
 
+				rc.setRecibioVisitaRepresentante(false);
+				rc.setCantidadPersonasHanVotado(null);
+				rc.setBoletasUtilizadas(null);
+				rc.setRc(false);
+				
+				if (perfil == PERFIL_RC) {
+					
+					/* Se mapean los nuevos campos */
+					rc.setRecibioVisitaRepresentante(dto.isRecibioVisitaRepresentante());
+					rc.setRc(true);
+					rc.setIdRg(null);
+					
+					if (dto.getCantidadPersonasHanVotado() == null || dto.getBoletasUtilizadas() == null) {
+						throw new CotException("La pregunta es obligatoria", 400);
+					}
+					
+					if (dto.getCantidadPersonasHanVotado() >= 0 && dto.getCantidadPersonasHanVotado() < 1000) {
+						rc.setCantidadPersonasHanVotado(dto.getCantidadPersonasHanVotado());
+					} else {
+						throw new CotException("La cantidad de personas que han votado debe tener maximo 3 numeros", 400);
+					}
+					
+					if (dto.getBoletasUtilizadas() >= 0 && dto.getBoletasUtilizadas() < 1000) {
+						rc.setBoletasUtilizadas(dto.getBoletasUtilizadas());
+					} else {
+						throw new CotException("La cantidad de boletas utilizadas debe tener maximo 3 numeros", 400);
+					}
+				}
+				
 				if (reporteRepository.save(rc) == 0) {
 					throw new CotException("No se guardo el reporte con éxito.", 409);
 				}

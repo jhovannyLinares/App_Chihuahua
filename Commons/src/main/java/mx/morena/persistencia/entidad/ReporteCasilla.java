@@ -17,6 +17,15 @@ public class ReporteCasilla {
 	private Timestamp horaCierre;
 
 	private Integer tipoReporte;
+	
+	/* Se agregan columnas */
+	private Long cantidadPersonasHanVotado;
+	
+	private Long boletasUtilizadas;
+	
+	private boolean recibioVisitaRepresentante;
+	
+	private boolean isRc;
 
 	public Long getId() {
 		return id;
@@ -74,4 +83,36 @@ public class ReporteCasilla {
 		this.tipoReporte = tipoReporte;
 	}
 
+	public Long getCantidadPersonasHanVotado() {
+		return cantidadPersonasHanVotado;
+	}
+
+	public void setCantidadPersonasHanVotado(Long cantidadPersonasHanVotado) {
+		this.cantidadPersonasHanVotado = cantidadPersonasHanVotado;
+	}
+
+	public Long getBoletasUtilizadas() {
+		return boletasUtilizadas;
+	}
+
+	public void setBoletasUtilizadas(Long boletasUtilizadas) {
+		this.boletasUtilizadas = boletasUtilizadas;
+	}
+
+	public boolean isRecibioVisitaRepresentante() {
+		return recibioVisitaRepresentante;
+	}
+
+	public void setRecibioVisitaRepresentante(boolean recibioVisitaRepresentante) {
+		this.recibioVisitaRepresentante = recibioVisitaRepresentante;
+	}
+
+	public boolean isRc() {
+		return isRc;
+	}
+
+	public void setRc(boolean isRc) {
+		this.isRc = isRc;
+	}
+	
 }
