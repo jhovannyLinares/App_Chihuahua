@@ -17,6 +17,7 @@ import mx.morena.negocio.dto.EstadoVotacionDTO;
 import mx.morena.negocio.dto.IncidenciasCasillasDTO;
 import mx.morena.negocio.dto.InstalacionCasillasDTO;
 import mx.morena.negocio.dto.ReporteCasillaDTO;
+import mx.morena.negocio.dto.RepresentantePartidosDTO;
 import mx.morena.negocio.dto.ResultadoOkDTO;
 import mx.morena.negocio.dto.VotacionesDTO;
 import mx.morena.negocio.dto.listIncidenciasDTO;
@@ -29,6 +30,7 @@ import mx.morena.persistencia.entidad.EstadoVotacion;
 import mx.morena.persistencia.entidad.IncidenciasCasillas;
 import mx.morena.persistencia.entidad.InstalacionCasilla;
 import mx.morena.persistencia.entidad.Partido;
+import mx.morena.persistencia.entidad.PartidosReporteCasilla;
 import mx.morena.persistencia.entidad.ReporteCasilla;
 import mx.morena.persistencia.entidad.Representantes;
 import mx.morena.persistencia.entidad.RepresentantesAsignados;
@@ -36,6 +38,7 @@ import mx.morena.persistencia.entidad.Usuario;
 import mx.morena.persistencia.repository.ICasillaRepository;
 import mx.morena.persistencia.repository.IIncidenciasCasillasRepository;
 import mx.morena.persistencia.repository.IInstalacionCasillasRepository;
+import mx.morena.persistencia.repository.IPartidoVotacionRepository;
 import mx.morena.persistencia.repository.IPartidosRepository;
 import mx.morena.persistencia.repository.IReporteCasillasRepository;
 import mx.morena.persistencia.repository.IRepresentanteRepository;
@@ -70,6 +73,8 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 	@Autowired
 	private IPartidosRepository partidosRepository;
 	
+	@Autowired
+	private IPartidoVotacionRepository partidoVotacionRepository;
 	
 	private List<Partido> gobernador;
 	private List<Partido> municipal;
@@ -132,7 +137,6 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 				}
 			}
 			
-
 			if (dto.getNumero() <= 750) {
 
 				List<listIncidenciasDTO> lstIn = dto.getIncidencia();
@@ -177,7 +181,7 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 					rc.setIdRg(null);
 					
 					if (dto.getCantidadPersonasHanVotado() == null || dto.getBoletasUtilizadas() == null) {
-						throw new CotException("La pregunta es obligatoria", 400);
+						throw new CotException("Todas las preguntas son obligatorias", 400);
 					}
 					
 					if (dto.getCantidadPersonasHanVotado() >= 0 && dto.getCantidadPersonasHanVotado() < 1000) {
@@ -191,10 +195,35 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 					} else {
 						throw new CotException("La cantidad de boletas utilizadas debe tener maximo 3 numeros", 400);
 					}
+					
+					PartidosReporteCasilla partidoCasilla = null;
+					List<RepresentantePartidosDTO> partidos = dto.getPartidos();
+						
+					for (RepresentantePartidosDTO partido : partidos) {
+						if (partido.getIdPartido() != null) {
+							partidoCasilla = new PartidosReporteCasilla();
+							
+							partidoCasilla.setIdCasilla(dto.getIdCasilla());
+							partidoCasilla.setIdPartido(partido.getIdPartido());
+							partidoCasilla.setTieneRepresentante(partido.isTieneRepresentante());
+
+							if (partidoVotacionRepository.save(partidoCasilla) == 0) {
+								throw new CotException("No se guardo el reporte de casilla con éxito.", 409);
+							} else {
+								logger.debug("Se guardo con exito en la tabla app_partidos_reporte_casillas");
+							}
+						} else {
+							logger.debug("El partido no. " + partido.getIdPartido() + " no tiene representante");
+						}
+							
+					}
+					
 				}
 				
 				if (reporteRepository.save(rc) == 0) {
 					throw new CotException("No se guardo el reporte con éxito.", 409);
+				} else {
+					return dto.getIdCasilla();
 				}
 
 			} else {
@@ -203,7 +232,7 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 		} else {
 			throw new CotException("No cuenta con los permisos suficientes para realizar la operacion.", 401);
 		}
-		return dto.getIdCasilla();
+		
 	}
 
 	@Override
