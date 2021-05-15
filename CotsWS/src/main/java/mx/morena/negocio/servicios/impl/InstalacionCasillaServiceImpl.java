@@ -125,9 +125,16 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 	@Transactional(rollbackFor = { CotException.class })
 	public Long saveIncidenciasCasilla(IncidenciasCasillasDTO dto, long perfil, long usuario) throws CotException {
 
-		if (perfil == PERFIL_RG || perfil == PERFIL_RC) {
-
-			List<ReporteCasilla> reportes = reporteRepository.getReporteByIdCasilla(dto.getIdCasilla());
+        if (perfil == PERFIL_RG || perfil == PERFIL_RC) {
+            boolean is_rc;
+            
+            if(perfil == PERFIL_RG) {
+                is_rc = false;
+            } else {
+                is_rc = true;
+            }
+            
+            List<ReporteCasilla> reportes = reporteRepository.getReporteByIdCasillaAndRc(dto.getIdCasilla(), is_rc);
 			
 			if (reportes != null) {
 				for (ReporteCasilla reporteCasilla : reportes) {
