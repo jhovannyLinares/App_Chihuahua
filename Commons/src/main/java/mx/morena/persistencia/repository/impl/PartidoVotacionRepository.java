@@ -30,11 +30,12 @@ public class PartidoVotacionRepository implements IPartidoVotacionRepository {
 
 	@Override
 	public int save(PartidosReporteCasilla partidos) {
-		String sql = "INSERT INTO app_partidos_reporte_casillas (id, id_casilla, id_partido, tiene_representante) "
-				+ " VALUES (COALESCE((SELECT MAX(id) FROM app_partidos_reporte_casillas), 0)+1, ?, ?, ?)";		
+		String sql = "INSERT INTO app_partidos_reporte_casillas (id, id_casilla, id_partido, tiene_representante, tipo_reporte) "
+				+ " VALUES (COALESCE((SELECT MAX(id) FROM app_partidos_reporte_casillas), 0)+1, ?, ?, ?, ?)";		
 
 		try {
-			template.update(sql, new Object[] { partidos.getIdCasilla(), partidos.getIdPartido(), partidos.isTieneRepresentante() });
+			template.update(sql, new Object[] { partidos.getIdCasilla(), partidos.getIdPartido(),
+					partidos.isTieneRepresentante(), partidos.getTipoReporte() });
 			return 1;
 		} catch (Exception e) {
 			e.printStackTrace();

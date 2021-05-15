@@ -125,7 +125,7 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 	@Transactional(rollbackFor = { CotException.class })
 	public Long saveIncidenciasCasilla(IncidenciasCasillasDTO dto, long perfil, long usuario) throws CotException {
 
-		if (perfil == PERFIL_RG) {
+		if (perfil == PERFIL_RG || perfil == PERFIL_RC) {
 
 			List<ReporteCasilla> reportes = reporteRepository.getReporteByIdCasilla(dto.getIdCasilla());
 			
@@ -209,6 +209,7 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 							partidoCasilla.setIdCasilla(dto.getIdCasilla());
 							partidoCasilla.setIdPartido(partido.getIdPartido());
 							partidoCasilla.setTieneRepresentante(partido.isTieneRepresentante());
+							partidoCasilla.setTipoReporte(dto.getTipoReporte());
 
 							if (partidoVotacionRepository.save(partidoCasilla) == 0) {
 								throw new CotException("No se guardo el reporte de casilla con éxito.", 409);

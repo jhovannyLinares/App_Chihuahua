@@ -6,7 +6,8 @@ public class PartidosReporteCasilla {
 	private Long idCasilla;
 	private Long idPartido;
 	private boolean tieneRepresentante;
-
+	private Integer tipoReporte;
+	
 	public Long getId() {
 		return id;
 	}
@@ -37,6 +38,14 @@ public class PartidosReporteCasilla {
 
 	public void setTieneRepresentante(boolean tieneRepresentante) {
 		this.tieneRepresentante = tieneRepresentante;
+	}
+
+	public Integer getTipoReporte() {
+		return tipoReporte;
+	}
+
+	public void setTipoReporte(Integer tipoReporte) {
+		this.tipoReporte = tipoReporte;
 	}
 
 }
