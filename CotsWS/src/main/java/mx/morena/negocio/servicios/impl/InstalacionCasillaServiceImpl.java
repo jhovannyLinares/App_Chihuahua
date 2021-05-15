@@ -13,9 +13,11 @@ import org.springframework.transaction.annotation.Transactional;
 import mx.morena.negocio.dto.CasillasDTO;
 import mx.morena.negocio.dto.CierreCasillaDTO;
 import mx.morena.negocio.dto.DatosRcDTO;
+import mx.morena.negocio.dto.EstadoVotacionDTO;
 import mx.morena.negocio.dto.IncidenciasCasillasDTO;
 import mx.morena.negocio.dto.InstalacionCasillasDTO;
 import mx.morena.negocio.dto.ReporteCasillaDTO;
+import mx.morena.negocio.dto.ResultadoOkDTO;
 import mx.morena.negocio.dto.VotacionesDTO;
 import mx.morena.negocio.dto.listIncidenciasDTO;
 import mx.morena.negocio.exception.CotException;
@@ -23,6 +25,7 @@ import mx.morena.negocio.servicios.IInstalacionCasillaService;
 import mx.morena.negocio.util.MapperUtil;
 import mx.morena.persistencia.entidad.AsignacionCasillas;
 import mx.morena.persistencia.entidad.Casilla;
+import mx.morena.persistencia.entidad.EstadoVotacion;
 import mx.morena.persistencia.entidad.IncidenciasCasillas;
 import mx.morena.persistencia.entidad.InstalacionCasilla;
 import mx.morena.persistencia.entidad.Partido;
@@ -311,6 +314,9 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 		if (asignacioncasillas.getOpen() > 0) {
 			casillaDto.setOpen(true);
 		}
+		casillaDto.setSeInstalo(asignacioncasillas.getSeInstalo());
+		casillaDto.setLlegoRc(asignacioncasillas.getLlegoRc());
+		casillaDto.setComenzoVotacion(asignacioncasillas.getComenzoVotacion());
 
 		return casillaDto;
 	}
@@ -491,6 +497,58 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 		} else {
 			throw new CotException("No se encontro el usuario registrado con el id " + usuario, 404);
 		}
+	}
+
+	@Override
+	@Transactional(rollbackFor = { CotException.class, Exception.class })
+	public String saveEstadoVotacion(EstadoVotacionDTO dto, long perfil, long usuario) throws CotException, IOException {
+
+		if (perfil == PERFIL_RG) {
+			List<EstadoVotacion> votacion = reporteRepository.getEstadoByIdCasilla(dto.getIdCasilla());
+
+			if (votacion != null) {
+				EstadoVotacion ev = new EstadoVotacion();
+				
+				ev.setSeInstalo(dto.getSeInicio());
+				ev.setLlegoRc(dto.getLlegoRc());
+				ev.setComenzoVotacion(dto.getComenzoVotacion());
+				ev.setIdCasilla(dto.getIdCasilla());
+
+				if (reporteRepository.updateEstadoVotacion(ev) == 0) {
+					throw new CotException("No se guardo el estado de la casilla", 409);
+				}
+			} else {
+				
+				EstadoVotacion ev = new EstadoVotacion();
+				
+				ev.setSeInstalo(dto.getSeInicio());
+				ev.setLlegoRc(dto.getLlegoRc());
+				ev.setComenzoVotacion(dto.getComenzoVotacion());
+				ev.setIdCasilla(dto.getIdCasilla());
+
+				if (reporteRepository.insertEstadoVotacion(ev) == 0) {
+					throw new CotException("No se guardo el estado de la casilla", 409);
+				}
+			}
+
+		} else {
+			throw new CotException("No cuenta con los permisos suficientes para realizar la operacion.", 401);
+		}
+		return "Se guardo es estado de la casilla " + dto.getIdCasilla();
+
+	}
+
+	@Override
+	@Transactional(rollbackFor = { CotException.class, Exception.class })
+	public ResultadoOkDTO saveEstadoP(List<EstadoVotacionDTO> dtos, Long perfil, Long usuario)
+			throws CotException, IOException {
+		for (EstadoVotacionDTO estadoVotacionDTO : dtos) {
+			//Long idCasilla = estadoVotacionDTO.getIdCasilla();
+			
+			saveEstadoVotacion(estadoVotacionDTO, perfil, usuario);
+			
+		}
+		return new ResultadoOkDTO(1, "OK");
 	}
 
 }

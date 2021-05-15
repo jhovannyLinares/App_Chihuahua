@@ -34,6 +34,9 @@ public class AsignacionCasillasRowMapper implements RowMapper<List<AsignacionCas
 			if (rs.findColumn("isOpen") > 0) {
 				casilla.setOpen(rs.getLong("isOpen"));
 			}
+			casilla.setSeInstalo(rs.getBoolean("se_instalo"));
+			casilla.setLlegoRc(rs.getString("llego_rc"));
+			casilla.setComenzoVotacion(rs.getBoolean("comenzo_votacion"));
 
 			casillas.add(casilla);
 

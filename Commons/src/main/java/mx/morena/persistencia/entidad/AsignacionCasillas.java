@@ -27,6 +27,12 @@ public class AsignacionCasillas {
 	private Long idCrg;
 
 	private Long open;
+	
+	private Boolean seInstalo;
+	
+	private String llegoRc;
+	
+	private Boolean comenzoVotacion;
 
 	public Long getId() {
 		return id;
@@ -132,4 +138,27 @@ public class AsignacionCasillas {
 		this.open = open;
 	}
 
+	public Boolean getSeInstalo() {
+		return seInstalo;
+	}
+
+	public void setSeInstalo(Boolean seInstalo) {
+		this.seInstalo = seInstalo;
+	}
+
+	public String getLlegoRc() {
+		return llegoRc;
+	}
+
+	public void setLlegoRc(String llegoRc) {
+		this.llegoRc = llegoRc;
+	}
+
+	public Boolean getComenzoVotacion() {
+		return comenzoVotacion;
+	}
+
+	public void setComenzoVotacion(Boolean comenzoVotacion) {
+		this.comenzoVotacion = comenzoVotacion;
+	}
 }

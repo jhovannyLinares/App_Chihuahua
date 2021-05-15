@@ -6,11 +6,14 @@ import java.util.List;
 import mx.morena.negocio.dto.CasillasDTO;
 import mx.morena.negocio.dto.CierreCasillaDTO;
 import mx.morena.negocio.dto.DatosRcDTO;
+import mx.morena.negocio.dto.EstadoVotacionDTO;
 import mx.morena.negocio.dto.IncidenciasCasillasDTO;
 import mx.morena.negocio.dto.InstalacionCasillasDTO;
 import mx.morena.negocio.dto.ReporteCasillaDTO;
+import mx.morena.negocio.dto.ResultadoOkDTO;
 import mx.morena.negocio.dto.VotacionesDTO;
 import mx.morena.negocio.exception.CotException;
+import mx.morena.persistencia.entidad.EstadoVotacion;
 
 public interface IInstalacionCasillaService {
 
@@ -29,5 +32,9 @@ public interface IInstalacionCasillaService {
 	InstalacionCasillasDTO getInstalacionCasilla(long perfil, long usuario, Long idCasilla) throws CotException;
 
 	DatosRcDTO getDatosRc(long perfil, long usuario) throws CotException;
+	
+	String saveEstadoVotacion(EstadoVotacionDTO dto, long perfil, long usuario)throws CotException, IOException;
+	
+	ResultadoOkDTO saveEstadoP(List<EstadoVotacionDTO> dto, Long perfil, Long usuario)throws CotException, IOException;
 	
 }
