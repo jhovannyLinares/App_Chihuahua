@@ -190,9 +190,12 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 		try {
 
 			resultadoVotacionRepository.save(votaciones);
+			logger.debug(preguntas.toString());
 			resultadoVotacionRepository.save(preguntas);
 			
 		} catch (Exception e) {
+			
+			e.printStackTrace();
 			throw new CotException("Se detecto un problema al guardar en BBDD ", 500);
 		}
 		
@@ -360,5 +363,12 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 		return MapperUtil.mapAll(partidos, PartidoDTO.class);
 
 	}
+
+//	@Override
+//	public PreguntasCasillaDTO getFormulario(Long idCasilla) throws CotException {
+//
+//		
+//		return null;
+//	}
 
 }

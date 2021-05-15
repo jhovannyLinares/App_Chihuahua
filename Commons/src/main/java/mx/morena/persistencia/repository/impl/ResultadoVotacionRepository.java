@@ -43,24 +43,14 @@ public class ResultadoVotacionRepository implements IResultadoVotacionRepository
 	public void save(Preguntas preguntas) {
 		
 		String sql = "INSERT INTO public.app_cuestionario_resultados "
-				+ " (id_casilla, id_ambito, se_instalo_casilla, hora_instalacion_casillas, instalo_lugar_distinto, causa_instalacion_distinto, boletas_recibidas, "
-				+ " boletas_sobrantes, folio_inicial, folio_final, sellaron_boletas, partido_sella_boletas, hora_inicio_votacion, tomaron_funcionarios_fila, nombre_completo_presidente, "
-				+ " nombre_completo_secretario, nombre_completo_escrutador_1, nombre_completo_escrutador_2, nombre_completo_escrutador_3, se_presento_incidente, incidente, "
+				+ " (id_casilla, id_ambito, "
 				+ " numero_personas_votaron, numero_representantes_votaron, suma_votantes, votos_sacados_urna, votos_x_partido_y_coalicion, es_igual_votos_persona_x_votos_urna,"
 				+ "  es_igual_votos_urna_x_total_votacion) "
-				+ "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+				+ "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?);";
 		
 		logger.debug(sql);
 
 		template.update(sql, new Object[] { preguntas.getIdCasilla(), preguntas.getTipoVotacion(),
-				preguntas.getSeInstaloCasilla(), preguntas.getHoraInstalacionCasillas(),
-				preguntas.getInstaloLugarDistinto(), preguntas.getCausaInstalacionDistinto(),
-				preguntas.getBoletasRecibidas(), preguntas.getBoletasSobrantes(), preguntas.getFolioInicial(),
-				preguntas.getFolioFinal(), preguntas.getSellaronBoletas(), preguntas.getPartidoSellaBoletas(),
-				preguntas.getHoraInicioVotacion(), preguntas.getTomaronFuncionariosFila(),
-				preguntas.getNombreCompletoPresidente(), preguntas.getNombreCompletoSecretario(),
-				preguntas.getNombreCompletoEscrutador1(), preguntas.getNombreCompletoEscrutador2(),
-				preguntas.getNombreCompletoEscrutador3(), preguntas.getSePresentoIncidente(), preguntas.getIncidente(),
 				preguntas.getNumeroPersonasVotaron(), preguntas.getNumeroRepresentantesVotaron(),
 				preguntas.getSumaVotantes(), preguntas.getVotosSacadosUrna(), preguntas.getVotosXPartidoYCoalicion(),
 				preguntas.getEsIgualVotosPersonaXVotosUrna(), preguntas.getEsIgualVotosUrnaXTotalVotacion() });

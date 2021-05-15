@@ -18,5 +18,7 @@ public interface ICasillasService {
 	public List<VotacionesDTO> getActas(Long idCasilla) throws CotException;
 
 	public List<PartidosXAmbitoDTO> getPartidos(Long idCasilla) throws CotException;
+
+//	public ResultadoOkDTO getFormulario(Long idCasilla) throws CotException;
 	
 }

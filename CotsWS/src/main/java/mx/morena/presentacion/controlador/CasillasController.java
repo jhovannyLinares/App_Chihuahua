@@ -112,6 +112,25 @@ public class CasillasController extends MasterController{
 			return null;
 		}
 	}
+	
+//	@GetMapping("/{idCasilla}/formulario")
+//	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+//	public ResultadoOkDTO getFormulario(HttpServletResponse response, HttpServletRequest request,  @PathVariable("idCasilla") Long idCasilla) throws IOException {
+//		long perfil = getPerfil(request);
+//		long usuario = getUsuario(request);
+//
+//		try {
+//			return casillaService.getFormulario(idCasilla);
+//		} catch (CotException e) {
+//			e.printStackTrace();
+//			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+//			return null;
+//		} catch (Exception e ) {
+//			e.printStackTrace();
+//			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+//			return null;
+//		}
+//	}
 
 	
 }
