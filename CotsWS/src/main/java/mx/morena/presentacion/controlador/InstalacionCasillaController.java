@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import mx.morena.negocio.dto.ActasVotacionDTO;
+import mx.morena.negocio.dto.AfluenciaVotosDTO;
 import mx.morena.negocio.dto.CasillasDTO;
 import mx.morena.negocio.dto.CierreCasillaDTO;
 import mx.morena.negocio.dto.EstadoVotacionDTO;
@@ -170,4 +172,43 @@ public class InstalacionCasillaController extends MasterController {
 			return null;
 		}
 	}
+	
+	@PostMapping("/afluenciaVotos")
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	public ResultadoOkDTO saveAfluencia(HttpServletResponse response, HttpServletRequest request, @RequestBody List<AfluenciaVotosDTO> dto) throws IOException {
+		long perfil = getPerfil(request);
+		long usuario = getUsuario(request);
+
+		try {
+			return IService.saveAfluencia(dto, perfil, usuario);
+		} catch (CotException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+			return null;
+		} catch (Exception e ) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			return null;
+		}
+	}
+	
+	@PostMapping("/actasVotacion")
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	public ResultadoOkDTO saveActas(HttpServletResponse response, HttpServletRequest request, @RequestBody List<ActasVotacionDTO> dto) throws IOException {
+		long perfil = getPerfil(request);
+		long usuario = getUsuario(request);
+
+		try {
+			return IService.saveActas(dto, perfil, usuario);
+		} catch (CotException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+			return null;
+		} catch (Exception e ) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			return null;
+		}
+	}
+	
 }

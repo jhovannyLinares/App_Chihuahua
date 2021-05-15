@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import mx.morena.negocio.dto.ActasVotacionDTO;
+import mx.morena.negocio.dto.AfluenciaVotosDTO;
 import mx.morena.negocio.dto.CasillasDTO;
 import mx.morena.negocio.dto.CierreCasillaDTO;
 import mx.morena.negocio.dto.DatosRcDTO;
@@ -24,6 +26,8 @@ import mx.morena.negocio.dto.listIncidenciasDTO;
 import mx.morena.negocio.exception.CotException;
 import mx.morena.negocio.servicios.IInstalacionCasillaService;
 import mx.morena.negocio.util.MapperUtil;
+import mx.morena.persistencia.entidad.ActasVotos;
+import mx.morena.persistencia.entidad.AfluenciaVotos;
 import mx.morena.persistencia.entidad.AsignacionCasillas;
 import mx.morena.persistencia.entidad.Casilla;
 import mx.morena.persistencia.entidad.EstadoVotacion;
@@ -117,16 +121,9 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 	@Transactional(rollbackFor = { CotException.class })
 	public Long saveIncidenciasCasilla(IncidenciasCasillasDTO dto, long perfil, long usuario) throws CotException {
 
-		if (perfil == PERFIL_RG || perfil == PERFIL_RC) {
-			boolean is_rc;
-			
-			if(perfil == PERFIL_RG) {
-				is_rc = false;
-			} else {
-				is_rc = true;
-			}
-			
-			List<ReporteCasilla> reportes = reporteRepository.getReporteByIdCasillaAndRc(dto.getIdCasilla(), is_rc);
+		if (perfil == PERFIL_RG) {
+
+			List<ReporteCasilla> reportes = reporteRepository.getReporteByIdCasilla(dto.getIdCasilla());
 			
 			if (reportes != null) {
 				for (ReporteCasilla reporteCasilla : reportes) {
@@ -613,6 +610,118 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 			//Long idCasilla = estadoVotacionDTO.getIdCasilla();
 			
 			saveEstadoVotacion(estadoVotacionDTO, perfil, usuario);
+			
+		}
+		return new ResultadoOkDTO(1, "OK");
+	}
+	
+	//metodo encargado de registrar la afluencia 
+	@Override
+	@Transactional(rollbackFor = { CotException.class, Exception.class })
+	public String saveAfluenciaVotos(AfluenciaVotosDTO dto, long perfil, long usuario) throws CotException, IOException {
+
+		if (perfil == PERFIL_RG) {
+			List<AfluenciaVotos> afluencia = reporteRepository.getAfluenciaByIdCasilla(dto.getIdCasilla());
+
+			if (afluencia != null) {
+				AfluenciaVotos ev = new AfluenciaVotos();
+				
+				ev.setHrs12(dto.getHrs12());
+				ev.setHrs16(dto.getHrs16());
+				ev.setHrs18(dto.getHrs18());
+				ev.setIdCasilla(dto.getIdCasilla());
+
+				if (reporteRepository.updateAfluenciaVotacion(ev) == 0) {
+					throw new CotException("No se guardo la alfuencia de la casilla", 409);
+				}
+			} else {
+				
+				throw new CotException("La casilla no fue intalada", 401);
+//				
+//				AfluenciaVotos ev = new AfluenciaVotos();
+//				
+//				ev.setHrs12(dto.getHrs12());
+//				ev.setHrs16(dto.getHrs16());
+//				ev.setHrs18(dto.getHrs18());
+//				ev.setIdCasilla(dto.getIdCasilla());
+//
+//				if (reporteRepository.insertAfluenciaVotacion(ev) == 0) {
+//					throw new CotException("No se guardo la afluenncia de la casilla", 409);
+//				}
+			}
+
+		} else {
+			throw new CotException("No cuenta con los permisos suficientes para realizar la operacion.", 401);
+		}
+		return "Se guardo es estado de la casilla " + dto.getIdCasilla();
+
+	}
+
+	@Override
+	public ResultadoOkDTO saveAfluencia(List<AfluenciaVotosDTO> dtos, Long perfil, Long usuario)
+			throws CotException, IOException {
+		for (AfluenciaVotosDTO afluenciaDTO : dtos) {
+			//Long idCasilla = estadoVotacionDTO.getIdCasilla();
+			
+			saveAfluenciaVotos(afluenciaDTO, perfil, usuario);
+			
+		}
+		return new ResultadoOkDTO(1, "OK");
+	}
+
+	@Override
+	@Transactional(rollbackFor = { CotException.class, Exception.class })
+	public String saveActasVotos(ActasVotacionDTO dto, long perfil, long usuario) throws CotException, IOException {
+
+		if (perfil == PERFIL_RG) {
+			List<ActasVotos> actas = reporteRepository.getActasByIdCasilla(dto.getIdCasilla());
+
+			if (actas != null) {
+				ActasVotos ev = new ActasVotos();
+				
+				ev.setGobernador(dto.getGobernador());
+				ev.setDiputadoFedaral(dto.getDiputadoFedaral());
+				ev.setDiputadoLocal(dto.getDiputadoLocal());
+				ev.setPresidenteMunicipal(dto.getPresidenteMunicipal());
+				ev.setSindico(dto.getSindico());
+				ev.setIdCasilla(dto.getIdCasilla());
+
+				if (reporteRepository.updateActasVotacion(ev) == 0) {
+					throw new CotException("No se guardo el estado de la casilla", 409);
+				}
+			} else {
+				
+				throw new CotException("La casilla no fue instalada", 401);
+				
+//				ActasVotos ev = new ActasVotos();
+//				
+//				ev.setGobernador(dto.getGobernador());
+//				ev.setDiputadoFedaral(dto.getDiputadoFedaral());
+//				ev.setDiputadoLocal(dto.getDiputadoLocal());
+//				ev.setPresidenteMunicipal(dto.getPresidenteMunicipal());
+//				ev.setSindico(dto.getSindico());
+//				ev.setIdCasilla(dto.getIdCasilla());
+//
+//				if (reporteRepository.insertActasVotacion(ev) == 0) {
+//					throw new CotException("No se guardo el estado de la casilla", 409);
+//				}
+			}
+
+		} else {
+			throw new CotException("No cuenta con los permisos suficientes para realizar la operacion.", 401);
+		}
+		return "Se guardo es estado de la casilla " + dto.getIdCasilla();
+
+	}
+	
+	@Override
+	public ResultadoOkDTO saveActas(List<ActasVotacionDTO> dtos, Long perfil, Long usuario)
+			throws CotException, IOException {
+		
+		for (ActasVotacionDTO actasDTO : dtos) {
+			//Long idCasilla = estadoVotacionDTO.getIdCasilla();
+			
+			saveActasVotos(actasDTO, perfil, usuario);
 			
 		}
 		return new ResultadoOkDTO(1, "OK");

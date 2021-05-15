@@ -10,9 +10,14 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import mx.morena.persistencia.entidad.ActasVotos;
+import mx.morena.persistencia.entidad.AfluenciaVotos;
 import mx.morena.persistencia.entidad.EstadoVotacion;
 import mx.morena.persistencia.entidad.ReporteCasilla;
 import mx.morena.persistencia.repository.IReporteCasillasRepository;
+import mx.morena.persistencia.rowmapper.ActasRowMapper;
+import mx.morena.persistencia.rowmapper.ActasVotosRowMapper;
+import mx.morena.persistencia.rowmapper.AfluenciaVotoRowMapper;
 import mx.morena.persistencia.rowmapper.EstadoVotacionRowMapper;
 import mx.morena.persistencia.rowmapper.LongRowMapper;
 import mx.morena.persistencia.rowmapper.ReporteCasillaRowMapper;
@@ -137,6 +142,66 @@ public class ReporteCasillaRepository implements IReporteCasillasRepository {
 		} catch (EmptyResultDataAccessException e) {
 			
 			return null;
+		}
+	}
+
+	@Override
+	public List<AfluenciaVotos> getAfluenciaByIdCasilla(Long idCasilla) {
+		
+		String sql = "SELECT id_casilla, hrs_12 , hrs_16 , hrs_18 "
+				+ "FROM public.app_instalacion_casilla "
+				+ "where id_casilla = ?";
+
+		try {
+			return template.queryForObject(sql, new Object[] { idCasilla },
+					new int[] { Types.NUMERIC}, new AfluenciaVotoRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			
+			return null;
+		}
+	}
+
+	@Override
+	public List<ActasVotos> getActasByIdCasilla(Long idCasilla) {
+		
+		String sql = "SELECT id_casilla, actas_gobernador , actas_federal , actas_local, actas_municipal, actas_sindico "
+				+ "FROM public.app_instalacion_casilla "
+				+ "where id_casilla = ?";
+
+		try {
+			return template.queryForObject(sql, new Object[] { idCasilla },
+					new int[] { Types.NUMERIC}, new ActasVotosRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			
+			return null;
+		}
+	}
+
+	@Override
+	public int updateAfluenciaVotacion(AfluenciaVotos ev) {
+		
+		String sql = "update app_instalacion_casilla set hrs_12 = ?, hrs_16 = ?, hrs_18 = ? where id_casilla = ? ";
+
+		try {
+			template.update(sql, new Object[] { ev.getHrs12(), ev.getHrs16(), ev.getHrs18(), ev.getIdCasilla() },
+					new int[] { Types.BOOLEAN, Types.BOOLEAN, Types.BOOLEAN, Types.NUMERIC });
+			return 1;
+		} catch (Exception e) {
+			return 0;
+		}
+	}
+
+	@Override
+	public int updateActasVotacion(ActasVotos ev) {
+		
+		String sql = "update app_instalacion_casilla set actas_gobernador = ?, actas_federal = ?, actas_local = ?, actas_municipal = ?, actas_sindico = ?  where id_casilla = ? ";
+
+		try {
+			template.update(sql, new Object[] { ev.getGobernador(), ev.getDiputadoLocal(), ev.getDiputadoFedaral(), ev.getPresidenteMunicipal(), ev.getSindico(), ev.getIdCasilla() },
+					new int[] { Types.BOOLEAN, Types.BOOLEAN, Types.BOOLEAN, Types.BOOLEAN, Types.BOOLEAN, Types.NUMERIC });
+			return 1;
+		} catch (Exception e) {
+			return 0;
 		}
 	}
 }

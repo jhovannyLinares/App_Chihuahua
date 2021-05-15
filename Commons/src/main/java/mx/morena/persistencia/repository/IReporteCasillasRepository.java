@@ -2,6 +2,8 @@ package mx.morena.persistencia.repository;
 
 import java.util.List;
 
+import mx.morena.persistencia.entidad.ActasVotos;
+import mx.morena.persistencia.entidad.AfluenciaVotos;
 import mx.morena.persistencia.entidad.EstadoVotacion;
 import mx.morena.persistencia.entidad.ReporteCasilla;
 
@@ -22,4 +24,12 @@ public interface IReporteCasillasRepository {
 	int insertEstadoVotacion(EstadoVotacion ev);
 	
 	List<ReporteCasilla> getReporteByIdCasillaAndRc(Long idCasilla, boolean isRc);
+	
+	List<AfluenciaVotos> getAfluenciaByIdCasilla(Long isCasilla);
+	
+	List<ActasVotos> getActasByIdCasilla(Long idCasilla);
+	
+	int updateAfluenciaVotacion(AfluenciaVotos ev);
+	
+	int updateActasVotacion(ActasVotos ev);
 }
