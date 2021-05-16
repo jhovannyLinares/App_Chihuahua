@@ -192,6 +192,8 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 
 			resultadoVotacionRepository.save(votaciones);
 			logger.debug(preguntas.toString());
+			
+			//TODO: validar el guardado
 			resultadoVotacionRepository.save(preguntas);
 
 		} catch (Exception e) {
@@ -402,18 +404,19 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 	}
 
 	@Override
-	public List<PreguntasCasillaDTO> getFormulario(Long idCasilla) throws CotException {
+	public PreguntasCasillaDTO getFormulario(Long idCasilla, Long ambito) throws CotException {
 
-		List<PreguntasCasillaDTO> preguntasCasillaDTOs = new ArrayList<PreguntasCasillaDTO>();
-		List<Preguntas> list = resultadoVotacionRepository.getByIdCasilla(idCasilla);
+		PreguntasCasillaDTO preguntasCasillaDTOs = new PreguntasCasillaDTO();
+		Preguntas preguntas = resultadoVotacionRepository.getByIdCasilla(idCasilla,ambito);
 
-		if (list != null) {
+		if (preguntas != null) {
+			MapperUtil.map(preguntas,preguntasCasillaDTOs);
 			
-			preguntasCasillaDTOs = MapperUtil.mapAll(list, PreguntasCasillaDTO.class);
 		}
 
 		return preguntasCasillaDTOs;
 
 	}
 
+	
 }

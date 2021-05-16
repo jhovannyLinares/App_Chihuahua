@@ -117,13 +117,14 @@ public class CasillasController extends MasterController{
 	
 	@GetMapping("/{idCasilla}/formulario")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	public List<PreguntasCasillaDTO> getFormulario(HttpServletResponse response, HttpServletRequest request,  @PathVariable("idCasilla") Long idCasilla) throws IOException {
+	public PreguntasCasillaDTO getFormulario(HttpServletResponse response, HttpServletRequest request, 
+			@PathVariable("idCasilla") Long idCasilla , @RequestParam(value = "ambito", required = true ) Long ambito) throws IOException {
 		
 //		long perfil = getPerfil(request);
 //		long usuario = getUsuario(request);
 
 		try {
-			return casillaService.getFormulario(idCasilla);
+			return casillaService.getFormulario(idCasilla,ambito);
 		} catch (CotException e) {
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());

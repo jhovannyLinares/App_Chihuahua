@@ -22,6 +22,6 @@ public interface ICasillasService {
 
 	public List<PartidosXAmbitoDTO> getPartidos(Long idCasilla) throws CotException;
 
-	public List<PreguntasCasillaDTO> getFormulario(Long idCasilla) throws CotException;
+	public PreguntasCasillaDTO getFormulario(Long idCasilla, Long ambito) throws CotException;
 	
 }

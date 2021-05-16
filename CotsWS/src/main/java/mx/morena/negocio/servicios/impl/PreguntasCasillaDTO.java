@@ -4,7 +4,7 @@ public class PreguntasCasillaDTO {
 
 	private Long idCasilla;
 	private Integer tipoVotacion;
-
+	private Boolean isCapturado = false;
 	private Integer boletasSobrantes;
 	private Integer numeroPersonasVotaron;
 	private Integer numeroRepresentantesVotaron;
@@ -28,6 +28,14 @@ public class PreguntasCasillaDTO {
 
 	public void setTipoVotacion(Integer tipoVotacion) {
 		this.tipoVotacion = tipoVotacion;
+	}
+
+	public Boolean getIsCapturado() {
+		return isCapturado;
+	}
+
+	public void setIsCapturado(Boolean isCapturado) {
+		this.isCapturado = isCapturado;
 	}
 
 	public Integer getBoletasSobrantes() {

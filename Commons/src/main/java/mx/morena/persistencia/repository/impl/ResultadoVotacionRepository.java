@@ -61,22 +61,18 @@ public class ResultadoVotacionRepository implements IResultadoVotacionRepository
 	}
 
 	@Override
-	public List<Preguntas> getByIdCasilla(Long idCasilla) {
+	public Preguntas getByIdCasilla(Long idCasilla,Long ambito) {
 		
 		String sql = "SELECT id, id_casilla, id_ambito, numero_personas_votaron, numero_representantes_votaron, suma_votantes, votos_sacados_urna, votos_x_partido_y_coalicion, "
 				+ " es_igual_votos_persona_x_votos_urna, es_igual_votos_urna_x_total_votacion "
-				+ "		FROM public.app_cuestionario_resultados where id_casilla = ?";
+				+ "		FROM public.app_cuestionario_resultados where id_casilla = ? and id_ambito = ?  ";
 		
 		try {
-			return template.queryForObject(sql, new Object[] {idCasilla }, new int[] { Types.NUMERIC },	new PreguntasRowMapper());
+			return template.queryForObject(sql, new Object[] {idCasilla, ambito }, new int[] { Types.NUMERIC,Types.NUMERIC },	new PreguntasRowMapper());
 			
 		} catch (EmptyResultDataAccessException e) {
-			return null;
+			return new Preguntas();
 		}
-		
-		
-		
-
 		
 	}
 

@@ -11,5 +11,5 @@ public interface IResultadoVotacionRepository {
 
 	public void save(Preguntas preguntas);
 
-	public List<Preguntas> getByIdCasilla(Long idCasilla);
+	public Preguntas getByIdCasilla(Long idCasilla, Long ambito);
 }

@@ -2,22 +2,18 @@ package mx.morena.persistencia.rowmapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.springframework.jdbc.core.RowMapper;
 
 import mx.morena.persistencia.entidad.Preguntas;
 
-public class PreguntasRowMapper implements RowMapper<List<Preguntas>> {
+public class PreguntasRowMapper implements RowMapper<Preguntas> {
 
 	@Override
-	public List<Preguntas> mapRow(ResultSet rs, int rowNum) throws SQLException {
+	public Preguntas mapRow(ResultSet rs, int rowNum) throws SQLException {
 
-		List<Preguntas> list = new ArrayList<Preguntas>();
 
 		Preguntas preguntas = null;
-		do {
 			preguntas = new Preguntas();
 			
 			preguntas.setIdCasilla(rs.getLong("id_casilla"));
@@ -30,11 +26,9 @@ public class PreguntasRowMapper implements RowMapper<List<Preguntas>> {
 			preguntas.setEsIgualVotosPersonaXVotosUrna(rs.getBoolean("es_igual_votos_persona_x_votos_urna"));
 			preguntas.setEsIgualVotosUrnaXTotalVotacion(rs.getBoolean("es_igual_votos_urna_x_total_votacion"));
 
-			list.add(preguntas);
+		
 
-		} while (rs.next());
-
-		return list;
+		return preguntas;
 	}
 
 }
