@@ -133,7 +133,7 @@ public class CasillaRepository implements ICasillaRepository {
 
 	@Override
 	public List<AsignacionCasillas> getCasillasAsignadasById(Long idCasilla) {
-		String sql = " SELECT aac.id, aac.distrito_federal_id, aac.nombre_distrito, aac.zona_crg, aac.id_zona_crg, aac.ruta, aac.id_casilla, aac.tipo_casilla, aac.seccion_id, aac.status, id_ruta_rg, id_crg, COALESCE(aic.id, 0 ) isOpen " + 
+		String sql = " SELECT aac.id, aac.distrito_federal_id, aac.nombre_distrito, aac.zona_crg, aac.id_zona_crg, aac.ruta, aac.id_casilla, aac.tipo_casilla, aac.seccion_id, aac.status, id_ruta_rg, id_crg, COALESCE(aic.id, 0 ) isOpen, se_instalo, llego_rc, comenzo_votacion " + 
 				"FROM app_asignacion_casillas aac left join app_instalacion_casilla aic on aac.id_casilla = aic.id_casilla  " + 
 				"where  aac.id_casilla = ? " 
 				+ "and aac.ruta != 0 ";
