@@ -14,7 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import mx.morena.negocio.dto.ActasVotacionDTO;
+import mx.morena.negocio.dto.ActasVotoDTO;
 import mx.morena.negocio.dto.AfluenciaVotosDTO;
+import mx.morena.negocio.dto.AfluenciasVotoDTO;
 import mx.morena.negocio.dto.CasillasDTO;
 import mx.morena.negocio.dto.CierreCasillaDTO;
 import mx.morena.negocio.dto.DatosRcDTO;
@@ -35,6 +37,7 @@ import mx.morena.negocio.servicios.IInstalacionCasillaService;
 import mx.morena.negocio.util.MapperUtil;
 import mx.morena.persistencia.entidad.ActasVotos;
 import mx.morena.persistencia.entidad.AfluenciaVotos;
+import mx.morena.persistencia.entidad.AfluenciasVoto;
 import mx.morena.persistencia.entidad.AsignacionCasillas;
 import mx.morena.persistencia.entidad.Casilla;
 import mx.morena.persistencia.entidad.EstadoVotacion;
@@ -382,6 +385,8 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 	private CasillasDTO convertirADto(AsignacionCasillas asignacioncasillas) {
 
 		CasillasDTO casillaDto = new CasillasDTO();
+		AfluenciasVotoDTO afluenciaDto = new AfluenciasVotoDTO();
+		ActasVotoDTO actasDto = new ActasVotoDTO();
 
 		casillaDto.setIdCasilla(asignacioncasillas.getIdCasilla());
 		casillaDto.setTipoCasilla(asignacioncasillas.getTipoCasilla());
@@ -398,7 +403,15 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 		casillaDto.setSeInstalo(asignacioncasillas.getSeInstalo());
 		casillaDto.setLlegoRc(asignacioncasillas.getLlegoRc());
 		casillaDto.setComenzoVotacion(asignacioncasillas.getComenzoVotacion());
-
+		
+		MapperUtil.map(asignacioncasillas.getAfluenciasVoto(), afluenciaDto);
+		
+		casillaDto.setAfluencia(afluenciaDto);
+		
+		MapperUtil.map(asignacioncasillas.getActasVotacion(), actasDto);
+		
+		casillaDto.setActas(actasDto);
+		
 		return casillaDto;
 	}
 

@@ -30,6 +30,10 @@ public class CasillasDTO {
 	
 	private Boolean comenzoVotacion; 
 	
+	private AfluenciasVotoDTO afluencia = new AfluenciasVotoDTO();
+	
+	private ActasVotoDTO actas = new ActasVotoDTO();
+	
 	
 
 	public Long getIdCasilla() {
@@ -134,5 +138,21 @@ public class CasillasDTO {
 
 	public void setComenzoVotacion(Boolean comenzoVotacion) {
 		this.comenzoVotacion = comenzoVotacion;
+	}
+
+	public AfluenciasVotoDTO getAfluencia() {
+		return afluencia;
+	}
+
+	public void setAfluencia(AfluenciasVotoDTO afluencia) {
+		this.afluencia = afluencia;
+	}
+
+	public ActasVotoDTO getActas() {
+		return actas;
+	}
+
+	public void setActas(ActasVotoDTO actas) {
+		this.actas = actas;
 	}
 }

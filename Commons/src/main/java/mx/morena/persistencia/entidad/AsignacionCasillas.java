@@ -33,6 +33,10 @@ public class AsignacionCasillas {
 	private String llegoRc;
 	
 	private Boolean comenzoVotacion;
+	
+	private AfluenciasVoto afluenciasVoto;
+	
+	private ActasVotacion actasVotacion; 
 
 	public Long getId() {
 		return id;
@@ -160,5 +164,21 @@ public class AsignacionCasillas {
 
 	public void setComenzoVotacion(Boolean comenzoVotacion) {
 		this.comenzoVotacion = comenzoVotacion;
+	}
+
+	public AfluenciasVoto getAfluenciasVoto() {
+		return afluenciasVoto;
+	}
+
+	public void setAfluenciasVoto(AfluenciasVoto afluenciasVoto) {
+		this.afluenciasVoto = afluenciasVoto;
+	}
+
+	public ActasVotacion getActasVotacion() {
+		return actasVotacion;
+	}
+
+	public void setActasVotacion(ActasVotacion actasVotacion) {
+		this.actasVotacion = actasVotacion;
 	}
 }
