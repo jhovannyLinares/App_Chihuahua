@@ -4,6 +4,7 @@ import java.util.List;
 
 import mx.morena.persistencia.entidad.PartidosReporteCasilla;
 import mx.morena.persistencia.entidad.RepresentacionPartidos;
+import mx.morena.persistencia.entidad.RepresentacionPartidosReporte;
 
 public interface IPartidoVotacionRepository {
 
@@ -11,5 +12,5 @@ public interface IPartidoVotacionRepository {
 	
 	int save(PartidosReporteCasilla partidos);
 	
-	List<RepresentacionPartidos> getPartidosByIdCasillaAndReporte(Long idCasilla, Integer tipoReporte);
+	List<RepresentacionPartidosReporte> getPartidosByIdCasillaAndReporte(Long idCasilla, Integer tipoReporte);
 }

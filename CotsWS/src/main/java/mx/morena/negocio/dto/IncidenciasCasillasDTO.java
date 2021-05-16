@@ -20,11 +20,11 @@ public class IncidenciasCasillasDTO {
 	private Timestamp horaReporte;
 	
 	/*Se agregan campos para preguntas*/
-	private Long cantidadPersonasHanVotado;
+	private Long personasHanVotado;
 	
 	private Long boletasUtilizadas;
 	
-	private boolean recibioVisitaRepresentante;
+	private boolean recibioVisitaRg;
 	
 	private List<RepresentantePartidosDTO> partidos;
 
@@ -76,22 +76,6 @@ public class IncidenciasCasillasDTO {
 		this.horaReporte = horaReporte;
 	}
 
-	public Long getCantidadPersonasHanVotado() {
-		return cantidadPersonasHanVotado;
-	}
-
-	public void setCantidadPersonasHanVotado(Long cantidadPersonasHanVotado) {
-		this.cantidadPersonasHanVotado = cantidadPersonasHanVotado;
-	}
-
-	public boolean isRecibioVisitaRepresentante() {
-		return recibioVisitaRepresentante;
-	}
-
-	public void setRecibioVisitaRepresentante(boolean recibioVisitaRepresentante) {
-		this.recibioVisitaRepresentante = recibioVisitaRepresentante;
-	}
-
 	public Long getBoletasUtilizadas() {
 		return boletasUtilizadas;
 	}
@@ -106,6 +90,22 @@ public class IncidenciasCasillasDTO {
 
 	public void setPartidos(List<RepresentantePartidosDTO> partidos) {
 		this.partidos = partidos;
+	}
+
+	public Long getPersonasHanVotado() {
+		return personasHanVotado;
+	}
+
+	public void setPersonasHanVotado(Long personasHanVotado) {
+		this.personasHanVotado = personasHanVotado;
+	}
+
+	public boolean isRecibioVisitaRg() {
+		return recibioVisitaRg;
+	}
+
+	public void setRecibioVisitaRg(boolean recibioVisitaRg) {
+		this.recibioVisitaRg = recibioVisitaRg;
 	}
 
 }

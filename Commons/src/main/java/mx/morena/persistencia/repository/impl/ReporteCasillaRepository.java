@@ -15,7 +15,6 @@ import mx.morena.persistencia.entidad.AfluenciaVotos;
 import mx.morena.persistencia.entidad.EstadoVotacion;
 import mx.morena.persistencia.entidad.ReporteCasilla;
 import mx.morena.persistencia.repository.IReporteCasillasRepository;
-import mx.morena.persistencia.rowmapper.ActasRowMapper;
 import mx.morena.persistencia.rowmapper.ActasVotosRowMapper;
 import mx.morena.persistencia.rowmapper.AfluenciaVotoRowMapper;
 import mx.morena.persistencia.rowmapper.EstadoVotacionRowMapper;
@@ -39,7 +38,7 @@ public class ReporteCasillaRepository implements IReporteCasillasRepository {
 //				+ "values ((SELECT MAX(id)+1 FROM app_reporte_casillas), ?, ?, ?, ?);";
 		try {
 			template.update(sql, new Object[] { rc.getIdCasilla(), rc.getHoraReporte(), rc.getIdRg(), rc.getNumeroVotos(),rc.getTipoReporte(),
-			rc.getCantidadPersonasHanVotado(), rc.getBoletasUtilizadas(), rc.isRecibioVisitaRepresentante(), rc.isRc(), rc.getIdRc() });
+			rc.getPersonasHanVotado(), rc.getBoletasUtilizadas(), rc.isRecibioVisitaRg(), rc.isRc(), rc.getIdRc() });
 			return 1;
 		} catch (Exception e) {
 			e.printStackTrace();

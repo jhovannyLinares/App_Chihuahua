@@ -10,7 +10,9 @@ import org.springframework.stereotype.Repository;
 
 import mx.morena.persistencia.entidad.PartidosReporteCasilla;
 import mx.morena.persistencia.entidad.RepresentacionPartidos;
+import mx.morena.persistencia.entidad.RepresentacionPartidosReporte;
 import mx.morena.persistencia.repository.IPartidoVotacionRepository;
+import mx.morena.persistencia.rowmapper.RepresentacionPartidoReporteRowMapper;
 import mx.morena.persistencia.rowmapper.RepresentacionPartidoRowMapper;
 
 @Repository
@@ -45,11 +47,13 @@ public class PartidoVotacionRepository implements IPartidoVotacionRepository {
 	}
 
 	@Override
-	public List<RepresentacionPartidos> getPartidosByIdCasillaAndReporte(Long idCasilla, Integer tipoReporte) {
-		String sql = "select aprc.id_partido as id, arp.partido from app_partidos_reporte_casillas aprc inner join app_representacion_partidos arp "
-				+ "on arp.id = aprc.id_partido where aprc.id_casilla = ? and aprc.tipo_reporte = ? ";
+	public List<RepresentacionPartidosReporte> getPartidosByIdCasillaAndReporte(Long idCasilla, Integer tipoReporte) {
+		String sql = "select aprc.id_partido as id, arp.partido, aprc.tiene_representante from app_partidos_reporte_casillas aprc "
+				+ "inner join app_representacion_partidos arp on arp.id = aprc.id_partido "
+				+ "where aprc.id_casilla = ? and aprc.tipo_reporte = ? ";
 		try {
-			return template.queryForObject(sql, new Object[] { idCasilla, tipoReporte }, new int[] { Types.NUMERIC, Types.NUMERIC }, new RepresentacionPartidoRowMapper());
+			return template.queryForObject(sql, new Object[] { idCasilla, tipoReporte }, new int[] { Types.NUMERIC, Types.NUMERIC },
+					new RepresentacionPartidoReporteRowMapper());
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}

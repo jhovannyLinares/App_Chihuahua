@@ -48,6 +48,7 @@ import mx.morena.persistencia.entidad.Partido;
 import mx.morena.persistencia.entidad.PartidosReporteCasilla;
 import mx.morena.persistencia.entidad.ReporteCasilla;
 import mx.morena.persistencia.entidad.RepresentacionPartidos;
+import mx.morena.persistencia.entidad.RepresentacionPartidosReporte;
 import mx.morena.persistencia.entidad.Representantes;
 import mx.morena.persistencia.entidad.RepresentantesAsignados;
 import mx.morena.persistencia.entidad.Usuario;
@@ -183,8 +184,8 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 				rc.setNumeroVotos(dto.getNumero());
 				rc.setTipoReporte(dto.getTipoReporte());
 
-				rc.setRecibioVisitaRepresentante(false);
-				rc.setCantidadPersonasHanVotado(null);
+				rc.setRecibioVisitaRg(false);
+				rc.setPersonasHanVotado(null);
 				rc.setBoletasUtilizadas(null);
 				rc.setRc(false);
 				rc.setIdRc(null);
@@ -192,18 +193,18 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 				if (perfil == PERFIL_RC) {
 					
 					/* Se mapean los nuevos campos */
-					rc.setRecibioVisitaRepresentante(dto.isRecibioVisitaRepresentante());
+					rc.setRecibioVisitaRg(dto.isRecibioVisitaRg());
 					rc.setRc(true);
 					rc.setIdRg(null);
 					rc.setIdRc(usr.getId());
 					rc.setNumeroVotos(0L);
 					
-					if (dto.getCantidadPersonasHanVotado() == null || dto.getBoletasUtilizadas() == null) {
+					if (dto.getPersonasHanVotado() == null || dto.getBoletasUtilizadas() == null) {
 						throw new CotException("Todas las preguntas son obligatorias", 400);
 					}
 					
-					if (dto.getCantidadPersonasHanVotado() >= 0 && dto.getCantidadPersonasHanVotado() < 1000) {
-						rc.setCantidadPersonasHanVotado(dto.getCantidadPersonasHanVotado());
+					if (dto.getPersonasHanVotado() >= 0 && dto.getPersonasHanVotado() < 1000) {
+						rc.setPersonasHanVotado(dto.getPersonasHanVotado());
 					} else {
 						throw new CotException("La cantidad de personas que han votado debe tener maximo 3 numeros", 400);
 					}
@@ -797,7 +798,7 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 			List<Incidencias> incidencias = new ArrayList<Incidencias>();
 			List<IncidenciasResponseDTO> incidenciasDto = new ArrayList<IncidenciasResponseDTO>();
 			
-			List<RepresentacionPartidos> partidos = new ArrayList<RepresentacionPartidos>();
+			List<RepresentacionPartidosReporte> partidos = new ArrayList<RepresentacionPartidosReporte>();
 			List<RepresentantePartidosRespDTO> partidosDto = new ArrayList<RepresentantePartidosRespDTO>();
 
 			if (reporteCasillas != null) {

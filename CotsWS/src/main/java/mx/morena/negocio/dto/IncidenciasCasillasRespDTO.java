@@ -9,9 +9,9 @@ public class IncidenciasCasillasRespDTO {
 	private Integer tipoReporte;
 	private List<IncidenciasResponseDTO> incidencia;
 	private String horaReporte;
-	private Long cantidadPersonasHanVotado;
+	private Long personasHanVotado;
 	private Long boletasUtilizadas;
-	private boolean recibioVisitaRepresentante;
+	private boolean recibioVisitaRg;
 	private List<RepresentantePartidosRespDTO> partidos;
 
 	public Long getIdCasilla() {
@@ -38,28 +38,12 @@ public class IncidenciasCasillasRespDTO {
 		this.horaReporte = horaReporte;
 	}
 
-	public Long getCantidadPersonasHanVotado() {
-		return cantidadPersonasHanVotado;
-	}
-
-	public void setCantidadPersonasHanVotado(Long cantidadPersonasHanVotado) {
-		this.cantidadPersonasHanVotado = cantidadPersonasHanVotado;
-	}
-
 	public Long getBoletasUtilizadas() {
 		return boletasUtilizadas;
 	}
 
 	public void setBoletasUtilizadas(Long boletasUtilizadas) {
 		this.boletasUtilizadas = boletasUtilizadas;
-	}
-
-	public boolean isRecibioVisitaRepresentante() {
-		return recibioVisitaRepresentante;
-	}
-
-	public void setRecibioVisitaRepresentante(boolean recibioVisitaRepresentante) {
-		this.recibioVisitaRepresentante = recibioVisitaRepresentante;
 	}
 
 	public List<RepresentantePartidosRespDTO> getPartidos() {
@@ -78,4 +62,20 @@ public class IncidenciasCasillasRespDTO {
 		this.tipoReporte = tipoReporte;
 	}
 
+	public Long getPersonasHanVotado() {
+		return personasHanVotado;
+	}
+
+	public void setPersonasHanVotado(Long personasHanVotado) {
+		this.personasHanVotado = personasHanVotado;
+	}
+
+	public boolean isRecibioVisitaRg() {
+		return recibioVisitaRg;
+	}
+
+	public void setRecibioVisitaRg(boolean recibioVisitaRg) {
+		this.recibioVisitaRg = recibioVisitaRg;
+	}
+	
 }
