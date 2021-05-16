@@ -8,10 +8,11 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import mx.morena.persistencia.entidad.DatosRc;
 import mx.morena.persistencia.entidad.RepresentantesAsignados;
 import mx.morena.persistencia.repository.IRepresentantesAsignadosRepository;
+import mx.morena.persistencia.rowmapper.DatosRcRowMapper;
 import mx.morena.persistencia.rowmapper.LongRowMapper;
-import mx.morena.persistencia.rowmapper.RepresentanteAsignadoRowMapper;
 import mx.morena.persistencia.rowmapper.RepresentantesAsignadosRowMapper;
 
 @Repository
@@ -60,13 +61,19 @@ public class RepresentantesAsignadosRepository implements IRepresentantesAsignad
 	}
 
 	@Override
-	public RepresentantesAsignados getRepresentanteById(long usuario) {
+	public DatosRc getRepresentanteById(long representanteId) {
 
-		String sql = "select * from app_representantes_asignados ara where representante_id = ?";
+		String sql = "select se.entidad, se.federal, se.local, ara.seccion_electoral_id, ara.casilla_id, ac.casilla, ac.calle , ac.numero, ac.colonia, ac.ubicacion, ac.tipo_casilla "  
+				+ "from app_representantes_asignados ara " 
+				+ "inner join app_secciones se "  
+				+ "on ara.seccion_electoral_id = se.id "  
+				+ "inner join app_casilla ac "  
+				+ "on ara.casilla_id = ac.id "  
+				+ "where representante_id = ? " ;
 
 		try {
-			return template.queryForObject(sql, new Object[] { usuario }, new int[] { Types.NUMERIC },
-					new RepresentanteAsignadoRowMapper());
+			return template.queryForObject(sql, new Object[] { representanteId }, new int[] { Types.NUMERIC },
+					new DatosRcRowMapper());
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}

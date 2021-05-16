@@ -2,10 +2,7 @@ package mx.morena.negocio.servicios.impl;
 
 import java.io.IOException;
 import java.sql.Time;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,6 +37,7 @@ import mx.morena.persistencia.entidad.AfluenciaVotos;
 import mx.morena.persistencia.entidad.AfluenciasVoto;
 import mx.morena.persistencia.entidad.AsignacionCasillas;
 import mx.morena.persistencia.entidad.Casilla;
+import mx.morena.persistencia.entidad.DatosRc;
 import mx.morena.persistencia.entidad.EstadoVotacion;
 import mx.morena.persistencia.entidad.Incidencias;
 import mx.morena.persistencia.entidad.IncidenciasCasillas;
@@ -574,19 +572,17 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 
 	@Override
 	public DatosRcDTO getDatosRc(long perfil, long usuario) throws CotException {
+		
+		Usuario usr = usuarioRepository.findById(usuario);
 
-		RepresentantesAsignados representante = representanteAsignadoRepository.getRepresentanteById(usuario);
+		DatosRc representante = representanteAsignadoRepository.getRepresentanteById(usr.getRepresentante());
 
 		if (representante != null) {
 
 			DatosRcDTO dto = new DatosRcDTO();
+			
+			MapperUtil.map(representante, dto);
 
-			dto.setIdUsuario(usuario);
-			dto.setEntidad(representante.getEntidadId());
-			dto.setDistFederal(representante.getDistritoFederalId());
-			dto.setDistLocal(representante.getDistritoLocalId());
-			dto.setSeccion(representante.getSeccionElectoralId());
-			dto.setCasilla(representante.getCasillaId());
 
 			return dto;
 

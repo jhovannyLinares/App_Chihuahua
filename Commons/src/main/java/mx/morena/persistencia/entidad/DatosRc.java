@@ -1,42 +1,42 @@
-package mx.morena.negocio.dto;
+package mx.morena.persistencia.entidad;
 
-public class DatosRcDTO {
-	
-	////////////////////////    get representantes
+public class DatosRc {
+
+////////////////////////get representantes
 	private String nombreRepresentante1;
-	
+
 	private String nombreRepresentante2;
-	
+
 	private String nombreRepresentante3;
-	
+
 	private String nombreRepresentante4;
-	
-	///////////////////////    get informacion rc
-	
+
+///////////////////////    get informacion rc
+
 	private String entidad;
-	
+
 	private String distritoFederal;
-	
+
 	private String distritoLocal;
-	
+
 	private Long seccion;
-	
+
 	private Long idCasilla;
-	
+
 	private String casilla;
-	
+
 	private String TipoCasilla;
-	
-	/////////////////////     get ubicasion casilla
-	
+
+/////////////////////     get ubicasion casilla
+
 	private String calle;
-	
+
 	private String numero;
-	
+
 	private String colonia;
-	
+
 	private String localidad;
-	
+
 	private String ubicacion;
 
 	public String getNombreRepresentante1() {
