@@ -1,5 +1,9 @@
 package mx.morena.negocio.servicios.impl;
 
+import java.util.List;
+
+import mx.morena.negocio.dto.VotacionDTO;
+
 public class PreguntasCasillaDTO {
 
 	private Long idCasilla;
@@ -13,6 +17,8 @@ public class PreguntasCasillaDTO {
 	private Integer votosXPartidoYCoalicion;
 	private Boolean esIgualVotosPersonaXVotosUrna;
 	private Boolean esIgualVotosUrnaXTotalVotacion;
+
+	List<VotacionDTO> votacion;
 
 	public Long getIdCasilla() {
 		return idCasilla;
@@ -100,6 +106,14 @@ public class PreguntasCasillaDTO {
 
 	public void setEsIgualVotosUrnaXTotalVotacion(Boolean esIgualVotosUrnaXTotalVotacion) {
 		this.esIgualVotosUrnaXTotalVotacion = esIgualVotosUrnaXTotalVotacion;
+	}
+
+	public List<VotacionDTO> getVotacion() {
+		return votacion;
+	}
+
+	public void setVotacion(List<VotacionDTO> votacion) {
+		this.votacion = votacion;
 	}
 
 }

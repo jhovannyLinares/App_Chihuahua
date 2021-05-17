@@ -18,6 +18,7 @@ public class PreguntasRowMapper implements RowMapper<Preguntas> {
 			
 			preguntas.setIdCasilla(rs.getLong("id_casilla"));
 			preguntas.setTipoVotacion(rs.getInt("id_ambito"));
+			preguntas.setBoletasSobrantes(rs.getInt("boletas_sobrantes"));
 			preguntas.setNumeroPersonasVotaron(rs.getInt("numero_personas_votaron"));
 			preguntas.setNumeroRepresentantesVotaron(rs.getInt("numero_representantes_votaron"));
 			preguntas.setSumaVotantes(rs.getInt("suma_votantes"));

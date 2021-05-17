@@ -14,6 +14,7 @@ import mx.morena.negocio.dto.PartidoDTO;
 import mx.morena.negocio.dto.PartidosXAmbitoDTO;
 import mx.morena.negocio.dto.ResultadoOkDTO;
 import mx.morena.negocio.dto.ResultadoVotacionDTO;
+import mx.morena.negocio.dto.VotacionDTO;
 import mx.morena.negocio.dto.VotacionesDTO;
 import mx.morena.negocio.dto.VotosPartidoDTO;
 import mx.morena.negocio.exception.CotException;
@@ -407,11 +408,68 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 	public PreguntasCasillaDTO getFormulario(Long idCasilla, Long ambito) throws CotException {
 
 		PreguntasCasillaDTO preguntasCasillaDTOs = new PreguntasCasillaDTO();
-		Preguntas preguntas = resultadoVotacionRepository.getByIdCasilla(idCasilla,ambito);
+		Preguntas preguntas = resultadoVotacionRepository.getByIdCasilla(idCasilla, ambito);
 
 		if (preguntas != null) {
-			MapperUtil.map(preguntas,preguntasCasillaDTOs);
+			MapperUtil.map(preguntas, preguntasCasillaDTOs);
+
+			List<Votacion> votaciones = resultadoVotacionRepository.getVotosByCasilla(idCasilla, ambito);
+
+			List<VotacionDTO> votacionDTOs = new ArrayList<VotacionDTO>();
+
+			votacionDTOs = MapperUtil.mapAll(votaciones, VotacionDTO.class);
 			
+			getVotaciones(idCasilla);
+
+			if (ambito == 1) {
+				for (Partido partido : gobernador) {
+					for (VotacionDTO votacionDTO : votacionDTOs) {
+						if (votacionDTO.getIdPartido() == partido.getId()) {
+							votacionDTO.setPartido(partido.getPartido());
+						}
+					}
+				}
+			}
+			if (ambito == 2) {
+				for (Partido partido : municipal) {
+					for (VotacionDTO votacionDTO : votacionDTOs) {
+						if (votacionDTO.getIdPartido() == partido.getId()) {
+							votacionDTO.setPartido(partido.getPartido());
+						}
+					}
+				}
+			}
+			if (ambito == 3) {
+				for (Partido partido : sindico) {
+					for (VotacionDTO votacionDTO : votacionDTOs) {
+						if (votacionDTO.getIdPartido() == partido.getId()) {
+							votacionDTO.setPartido(partido.getPartido());
+						}
+					}
+				}
+			}
+			if (ambito == 4) {
+				for (Partido partido : diputadoLocal) {
+					for (VotacionDTO votacionDTO : votacionDTOs) {
+						if (votacionDTO.getIdPartido() == partido.getId()) {
+							votacionDTO.setPartido(partido.getPartido());
+						}
+					}
+				}
+			}
+			if (ambito == 5) {
+				for (Partido partido : diputadoFederal) {
+					for (VotacionDTO votacionDTO : votacionDTOs) {
+						if (votacionDTO.getIdPartido() == partido.getId()) {
+							votacionDTO.setPartido(partido.getPartido());
+						}
+					}
+				}
+			
+			}
+			
+			preguntasCasillaDTOs.setVotacion(votacionDTOs);
+
 		}
 
 		return preguntasCasillaDTOs;

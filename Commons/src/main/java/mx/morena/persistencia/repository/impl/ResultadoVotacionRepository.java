@@ -14,6 +14,7 @@ import mx.morena.persistencia.entidad.Preguntas;
 import mx.morena.persistencia.entidad.Votacion;
 import mx.morena.persistencia.repository.IResultadoVotacionRepository;
 import mx.morena.persistencia.rowmapper.PreguntasRowMapper;
+import mx.morena.persistencia.rowmapper.VotacionRowMapper;
 
 @Repository
 public class ResultadoVotacionRepository implements IResultadoVotacionRepository {
@@ -46,14 +47,14 @@ public class ResultadoVotacionRepository implements IResultadoVotacionRepository
 	public void save(Preguntas preguntas) {
 		
 		String sql = "INSERT INTO public.app_cuestionario_resultados "
-				+ " (id_casilla, id_ambito, "
+				+ " (id_casilla, id_ambito, boletas_sobrantes "
 				+ " numero_personas_votaron, numero_representantes_votaron, suma_votantes, votos_sacados_urna, votos_x_partido_y_coalicion, es_igual_votos_persona_x_votos_urna,"
 				+ "  es_igual_votos_urna_x_total_votacion) "
-				+ "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?);";
+				+ "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 		
 		logger.debug(sql);
 
-		template.update(sql, new Object[] { preguntas.getIdCasilla(), preguntas.getTipoVotacion(),
+		template.update(sql, new Object[] { preguntas.getIdCasilla(), preguntas.getTipoVotacion(),preguntas.getBoletasSobrantes(),
 				preguntas.getNumeroPersonasVotaron(), preguntas.getNumeroRepresentantesVotaron(),
 				preguntas.getSumaVotantes(), preguntas.getVotosSacadosUrna(), preguntas.getVotosXPartidoYCoalicion(),
 				preguntas.getEsIgualVotosPersonaXVotosUrna(), preguntas.getEsIgualVotosUrnaXTotalVotacion() });
@@ -63,7 +64,7 @@ public class ResultadoVotacionRepository implements IResultadoVotacionRepository
 	@Override
 	public Preguntas getByIdCasilla(Long idCasilla,Long ambito) {
 		
-		String sql = "SELECT id, id_casilla, id_ambito, numero_personas_votaron, numero_representantes_votaron, suma_votantes, votos_sacados_urna, votos_x_partido_y_coalicion, "
+		String sql = "SELECT id, id_casilla, id_ambito, boletas_sobrantes, numero_personas_votaron, numero_representantes_votaron, suma_votantes, votos_sacados_urna, votos_x_partido_y_coalicion, "
 				+ " es_igual_votos_persona_x_votos_urna, es_igual_votos_urna_x_total_votacion "
 				+ "		FROM public.app_cuestionario_resultados where id_casilla = ? and id_ambito = ?  ";
 		
@@ -74,6 +75,19 @@ public class ResultadoVotacionRepository implements IResultadoVotacionRepository
 			return new Preguntas();
 		}
 		
+	}
+
+	@Override
+	public List<Votacion> getVotosByCasilla(Long idCasilla, Long ambito) {
+		String sql = "select * from app_votos_partido_ambito "
+				+ "where id_casilla = ? and id_ambito =? ";
+		
+		try {
+			return template.queryForObject(sql, new Object[] {idCasilla, ambito }, new int[] { Types.NUMERIC,Types.NUMERIC },	new VotacionRowMapper());
+			
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
 	}
 
 }
