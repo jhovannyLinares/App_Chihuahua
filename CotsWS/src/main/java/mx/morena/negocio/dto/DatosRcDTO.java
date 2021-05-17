@@ -1,15 +1,12 @@
 package mx.morena.negocio.dto;
 
+import java.util.List;
+
 public class DatosRcDTO {
 	
 	////////////////////////    get representantes
-	private String nombreRepresentante1;
 	
-	private String nombreRepresentante2;
-	
-	private String nombreRepresentante3;
-	
-	private String nombreRepresentante4;
+	private List<RepresentanteDTO> representante;
 	
 	///////////////////////    get informacion rc
 	
@@ -39,36 +36,12 @@ public class DatosRcDTO {
 	
 	private String ubicacion;
 
-	public String getNombreRepresentante1() {
-		return nombreRepresentante1;
+	public List<RepresentanteDTO> getRepresentante() {
+		return representante;
 	}
 
-	public void setNombreRepresentante1(String nombreRepresentante1) {
-		this.nombreRepresentante1 = nombreRepresentante1;
-	}
-
-	public String getNombreRepresentante2() {
-		return nombreRepresentante2;
-	}
-
-	public void setNombreRepresentante2(String nombreRepresentante2) {
-		this.nombreRepresentante2 = nombreRepresentante2;
-	}
-
-	public String getNombreRepresentante3() {
-		return nombreRepresentante3;
-	}
-
-	public void setNombreRepresentante3(String nombreRepresentante3) {
-		this.nombreRepresentante3 = nombreRepresentante3;
-	}
-
-	public String getNombreRepresentante4() {
-		return nombreRepresentante4;
-	}
-
-	public void setNombreRepresentante4(String nombreRepresentante4) {
-		this.nombreRepresentante4 = nombreRepresentante4;
+	public void setRepresentante(List<RepresentanteDTO> representante) {
+		this.representante = representante;
 	}
 
 	public String getEntidad() {

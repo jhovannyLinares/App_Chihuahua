@@ -23,6 +23,7 @@ import mx.morena.negocio.dto.IncidenciasCasillasRespDTO;
 import mx.morena.negocio.dto.IncidenciasResponseDTO;
 import mx.morena.negocio.dto.InstalacionCasillasDTO;
 import mx.morena.negocio.dto.ReporteCasillaDTO;
+import mx.morena.negocio.dto.RepresentanteDTO;
 import mx.morena.negocio.dto.RepresentantePartidosDTO;
 import mx.morena.negocio.dto.RepresentantePartidosRespDTO;
 import mx.morena.negocio.dto.ResultadoOkDTO;
@@ -47,6 +48,7 @@ import mx.morena.persistencia.entidad.PartidosReporteCasilla;
 import mx.morena.persistencia.entidad.ReporteCasilla;
 import mx.morena.persistencia.entidad.RepresentacionPartidos;
 import mx.morena.persistencia.entidad.RepresentacionPartidosReporte;
+import mx.morena.persistencia.entidad.RepresentanteCargo;
 import mx.morena.persistencia.entidad.Representantes;
 import mx.morena.persistencia.entidad.RepresentantesAsignados;
 import mx.morena.persistencia.entidad.Usuario;
@@ -571,7 +573,7 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 
 	@Override
 	public DatosRcDTO getDatosRc(long perfil, long usuario) throws CotException {
-		
+
 		Usuario usr = usuarioRepository.findById(usuario);
 
 		DatosRc representante = representanteAsignadoRepository.getRepresentanteById(usr.getRepresentante());
@@ -579,9 +581,17 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 		if (representante != null) {
 
 			DatosRcDTO dto = new DatosRcDTO();
-			
+
 			MapperUtil.map(representante, dto);
 
+			List<RepresentanteCargo> lstDto = new ArrayList<RepresentanteCargo>();
+
+			List<RepresentanteDTO> rep = null;
+
+			lstDto = representanteAsignadoRepository.getNombreRepresentanteByCasilla(representante.getIdCasilla());
+
+			rep = MapperUtil.mapAll(lstDto, RepresentanteDTO.class);
+			dto.setRepresentante(rep);
 
 			return dto;
 

@@ -9,11 +9,13 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import mx.morena.persistencia.entidad.DatosRc;
+import mx.morena.persistencia.entidad.RepresentanteCargo;
 import mx.morena.persistencia.entidad.RepresentantesAsignados;
 import mx.morena.persistencia.repository.IRepresentantesAsignadosRepository;
 import mx.morena.persistencia.rowmapper.DatosRcRowMapper;
 import mx.morena.persistencia.rowmapper.LongRowMapper;
 import mx.morena.persistencia.rowmapper.RepresentantesAsignadosRowMapper;
+import mx.morena.persistencia.rowmapper.RepresentantesCasillaRowMapper;
 
 @Repository
 public class RepresentantesAsignadosRepository implements IRepresentantesAsignadosRepository {
@@ -74,6 +76,23 @@ public class RepresentantesAsignadosRepository implements IRepresentantesAsignad
 		try {
 			return template.queryForObject(sql, new Object[] { representanteId }, new int[] { Types.NUMERIC },
 					new DatosRcRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+
+	@Override
+	public List<RepresentanteCargo> getNombreRepresentanteByCasilla(Long idCasilla) {
+
+		String sql = "select ara.representante_id,  concat(ar.nombre , ' ', ar.apellido_paterno, ' ', ar.apellido_materno) as nombre_representante, ac.descripcion from app_representantes ar "  
+				+ "inner join app_representantes_asignados ara "  
+				+ "on ar.id = ara.representante_id "  
+				+ "inner join app_cargos ac "  
+				+ "on ac.id = ara.cargo "  
+				+ "where ara.casilla_id = ? order by ara.representante_id asc";
+		try {
+			return template.queryForObject(sql, new Object[] { idCasilla }, new int[] { Types.NUMERIC },
+					new RepresentantesCasillaRowMapper());
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}
