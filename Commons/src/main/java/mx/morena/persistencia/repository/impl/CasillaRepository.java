@@ -15,6 +15,7 @@ import mx.morena.persistencia.entidad.AsignacionCasillas;
 import mx.morena.persistencia.entidad.Casilla;
 import mx.morena.persistencia.repository.ICasillaRepository;
 import mx.morena.persistencia.rowmapper.AsignacionCasillasRowMapper;
+import mx.morena.persistencia.rowmapper.CasillaRespRowMapper;
 import mx.morena.persistencia.rowmapper.CasillasLocalesByFederalRowMapper;
 import mx.morena.persistencia.rowmapper.CasillasRowMapper;
 import mx.morena.persistencia.rowmapper.CountCasillasRowMapper;
@@ -350,6 +351,20 @@ public class CasillaRepository implements ICasillaRepository {
 			return 1L;
 		} catch (Exception e) {
 			return 0L;
+		}
+	}
+	
+	@Override
+	public Casilla getById(Long idCasilla) {
+		String sql = "SELECT id, entidad_id, federal_id, local_id, municpio_id, seccion_id, tipo_casilla, tipologia, "
+				+ "tipo_domicilio, calle, numero, colonia, cp, ubicacion, referencia, is_asignada  FROM app_casilla "
+				+ "where id = ? ";
+		try {
+			return template.queryForObject(sql, new Object[] { idCasilla }, new int[] { Types.NUMERIC },
+					new CasillaRespRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+
 		}
 	}
 

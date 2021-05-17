@@ -848,4 +848,40 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 		}
 	}
 
+	/**
+	 * Gets the existe Reporte.
+	 *
+	 * @param perfil
+	 * @param idCasilla
+	 * @param tipoReporte
+	 * @return valida si un reporte ya esta registrado para determinada casilla
+	 * @throws CotException the cot exception
+	 */
+	@Override
+	public boolean existeReporte(Long perfil, Long idCasilla, Integer tipoReporte) throws CotException {
+		if (perfil == PERFIL_RC) {
+			if (idCasilla != null && tipoReporte != null) {
+				boolean is_rc = true;
+				Casilla cas = casillaRepository.getById(idCasilla);
+				
+				if (cas != null) {
+					List<ReporteCasilla> reportes = reporteRepository.getReporteByIdCasillaAndTipoRep(idCasilla, is_rc, tipoReporte);
+					
+					if (reportes != null) {
+						return true;
+					}
+					
+					return false;
+				} else {
+					throw new CotException("La casilla ingresada no existe", 404);
+				}
+				
+			} else {
+				throw new CotException("Ingrese una casilla y un tipo de reporte", 400);
+			}
+			
+		} else {
+			throw new CotException("No cuenta con los permisos suficientes para realizar la operacion.", 401);
+		}
+	}
 }

@@ -217,4 +217,17 @@ public class ReporteCasillaRepository implements IReporteCasillasRepository {
 			return null;
 		}
 	}
+
+	@Override
+	public List<ReporteCasilla> getReporteByIdCasillaAndTipoRep(Long idCasilla, boolean isRc, Integer tipoReporte) {
+		String sql = "select * from app_reporte_casillas arc where id_casilla = ? and is_rc = ? and tipo_reporte = ? ";
+
+		try {
+			logger.debug(sql);
+			return template.queryForObject(sql, new Object[] { idCasilla, isRc, tipoReporte },
+					new int[] { Types.NUMERIC, Types.BOOLEAN, Types.NUMERIC }, new ReporteCasillaRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
 }

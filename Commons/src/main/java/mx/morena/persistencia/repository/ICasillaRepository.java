@@ -49,4 +49,6 @@ public interface ICasillaRepository {
 	public Casilla getUbicacionById(Long usuario);
 
 	public Long UpdateUbicacion(Long idCasilla, Casilla casilla);
+	
+	public Casilla getById(Long idCasilla);
 }

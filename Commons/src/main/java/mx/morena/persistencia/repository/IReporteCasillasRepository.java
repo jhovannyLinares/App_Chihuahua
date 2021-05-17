@@ -34,4 +34,6 @@ public interface IReporteCasillasRepository {
 	int updateActasVotacion(ActasVotos ev);
 	
 	List<ReporteCasilla> getRegistrosByIdRc(Long idRc);
+	
+	List<ReporteCasilla> getReporteByIdCasillaAndTipoRep(Long idCasilla, boolean isRc, Integer tipoReporte);
 }

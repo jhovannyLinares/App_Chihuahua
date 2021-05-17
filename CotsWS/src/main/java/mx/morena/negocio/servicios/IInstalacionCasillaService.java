@@ -51,4 +51,6 @@ public interface IInstalacionCasillaService {
 	String saveAfluenciaVotos(AfluenciaVotosDTO dto, long perfil, long usuario) throws CotException, IOException;
 	
 	List<IncidenciasCasillasRespDTO> getRegistrosVotaciones(Long idUsuario, Long perfil) throws CotException;
+	
+	boolean existeReporte(Long perfil, Long idCasilla, Integer tipoReporte) throws CotException;
 }

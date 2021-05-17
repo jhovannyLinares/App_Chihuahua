@@ -286,4 +286,31 @@ public class InstalacionCasillaController extends MasterController {
 		}
 	}
 	
+	/**
+	 * @param response
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 * 
+	 * Consulta si un tipo de reporte existe en una casilla
+	 */
+	@GetMapping("/tipoReporte")
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	public boolean getTipoReporte(HttpServletResponse response, HttpServletRequest request,
+				@RequestParam(value = "idCasilla", required = true) Long idCasilla,
+				@RequestParam(value = "tipoReporte", required = true) Integer tipoReporte) throws IOException {
+		long perfil = getPerfil(request);
+ 
+		try {
+			return IService.existeReporte(perfil, idCasilla, tipoReporte);
+		} catch (CotException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+			return false;
+		} catch (Exception e ) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			return false;
+		}
+	}
 }
