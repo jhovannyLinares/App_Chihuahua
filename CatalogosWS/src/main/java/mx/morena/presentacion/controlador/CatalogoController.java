@@ -21,6 +21,7 @@ import mx.morena.negocio.dto.DistritoFederalDTO;
 import mx.morena.negocio.dto.EleccionDTO;
 import mx.morena.negocio.dto.EntidadDTO;
 import mx.morena.negocio.dto.IncidenciaDTO;
+import mx.morena.negocio.dto.MotivosTerminoVotacionDTO;
 import mx.morena.negocio.dto.MunicipioDTO;
 import mx.morena.negocio.dto.RepresentacionPartidosDTO;
 import mx.morena.negocio.dto.RepresentanteDTO;
@@ -242,6 +243,23 @@ public class CatalogoController extends MasterController {
 		
 		try {
 			return ICatService.getRepresentacionPartidos();
+		} catch (CatalogoException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+			return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			return null;
+		}
+	}
+	
+	@GetMapping("/motivos")
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	private List<MotivosTerminoVotacionDTO> getMotivosTermino(HttpServletResponse response, HttpServletRequest request) throws IOException{
+		
+		try {
+			return ICatService.getMotivos();
 		} catch (CatalogoException e) {
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
