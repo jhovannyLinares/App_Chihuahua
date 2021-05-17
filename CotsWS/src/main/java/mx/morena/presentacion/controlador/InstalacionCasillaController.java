@@ -220,35 +220,6 @@ public class InstalacionCasillaController extends MasterController {
 		}
 	}
 	
-	/**
-	 * 
-	 * @param response
-	 * @param request
-	 * @return
-	 * @throws IOException
-	 * 
-	 * Metodo get de consulta de ubicacion de la casilla.
-	 */
-	@GetMapping("/UbicacionCasilla")
-	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	public UbicacionCasillaDTO getDatosCasilla(HttpServletResponse response, HttpServletRequest request)throws IOException {
-//			,@RequestParam (value = "idCasilla", required = true) Long idCasilla) throws IOException {
-		long perfil = getPerfil(request);
-		long usuario = getUsuario(request);
-		long idCasilla = 0L;
- 
-		try {
-			return IService.getDatosCasilla(perfil, usuario, idCasilla);
-		} catch (CotException e) {
-			e.printStackTrace();
-			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
-			return null;
-		} catch (Exception e ) {
-			e.printStackTrace();
-			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
-			return null;
-		}
-	}
 	
 	@PostMapping("/afluenciaVotos")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))

@@ -7,6 +7,7 @@ import mx.morena.negocio.dto.DistritoFederalDTO;
 import mx.morena.negocio.dto.EleccionDTO;
 import mx.morena.negocio.dto.EntidadDTO;
 import mx.morena.negocio.dto.IncidenciaDTO;
+import mx.morena.negocio.dto.MotivosTerminoVotacionDTO;
 import mx.morena.negocio.dto.MunicipioDTO;
 import mx.morena.negocio.dto.RepresentacionPartidosDTO;
 import mx.morena.negocio.dto.RepresentanteDTO;
@@ -50,4 +51,6 @@ public interface ICatalogoService {
 	List<TipoActasDTO>getTipoActas(Long idPerfil)throws CatalogoException;
 
 	List<RepresentacionPartidosDTO> getRepresentacionPartidos()throws CatalogoException;
+	
+	List<MotivosTerminoVotacionDTO> getMotivos()throws CatalogoException;
 }

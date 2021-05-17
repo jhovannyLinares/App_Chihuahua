@@ -1,47 +1,74 @@
-package mx.morena.negocio.dto;
+package mx.morena.persistencia.entidad;
 
-import java.util.List;
+public class DatosRc {
 
-public class DatosRcDTO {
-	
-	////////////////////////    get representantes
-	
-	private List<RepresentanteDTO> representante;
-	
-	///////////////////////    get informacion rc
-	
+////////////////////////get representantes
+	private String nombreRepresentante1;
+
+	private String nombreRepresentante2;
+
+	private String nombreRepresentante3;
+
+	private String nombreRepresentante4;
+
+///////////////////////    get informacion rc
+
 	private String entidad;
-	
+
 	private String distritoFederal;
-	
+
 	private String distritoLocal;
-	
+
 	private Long seccion;
-	
+
 	private Long idCasilla;
-	
+
 	private String casilla;
-	
+
 	private String TipoCasilla;
-	
-	/////////////////////     get ubicasion casilla
-	
+
+/////////////////////     get ubicasion casilla
+
 	private String calle;
-	
+
 	private String numero;
-	
+
 	private String colonia;
-	
+
 	private String localidad;
-	
+
 	private String ubicacion;
 
-	public List<RepresentanteDTO> getRepresentante() {
-		return representante;
+	public String getNombreRepresentante1() {
+		return nombreRepresentante1;
 	}
 
-	public void setRepresentante(List<RepresentanteDTO> representante) {
-		this.representante = representante;
+	public void setNombreRepresentante1(String nombreRepresentante1) {
+		this.nombreRepresentante1 = nombreRepresentante1;
+	}
+
+	public String getNombreRepresentante2() {
+		return nombreRepresentante2;
+	}
+
+	public void setNombreRepresentante2(String nombreRepresentante2) {
+		this.nombreRepresentante2 = nombreRepresentante2;
+	}
+
+	public String getNombreRepresentante3() {
+		return nombreRepresentante3;
+	}
+
+	public void setNombreRepresentante3(String nombreRepresentante3) {
+		this.nombreRepresentante3 = nombreRepresentante3;
+	}
+
+	public String getNombreRepresentante4() {
+		return nombreRepresentante4;
+	}
+
+	public void setNombreRepresentante4(String nombreRepresentante4) {
+		this.nombreRepresentante4 = nombreRepresentante4;
 	}
 
 	public String getEntidad() {

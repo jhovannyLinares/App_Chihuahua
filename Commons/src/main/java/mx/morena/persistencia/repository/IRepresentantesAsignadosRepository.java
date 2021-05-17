@@ -2,6 +2,8 @@ package mx.morena.persistencia.repository;
 
 import java.util.List;
 
+import mx.morena.persistencia.entidad.DatosRc;
+import mx.morena.persistencia.entidad.RepresentanteCargo;
 import mx.morena.persistencia.entidad.RepresentantesAsignados;
 
 public interface IRepresentantesAsignadosRepository {
@@ -12,5 +14,7 @@ public interface IRepresentantesAsignadosRepository {
 
 	Long getRutaIdByRepresentante(Long usuario);
 
-	RepresentantesAsignados getRepresentanteById(long usuario);
+	DatosRc getRepresentanteById(long representanteId);
+
+	List<RepresentanteCargo> getNombreRepresentanteByCasilla(Long idCasilla);
 }

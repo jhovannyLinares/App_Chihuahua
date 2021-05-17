@@ -11,6 +11,7 @@ import mx.morena.negocio.dto.DistritoFederalDTO;
 import mx.morena.negocio.dto.EleccionDTO;
 import mx.morena.negocio.dto.EntidadDTO;
 import mx.morena.negocio.dto.IncidenciaDTO;
+import mx.morena.negocio.dto.MotivosTerminoVotacionDTO;
 import mx.morena.negocio.dto.MunicipioDTO;
 import mx.morena.negocio.dto.RepresentacionPartidosDTO;
 import mx.morena.negocio.dto.RepresentanteDTO;
@@ -31,6 +32,7 @@ import mx.morena.persistencia.entidad.DistritoFederal;
 import mx.morena.persistencia.entidad.Eleccion;
 import mx.morena.persistencia.entidad.Entidad;
 import mx.morena.persistencia.entidad.Incidencias;
+import mx.morena.persistencia.entidad.MotivosTerminoVotacion;
 import mx.morena.persistencia.entidad.Municipio;
 import mx.morena.persistencia.entidad.RepresentacionPartidos;
 import mx.morena.persistencia.entidad.SeccionElectoral;
@@ -43,6 +45,7 @@ import mx.morena.persistencia.repository.IDistritoLocalRepository;
 import mx.morena.persistencia.repository.IEleccionRepository;
 import mx.morena.persistencia.repository.IEntidadRepository;
 import mx.morena.persistencia.repository.IIncidenciasRepository;
+import mx.morena.persistencia.repository.IMotivosTerminoVotacionRepository;
 import mx.morena.persistencia.repository.IMunicipioRepository;
 import mx.morena.persistencia.repository.IPartidoVotacionRepository;
 import mx.morena.persistencia.repository.ISeccionElectoralRepository;
@@ -85,6 +88,9 @@ public class CatalogoServiceImpl extends MasterService implements ICatalogoServi
 	@Autowired
 	private IPartidoVotacionRepository partidoVotacionRepository;
 
+	@Autowired
+	private IMotivosTerminoVotacionRepository motivosRepository;
+	
 	@Override
 	public List<EntidadDTO> getEntidades() {
 
@@ -447,11 +453,28 @@ public class CatalogoServiceImpl extends MasterService implements ICatalogoServi
 	@Override
 	public List<RepresentacionPartidosDTO> getRepresentacionPartidos() throws CatalogoException {
 		List<RepresentacionPartidos> partidos = partidoVotacionRepository.getPartidos();
-		
 		List<RepresentacionPartidosDTO> dtos = new ArrayList<RepresentacionPartidosDTO>();
+		
+		if (partidos != null) {
+			dtos = MapperUtil.mapAll(partidos, RepresentacionPartidosDTO.class);
+		} else {
+			throw new CatalogoException("No se encontraron datos", 404);
+		}
 
-		dtos = MapperUtil.mapAll(partidos, RepresentacionPartidosDTO.class);
+		return dtos;
+	}
 
+	@Override
+	public List<MotivosTerminoVotacionDTO> getMotivos() throws CatalogoException {
+		List<MotivosTerminoVotacion> motivos = motivosRepository.findAll();
+		List<MotivosTerminoVotacionDTO> dtos = new ArrayList<MotivosTerminoVotacionDTO>();
+		
+		if (motivos != null) {
+			dtos = MapperUtil.mapAll(motivos, MotivosTerminoVotacionDTO.class);
+		} else {
+			throw new CatalogoException("No se encontraron datos", 404);
+		}
+		
 		return dtos;
 	}
 

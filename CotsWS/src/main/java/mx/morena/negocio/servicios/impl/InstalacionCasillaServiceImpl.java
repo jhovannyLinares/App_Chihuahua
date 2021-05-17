@@ -2,10 +2,7 @@ package mx.morena.negocio.servicios.impl;
 
 import java.io.IOException;
 import java.sql.Time;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,6 +23,7 @@ import mx.morena.negocio.dto.IncidenciasCasillasRespDTO;
 import mx.morena.negocio.dto.IncidenciasResponseDTO;
 import mx.morena.negocio.dto.InstalacionCasillasDTO;
 import mx.morena.negocio.dto.ReporteCasillaDTO;
+import mx.morena.negocio.dto.RepresentanteDTO;
 import mx.morena.negocio.dto.RepresentantePartidosDTO;
 import mx.morena.negocio.dto.RepresentantePartidosRespDTO;
 import mx.morena.negocio.dto.ResultadoOkDTO;
@@ -40,6 +38,7 @@ import mx.morena.persistencia.entidad.AfluenciaVotos;
 import mx.morena.persistencia.entidad.AfluenciasVoto;
 import mx.morena.persistencia.entidad.AsignacionCasillas;
 import mx.morena.persistencia.entidad.Casilla;
+import mx.morena.persistencia.entidad.DatosRc;
 import mx.morena.persistencia.entidad.EstadoVotacion;
 import mx.morena.persistencia.entidad.Incidencias;
 import mx.morena.persistencia.entidad.IncidenciasCasillas;
@@ -49,6 +48,7 @@ import mx.morena.persistencia.entidad.PartidosReporteCasilla;
 import mx.morena.persistencia.entidad.ReporteCasilla;
 import mx.morena.persistencia.entidad.RepresentacionPartidos;
 import mx.morena.persistencia.entidad.RepresentacionPartidosReporte;
+import mx.morena.persistencia.entidad.RepresentanteCargo;
 import mx.morena.persistencia.entidad.Representantes;
 import mx.morena.persistencia.entidad.RepresentantesAsignados;
 import mx.morena.persistencia.entidad.Usuario;
@@ -197,7 +197,6 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 					rc.setRc(true);
 					rc.setIdRg(null);
 					rc.setIdRc(usr.getId());
-					rc.setNumeroVotos(0L);
 					
 					if (dto.getPersonasHanVotado() == null || dto.getBoletasUtilizadas() == null) {
 						throw new CotException("Todas las preguntas son obligatorias", 400);
@@ -219,7 +218,7 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 					List<RepresentantePartidosDTO> partidos = dto.getPartidos();
 						
 					for (RepresentantePartidosDTO partido : partidos) {
-						if (partido.getIdPartido() != null || partido.getIdPartido() != 0) {
+						if (partido.getIdPartido() != null && partido.getIdPartido() != 0) {
 							partidoCasilla = new PartidosReporteCasilla();
 							
 							partidoCasilla.setIdCasilla(dto.getIdCasilla());
@@ -575,18 +574,24 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 	@Override
 	public DatosRcDTO getDatosRc(long perfil, long usuario) throws CotException {
 
-		RepresentantesAsignados representante = representanteAsignadoRepository.getRepresentanteById(usuario);
+		Usuario usr = usuarioRepository.findById(usuario);
+
+		DatosRc representante = representanteAsignadoRepository.getRepresentanteById(usr.getRepresentante());
 
 		if (representante != null) {
 
 			DatosRcDTO dto = new DatosRcDTO();
 
-			dto.setIdUsuario(usuario);
-			dto.setEntidad(representante.getEntidadId());
-			dto.setDistFederal(representante.getDistritoFederalId());
-			dto.setDistLocal(representante.getDistritoLocalId());
-			dto.setSeccion(representante.getSeccionElectoralId());
-			dto.setCasilla(representante.getCasillaId());
+			MapperUtil.map(representante, dto);
+
+			List<RepresentanteCargo> lstDto = new ArrayList<RepresentanteCargo>();
+
+			List<RepresentanteDTO> rep = null;
+
+			lstDto = representanteAsignadoRepository.getNombreRepresentanteByCasilla(representante.getIdCasilla());
+
+			rep = MapperUtil.mapAll(lstDto, RepresentanteDTO.class);
+			dto.setRepresentante(rep);
 
 			return dto;
 
@@ -787,13 +792,20 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 		
 	}
 
+	/**
+	 * Gets the registros votaciones.
+	 *
+	 * @param idUsuario
+	 * @param perfil
+	 * @return datos que registro un rc sobre votaciones
+	 * @throws CotException the cot exception
+	 */
 	@Override
 	public List<IncidenciasCasillasRespDTO> getRegistrosVotaciones(Long idUsuario, Long perfil) throws CotException {
 		
 		if (perfil == PERFIL_RC) {
-
 			List<ReporteCasilla> reporteCasillas = reporteRepository.getRegistrosByIdRc(idUsuario);
-	
+			
 			List<IncidenciasCasillasRespDTO> reporteCasillaDTOs = new ArrayList<IncidenciasCasillasRespDTO>();
 			List<Incidencias> incidencias = new ArrayList<Incidencias>();
 			List<IncidenciasResponseDTO> incidenciasDto = new ArrayList<IncidenciasResponseDTO>();
@@ -802,7 +814,6 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 			List<RepresentantePartidosRespDTO> partidosDto = new ArrayList<RepresentantePartidosRespDTO>();
 
 			if (reporteCasillas != null) {
-				//reporteCasillas.stream().map(this::formatoFecha).collect(Collectors.toList());
 				reporteCasillaDTOs = MapperUtil.mapAll(reporteCasillas, IncidenciasCasillasRespDTO.class);
 				
 				for (IncidenciasCasillasRespDTO reporteCasilla : reporteCasillaDTOs) {
@@ -818,9 +829,16 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 						reporteCasilla.setPartidos(partidosDto);
 					}
 					
-//					reporteCasilla.setHoraReporte(new Time(reporteCasillas.forEach(a -> a.getHoraReporte().getTime().toString())));
+					for (ReporteCasilla rep : reporteCasillas) {
+						if (reporteCasilla.getTipoReporte() == rep.getTipoReporte() && reporteCasilla.getIdCasilla() == rep.getIdCasilla()) {
+							reporteCasilla.setHoraReporte(new Time(rep.getHoraReporte().getTime()).toString());
+						}
+					}
+					
 				}
 				
+			} else {
+				throw new CotException("El Rc no ha capturado datos", 404);
 			}
 	
 			return reporteCasillaDTOs;
