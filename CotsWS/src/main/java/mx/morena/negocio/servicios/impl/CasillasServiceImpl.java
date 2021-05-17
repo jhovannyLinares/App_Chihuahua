@@ -120,6 +120,8 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 			throws CotException {
 
 		validacionVotos(resultadoVotos);
+		
+		logger.debug(resultadoVotos.toString());
 
 		List<Votacion> votaciones = new ArrayList<Votacion>();
 
@@ -130,10 +132,10 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 
 		preguntas.setIdCasilla(resultadoVotos.getIdCasilla());
 		preguntas.setTipoVotacion(resultadoVotos.getTipoVotacion());
+		
+		consultarVotaciones();
 
 		for (VotosPartidoDTO voto : resultadoVotos.getVotos()) {
-
-			consultarVotaciones();
 
 			votacion = new Votacion();
 
@@ -147,27 +149,27 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 			Partido stream = new Partido();
 
 			if (votacion.getTipoVotacion() == 1) {
-				stream = gobernador.stream().filter(partido -> voto.getIdPartido() == partido.getId()).findAny()
+				stream = gobernador.stream().filter(partido -> voto.getIdPartido().longValue() == partido.getId().longValue()).findAny()
 						.orElse(null);
 			}
 
 			if (votacion.getTipoVotacion() == 2) {
-				stream = municipal.stream().filter(partido -> voto.getIdPartido() == partido.getId()).findAny()
+				stream = municipal.stream().filter(partido -> voto.getIdPartido().longValue() == partido.getId().longValue()).findAny()
 						.orElse(null);
 			}
 
 			if (votacion.getTipoVotacion() == 3) {
-				stream = sindico.stream().filter(partido -> voto.getIdPartido() == partido.getId()).findAny()
+				stream = sindico.stream().filter(partido -> voto.getIdPartido().longValue() == partido.getId().longValue()).findAny()
 						.orElse(null);
 			}
 
 			if (votacion.getTipoVotacion() == 4) {
-				stream = diputadoLocal.stream().filter(partido -> voto.getIdPartido() == partido.getId()).findAny()
+				stream = diputadoLocal.stream().filter(partido -> voto.getIdPartido().longValue() == partido.getId().longValue()).findAny()
 						.orElse(null);
 			}
 
 			if (votacion.getTipoVotacion() == 5) {
-				stream = diputadoFederal.stream().filter(partido -> voto.getIdPartido() == partido.getId()).findAny()
+				stream = diputadoFederal.stream().filter(partido -> voto.getIdPartido().longValue() == partido.getId().longValue()).findAny()
 						.orElse(null);
 			}
 

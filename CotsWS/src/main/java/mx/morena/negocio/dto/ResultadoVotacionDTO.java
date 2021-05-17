@@ -41,4 +41,10 @@ public class ResultadoVotacionDTO {
 		this.cuestionario = cuestionario;
 	}
 
+	@Override
+	public String toString() {
+		return "ResultadoVotacionDTO [idCasilla=" + idCasilla + ", tipoVotacion=" + tipoVotacion + ", votos=" + votos
+				+ ", cuestionario=" + cuestionario + "]";
+	}
+
 }

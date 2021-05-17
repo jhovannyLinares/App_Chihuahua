@@ -47,7 +47,7 @@ public class ResultadoVotacionRepository implements IResultadoVotacionRepository
 	public void save(Preguntas preguntas) {
 		
 		String sql = "INSERT INTO public.app_cuestionario_resultados "
-				+ " (id_casilla, id_ambito, boletas_sobrantes "
+				+ " (id_casilla, id_ambito, boletas_sobrantes, "
 				+ " numero_personas_votaron, numero_representantes_votaron, suma_votantes, votos_sacados_urna, votos_x_partido_y_coalicion, es_igual_votos_persona_x_votos_urna,"
 				+ "  es_igual_votos_urna_x_total_votacion) "
 				+ "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
