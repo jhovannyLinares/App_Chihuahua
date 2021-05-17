@@ -801,10 +801,10 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 	 * @throws CotException the cot exception
 	 */
 	@Override
-	public List<IncidenciasCasillasRespDTO> getRegistrosVotaciones(Long idUsuario, Long perfil) throws CotException {
+	public List<IncidenciasCasillasRespDTO> getRegistrosVotaciones(Long idUsuario, Long perfil, Long idCasilla, Integer tipoReporte) throws CotException {
 		
 		if (perfil == PERFIL_RC) {
-			List<ReporteCasilla> reporteCasillas = reporteRepository.getRegistrosByIdRc(idUsuario);
+			List<ReporteCasilla> reporteCasillas = reporteRepository.getRegistrosByIdRc(idUsuario, idCasilla, tipoReporte);
 			
 			List<IncidenciasCasillasRespDTO> reporteCasillaDTOs = new ArrayList<IncidenciasCasillasRespDTO>();
 			List<Incidencias> incidencias = new ArrayList<Incidencias>();

@@ -31,7 +31,6 @@ import mx.morena.negocio.dto.IncidenciasCasillasRespDTO;
 import mx.morena.negocio.dto.InstalacionCasillasDTO;
 import mx.morena.negocio.dto.ReporteCasillaDTO;
 import mx.morena.negocio.dto.ResultadoOkDTO;
-import mx.morena.negocio.dto.UbicacionCasillaDTO;
 import mx.morena.negocio.exception.CotException;
 import mx.morena.negocio.servicios.IInstalacionCasillaService;
 import mx.morena.security.controller.MasterController;
@@ -269,12 +268,15 @@ public class InstalacionCasillaController extends MasterController {
 	 */
 	@GetMapping("/registrosRc")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	public List<IncidenciasCasillasRespDTO> getRegistrosVotacionRc(HttpServletResponse response, HttpServletRequest request ) throws IOException {
+	public List<IncidenciasCasillasRespDTO> getRegistrosVotacionRc(HttpServletResponse response, HttpServletRequest request,
+			@RequestParam(value = "idCasilla", required = true) Long idCasilla,
+			@RequestParam(value = "tipoReporte", required = false) Integer tipoReporte) throws IOException {
+		
 		long usuario = getUsuario(request);
 		long perfil = getPerfil(request);
  
 		try {
-			return IService.getRegistrosVotaciones(usuario, perfil);
+			return IService.getRegistrosVotaciones(usuario, perfil, idCasilla, tipoReporte);
 		} catch (CotException e) {
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());

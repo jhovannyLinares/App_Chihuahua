@@ -1,6 +1,7 @@
 package mx.morena.persistencia.repository.impl;
 
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -206,13 +207,39 @@ public class ReporteCasillaRepository implements IReporteCasillasRepository {
 	}
 
 	@Override
-	public List<ReporteCasilla> getRegistrosByIdRc(Long idRc) {
-		String sql = "select id, id_casilla, hora_reporte, hora_cierre, tipo_reporte, cantidad_personas_han_votado, boletas_utilizadas, "
+	public List<ReporteCasilla> getRegistrosByIdRc(Long idRc, Long idCasilla, Integer tipoReporte) {
+		String select = "select id, id_casilla, hora_reporte, hora_cierre, tipo_reporte, cantidad_personas_han_votado, boletas_utilizadas, "
 				+ "recibio_visita_representante, is_rc, id_rc "
-				+ "from app_reporte_casillas arc where is_rc = true and id_rc = ? ";
+				+ "from app_reporte_casillas arc";
+		
+		String sql = null;
+		String where = " where is_rc = true and id_rc = ? and id_casilla = ?";
+		List<Object> para = new ArrayList<Object>();
+		List<Integer> type = new ArrayList<Integer>();
+		
+		para.add(idRc);
+		type.add(Types.NUMERIC);
+		para.add(idCasilla);
+		type.add(Types.NUMERIC);
+
+		if (tipoReporte != null) {
+			where = where.concat(" and tipo_reporte = ? ");
+			para.add(tipoReporte);
+			type.add(Types.NUMERIC);
+		}
+		
+		Object[] parametros = new Object[para.size()];
+		int[] types = new int[para.size()];
+
+		for (int i = 0; i < para.size(); i++) {
+			parametros[i] = para.get(i);
+			types[i] = type.get(i);
+		}
 
 		try {
-			return template.queryForObject(sql, new Object[] { idRc }, new int[] { Types.NUMERIC}, new ReporteCasillaResponseRowMapper());
+			sql = select.concat(where);
+
+			return template.queryForObject(sql, parametros, types, new ReporteCasillaResponseRowMapper());
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}
@@ -220,7 +247,7 @@ public class ReporteCasillaRepository implements IReporteCasillasRepository {
 
 	@Override
 	public List<ReporteCasilla> getReporteByIdCasillaAndTipoRep(Long idCasilla, boolean isRc, Integer tipoReporte) {
-		String sql = "select * from app_reporte_casillas arc where id_casilla = ? and is_rc = ? and tipo_reporte = ? ";
+		String sql = "select * from app_reporte_casillas where id_casilla = ? and is_rc = ? and tipo_reporte = ? ";
 
 		try {
 			logger.debug(sql);
@@ -230,4 +257,5 @@ public class ReporteCasillaRepository implements IReporteCasillasRepository {
 			return null;
 		}
 	}
+	
 }
