@@ -132,16 +132,8 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 	@Transactional(rollbackFor = { CotException.class })
 	public Long saveIncidenciasCasilla(IncidenciasCasillasDTO dto, long perfil, long usuario) throws CotException {
 
-        if (perfil == PERFIL_RG || perfil == PERFIL_RC) {
-            boolean is_rc;
-            
-            if(perfil == PERFIL_RG) {
-                is_rc = false;
-            } else {
-                is_rc = true;
-            }
-            
-            List<ReporteCasilla> reportes = reporteRepository.getReporteByIdCasillaAndRc(dto.getIdCasilla(), is_rc);
+        if (perfil == PERFIL_RC) {
+            List<ReporteCasilla> reportes = reporteRepository.getReporteByIdCasilla(dto.getIdCasilla());
 			
 			if (reportes != null) {
 				for (ReporteCasilla reporteCasilla : reportes) {
@@ -180,65 +172,54 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 
 				rc.setIdCasilla(dto.getIdCasilla());
 				rc.setHoraReporte(dto.getHoraReporte());
-				rc.setIdRg(usr.getId());
 				rc.setNumeroVotos(dto.getNumero());
 				rc.setTipoReporte(dto.getTipoReporte());
-
-				rc.setRecibioVisitaRg(false);
-				rc.setPersonasHanVotado(null);
-				rc.setBoletasUtilizadas(null);
-				rc.setRc(false);
-				rc.setIdRc(null);
+					
+				/* Se mapean los nuevos campos */
+				rc.setRecibioVisitaRg(dto.isRecibioVisitaRg());
+				//rc.setRc(true);
+				//rc.setIdRg(null);
+				rc.setIdRc(usr.getId());
 				
-				if (perfil == PERFIL_RC) {
-					
-					/* Se mapean los nuevos campos */
-					rc.setRecibioVisitaRg(dto.isRecibioVisitaRg());
-					rc.setRc(true);
-					rc.setIdRg(null);
-					rc.setIdRc(usr.getId());
-					
-					if (dto.getPersonasHanVotado() == null || dto.getBoletasUtilizadas() == null) {
-						throw new CotException("Todas las preguntas son obligatorias", 400);
-					}
-					
-					if (dto.getPersonasHanVotado() >= 0 && dto.getPersonasHanVotado() < 1000) {
-						rc.setPersonasHanVotado(dto.getPersonasHanVotado());
-					} else {
-						throw new CotException("La cantidad de personas que han votado debe tener maximo 3 numeros", 400);
-					}
-					
-					if (dto.getBoletasUtilizadas() >= 0 && dto.getBoletasUtilizadas() < 1000) {
-						rc.setBoletasUtilizadas(dto.getBoletasUtilizadas());
-					} else {
-						throw new CotException("La cantidad de boletas utilizadas debe tener maximo 3 numeros", 400);
-					}
-					
-					PartidosReporteCasilla partidoCasilla = null;
-					List<RepresentantePartidosDTO> partidos = dto.getPartidos();
-						
-					for (RepresentantePartidosDTO partido : partidos) {
-						if (partido.getIdPartido() != null && partido.getIdPartido() != 0) {
-							partidoCasilla = new PartidosReporteCasilla();
-							
-							partidoCasilla.setIdCasilla(dto.getIdCasilla());
-							partidoCasilla.setIdPartido(partido.getIdPartido());
-							partidoCasilla.setTieneRepresentante(partido.isTieneRepresentante());
-							partidoCasilla.setTipoReporte(dto.getTipoReporte());
-
-							if (partidoVotacionRepository.save(partidoCasilla) == 0) {
-								throw new CotException("No se guardo el reporte de casilla con éxito.", 409);
-							} else {
-								logger.debug("Se guardo con exito en la tabla app_partidos_reporte_casillas");
-							}
-						} else {
-							logger.debug("El partido no. " + partido.getIdPartido() + " no tiene representante");
-						}
-							
-					}
-					
+				if (dto.getPersonasHanVotado() == null || dto.getBoletasUtilizadas() == null) {
+					throw new CotException("Todas las preguntas son obligatorias", 400);
 				}
-				
+					
+				if (dto.getPersonasHanVotado() >= 0 && dto.getPersonasHanVotado() < 1000) {
+					rc.setPersonasHanVotado(dto.getPersonasHanVotado());
+				} else {
+					throw new CotException("La cantidad de personas que han votado debe tener maximo 3 numeros", 400);
+				}
+					
+				if (dto.getBoletasUtilizadas() >= 0 && dto.getBoletasUtilizadas() < 1000) {
+					rc.setBoletasUtilizadas(dto.getBoletasUtilizadas());
+				} else {
+					throw new CotException("La cantidad de boletas utilizadas debe tener maximo 3 numeros", 400);
+				}
+					
+				PartidosReporteCasilla partidoCasilla = null;
+				List<RepresentantePartidosDTO> partidos = dto.getPartidos();
+						
+				for (RepresentantePartidosDTO partido : partidos) {
+					if (partido.getIdPartido() != null && partido.getIdPartido() != 0) {
+						partidoCasilla = new PartidosReporteCasilla();
+							
+						partidoCasilla.setIdCasilla(dto.getIdCasilla());
+						partidoCasilla.setIdPartido(partido.getIdPartido());
+						partidoCasilla.setTieneRepresentante(partido.isTieneRepresentante());
+						partidoCasilla.setTipoReporte(dto.getTipoReporte());
+
+						if (partidoVotacionRepository.save(partidoCasilla) == 0) {
+							throw new CotException("No se guardo el reporte de casilla con éxito.", 409);
+						} else {
+							logger.debug("Se guardo con exito en la tabla app_partidos_reporte_casillas");
+						}
+					} else {
+						logger.debug("El partido no. " + partido.getIdPartido() + " no tiene representante");
+					}
+							
+				}
+					
 				if (reporteRepository.save(rc) == 0) {
 					throw new CotException("No se guardo el reporte con éxito.", 409);
 				} else {
@@ -861,11 +842,10 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 	public boolean existeReporte(Long perfil, Long idCasilla, Integer tipoReporte) throws CotException {
 		if (perfil == PERFIL_RC) {
 			if (idCasilla != null && tipoReporte != null) {
-				boolean is_rc = true;
 				Casilla cas = casillaRepository.getById(idCasilla);
 				
 				if (cas != null) {
-					List<ReporteCasilla> reportes = reporteRepository.getReporteByIdCasillaAndTipoRep(idCasilla, is_rc, tipoReporte);
+					List<ReporteCasilla> reportes = reporteRepository.getReporteByIdCasillaAndTipoRep(idCasilla, tipoReporte);
 					
 					if (reportes != null) {
 						return true;

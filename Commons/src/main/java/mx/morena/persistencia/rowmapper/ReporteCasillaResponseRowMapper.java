@@ -28,7 +28,7 @@ public class ReporteCasillaResponseRowMapper implements RowMapper<List<ReporteCa
 			reporteCasilla.setPersonasHanVotado(rs.getLong("cantidad_personas_han_votado"));
 			reporteCasilla.setBoletasUtilizadas(rs.getLong("boletas_utilizadas"));
 			reporteCasilla.setRecibioVisitaRg(rs.getBoolean("recibio_visita_representante"));
-			reporteCasilla.setRc(rs.getBoolean("is_rc"));
+//			reporteCasilla.setRc(rs.getBoolean("is_rc"));
 			reporteCasilla.setIdRc(rs.getLong("id_rc"));
 
 			reporteCasillas.add(reporteCasilla);

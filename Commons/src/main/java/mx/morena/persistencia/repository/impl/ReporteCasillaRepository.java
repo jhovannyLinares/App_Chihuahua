@@ -33,13 +33,13 @@ public class ReporteCasillaRepository implements IReporteCasillasRepository {
 
 	@Override
 	public int save(ReporteCasilla rc) {
-		String sql = "insert into app_reporte_casillas (id, id_casilla, hora_reporte, id_rg, numero_votos,tipo_reporte, cantidad_personas_han_votado, "
-				+ "boletas_utilizadas, recibio_visita_representante, is_rc, id_rc)" 
-				+ "values (COALESCE((SELECT MAX(id) FROM app_reporte_casillas), 0)+1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		String sql = "insert into app_reporte_casillas (id, id_casilla, hora_reporte, numero_votos,tipo_reporte, cantidad_personas_han_votado, "
+				+ "boletas_utilizadas, recibio_visita_representante, id_rc)" 
+				+ "values (COALESCE((SELECT MAX(id) FROM app_reporte_casillas), 0)+1, ?, ?, ?, ?, ?, ?, ?, ?)";
 //				+ "values ((SELECT MAX(id)+1 FROM app_reporte_casillas), ?, ?, ?, ?);";
 		try {
-			template.update(sql, new Object[] { rc.getIdCasilla(), rc.getHoraReporte(), rc.getIdRg(), rc.getNumeroVotos(),rc.getTipoReporte(),
-			rc.getPersonasHanVotado(), rc.getBoletasUtilizadas(), rc.isRecibioVisitaRg(), rc.isRc(), rc.getIdRc() });
+			template.update(sql, new Object[] { rc.getIdCasilla(), rc.getHoraReporte(), rc.getNumeroVotos(),rc.getTipoReporte(),
+			rc.getPersonasHanVotado(), rc.getBoletasUtilizadas(), rc.isRecibioVisitaRg(), rc.getIdRc() });
 			return 1;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -62,7 +62,7 @@ public class ReporteCasillaRepository implements IReporteCasillasRepository {
 
 	@Override
 	public List<ReporteCasilla> getReporteByIdCasilla(Long idCasilla) {
-		String sql = "select id, id_casilla, hora_reporte, id_rg, numero_votos, hora_cierre, tipo_votacion, tipo_reporte from app_reporte_casillas arc where id_casilla = ? ";
+		String sql = "select id, id_casilla, hora_reporte, numero_votos, hora_cierre, tipo_votacion, tipo_reporte from app_reporte_casillas arc where id_casilla = ? ";
 
 		try {
 			logger.debug(sql);
@@ -133,20 +133,6 @@ public class ReporteCasillaRepository implements IReporteCasillasRepository {
 	}
 
 	@Override
-	public List<ReporteCasilla> getReporteByIdCasillaAndRc(Long idCasilla, boolean isRc) {
-		String sql = "select * from app_reporte_casillas arc where id_casilla = ? and is_rc = ? ";
-
-		try {
-			logger.debug(sql);
-			return template.queryForObject(sql, new Object[] { idCasilla, isRc },
-					new int[] { Types.NUMERIC, Types.BOOLEAN }, new ReporteCasillaRowMapper());
-		} catch (EmptyResultDataAccessException e) {
-			
-			return null;
-		}
-	}
-
-	@Override
 	public List<AfluenciaVotos> getAfluenciaByIdCasilla(Long idCasilla) {
 		
 		String sql = "SELECT id_casilla, hrs_12 , hrs_16 , hrs_18 "
@@ -209,11 +195,11 @@ public class ReporteCasillaRepository implements IReporteCasillasRepository {
 	@Override
 	public List<ReporteCasilla> getRegistrosByIdRc(Long idRc, Long idCasilla, Integer tipoReporte) {
 		String select = "select id, id_casilla, hora_reporte, hora_cierre, tipo_reporte, cantidad_personas_han_votado, boletas_utilizadas, "
-				+ "recibio_visita_representante, is_rc, id_rc "
+				+ "recibio_visita_representante, id_rc "
 				+ "from app_reporte_casillas arc";
 		
 		String sql = null;
-		String where = " where is_rc = true and id_rc = ? and id_casilla = ?";
+		String where = " where id_rc = ? and id_casilla = ?";
 		List<Object> para = new ArrayList<Object>();
 		List<Integer> type = new ArrayList<Integer>();
 		
@@ -246,13 +232,13 @@ public class ReporteCasillaRepository implements IReporteCasillasRepository {
 	}
 
 	@Override
-	public List<ReporteCasilla> getReporteByIdCasillaAndTipoRep(Long idCasilla, boolean isRc, Integer tipoReporte) {
-		String sql = "select * from app_reporte_casillas where id_casilla = ? and is_rc = ? and tipo_reporte = ? ";
+	public List<ReporteCasilla> getReporteByIdCasillaAndTipoRep(Long idCasilla, Integer tipoReporte) {
+		String sql = "select * from app_reporte_casillas where id_casilla = ? and tipo_reporte = ? ";
 
 		try {
 			logger.debug(sql);
-			return template.queryForObject(sql, new Object[] { idCasilla, isRc, tipoReporte },
-					new int[] { Types.NUMERIC, Types.BOOLEAN, Types.NUMERIC }, new ReporteCasillaRowMapper());
+			return template.queryForObject(sql, new Object[] { idCasilla, tipoReporte },
+					new int[] { Types.NUMERIC, Types.NUMERIC }, new ReporteCasillaRowMapper());
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}

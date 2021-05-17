@@ -23,8 +23,6 @@ public interface IReporteCasillasRepository {
 	
 	int insertEstadoVotacion(EstadoVotacion ev);
 	
-	List<ReporteCasilla> getReporteByIdCasillaAndRc(Long idCasilla, boolean isRc);
-	
 	List<AfluenciaVotos> getAfluenciaByIdCasilla(Long isCasilla);
 	
 	List<ActasVotos> getActasByIdCasilla(Long idCasilla);
@@ -35,5 +33,5 @@ public interface IReporteCasillasRepository {
 	
 	List<ReporteCasilla> getRegistrosByIdRc(Long idRc, Long idCasilla, Integer tipoReporte);
 	
-	List<ReporteCasilla> getReporteByIdCasillaAndTipoRep(Long idCasilla, boolean isRc, Integer tipoReporte);
+	List<ReporteCasilla> getReporteByIdCasillaAndTipoRep(Long idCasilla, Integer tipoReporte);
 }

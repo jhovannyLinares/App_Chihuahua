@@ -10,7 +10,7 @@ public class ReporteCasilla {
 
 	private Timestamp horaReporte;
 
-	private Long idRg;
+//	private Long idRg;
 
 	private Long numeroVotos;
 
@@ -25,7 +25,7 @@ public class ReporteCasilla {
 	
 	private boolean recibioVisitaRg;
 	
-	private boolean isRc;
+//	private boolean isRc;
 
 	private Long idRc;
 	
@@ -51,14 +51,6 @@ public class ReporteCasilla {
 
 	public void setHoraReporte(Timestamp horaReporte) {
 		this.horaReporte = horaReporte;
-	}
-
-	public Long getIdRg() {
-		return idRg;
-	}
-
-	public void setIdRg(Long idRg) {
-		this.idRg = idRg;
 	}
 
 	public Long getNumeroVotos() {
@@ -91,14 +83,6 @@ public class ReporteCasilla {
 
 	public void setBoletasUtilizadas(Long boletasUtilizadas) {
 		this.boletasUtilizadas = boletasUtilizadas;
-	}
-
-	public boolean isRc() {
-		return isRc;
-	}
-
-	public void setRc(boolean isRc) {
-		this.isRc = isRc;
 	}
 
 	public Long getIdRc() {
