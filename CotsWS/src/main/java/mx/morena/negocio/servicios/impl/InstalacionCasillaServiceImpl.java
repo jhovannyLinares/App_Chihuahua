@@ -195,7 +195,6 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 					rc.setRc(true);
 					rc.setIdRg(null);
 					rc.setIdRc(usr.getId());
-					rc.setNumeroVotos(0L);
 					
 					if (dto.getPersonasHanVotado() == null || dto.getBoletasUtilizadas() == null) {
 						throw new CotException("Todas las preguntas son obligatorias", 400);
@@ -217,7 +216,7 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 					List<RepresentantePartidosDTO> partidos = dto.getPartidos();
 						
 					for (RepresentantePartidosDTO partido : partidos) {
-						if (partido.getIdPartido() != null || partido.getIdPartido() != 0) {
+						if (partido.getIdPartido() != null && partido.getIdPartido() != 0) {
 							partidoCasilla = new PartidosReporteCasilla();
 							
 							partidoCasilla.setIdCasilla(dto.getIdCasilla());
@@ -783,13 +782,20 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 		
 	}
 
+	/**
+	 * Gets the registros votaciones.
+	 *
+	 * @param idUsuario
+	 * @param perfil
+	 * @return datos que registro un rc sobre votaciones
+	 * @throws CotException the cot exception
+	 */
 	@Override
 	public List<IncidenciasCasillasRespDTO> getRegistrosVotaciones(Long idUsuario, Long perfil) throws CotException {
 		
 		if (perfil == PERFIL_RC) {
-
 			List<ReporteCasilla> reporteCasillas = reporteRepository.getRegistrosByIdRc(idUsuario);
-	
+			
 			List<IncidenciasCasillasRespDTO> reporteCasillaDTOs = new ArrayList<IncidenciasCasillasRespDTO>();
 			List<Incidencias> incidencias = new ArrayList<Incidencias>();
 			List<IncidenciasResponseDTO> incidenciasDto = new ArrayList<IncidenciasResponseDTO>();
@@ -798,7 +804,6 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 			List<RepresentantePartidosRespDTO> partidosDto = new ArrayList<RepresentantePartidosRespDTO>();
 
 			if (reporteCasillas != null) {
-				//reporteCasillas.stream().map(this::formatoFecha).collect(Collectors.toList());
 				reporteCasillaDTOs = MapperUtil.mapAll(reporteCasillas, IncidenciasCasillasRespDTO.class);
 				
 				for (IncidenciasCasillasRespDTO reporteCasilla : reporteCasillaDTOs) {
@@ -814,9 +819,16 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 						reporteCasilla.setPartidos(partidosDto);
 					}
 					
-//					reporteCasilla.setHoraReporte(new Time(reporteCasillas.forEach(a -> a.getHoraReporte().getTime().toString())));
+					for (ReporteCasilla rep : reporteCasillas) {
+						if (reporteCasilla.getTipoReporte() == rep.getTipoReporte() && reporteCasilla.getIdCasilla() == rep.getIdCasilla()) {
+							reporteCasilla.setHoraReporte(new Time(rep.getHoraReporte().getTime()).toString());
+						}
+					}
+					
 				}
 				
+			} else {
+				throw new CotException("El Rc no ha capturado datos", 404);
 			}
 	
 			return reporteCasillaDTOs;

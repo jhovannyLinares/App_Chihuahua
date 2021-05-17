@@ -14,6 +14,7 @@ import mx.morena.negocio.dto.PartidoDTO;
 import mx.morena.negocio.dto.PartidosXAmbitoDTO;
 import mx.morena.negocio.dto.ResultadoOkDTO;
 import mx.morena.negocio.dto.ResultadoVotacionDTO;
+import mx.morena.negocio.dto.VotacionDTO;
 import mx.morena.negocio.dto.VotacionesDTO;
 import mx.morena.negocio.dto.VotosPartidoDTO;
 import mx.morena.negocio.exception.CotException;
@@ -119,6 +120,8 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 			throws CotException {
 
 		validacionVotos(resultadoVotos);
+		
+		logger.debug(resultadoVotos.toString());
 
 		List<Votacion> votaciones = new ArrayList<Votacion>();
 
@@ -129,10 +132,10 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 
 		preguntas.setIdCasilla(resultadoVotos.getIdCasilla());
 		preguntas.setTipoVotacion(resultadoVotos.getTipoVotacion());
+		
+		consultarVotaciones();
 
 		for (VotosPartidoDTO voto : resultadoVotos.getVotos()) {
-
-			consultarVotaciones();
 
 			votacion = new Votacion();
 
@@ -146,27 +149,27 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 			Partido stream = new Partido();
 
 			if (votacion.getTipoVotacion() == 1) {
-				stream = gobernador.stream().filter(partido -> voto.getIdPartido() == partido.getId()).findAny()
+				stream = gobernador.stream().filter(partido -> voto.getIdPartido().longValue() == partido.getId().longValue()).findAny()
 						.orElse(null);
 			}
 
 			if (votacion.getTipoVotacion() == 2) {
-				stream = municipal.stream().filter(partido -> voto.getIdPartido() == partido.getId()).findAny()
+				stream = municipal.stream().filter(partido -> voto.getIdPartido().longValue() == partido.getId().longValue()).findAny()
 						.orElse(null);
 			}
 
 			if (votacion.getTipoVotacion() == 3) {
-				stream = sindico.stream().filter(partido -> voto.getIdPartido() == partido.getId()).findAny()
+				stream = sindico.stream().filter(partido -> voto.getIdPartido().longValue() == partido.getId().longValue()).findAny()
 						.orElse(null);
 			}
 
 			if (votacion.getTipoVotacion() == 4) {
-				stream = diputadoLocal.stream().filter(partido -> voto.getIdPartido() == partido.getId()).findAny()
+				stream = diputadoLocal.stream().filter(partido -> voto.getIdPartido().longValue() == partido.getId().longValue()).findAny()
 						.orElse(null);
 			}
 
 			if (votacion.getTipoVotacion() == 5) {
-				stream = diputadoFederal.stream().filter(partido -> voto.getIdPartido() == partido.getId()).findAny()
+				stream = diputadoFederal.stream().filter(partido -> voto.getIdPartido().longValue() == partido.getId().longValue()).findAny()
 						.orElse(null);
 			}
 
@@ -407,11 +410,68 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 	public PreguntasCasillaDTO getFormulario(Long idCasilla, Long ambito) throws CotException {
 
 		PreguntasCasillaDTO preguntasCasillaDTOs = new PreguntasCasillaDTO();
-		Preguntas preguntas = resultadoVotacionRepository.getByIdCasilla(idCasilla,ambito);
+		Preguntas preguntas = resultadoVotacionRepository.getByIdCasilla(idCasilla, ambito);
 
 		if (preguntas != null) {
-			MapperUtil.map(preguntas,preguntasCasillaDTOs);
+			MapperUtil.map(preguntas, preguntasCasillaDTOs);
+
+			List<Votacion> votaciones = resultadoVotacionRepository.getVotosByCasilla(idCasilla, ambito);
+
+			List<VotacionDTO> votacionDTOs = new ArrayList<VotacionDTO>();
+
+			votacionDTOs = MapperUtil.mapAll(votaciones, VotacionDTO.class);
 			
+			getVotaciones(idCasilla);
+
+			if (ambito == 1) {
+				for (Partido partido : gobernador) {
+					for (VotacionDTO votacionDTO : votacionDTOs) {
+						if (votacionDTO.getIdPartido() == partido.getId()) {
+							votacionDTO.setPartido(partido.getPartido());
+						}
+					}
+				}
+			}
+			if (ambito == 2) {
+				for (Partido partido : municipal) {
+					for (VotacionDTO votacionDTO : votacionDTOs) {
+						if (votacionDTO.getIdPartido() == partido.getId()) {
+							votacionDTO.setPartido(partido.getPartido());
+						}
+					}
+				}
+			}
+			if (ambito == 3) {
+				for (Partido partido : sindico) {
+					for (VotacionDTO votacionDTO : votacionDTOs) {
+						if (votacionDTO.getIdPartido() == partido.getId()) {
+							votacionDTO.setPartido(partido.getPartido());
+						}
+					}
+				}
+			}
+			if (ambito == 4) {
+				for (Partido partido : diputadoLocal) {
+					for (VotacionDTO votacionDTO : votacionDTOs) {
+						if (votacionDTO.getIdPartido() == partido.getId()) {
+							votacionDTO.setPartido(partido.getPartido());
+						}
+					}
+				}
+			}
+			if (ambito == 5) {
+				for (Partido partido : diputadoFederal) {
+					for (VotacionDTO votacionDTO : votacionDTOs) {
+						if (votacionDTO.getIdPartido() == partido.getId()) {
+							votacionDTO.setPartido(partido.getPartido());
+						}
+					}
+				}
+			
+			}
+			
+			preguntasCasillaDTOs.setVotacion(votacionDTOs);
+
 		}
 
 		return preguntasCasillaDTOs;
