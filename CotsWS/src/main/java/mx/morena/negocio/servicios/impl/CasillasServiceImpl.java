@@ -122,6 +122,12 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 		validacionVotos(resultadoVotos);
 		
 		logger.debug(resultadoVotos.toString());
+		
+		PreguntasCasillaDTO dto = getFormulario(resultadoVotos.getIdCasilla(),resultadoVotos.getTipoVotacion().longValue());
+		
+		if(dto.getIsCapturado()) {
+			throw new CotException("Resultados ya capturados anteriormente", 409);
+		}
 
 		List<Votacion> votaciones = new ArrayList<Votacion>();
 
@@ -417,60 +423,65 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 
 			List<Votacion> votaciones = resultadoVotacionRepository.getVotosByCasilla(idCasilla, ambito);
 
-			List<VotacionDTO> votacionDTOs = new ArrayList<VotacionDTO>();
+			if (votaciones != null) {
+				
+				preguntasCasillaDTOs.setIsCapturado(true);
 
-			votacionDTOs = MapperUtil.mapAll(votaciones, VotacionDTO.class);
-			
-			getVotaciones(idCasilla);
+				List<VotacionDTO> votacionDTOs = new ArrayList<VotacionDTO>();
 
-			if (ambito == 1) {
-				for (Partido partido : gobernador) {
-					for (VotacionDTO votacionDTO : votacionDTOs) {
-						if (votacionDTO.getIdPartido() == partido.getId()) {
-							votacionDTO.setPartido(partido.getPartido());
+				votacionDTOs = MapperUtil.mapAll(votaciones, VotacionDTO.class);
+
+				getVotaciones(idCasilla);
+
+				if (ambito == 1) {
+					for (Partido partido : gobernador) {
+						for (VotacionDTO votacionDTO : votacionDTOs) {
+							if (votacionDTO.getIdPartido() == partido.getId()) {
+								votacionDTO.setPartido(partido.getPartido());
+							}
 						}
 					}
 				}
-			}
-			if (ambito == 2) {
-				for (Partido partido : municipal) {
-					for (VotacionDTO votacionDTO : votacionDTOs) {
-						if (votacionDTO.getIdPartido() == partido.getId()) {
-							votacionDTO.setPartido(partido.getPartido());
+				if (ambito == 2) {
+					for (Partido partido : municipal) {
+						for (VotacionDTO votacionDTO : votacionDTOs) {
+							if (votacionDTO.getIdPartido() == partido.getId()) {
+								votacionDTO.setPartido(partido.getPartido());
+							}
 						}
 					}
 				}
-			}
-			if (ambito == 3) {
-				for (Partido partido : sindico) {
-					for (VotacionDTO votacionDTO : votacionDTOs) {
-						if (votacionDTO.getIdPartido() == partido.getId()) {
-							votacionDTO.setPartido(partido.getPartido());
+				if (ambito == 3) {
+					for (Partido partido : sindico) {
+						for (VotacionDTO votacionDTO : votacionDTOs) {
+							if (votacionDTO.getIdPartido() == partido.getId()) {
+								votacionDTO.setPartido(partido.getPartido());
+							}
 						}
 					}
 				}
-			}
-			if (ambito == 4) {
-				for (Partido partido : diputadoLocal) {
-					for (VotacionDTO votacionDTO : votacionDTOs) {
-						if (votacionDTO.getIdPartido() == partido.getId()) {
-							votacionDTO.setPartido(partido.getPartido());
+				if (ambito == 4) {
+					for (Partido partido : diputadoLocal) {
+						for (VotacionDTO votacionDTO : votacionDTOs) {
+							if (votacionDTO.getIdPartido() == partido.getId()) {
+								votacionDTO.setPartido(partido.getPartido());
+							}
 						}
 					}
 				}
-			}
-			if (ambito == 5) {
-				for (Partido partido : diputadoFederal) {
-					for (VotacionDTO votacionDTO : votacionDTOs) {
-						if (votacionDTO.getIdPartido() == partido.getId()) {
-							votacionDTO.setPartido(partido.getPartido());
+				if (ambito == 5) {
+					for (Partido partido : diputadoFederal) {
+						for (VotacionDTO votacionDTO : votacionDTOs) {
+							if (votacionDTO.getIdPartido() == partido.getId()) {
+								votacionDTO.setPartido(partido.getPartido());
+							}
 						}
 					}
+
 				}
-			
+
+				preguntasCasillaDTOs.setVotacion(votacionDTOs);
 			}
-			
-			preguntasCasillaDTOs.setVotacion(votacionDTOs);
 
 		}
 
