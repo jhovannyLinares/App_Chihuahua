@@ -15,6 +15,7 @@ import mx.morena.negocio.dto.PartidosXAmbitoDTO;
 import mx.morena.negocio.dto.ResultadoOkDTO;
 import mx.morena.negocio.dto.ResultadoVotacionDTO;
 import mx.morena.negocio.dto.VotacionDTO;
+import mx.morena.negocio.dto.UbicacionCasillaDTO;
 import mx.morena.negocio.dto.VotacionesDTO;
 import mx.morena.negocio.dto.VotosPartidoDTO;
 import mx.morena.negocio.exception.CotException;
@@ -487,6 +488,28 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 
 		return preguntasCasillaDTOs;
 
+	}
+
+	@Override
+	public String updateDatosCasilla(long perfil, Long idCasilla, UbicacionCasillaDTO dto ) throws CotException {
+		
+		if (perfil == PERFIL_RC) {
+			
+			Casilla casilla = new Casilla();
+			
+			casilla.setCalle(dto.getCalle());
+			casilla.setNumero(dto.getNumero());
+			casilla.setColonia(dto.getColonia());
+			casilla.setUbicacion(dto.getUbicacion());
+			
+			if (casillaRepository.UpdateUbicacion(idCasilla, casilla) == 0L) {
+				throw new CotException("No se actualizo la ubicacion de la casilla.", 409);
+			}
+			
+		} else {
+			throw new CotException("No cuenta con los permisos suficientes.", 401);
+		}
+		return "Se actualizo la ubicacion de la casilla " + idCasilla;
 	}
 
 	

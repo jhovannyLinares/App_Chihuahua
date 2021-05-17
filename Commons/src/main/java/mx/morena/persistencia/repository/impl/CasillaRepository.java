@@ -339,4 +339,18 @@ public class CasillaRepository implements ICasillaRepository {
 		}
 	}
 
+	@Override
+	public Long UpdateUbicacion(Long idCasilla, Casilla casilla) {
+		
+		String sql = "update app_casilla set calle = ?, numero = ?, colonia = ?, ubicacion = ? where id = ?";
+		
+		try {
+			template.update(sql, new Object[] { casilla.getCalle(), casilla.getNumero(), casilla.getColonia(), casilla.getUbicacion(), idCasilla },
+					new int[] {Types.VARCHAR,Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.NUMERIC });
+			return 1L;
+		} catch (Exception e) {
+			return 0L;
+		}
+	}
+
 }

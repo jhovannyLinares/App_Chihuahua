@@ -47,4 +47,6 @@ public interface ICasillaRepository {
 			String idRutaRg);
 
 	public Casilla getUbicacionById(Long usuario);
+
+	public Long UpdateUbicacion(Long idCasilla, Casilla casilla);
 }

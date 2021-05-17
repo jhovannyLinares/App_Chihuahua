@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,6 +23,7 @@ import mx.morena.negocio.dto.EnvioActasDTO;
 import mx.morena.negocio.dto.PartidosXAmbitoDTO;
 import mx.morena.negocio.dto.ResultadoOkDTO;
 import mx.morena.negocio.dto.ResultadoVotacionDTO;
+import mx.morena.negocio.dto.UbicacionCasillaDTO;
 import mx.morena.negocio.dto.VotacionesDTO;
 import mx.morena.negocio.exception.CotException;
 import mx.morena.negocio.servicios.ICasillasService;
@@ -158,5 +160,25 @@ public class CasillasController extends MasterController{
 		}
 	}
 
+	@PutMapping("/{idCasilla}")
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	public String updateDatosCasilla(HttpServletResponse response, HttpServletRequest request
+			,@RequestParam (value = "idCasilla", required = true) Long idCasilla, @RequestBody UbicacionCasillaDTO dto) throws IOException {
+		long perfil = getPerfil(request);
+		long usuario = getUsuario(request);
+//		long idCasilla = 0L;
+ 
+		try {
+			return casillaService.updateDatosCasilla(perfil, idCasilla, dto);
+		} catch (CotException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+			return null;
+		} catch (Exception e ) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			return null;
+		}
+	}
 	
 }
