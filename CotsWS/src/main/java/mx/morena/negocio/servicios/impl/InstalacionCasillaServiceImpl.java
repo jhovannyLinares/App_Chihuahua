@@ -16,6 +16,7 @@ import mx.morena.negocio.dto.AfluenciaVotosDTO;
 import mx.morena.negocio.dto.AfluenciasVotoDTO;
 import mx.morena.negocio.dto.CasillasDTO;
 import mx.morena.negocio.dto.CierreCasillaDTO;
+import mx.morena.negocio.dto.CierreVotacionDTO;
 import mx.morena.negocio.dto.DatosRcDTO;
 import mx.morena.negocio.dto.EstadoVotacionDTO;
 import mx.morena.negocio.dto.IncidenciasCasillasDTO;
@@ -35,7 +36,6 @@ import mx.morena.negocio.servicios.IInstalacionCasillaService;
 import mx.morena.negocio.util.MapperUtil;
 import mx.morena.persistencia.entidad.ActasVotos;
 import mx.morena.persistencia.entidad.AfluenciaVotos;
-import mx.morena.persistencia.entidad.AfluenciasVoto;
 import mx.morena.persistencia.entidad.AsignacionCasillas;
 import mx.morena.persistencia.entidad.Casilla;
 import mx.morena.persistencia.entidad.DatosRc;
@@ -46,7 +46,6 @@ import mx.morena.persistencia.entidad.InstalacionCasilla;
 import mx.morena.persistencia.entidad.Partido;
 import mx.morena.persistencia.entidad.PartidosReporteCasilla;
 import mx.morena.persistencia.entidad.ReporteCasilla;
-import mx.morena.persistencia.entidad.RepresentacionPartidos;
 import mx.morena.persistencia.entidad.RepresentacionPartidosReporte;
 import mx.morena.persistencia.entidad.RepresentanteCargo;
 import mx.morena.persistencia.entidad.Representantes;
@@ -174,12 +173,15 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 				rc.setHoraReporte(dto.getHoraReporte());
 				rc.setNumeroVotos(dto.getNumero());
 				rc.setTipoReporte(dto.getTipoReporte());
+				rc.setHoraCierre(null);
 					
 				/* Se mapean los nuevos campos */
 				rc.setRecibioVisitaRg(dto.isRecibioVisitaRg());
 				//rc.setRc(true);
 				//rc.setIdRg(null);
 				rc.setIdRc(usr.getId());
+				rc.setCerrada(false);
+				rc.setIdMotivoCierre(0L);
 				
 				if (dto.getPersonasHanVotado() == null || dto.getBoletasUtilizadas() == null) {
 					throw new CotException("Todas las preguntas son obligatorias", 400);
@@ -423,6 +425,64 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 		return "Se guardo la hora de cierre de la casilla " + dto.getIdCasilla();
 	}
 	
+	@Override
+	public String horaCierreVotacion(long usuario, CierreVotacionDTO dto, long perfil) throws CotException {
+		if (perfil == PERFIL_RC) {
+
+			List<ReporteCasilla> reporte = reporteRepository.getCierreByIdCasilla(dto.getIdCasilla());
+			
+			if (reporte != null) {
+				for (ReporteCasilla casilla : reporte) {
+					if (casilla.isCerrada()) {
+						throw new CotException("La casilla ya esta cerrada", 400);
+					}
+				}
+				
+				ReporteCasilla rc = new ReporteCasilla();
+				if (dto.getIdMotivoCierre() > 0 && dto.getIdMotivoCierre() <= 4) {
+					rc.setIdMotivoCierre(dto.getIdMotivoCierre());
+				} else {
+					throw new CotException("El motivo del cierre de votación es obligatorio.", 400);
+				}
+				
+				Usuario usr = usuarioRepository.findById(usuario);
+				
+				rc.setIdCasilla(dto.getIdCasilla());
+				rc.setHoraCierre(dto.getHoraCierre());
+				rc.setIdRc(usr.getId());
+				rc.setCerrada(true);
+				rc.setNumeroVotos(0L);
+				
+				List<listIncidenciasDTO> incidencias = dto.getIncidencia();
+				IncidenciasCasillas ic = null;
+				
+				if (dto.isPresentaIncidencias()) {
+					for (listIncidenciasDTO incidencia : incidencias) {
+						ic = new IncidenciasCasillas();
+
+						ic.setIdCasilla(dto.getIdCasilla());
+						ic.setIdIncidencia(incidencia.getId());
+						ic.setTipoReporte(null);
+
+						if (incidenciasRepository.save(ic) == 0) {
+							throw new CotException("No se guardo la incidencia", 409);
+						}
+					}
+				}
+
+				if (reporteRepository.save(rc) == 0) {
+					throw new CotException("No se guardo la hora de cierre", 409);
+				} else {
+					return "Se guardo la hora de cierre de la votacion " + dto.getIdCasilla();
+				}
+			} else {
+				throw new CotException("La casilla seleccionada no esta registrada", 404);
+			}
+
+		} else {
+			throw new CotException("No cuenta con los permisos suficientes para realizar la operacion.", 401);
+		}
+	}
 
 	public List<VotacionesDTO> getVotaciones(Long idCasilla) throws CotException {
 		
@@ -864,4 +924,5 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 			throw new CotException("No cuenta con los permisos suficientes para realizar la operacion.", 401);
 		}
 	}
+
 }

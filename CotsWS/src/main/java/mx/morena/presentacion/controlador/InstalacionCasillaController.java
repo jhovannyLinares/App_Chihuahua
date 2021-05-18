@@ -24,6 +24,7 @@ import mx.morena.negocio.dto.ActasVotacionDTO;
 import mx.morena.negocio.dto.AfluenciaVotosDTO;
 import mx.morena.negocio.dto.CasillasDTO;
 import mx.morena.negocio.dto.CierreCasillaDTO;
+import mx.morena.negocio.dto.CierreVotacionDTO;
 import mx.morena.negocio.dto.DatosRcDTO;
 import mx.morena.negocio.dto.EstadoVotacionDTO;
 import mx.morena.negocio.dto.IncidenciasCasillasDTO;
@@ -133,6 +134,34 @@ public class InstalacionCasillaController extends MasterController {
 
 		try {
 			return IService.horaCierre(usuario, dto, perfil);
+		} catch (CotException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+			return null;
+		} catch (Exception e ) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			return null;
+		}
+	}
+	
+	/**
+	 * @param response
+	 * @param request
+	 * @param dto
+	 * @return
+	 * @throws IOException
+	 * 
+	 * Guardado de informacion del cierre de votación
+	 */
+	@PostMapping("/cierreVotacion")
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	public String cierreVotacion(HttpServletResponse response, HttpServletRequest request, @RequestBody CierreVotacionDTO dto) throws IOException {
+		long usuario = getUsuario(request);
+		long perfil = getPerfil(request);
+
+		try {
+			return IService.horaCierreVotacion(usuario, dto, perfil);
 		} catch (CotException e) {
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());

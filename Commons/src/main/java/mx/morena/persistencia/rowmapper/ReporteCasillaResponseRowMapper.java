@@ -30,7 +30,9 @@ public class ReporteCasillaResponseRowMapper implements RowMapper<List<ReporteCa
 			reporteCasilla.setRecibioVisitaRg(rs.getBoolean("recibio_visita_representante"));
 //			reporteCasilla.setRc(rs.getBoolean("is_rc"));
 			reporteCasilla.setIdRc(rs.getLong("id_rc"));
-
+			reporteCasilla.setIdMotivoCierre(rs.getLong("id_motivo_cierre"));
+			reporteCasilla.setCerrada(rs.getBoolean("is_cerrada"));
+			
 			reporteCasillas.add(reporteCasilla);
 
 		} while (rs.next());

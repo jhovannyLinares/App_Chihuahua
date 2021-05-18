@@ -34,12 +34,13 @@ public class ReporteCasillaRepository implements IReporteCasillasRepository {
 	@Override
 	public int save(ReporteCasilla rc) {
 		String sql = "insert into app_reporte_casillas (id, id_casilla, hora_reporte, numero_votos,tipo_reporte, cantidad_personas_han_votado, "
-				+ "boletas_utilizadas, recibio_visita_representante, id_rc)" 
-				+ "values (COALESCE((SELECT MAX(id) FROM app_reporte_casillas), 0)+1, ?, ?, ?, ?, ?, ?, ?, ?)";
+				+ "boletas_utilizadas, recibio_visita_representante, id_rc, id_motivo_cierre, is_cerrada, hora_cierre)" 
+				+ "values (COALESCE((SELECT MAX(id) FROM app_reporte_casillas), 0)+1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 //				+ "values ((SELECT MAX(id)+1 FROM app_reporte_casillas), ?, ?, ?, ?);";
 		try {
 			template.update(sql, new Object[] { rc.getIdCasilla(), rc.getHoraReporte(), rc.getNumeroVotos(),rc.getTipoReporte(),
-			rc.getPersonasHanVotado(), rc.getBoletasUtilizadas(), rc.isRecibioVisitaRg(), rc.getIdRc() });
+			rc.getPersonasHanVotado(), rc.getBoletasUtilizadas(), rc.isRecibioVisitaRg(), rc.getIdRc(), rc.getIdMotivoCierre(),
+			rc.isCerrada(), rc.getHoraCierre() });
 			return 1;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -195,11 +196,11 @@ public class ReporteCasillaRepository implements IReporteCasillasRepository {
 	@Override
 	public List<ReporteCasilla> getRegistrosByIdRc(Long idRc, Long idCasilla, Integer tipoReporte) {
 		String select = "select id, id_casilla, hora_reporte, hora_cierre, tipo_reporte, cantidad_personas_han_votado, boletas_utilizadas, "
-				+ "recibio_visita_representante, id_rc "
-				+ "from app_reporte_casillas arc";
+				+ "recibio_visita_representante, id_rc, id_motivo_cierre, is_cerrada "
+				+ "from app_reporte_casillas ";
 		
 		String sql = null;
-		String where = " where id_rc = ? and id_casilla = ?";
+		String where = " where id_rc = ? and id_casilla = ? and is_cerrada = false";
 		List<Object> para = new ArrayList<Object>();
 		List<Integer> type = new ArrayList<Integer>();
 		
@@ -239,6 +240,20 @@ public class ReporteCasillaRepository implements IReporteCasillasRepository {
 			logger.debug(sql);
 			return template.queryForObject(sql, new Object[] { idCasilla, tipoReporte },
 					new int[] { Types.NUMERIC, Types.NUMERIC }, new ReporteCasillaRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+
+	@Override
+	public List<ReporteCasilla> getCierreByIdCasilla(Long idCasilla) {
+		String sql = "select id, id_casilla, hora_reporte, hora_cierre, tipo_reporte, cantidad_personas_han_votado, boletas_utilizadas, "
+				+ " recibio_visita_representante, id_rc, id_motivo_cierre, is_cerrada from app_reporte_casillas arc where id_casilla = ? ";
+
+		try {
+			logger.debug(sql);
+			return template.queryForObject(sql, new Object[] { idCasilla },
+					new int[] { Types.NUMERIC}, new ReporteCasillaResponseRowMapper());
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}

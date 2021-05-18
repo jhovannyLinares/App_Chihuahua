@@ -26,8 +26,11 @@ public class ReporteCasilla {
 	private boolean recibioVisitaRg;
 	
 //	private boolean isRc;
-
 	private Long idRc;
+	
+	private Long idMotivoCierre;
+	
+	private boolean isCerrada;
 	
 	public Long getId() {
 		return id;
@@ -107,6 +110,22 @@ public class ReporteCasilla {
 
 	public void setRecibioVisitaRg(boolean recibioVisitaRg) {
 		this.recibioVisitaRg = recibioVisitaRg;
+	}
+
+	public Long getIdMotivoCierre() {
+		return idMotivoCierre;
+	}
+
+	public void setIdMotivoCierre(Long idMotivoCierre) {
+		this.idMotivoCierre = idMotivoCierre;
+	}
+
+	public boolean isCerrada() {
+		return isCerrada;
+	}
+
+	public void setCerrada(boolean isCerrada) {
+		this.isCerrada = isCerrada;
 	}
 	
 }
