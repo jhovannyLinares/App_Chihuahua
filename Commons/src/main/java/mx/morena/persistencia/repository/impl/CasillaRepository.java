@@ -357,7 +357,7 @@ public class CasillaRepository implements ICasillaRepository {
 	@Override
 	public Casilla getById(Long idCasilla) {
 		String sql = "SELECT id, entidad_id, federal_id, local_id, municpio_id, seccion_id, tipo_casilla, tipologia, "
-				+ "tipo_domicilio, calle, numero, colonia, cp, ubicacion, referencia, is_asignada  FROM app_casilla "
+				+ "tipo_domicilio, calle, numero, colonia, cp, ubicacion, referencia, is_asignada FROM app_casilla "
 				+ "where id = ? ";
 		try {
 			return template.queryForObject(sql, new Object[] { idCasilla }, new int[] { Types.NUMERIC },

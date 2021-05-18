@@ -373,4 +373,31 @@ public class InstalacionCasillaController extends MasterController {
 			return null;
 		}
 	}
+	
+	/**
+	 * @param response
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 * 
+	 * Consulta si esta cerrada la votacion en una casilla
+	 */
+	@GetMapping("/votacionesCerradas")
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	public boolean getVotacionesCerradas(HttpServletResponse response, HttpServletRequest request,
+				@RequestParam(value = "idCasilla", required = true) Long idCasilla) throws IOException {
+		long perfil = getPerfil(request);
+ 
+		try {
+			return IService.isCerradaVotacion(perfil, idCasilla);
+		} catch (CotException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+			return false;
+		} catch (Exception e ) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			return false;
+		}
+	}
 }

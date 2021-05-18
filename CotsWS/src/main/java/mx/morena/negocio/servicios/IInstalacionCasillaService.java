@@ -59,4 +59,6 @@ public interface IInstalacionCasillaService {
 	boolean existeReporte(Long perfil, Long idCasilla, Integer tipoReporte) throws CotException;
 	
 	List<CierreVotacionResponseDTO> getCierreVotacion(Long idUsuario, Long perfil, Long idCasilla) throws CotException;
+	
+	boolean isCerradaVotacion(Long perfil, Long idCasilla) throws CotException;
 }
