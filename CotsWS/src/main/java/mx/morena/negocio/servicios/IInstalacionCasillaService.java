@@ -8,6 +8,7 @@ import mx.morena.negocio.dto.AfluenciaVotosDTO;
 import mx.morena.negocio.dto.CasillasDTO;
 import mx.morena.negocio.dto.CierreCasillaDTO;
 import mx.morena.negocio.dto.CierreVotacionDTO;
+import mx.morena.negocio.dto.CierreVotacionResponseDTO;
 import mx.morena.negocio.dto.DatosRcDTO;
 import mx.morena.negocio.dto.EstadoVotacionDTO;
 import mx.morena.negocio.dto.IncidenciasCasillasDTO;
@@ -56,4 +57,6 @@ public interface IInstalacionCasillaService {
 	List<IncidenciasCasillasRespDTO> getRegistrosVotaciones(Long idUsuario, Long perfil, Long idCasilla, Integer tipoReporte) throws CotException;
 	
 	boolean existeReporte(Long perfil, Long idCasilla, Integer tipoReporte) throws CotException;
+	
+	List<CierreVotacionResponseDTO> getCierreVotacion(Long idUsuario, Long perfil, Long idCasilla) throws CotException;
 }

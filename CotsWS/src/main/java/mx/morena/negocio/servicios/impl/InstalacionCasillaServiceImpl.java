@@ -17,6 +17,7 @@ import mx.morena.negocio.dto.AfluenciasVotoDTO;
 import mx.morena.negocio.dto.CasillasDTO;
 import mx.morena.negocio.dto.CierreCasillaDTO;
 import mx.morena.negocio.dto.CierreVotacionDTO;
+import mx.morena.negocio.dto.CierreVotacionResponseDTO;
 import mx.morena.negocio.dto.DatosRcDTO;
 import mx.morena.negocio.dto.EstadoVotacionDTO;
 import mx.morena.negocio.dto.IncidenciasCasillasDTO;
@@ -43,6 +44,7 @@ import mx.morena.persistencia.entidad.EstadoVotacion;
 import mx.morena.persistencia.entidad.Incidencias;
 import mx.morena.persistencia.entidad.IncidenciasCasillas;
 import mx.morena.persistencia.entidad.InstalacionCasilla;
+import mx.morena.persistencia.entidad.MotivosTerminoVotacion;
 import mx.morena.persistencia.entidad.Partido;
 import mx.morena.persistencia.entidad.PartidosReporteCasilla;
 import mx.morena.persistencia.entidad.ReporteCasilla;
@@ -54,6 +56,7 @@ import mx.morena.persistencia.entidad.Usuario;
 import mx.morena.persistencia.repository.ICasillaRepository;
 import mx.morena.persistencia.repository.IIncidenciasCasillasRepository;
 import mx.morena.persistencia.repository.IInstalacionCasillasRepository;
+import mx.morena.persistencia.repository.IMotivosTerminoVotacionRepository;
 import mx.morena.persistencia.repository.IPartidoVotacionRepository;
 import mx.morena.persistencia.repository.IPartidosRepository;
 import mx.morena.persistencia.repository.IReporteCasillasRepository;
@@ -91,6 +94,9 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 	
 	@Autowired
 	private IPartidoVotacionRepository partidoVotacionRepository;
+	
+	@Autowired
+	IMotivosTerminoVotacionRepository motivosTerminoRepository;
 	
 	private List<Partido> gobernador;
 	private List<Partido> municipal;
@@ -837,6 +843,7 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 		
 	}
 
+	
 	/**
 	 * Gets the registros votaciones.
 	 *
@@ -927,6 +934,61 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 		} else {
 			throw new CotException("No cuenta con los permisos suficientes para realizar la operacion.", 401);
 		}
+	}
+
+	/**
+	 * Gets the get cierre votacion.
+	 *
+	 * @param idUsuario
+	 * @param perfil
+	 * @param idCasilla
+	 * @return muestra el cierre de votaciones de una casilla
+	 * @throws CotException the cot exception
+	 */
+	@Override
+	public List<CierreVotacionResponseDTO> getCierreVotacion(Long idUsuario, Long perfil, Long idCasilla) throws CotException {
+		if (perfil == PERFIL_RC) {
+			
+			List<ReporteCasilla> reporteCasillas = reporteRepository.getCierreByIdCasilla(idCasilla);
+			
+			List<CierreVotacionResponseDTO> reportesCasillasDTO = new ArrayList<CierreVotacionResponseDTO>();
+			List<Incidencias> incidencias = new ArrayList<Incidencias>();
+			List<IncidenciasResponseDTO> incidenciasDto = new ArrayList<IncidenciasResponseDTO>();
+			CierreVotacionResponseDTO reporteDTO = null;
+			
+			MotivosTerminoVotacion motivo = new MotivosTerminoVotacion();
+
+			if (reporteCasillas != null) {
+				
+				for (ReporteCasilla reporteCasilla : reporteCasillas) {
+					
+					reporteDTO = new CierreVotacionResponseDTO();
+					
+					incidencias = incidenciasRepository.getByIdCasilla(reporteCasilla.getIdCasilla(), null);
+					if (incidencias != null) {
+						incidenciasDto = MapperUtil.mapAll(incidencias, IncidenciasResponseDTO.class);
+						reporteDTO.setIncidencia(incidenciasDto);
+					}
+					
+					motivo = motivosTerminoRepository.getById(reporteCasilla.getIdMotivoCierre());
+					if (motivo != null) {
+						reporteDTO.setMotivoCierre(motivo.getMotivo());
+					}
+					
+					reporteDTO.setHoraCierre(new Time(reporteCasilla.getHoraCierre().getTime()).toString());
+					reportesCasillasDTO.add(reporteDTO);
+				}
+				
+			} else {
+				throw new CotException("No se encontraron datos", 404);
+			}
+	
+			return reportesCasillasDTO;
+			
+		} else {
+			throw new CotException("No se cuenta con los permisos suficientes para consultar la informacion. ", 401);
+		}
+
 	}
 
 }

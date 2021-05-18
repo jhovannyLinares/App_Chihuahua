@@ -25,6 +25,7 @@ import mx.morena.negocio.dto.AfluenciaVotosDTO;
 import mx.morena.negocio.dto.CasillasDTO;
 import mx.morena.negocio.dto.CierreCasillaDTO;
 import mx.morena.negocio.dto.CierreVotacionDTO;
+import mx.morena.negocio.dto.CierreVotacionResponseDTO;
 import mx.morena.negocio.dto.DatosRcDTO;
 import mx.morena.negocio.dto.EstadoVotacionDTO;
 import mx.morena.negocio.dto.IncidenciasCasillasDTO;
@@ -342,6 +343,34 @@ public class InstalacionCasillaController extends MasterController {
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 			return false;
+		}
+	}
+	
+	/**
+	 * @param response
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 * 
+	 * Consulta los datos registrados sobre el cierre de votacion
+	 */
+	@GetMapping("/cierreVotaciones")
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	public List<CierreVotacionResponseDTO> getCierreCasilla(HttpServletResponse response, HttpServletRequest request,
+				@RequestParam(value = "idCasilla", required = true) Long idCasilla) throws IOException {
+		long perfil = getPerfil(request);
+		long usuario = getUsuario(request);
+		
+		try {
+			return IService.getCierreVotacion(usuario, perfil, idCasilla);
+		} catch (CotException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+			return null;
+		} catch (Exception e ) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			return null;
 		}
 	}
 }
