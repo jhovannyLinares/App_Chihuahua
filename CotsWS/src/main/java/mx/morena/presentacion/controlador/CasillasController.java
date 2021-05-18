@@ -165,7 +165,7 @@ public class CasillasController extends MasterController{
 	public String updateDatosCasilla(HttpServletResponse response, HttpServletRequest request
 			,@RequestParam (value = "idCasilla", required = true) Long idCasilla, @RequestBody UbicacionCasillaDTO dto) throws IOException {
 		long perfil = getPerfil(request);
-		long usuario = getUsuario(request);
+//		long usuario = getUsuario(request);
 //		long idCasilla = 0L;
  
 		try {
