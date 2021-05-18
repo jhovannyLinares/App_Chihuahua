@@ -459,10 +459,14 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 				if (dto.isPresentaIncidencias()) {
 					for (listIncidenciasDTO incidencia : incidencias) {
 						ic = new IncidenciasCasillas();
-
 						ic.setIdCasilla(dto.getIdCasilla());
-						ic.setIdIncidencia(incidencia.getId());
-						ic.setTipoReporte(null);
+						
+						if (incidencia.getId() > 0) {
+							ic.setIdIncidencia(incidencia.getId());
+							ic.setTipoReporte(null);
+						} else {
+							throw new CotException("Ingrese una incidencia valida", 400);
+						}
 
 						if (incidenciasRepository.save(ic) == 0) {
 							throw new CotException("No se guardo la incidencia", 409);
