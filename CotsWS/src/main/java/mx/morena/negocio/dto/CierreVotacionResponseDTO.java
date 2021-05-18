@@ -6,7 +6,7 @@ public class CierreVotacionResponseDTO {
 	
 	private Long idCasilla;
 	private String horaCierre;
-	private String motivoCierre;
+	private MotivoCierreDTO motivoCierre;
 	private List<IncidenciasResponseDTO> incidencia;
 
 	public Long getIdCasilla() {
@@ -25,11 +25,11 @@ public class CierreVotacionResponseDTO {
 		this.horaCierre = horaCierre;
 	}
 
-	public String getMotivoCierre() {
+	public MotivoCierreDTO getMotivoCierre() {
 		return motivoCierre;
 	}
 
-	public void setMotivoCierre(String motivoCierre) {
+	public void setMotivoCierre(MotivoCierreDTO motivoCierre) {
 		this.motivoCierre = motivoCierre;
 	}
 

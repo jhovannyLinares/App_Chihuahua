@@ -258,5 +258,20 @@ public class ReporteCasillaRepository implements IReporteCasillasRepository {
 			return null;
 		}
 	}
+
+	@Override
+	public List<ReporteCasilla> getCierreByIdCasillaAndIsCerrada(Long idCasilla, boolean isCerrada) {
+		String sql = "select id, id_casilla, hora_reporte, hora_cierre, tipo_reporte, cantidad_personas_han_votado, "
+				+ "boletas_utilizadas, recibio_visita_representante, id_rc, id_motivo_cierre, is_cerrada "
+				+ "from app_reporte_casillas arc where id_casilla = ? and is_cerrada = ? ";
+
+		try {
+			logger.debug(sql);
+			return template.queryForObject(sql, new Object[] { idCasilla, isCerrada },
+					new int[] { Types.NUMERIC, Types.BOOLEAN }, new ReporteCasillaResponseRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
 	
 }

@@ -24,6 +24,7 @@ import mx.morena.negocio.dto.IncidenciasCasillasDTO;
 import mx.morena.negocio.dto.IncidenciasCasillasRespDTO;
 import mx.morena.negocio.dto.IncidenciasResponseDTO;
 import mx.morena.negocio.dto.InstalacionCasillasDTO;
+import mx.morena.negocio.dto.MotivoCierreDTO;
 import mx.morena.negocio.dto.ReporteCasillaDTO;
 import mx.morena.negocio.dto.RepresentanteDTO;
 import mx.morena.negocio.dto.RepresentantePartidosDTO;
@@ -949,7 +950,7 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 	public List<CierreVotacionResponseDTO> getCierreVotacion(Long idUsuario, Long perfil, Long idCasilla) throws CotException {
 		if (perfil == PERFIL_RC) {
 			
-			List<ReporteCasilla> reporteCasillas = reporteRepository.getCierreByIdCasilla(idCasilla);
+			List<ReporteCasilla> reporteCasillas = reporteRepository.getCierreByIdCasillaAndIsCerrada(idCasilla, true);
 			
 			List<CierreVotacionResponseDTO> reportesCasillasDTO = new ArrayList<CierreVotacionResponseDTO>();
 			List<Incidencias> incidencias = new ArrayList<Incidencias>();
@@ -957,12 +958,13 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 			CierreVotacionResponseDTO reporteDTO = null;
 			
 			MotivosTerminoVotacion motivo = new MotivosTerminoVotacion();
-
+			MotivoCierreDTO motivoDTO = null;
 			if (reporteCasillas != null) {
 				
 				for (ReporteCasilla reporteCasilla : reporteCasillas) {
 					
 					reporteDTO = new CierreVotacionResponseDTO();
+					reporteDTO.setIdCasilla(reporteCasilla.getIdCasilla());
 					
 					incidencias = incidenciasRepository.getByIdCasilla(reporteCasilla.getIdCasilla(), null);
 					if (incidencias != null) {
@@ -972,7 +974,10 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 					
 					motivo = motivosTerminoRepository.getById(reporteCasilla.getIdMotivoCierre());
 					if (motivo != null) {
-						reporteDTO.setMotivoCierre(motivo.getMotivo());
+						motivoDTO = new MotivoCierreDTO();
+						motivoDTO.setIdMotivo(motivo.getId());
+						motivoDTO.setMotivo(motivo.getMotivo());
+						reporteDTO.setMotivoCierre(motivoDTO);
 					}
 					
 					reporteDTO.setHoraCierre(new Time(reporteCasilla.getHoraCierre().getTime()).toString());

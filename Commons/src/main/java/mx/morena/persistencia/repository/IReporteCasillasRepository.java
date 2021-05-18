@@ -36,4 +36,6 @@ public interface IReporteCasillasRepository {
 	List<ReporteCasilla> getReporteByIdCasillaAndTipoRep(Long idCasilla, Integer tipoReporte);
 	
 	List<ReporteCasilla> getCierreByIdCasilla(Long idCasilla);
+	
+	List<ReporteCasilla> getCierreByIdCasillaAndIsCerrada(Long idCasilla, boolean isCerrada);
 }
