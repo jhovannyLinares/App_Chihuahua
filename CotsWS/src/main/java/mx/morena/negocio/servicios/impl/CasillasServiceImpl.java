@@ -437,7 +437,7 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 				if (ambito == 1) {
 					for (Partido partido : gobernador) {
 						for (VotacionDTO votacionDTO : votacionDTOs) {
-							if (votacionDTO.getIdPartido() == partido.getId()) {
+							if (votacionDTO.getIdPartido().longValue() == partido.getId().longValue()) {
 								votacionDTO.setPartido(partido.getPartido());
 							}
 						}
@@ -446,7 +446,7 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 				if (ambito == 2) {
 					for (Partido partido : municipal) {
 						for (VotacionDTO votacionDTO : votacionDTOs) {
-							if (votacionDTO.getIdPartido() == partido.getId()) {
+							if (votacionDTO.getIdPartido().longValue() == partido.getId().longValue()) {
 								votacionDTO.setPartido(partido.getPartido());
 							}
 						}
@@ -455,7 +455,7 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 				if (ambito == 3) {
 					for (Partido partido : sindico) {
 						for (VotacionDTO votacionDTO : votacionDTOs) {
-							if (votacionDTO.getIdPartido() == partido.getId()) {
+							if (votacionDTO.getIdPartido().longValue() == partido.getId().longValue()) {
 								votacionDTO.setPartido(partido.getPartido());
 							}
 						}
@@ -464,7 +464,7 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 				if (ambito == 4) {
 					for (Partido partido : diputadoLocal) {
 						for (VotacionDTO votacionDTO : votacionDTOs) {
-							if (votacionDTO.getIdPartido() == partido.getId()) {
+							if (votacionDTO.getIdPartido().longValue() == partido.getId().longValue()) {
 								votacionDTO.setPartido(partido.getPartido());
 							}
 						}
@@ -473,7 +473,7 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 				if (ambito == 5) {
 					for (Partido partido : diputadoFederal) {
 						for (VotacionDTO votacionDTO : votacionDTOs) {
-							if (votacionDTO.getIdPartido() == partido.getId()) {
+							if (votacionDTO.getIdPartido().longValue() == partido.getId().longValue()) {
 								votacionDTO.setPartido(partido.getPartido());
 							}
 						}
