@@ -160,10 +160,20 @@ public class CasillasController extends MasterController{
 		}
 	}
 
+	/**
+	 * @param response
+	 * @param request
+	 * @param idCasilla
+	 * @param dto
+	 * @return
+	 * @throws IOException
+	 * 
+	 * Actualizacion de ubicacion de la casilla
+	 */
 	@PutMapping("/{idCasilla}")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	public String updateDatosCasilla(HttpServletResponse response, HttpServletRequest request
-			,@RequestParam (value = "idCasilla", required = true) Long idCasilla, @RequestBody UbicacionCasillaDTO dto) throws IOException {
+	public String updateDatosCasilla(HttpServletResponse response, HttpServletRequest request, @PathVariable ("idCasilla") Long idCasilla
+			, @RequestBody UbicacionCasillaDTO dto) throws IOException {
 		long perfil = getPerfil(request);
 //		long usuario = getUsuario(request);
 //		long idCasilla = 0L;

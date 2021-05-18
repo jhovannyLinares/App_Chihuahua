@@ -623,6 +623,9 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 		
 	}
 
+	/**
+	 * metodo de consulta de casilla y datos del rc
+	 */
 	@Override
 	public DatosRcDTO getDatosRc(long perfil, long usuario) throws CotException {
 

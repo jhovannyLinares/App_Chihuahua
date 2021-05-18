@@ -490,6 +490,9 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 
 	}
 
+	/**
+	 * Metodo de actualizacion de ubicacion de la casilla
+	 */
 	@Override
 	public String updateDatosCasilla(long perfil, Long idCasilla, UbicacionCasillaDTO dto ) throws CotException {
 		
