@@ -10,4 +10,6 @@ public interface IIncidenciasCasillasRepository {
 	int save(IncidenciasCasillas ic);
 	
 	List<Incidencias> getByIdCasilla(Long idCasilla, Integer tipoReporte);
+	
+	List<Incidencias> getIncidenciaByIdCasilla(Long idCasilla);
 }

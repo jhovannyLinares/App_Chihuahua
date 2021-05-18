@@ -966,7 +966,7 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 					reporteDTO = new CierreVotacionResponseDTO();
 					reporteDTO.setIdCasilla(reporteCasilla.getIdCasilla());
 					
-					incidencias = incidenciasRepository.getByIdCasilla(reporteCasilla.getIdCasilla(), null);
+					incidencias = incidenciasRepository.getIncidenciaByIdCasilla(reporteCasilla.getIdCasilla());
 					if (incidencias != null) {
 						incidenciasDto = MapperUtil.mapAll(incidencias, IncidenciasResponseDTO.class);
 						reporteDTO.setIncidencia(incidenciasDto);
