@@ -184,10 +184,10 @@ public class InstalacionCasillaController extends MasterController {
 	 * 
 	 * Consulta de informacion de instalacion de la casilla
 	 */
-	@GetMapping("/instalacionCasillas")
+	@GetMapping("/instalacionCasillas/{idCasilla}")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
 	public InstalacionCasillasResponseDTO getIstalacionCasilla(HttpServletResponse response, HttpServletRequest request, 
-			@RequestParam(value = "idCasilla", required = true) Long idCasilla) throws IOException {
+			@PathVariable Long idCasilla) throws IOException {
 		long perfil = getPerfil(request);
 		long usuario = getUsuario(request);
  
