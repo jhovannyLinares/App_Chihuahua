@@ -5,8 +5,6 @@ import java.util.List;
 
 public class InstalacionCasillasResponseDTO {
 	
-	private Long idCasilla;
-
 	private Timestamp horaInstalacion;
 
 	private String llegaronFuncionarios;
@@ -78,14 +76,6 @@ public class InstalacionCasillasResponseDTO {
 	private String presentaIncidencias;
 	
 	private List<IncidenciasResponseDTO> incidencia;
-
-	public Long getIdCasilla() {
-		return idCasilla;
-	}
-
-	public void setIdCasilla(Long idCasilla) {
-		this.idCasilla = idCasilla;
-	}
 
 	public Timestamp getHoraInstalacion() {
 		return horaInstalacion;
