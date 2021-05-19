@@ -130,6 +130,7 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 
 						incCasilla.setIdCasilla(dto.getIdCasilla());
 						incCasilla.setIdIncidencia(incidencia.getId());
+						incCasilla.setTipoReporte(0);
 
 						if (incidenciasRepository.save(incCasilla) == 0) {
 							throw new CotException("No se guardo la incidencia con éxito.", 409);
