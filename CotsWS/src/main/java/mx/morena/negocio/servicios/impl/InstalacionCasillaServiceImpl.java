@@ -119,7 +119,24 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 				InstalacionCasilla ic = new InstalacionCasilla();
 
 				MapperUtil.map(dto, ic);
+				
+				////////   incideencias
+				List<listIncidenciasDTO> lstIn = dto.getIncidencia();
+				IncidenciasCasillas incCasilla = null;
+				if (dto.getPresentaIncidencias().equalsIgnoreCase("si")) {
+					for (listIncidenciasDTO incidencia : lstIn) {
+						incCasilla = new IncidenciasCasillas();
 
+						incCasilla.setIdCasilla(dto.getIdCasilla());
+						incCasilla.setIdIncidencia(incidencia.getId());
+
+						if (incidenciasRepository.save(incCasilla) == 0) {
+							throw new CotException("No se guardo la incidencia con éxito.", 409);
+						}
+					}
+
+				}
+				////////
 				if (casillasRepository.save(ic) == 0) {
 
 					throw new CotException("No se guardo la informacion con éxito.", 409);

@@ -494,21 +494,28 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 	 * Metodo de actualizacion de ubicacion de la casilla
 	 */
 	@Override
-	public String updateDatosCasilla(long perfil, Long idCasilla, UbicacionCasillaDTO dto ) throws CotException {
-		
+	public String updateDatosCasilla(long perfil, Long idCasilla, UbicacionCasillaDTO dto) throws CotException {
+
 		if (perfil == PERFIL_RC) {
-			
-			Casilla casilla = new Casilla();
-			
-			casilla.setCalle(dto.getCalle());
-			casilla.setNumero(dto.getNumero());
-			casilla.setColonia(dto.getColonia());
-			casilla.setUbicacion(dto.getUbicacion());
-			
-			if (casillaRepository.UpdateUbicacion(idCasilla, casilla) == 0L) {
-				throw new CotException("No se actualizo la ubicacion de la casilla.", 409);
+
+			Casilla ca = casillaRepository.getById(idCasilla);
+
+			if (ca != null) {
+
+				Casilla casilla = new Casilla();
+
+				casilla.setCalle(dto.getCalle());
+				casilla.setNumero(dto.getNumero());
+				casilla.setColonia(dto.getColonia());
+				casilla.setUbicacion(dto.getUbicacion());
+
+				if (casillaRepository.UpdateUbicacion(idCasilla, casilla) == 0L) {
+					throw new CotException("No se actualizo la ubicacion de la casilla.", 409);
+				}
+			} else {
+				throw new CotException("La casilla seleccionada no esta registrada.", 404);
 			}
-			
+
 		} else {
 			throw new CotException("No cuenta con los permisos suficientes.", 401);
 		}

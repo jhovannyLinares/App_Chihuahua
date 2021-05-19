@@ -1,6 +1,7 @@
 package mx.morena.negocio.dto;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 public class InstalacionCasillasDTO {
 
@@ -73,6 +74,10 @@ public class InstalacionCasillasDTO {
 	private String nombreEscrutador2;
 	
 	private String nombreEscrutador3;
+	
+	private String presentaIncidencias;
+	
+	private List<listIncidenciasDTO> incidencia;
 
 	///////////////////////
 
@@ -346,6 +351,22 @@ public class InstalacionCasillasDTO {
 
 	public void setNombreEscrutador3(String nombreEscrutador3) {
 		this.nombreEscrutador3 = nombreEscrutador3;
+	}
+
+	public String getPresentaIncidencias() {
+		return presentaIncidencias;
+	}
+
+	public void setPresentaIncidencias(String presentaIncidencias) {
+		this.presentaIncidencias = presentaIncidencias;
+	}
+
+	public List<listIncidenciasDTO> getIncidencia() {
+		return incidencia;
+	}
+
+	public void setIncidencia(List<listIncidenciasDTO> incidencia) {
+		this.incidencia = incidencia;
 	}
 
 }
