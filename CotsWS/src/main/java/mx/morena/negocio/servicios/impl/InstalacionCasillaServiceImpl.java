@@ -955,19 +955,14 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 				Casilla cas = casillaRepository.getById(idCasilla);
 				
 				if (cas != null) {
-					//Valida que la casilla este en reporte_casillas
-					List<ReporteCasilla> reporte = reporteRepository.getCierreByIdCasilla(idCasilla);
-					if (reporte != null) {
-						List<ReporteCasilla> reportes = reporteRepository.getReporteByIdCasillaAndTipoRep(idCasilla, tipoReporte);
+					List<ReporteCasilla> reportes = reporteRepository.getReporteByIdCasillaAndTipoRep(idCasilla, tipoReporte);
 						
-						if (reportes != null) {
-							return true;
-						}
-						
-						return false;
-					} else {
-						throw new CotException("La casilla ingresada aun no contiene informacion", 404);
+					if (reportes != null) {
+						return true;
 					}
+						
+					return false;
+					
 				} else {
 					throw new CotException("La casilla ingresada no existe", 404);
 				}
