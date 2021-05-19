@@ -62,4 +62,17 @@ public class IncidenciasCasillasRepository implements IIncidenciasCasillasReposi
 		}
 	}
 
+	@Override
+	public List<Incidencias> getIncidenciasByIdCasilla(Long idCasilla) {
+		String sql ="select ai.\"idIncidencia\", ai.incidencia from app_incidencias_casillas aic "  
+				+ "inner join app_incidencias ai "  
+				+ "on aic.id_incidencia = ai.\"idIncidencia\" "  
+				+ "where aic.id_casilla = ? ";
+		try {	
+			return template.queryForObject(sql, new Object[] { idCasilla }, new int[] { Types.NUMERIC }, new IncidenciaRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+
 }

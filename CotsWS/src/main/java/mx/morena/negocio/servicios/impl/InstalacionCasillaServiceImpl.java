@@ -24,6 +24,7 @@ import mx.morena.negocio.dto.IncidenciasCasillasDTO;
 import mx.morena.negocio.dto.IncidenciasCasillasRespDTO;
 import mx.morena.negocio.dto.IncidenciasResponseDTO;
 import mx.morena.negocio.dto.InstalacionCasillasDTO;
+import mx.morena.negocio.dto.InstalacionCasillasResponseDTO;
 import mx.morena.negocio.dto.MotivoCierreDTO;
 import mx.morena.negocio.dto.ReporteCasillaDTO;
 import mx.morena.negocio.dto.RepresentanteDTO;
@@ -617,27 +618,43 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 	}
 
 	@Override
-	public InstalacionCasillasDTO getInstalacionCasilla(long perfil, long usuario, Long idCasilla) throws CotException {
-		
+	public InstalacionCasillasResponseDTO getInstalacionCasilla(long perfil, long usuario, Long idCasilla) throws CotException {
+
 		if (perfil == PERFIL_RC) {
-			
+
 			InstalacionCasilla casilla = casillasRepository.getCasillaById(idCasilla);
-			
+
 			if (casilla != null) {
+
+				InstalacionCasillasResponseDTO dto = new InstalacionCasillasResponseDTO();
+
+				MapperUtil.map(casilla, dto);
 				
-				InstalacionCasillasDTO dto = new InstalacionCasillasDTO();
-			
-			MapperUtil.map(casilla, dto);
-						
-			return dto;
-			
-			}else {
+				List<Incidencias> incidencias = new ArrayList<Incidencias>();
+				
+				List<IncidenciasResponseDTO> lstIncidencias = null;
+				
+				incidencias = incidenciasRepository.getIncidenciasByIdCasilla(idCasilla);
+				
+				if (incidencias != null) {
+				
+				lstIncidencias = MapperUtil.mapAll(incidencias, IncidenciasResponseDTO.class);
+				
+				dto.setPresentaIncidencias("si");
+				dto.setIncidencia(lstIncidencias);
+				}else {
+					dto.setPresentaIncidencias("no");
+				}
+
+				return dto;
+
+			} else {
 				throw new CotException("La casilla seleccionada no esta registrada.", 404);
 			}
 		} else {
 			throw new CotException("No cuenta con los permisos suficientes para realizar la operacion.", 401);
 		}
-		
+
 	}
 
 	/**

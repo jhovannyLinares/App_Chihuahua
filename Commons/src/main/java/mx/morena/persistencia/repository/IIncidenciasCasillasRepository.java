@@ -12,4 +12,6 @@ public interface IIncidenciasCasillasRepository {
 	List<Incidencias> getByIdCasilla(Long idCasilla, Integer tipoReporte);
 	
 	List<Incidencias> getIncidenciaByIdCasilla(Long idCasilla);
+
+	List<Incidencias> getIncidenciasByIdCasilla(Long idCasilla);
 }

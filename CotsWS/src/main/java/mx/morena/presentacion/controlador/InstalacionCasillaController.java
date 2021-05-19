@@ -31,6 +31,7 @@ import mx.morena.negocio.dto.EstadoVotacionDTO;
 import mx.morena.negocio.dto.IncidenciasCasillasDTO;
 import mx.morena.negocio.dto.IncidenciasCasillasRespDTO;
 import mx.morena.negocio.dto.InstalacionCasillasDTO;
+import mx.morena.negocio.dto.InstalacionCasillasResponseDTO;
 import mx.morena.negocio.dto.ReporteCasillaDTO;
 import mx.morena.negocio.dto.ResultadoOkDTO;
 import mx.morena.negocio.exception.CotException;
@@ -185,7 +186,7 @@ public class InstalacionCasillaController extends MasterController {
 	 */
 	@GetMapping("/instalacionCasillas")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	public InstalacionCasillasDTO getIstalacionCasilla(HttpServletResponse response, HttpServletRequest request, 
+	public InstalacionCasillasResponseDTO getIstalacionCasilla(HttpServletResponse response, HttpServletRequest request, 
 			@RequestParam(value = "idCasilla", required = true) Long idCasilla) throws IOException {
 		long perfil = getPerfil(request);
 		long usuario = getUsuario(request);

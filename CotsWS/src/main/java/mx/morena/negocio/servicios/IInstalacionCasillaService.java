@@ -14,6 +14,7 @@ import mx.morena.negocio.dto.EstadoVotacionDTO;
 import mx.morena.negocio.dto.IncidenciasCasillasDTO;
 import mx.morena.negocio.dto.IncidenciasCasillasRespDTO;
 import mx.morena.negocio.dto.InstalacionCasillasDTO;
+import mx.morena.negocio.dto.InstalacionCasillasResponseDTO;
 import mx.morena.negocio.dto.ReporteCasillaDTO;
 import mx.morena.negocio.dto.ResultadoOkDTO;
 import mx.morena.negocio.dto.UbicacionCasillaDTO;
@@ -36,7 +37,7 @@ public interface IInstalacionCasillaService {
 
 	List<VotacionesDTO> getVotaciones(Long idCasilla) throws CotException;
 
-	InstalacionCasillasDTO getInstalacionCasilla(long perfil, long usuario, Long idCasilla) throws CotException;
+	InstalacionCasillasResponseDTO getInstalacionCasilla(long perfil, long usuario, Long idCasilla) throws CotException;
 
 	DatosRcDTO getDatosRc(long perfil, long usuario) throws CotException;
 
