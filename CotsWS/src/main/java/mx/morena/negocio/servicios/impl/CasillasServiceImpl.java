@@ -1,30 +1,18 @@
 package mx.morena.negocio.servicios.impl;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import javax.imageio.stream.FileImageOutputStream;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.core.Response;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import mx.morena.negocio.dto.EnvioActasDTO;
 import mx.morena.negocio.dto.PartidoDTO;
 import mx.morena.negocio.dto.PartidosXAmbitoDTO;
@@ -47,7 +35,6 @@ import mx.morena.persistencia.repository.ICasillaRepository;
 import mx.morena.persistencia.repository.IEnvioActasRepository;
 import mx.morena.persistencia.repository.IPartidosRepository;
 import mx.morena.persistencia.repository.IResultadoVotacionRepository;
-import mx.morena.presentacion.controlador.MediaTypeUtils;
 import mx.morena.security.servicio.MasterService;
 
 @Service
