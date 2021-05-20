@@ -1,12 +1,28 @@
 package mx.morena.negocio.servicios.impl;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.imageio.stream.FileImageOutputStream;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.core.Response;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import mx.morena.negocio.dto.EnvioActasDTO;
@@ -31,6 +47,7 @@ import mx.morena.persistencia.repository.ICasillaRepository;
 import mx.morena.persistencia.repository.IEnvioActasRepository;
 import mx.morena.persistencia.repository.IPartidosRepository;
 import mx.morena.persistencia.repository.IResultadoVotacionRepository;
+import mx.morena.presentacion.controlador.MediaTypeUtils;
 import mx.morena.security.servicio.MasterService;
 
 @Service
@@ -50,6 +67,8 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 
 	@Autowired
 	private IPartidosRepository partidosRepository;
+	@Autowired
+	private ServletContext servletContext;
 
 	private List<Partido> gobernador;
 	private List<Partido> municipal;
@@ -73,6 +92,8 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 			actas.setIdCasilla(actaDto.getIdCasilla());
 			actas.setRegistroActa((new Timestamp(new Date().getTime())));
 			actas.setTipoActa(actaDto.getTipoActa());
+			actas.setTipoMime(actaDto.getTipoMime());
+			actas.setExtensionActa(actaDto.getExtensionActa());
 			actas.setCopiaRespuestaGobernador(actaDto.isCopiaRespuestaGobernador());
 			actas.setCopiaRespuestaDiputadoLocal(actaDto.isCopiaRespuestaDiputadoLocal());
 			actas.setCopiaRespuestaPresidenteMunicipal(actaDto.isCopiaRespuestaPresidenteMunicipal());
@@ -121,12 +142,13 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 			throws CotException {
 
 		validacionVotos(resultadoVotos);
-		
+
 		logger.debug(resultadoVotos.toString());
-		
-		PreguntasCasillaDTO dto = getFormulario(resultadoVotos.getIdCasilla(),resultadoVotos.getTipoVotacion().longValue());
-		
-		if(dto.getIsCapturado()) {
+
+		PreguntasCasillaDTO dto = getFormulario(resultadoVotos.getIdCasilla(),
+				resultadoVotos.getTipoVotacion().longValue());
+
+		if (dto.getIsCapturado()) {
 			throw new CotException("Resultados ya capturados anteriormente", 409);
 		}
 
@@ -139,7 +161,7 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 
 		preguntas.setIdCasilla(resultadoVotos.getIdCasilla());
 		preguntas.setTipoVotacion(resultadoVotos.getTipoVotacion());
-		
+
 		consultarVotaciones();
 
 		for (VotosPartidoDTO voto : resultadoVotos.getVotos()) {
@@ -156,27 +178,32 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 			Partido stream = new Partido();
 
 			if (votacion.getTipoVotacion() == 1) {
-				stream = gobernador.stream().filter(partido -> voto.getIdPartido().longValue() == partido.getId().longValue()).findAny()
+				stream = gobernador.stream()
+						.filter(partido -> voto.getIdPartido().longValue() == partido.getId().longValue()).findAny()
 						.orElse(null);
 			}
 
 			if (votacion.getTipoVotacion() == 2) {
-				stream = municipal.stream().filter(partido -> voto.getIdPartido().longValue() == partido.getId().longValue()).findAny()
+				stream = municipal.stream()
+						.filter(partido -> voto.getIdPartido().longValue() == partido.getId().longValue()).findAny()
 						.orElse(null);
 			}
 
 			if (votacion.getTipoVotacion() == 3) {
-				stream = sindico.stream().filter(partido -> voto.getIdPartido().longValue() == partido.getId().longValue()).findAny()
+				stream = sindico.stream()
+						.filter(partido -> voto.getIdPartido().longValue() == partido.getId().longValue()).findAny()
 						.orElse(null);
 			}
 
 			if (votacion.getTipoVotacion() == 4) {
-				stream = diputadoLocal.stream().filter(partido -> voto.getIdPartido().longValue() == partido.getId().longValue()).findAny()
+				stream = diputadoLocal.stream()
+						.filter(partido -> voto.getIdPartido().longValue() == partido.getId().longValue()).findAny()
 						.orElse(null);
 			}
 
 			if (votacion.getTipoVotacion() == 5) {
-				stream = diputadoFederal.stream().filter(partido -> voto.getIdPartido().longValue() == partido.getId().longValue()).findAny()
+				stream = diputadoFederal.stream()
+						.filter(partido -> voto.getIdPartido().longValue() == partido.getId().longValue()).findAny()
 						.orElse(null);
 			}
 
@@ -202,8 +229,8 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 
 			resultadoVotacionRepository.save(votaciones);
 			logger.debug(preguntas.toString());
-			
-			//TODO: validar el guardado
+
+			// TODO: validar el guardado
 			resultadoVotacionRepository.save(preguntas);
 
 		} catch (Exception e) {
@@ -404,6 +431,8 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 		actasDto.setIdCasilla(actas.getIdCasilla());
 		actasDto.setTipoActa(actas.getTipoActa());
 		actasDto.setRutaActa(actas.getRutaActa());
+		actasDto.setTipoMime(actas.getTipoMime());
+		actasDto.setExtensionActa(actas.getExtensionActa());
 		actasDto.setCopiaRespuestaGobernador(actas.isCopiaRespuestaGobernador());
 		actasDto.setCopiaRespuestaDiputadoLocal(actas.isCopiaRespuestaDiputadoLocal());
 		actasDto.setCopiaRespuestaDiputadoFederal(actas.isCopiaRespuestaDiputadoFederal());
@@ -425,7 +454,7 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 			List<Votacion> votaciones = resultadoVotacionRepository.getVotosByCasilla(idCasilla, ambito);
 
 			if (votaciones != null) {
-				
+
 				preguntasCasillaDTOs.setIsCapturado(true);
 
 				List<VotacionDTO> votacionDTOs = new ArrayList<VotacionDTO>();
@@ -522,5 +551,53 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 		return "Se actualizo la ubicacion de la casilla " + idCasilla;
 	}
 
-	
+	/* ICJ - Metodo para decodificar el Base64*/
+	public static void decoder(String base64Image, String pathFile) {
+		try (FileOutputStream imageOutFile = new FileOutputStream(pathFile)) {
+			// Convierte  el Base64 String en Image 
+			byte[] imageByteArray = Base64.getDecoder().decode(base64Image);
+			imageOutFile.write(imageByteArray);
+		} catch (FileNotFoundException e) {
+			System.out.println("Image not found" + e);
+		} catch (IOException ioe) {
+			System.out.println("Exception while reading the Image " + ioe);
+		}
+	}
+
+	@Override
+	public String getActaFile(Long perfil, HttpServletResponse response, Long idActa, String fileName)
+			throws CotException, IOException {
+
+		if (perfil != PERFIL_RC) {
+			throw new CotException("No cuenta con los permisos suficientes para este servicio.", 401);
+		} else {
+
+			if (idActa == null && fileName == null) {
+				throw new CotException(
+						"Favor de agregar proporcionar el No. de acta y el nombre del archivo a descargar con extension.",
+						409);
+			} else {
+
+				List<EnvioActas> actasDTOs = envioActasRepository.getBase64Byid(idActa);
+
+				System.out.println("Tamaño de la query: " + actasDTOs.size());
+
+				// Se convierte la lista en string para guardar el base64 del archivo mediante
+				// el id de la acta
+				String str = "";
+				String Base64 = "";
+				for (EnvioActas s : actasDTOs) {
+					str = str + s + ",";
+				}
+				System.out.println("Converted String is " + str);
+
+				Base64 = actasDTOs.get(0).getRutaActa().toString();
+
+				String imagePath = "src\\img\\" + fileName;
+				decoder(Base64, imagePath);
+
+				return Base64;
+			}
+		}
+	}
 }

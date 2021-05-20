@@ -1,6 +1,12 @@
 package mx.morena.negocio.servicios;
 
+import java.io.IOException;
 import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.ResponseEntity;
 
 import mx.morena.negocio.dto.EnvioActasDTO;
 import mx.morena.negocio.dto.PartidosXAmbitoDTO;
@@ -26,5 +32,8 @@ public interface ICasillasService {
 	public PreguntasCasillaDTO getFormulario(Long idCasilla, Long ambito) throws CotException;
 
 	public String updateDatosCasilla(long perfil, Long idCasilla, UbicacionCasillaDTO dto) throws CotException;	
+	
+	//Descarga del archivo de las actas
+	public String getActaFile(Long perfil, HttpServletResponse response, Long idActa, String fileName)throws CotException, IOException;
 	
 }

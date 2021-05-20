@@ -31,6 +31,8 @@ public class ActasByTipoRowMapper  implements RowMapper<List<EnvioActas>>  {
 			acta.setCopiaRespuestaSindico(rs.getBoolean("copia_resultados_sindico"));
 			acta.setCopiaRespuestaDiputadoFederal(rs.getBoolean("copia_resultados_diputado_federal"));
 			acta.setCopiaRespuestaPresidenteMunicipal(rs.getBoolean("copia_resultados_presidente_municipal"));
+			acta.setTipoMime(rs.getString("tipo_mime"));
+			acta.setExtensionActa(rs.getString("extension_acta"));
 			
 
 			actas.add(acta);

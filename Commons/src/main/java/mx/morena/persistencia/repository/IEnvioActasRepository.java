@@ -18,5 +18,9 @@ public interface IEnvioActasRepository {
 	
 	List<EnvioActas> getActaByTipo(Long idTipoActa);
 	
+	//se extra el base64 por medio del id
+	List<EnvioActas> getBase64Byid(Long idTipoActa);
+	
+	
 	
 }

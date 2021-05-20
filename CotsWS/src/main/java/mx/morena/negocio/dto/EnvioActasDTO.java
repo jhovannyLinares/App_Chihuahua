@@ -7,11 +7,29 @@ public class EnvioActasDTO {
 	private String rutaActa;
 	private Long idCasilla;
 	private Long tipoActa;
+	private String tipoMime;
+	private String extensionActa;
 	private boolean copiaRespuestaGobernador;
 	private boolean copiaRespuestaDiputadoLocal;
 	private boolean copiaRespuestaSindico;
 	private boolean copiaRespuestaDiputadoFederal;
 	private boolean copiaRespuestaPresidenteMunicipal;
+
+	public String getTipoMime() {
+		return tipoMime;
+	}
+
+	public void setTipoMime(String tipoMime) {
+		this.tipoMime = tipoMime;
+	}
+
+	public String getExtensionActa() {
+		return extensionActa;
+	}
+
+	public void setExtensionActa(String extensionActa) {
+		this.extensionActa = extensionActa;
+	}
 
 	public boolean isCopiaRespuestaPresidenteMunicipal() {
 		return copiaRespuestaPresidenteMunicipal;
