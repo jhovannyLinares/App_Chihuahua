@@ -878,8 +878,6 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 			throw new CotException("No se cuenta con los permisos suficientes para consultar la informacion. ", 401);
 		}
 		
-		
-		
 	}
 
 	
@@ -952,23 +950,16 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 	public boolean existeReporte(Long perfil, Long idCasilla, Integer tipoReporte) throws CotException {
 		if (perfil == PERFIL_RC) {
 			if (idCasilla != null && tipoReporte != null) {
-				Casilla cas = casillaRepository.getById(idCasilla);
-				
-				if (cas != null) {
-					List<ReporteCasilla> reportes = reporteRepository.getReporteByIdCasillaAndTipoRep(idCasilla, tipoReporte);
+
+				List<ReporteCasilla> reportes = reporteRepository.getReporteByIdCasillaAndTipoRep(idCasilla, tipoReporte);
 						
-					if (reportes != null) {
-						return true;
-					}
-						
-					return false;
-					
-				} else {
-					throw new CotException("La casilla ingresada no existe", 404);
+				if (reportes != null) {
+					return true;
 				}
-				
+						
+				return false;
 			} else {
-				throw new CotException("Ingrese una casilla y un tipo de reporte", 400);
+                throw new CotException("Ingrese una casilla y un tipo de reporte", 400);
 			}
 			
 		} else {
@@ -1047,29 +1038,22 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 	public boolean isCerradaVotacion(Long perfil, Long idCasilla) throws CotException {
 		if (perfil == PERFIL_RC) {
 			if (idCasilla != null) {
-				//Se valida que exista la casilla
-				Casilla cas = casillaRepository.getById(idCasilla);
-				
-				if (cas != null) {
-					//Valida que la casilla este en reporte_casillas
-					List<ReporteCasilla> reporte = reporteRepository.getCierreByIdCasilla(idCasilla);
-					if (reporte != null) {
-						List<ReporteCasilla> reportes = reporteRepository.getCierreByIdCasillaAndIsCerrada(idCasilla, true);
-						
-						if (reportes != null) {
-							return true;
-						}
-						
-						return false;
-					} else {
-						throw new CotException("La casilla ingresada aun no contiene informacion", 404);
-					}
-				} else {
-					throw new CotException("La casilla ingresada no existe", 404);
-				}
-				
+                List<ReporteCasilla> reporte = reporteRepository.getCierreByIdCasilla(idCasilla);
+                if (reporte != null) {
+                    List<ReporteCasilla> reportes = reporteRepository.getCierreByIdCasillaAndIsCerrada(idCasilla, true);
+                    
+                    if (reportes != null) {
+                        return true;
+                    }
+                    
+                    return false;
+                } else {
+                	logger.debug("La casilla " + idCasilla + " aun no contiene informacion");
+    				return false;
+                }
+                
 			} else {
-				throw new CotException("Ingrese una casilla", 400);
+                throw new CotException("Ingrese una casilla", 400);
 			}
 			
 		} else {
