@@ -413,7 +413,8 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 
 	private EnvioActasDTO converDto(EnvioActas actas) {
 		EnvioActasDTO actasDto = new EnvioActasDTO();
-
+		
+		actasDto.setIdActa(actas.getIdActa());
 		actasDto.setTipoVotacion(actas.getTipoVotacion());
 		actasDto.setIdCasilla(actas.getIdCasilla());
 		actasDto.setTipoActa(actas.getTipoActa());

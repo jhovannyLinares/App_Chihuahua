@@ -2,7 +2,7 @@ package mx.morena.negocio.dto;
 
 public class EnvioActasDTO {
 
-	// private Long idActa;
+	private Long idActa;
 	private Long tipoVotacion;
 	private String rutaActa;
 	private Long idCasilla;
@@ -14,6 +14,14 @@ public class EnvioActasDTO {
 	private boolean copiaRespuestaSindico;
 	private boolean copiaRespuestaDiputadoFederal;
 	private boolean copiaRespuestaPresidenteMunicipal;
+
+	public Long getIdActa() {
+		return idActa;
+	}
+
+	public void setIdActa(Long idActa) {
+		this.idActa = idActa;
+	}
 
 	public String getTipoMime() {
 		return tipoMime;
