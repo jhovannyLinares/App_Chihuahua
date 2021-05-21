@@ -7,8 +7,6 @@ import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.QueryParam;
-//import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
@@ -209,7 +207,8 @@ public class CasillasController extends MasterController {
 	@GetMapping("/consultaActas/download")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
 	private ResponseEntity<InputStreamResource> getReporte(HttpServletResponse response, HttpServletRequest request,
-			@QueryParam("idActa") Long idActa, @QueryParam("TipoMime") String typeMime) throws IOException {
+			@RequestParam(value = "idActa", required = true) long idActa,
+			@RequestParam(value = "TipoMime", required = true) String typeMime) throws IOException {
 		long perfil = getPerfil(request);
 		String extension = "";
 
