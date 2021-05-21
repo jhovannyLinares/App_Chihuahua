@@ -46,7 +46,7 @@ public class MasterService {
 	protected static final String URBANAS = "Urbana";
 	protected static final String NO_URBANAS = "No urbana";
 	
-	protected static final String SI_TOMO_CAPACITACION = "Si";
+	protected static final String SI_TOMO_CAPACITACION = "si";
 	
 	protected static final String CSV_COTS = "ReporteCots.csv";
 	protected static final String CSV_CONV_DIST = "ReporteConvencidosDistrital.csv";
