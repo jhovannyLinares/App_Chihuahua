@@ -34,6 +34,6 @@ public interface ICasillasService {
 	public String updateDatosCasilla(long perfil, Long idCasilla, UbicacionCasillaDTO dto) throws CotException;	
 	
 	//Descarga del archivo de las actas
-	public String getActaFile(Long perfil, HttpServletResponse response, Long idActa, String fileName)throws CotException, IOException;
+	public String getActaFile(Long perfil, HttpServletResponse response, Long idActa, String extension)throws CotException, IOException;
 	
 }

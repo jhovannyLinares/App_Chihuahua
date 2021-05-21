@@ -1,8 +1,14 @@
 package mx.morena.negocio.servicios.impl;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -413,7 +419,7 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 
 	private EnvioActasDTO converDto(EnvioActas actas) {
 		EnvioActasDTO actasDto = new EnvioActasDTO();
-		
+
 		actasDto.setIdActa(actas.getIdActa());
 		actasDto.setTipoVotacion(actas.getTipoVotacion());
 		actasDto.setIdCasilla(actas.getIdCasilla());
@@ -539,52 +545,102 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 		return "Se actualizo la ubicacion de la casilla " + idCasilla;
 	}
 
-	/* ICJ - Metodo para decodificar el Base64*/
-	public static void decoder(String base64Image, String pathFile) {
-		try (FileOutputStream imageOutFile = new FileOutputStream(pathFile)) {
-			// Convierte  el Base64 String en Image 
+	/* ICJ - Metodo para decodificar el Base64 */
+	public File decoder(String base64Image, String extension) throws IOException {
+		File file = null;
+		File dir = new File("Actas\\");
+		file = File.createTempFile("ACTA", "." + extension, dir);
+		System.out.println("Ruta del file temporal: " + file);
+
+		try (FileOutputStream imageOutFile = new FileOutputStream(file)) {
+			// Convierte el Base64 String en Image
 			byte[] imageByteArray = Base64.getDecoder().decode(base64Image);
 			imageOutFile.write(imageByteArray);
+			imageOutFile.close();
+			file.deleteOnExit();
 		} catch (FileNotFoundException e) {
-			System.out.println("Image not found" + e);
+			System.out.println("Archivo no encontrada" + e);
 		} catch (IOException ioe) {
-			System.out.println("Exception while reading the Image " + ioe);
+			System.out.println("Error al leer el archivo " + ioe);
+		}
+		return file;
+	}
+
+	// Elimina el directorio donde se almacenan las actas temporales
+	public static void deleteDirectory(Path directory) throws IOException {
+
+		if (Files.exists(directory, LinkOption.NOFOLLOW_LINKS)) {
+
+			if (Files.isDirectory(directory, LinkOption.NOFOLLOW_LINKS)) {
+				try (DirectoryStream<Path> entries = Files.newDirectoryStream(directory)) {
+					for (Path entry : entries) {
+						deleteDirectory(entry);
+					}
+				}
+			}
+
+			Files.delete(directory);
+
+		}else {
+			System.out.println("El directorio no se borro debido a que no existe");
 		}
 	}
 
+	// Crea el directorio para almacenar las actas temporales
+	public static void createDirectory(String directory) throws IOException {
+		File fichero = new File(directory);
+		Boolean folder = fichero.mkdir();
+		if (folder) {
+			System.out.println("Folder " + directory + " creado correctamente");
+		} else {
+			System.out.println("Error al crear el Folder " + directory);
+		}
+
+	}
+
 	@Override
-	public String getActaFile(Long perfil, HttpServletResponse response, Long idActa, String fileName)
+	public String getActaFile(Long perfil, HttpServletResponse response, Long idActa, String extension)
 			throws CotException, IOException {
 
 		if (perfil != PERFIL_RC) {
 			throw new CotException("No cuenta con los permisos suficientes para este servicio.", 401);
 		} else {
 
-			if (idActa == null && fileName == null) {
+			if (idActa == null && extension == null) {
 				throw new CotException(
 						"Favor de agregar proporcionar el No. de acta y el nombre del archivo a descargar con extension.",
 						409);
 			} else {
 
-				List<EnvioActas> actasDTOs = envioActasRepository.getBase64Byid(idActa);
+				if (extension == null) {
+					throw new CotException(
+							"Solo se admite formato JPG y PDF, ingrese un MIME valido para los formatos mencionados.",
+							409);
+				} else {
 
-				System.out.println("Tamaño de la query: " + actasDTOs.size());
+					List<EnvioActas> actasDTOs = envioActasRepository.getBase64Byid(idActa);
+					if (actasDTOs.isEmpty()) {
+						throw new CotException("No se encontraron datos con el No. de acta ingresado.", 409);
+					}
 
-				// Se convierte la lista en string para guardar el base64 del archivo mediante
-				// el id de la acta
-				String str = "";
-				String Base64 = "";
-				for (EnvioActas s : actasDTOs) {
-					str = str + s + ",";
+					// Se convierte la lista en string para guardar el base64 del archivo mediante
+					// el id de la acta
+					String Base64 = "";
+					Base64 = actasDTOs.get(0).getRutaActa().toString();
+
+					String fileName = "";
+					String directory = "Actas\\";
+
+					// Se elimina lo que tenga el directorio
+					Path path = Paths.get(directory);
+					deleteDirectory(path);
+					// Se crea el directorio para almacenar de nueva las actas temp
+					createDirectory(directory);
+					//Metodo encargado de la decodificacion del Base64
+					fileName = decoder(Base64, extension).toString();
+
+					return fileName;
 				}
-				System.out.println("Converted String is " + str);
-
-				Base64 = actasDTOs.get(0).getRutaActa().toString();
-
-				String imagePath = "src\\img\\" + fileName;
-				decoder(Base64, imagePath);
-
-				return Base64;
 			}
 		}
 	}

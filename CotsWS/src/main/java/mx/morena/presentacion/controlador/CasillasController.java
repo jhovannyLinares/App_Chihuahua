@@ -1,12 +1,18 @@
 package mx.morena.presentacion.controlador;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
-
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+import javax.ws.rs.QueryParam;
+//import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,14 +39,18 @@ import mx.morena.security.controller.MasterController;
 @RestController
 @RequestMapping(value = "/casillas")
 @CrossOrigin
-public class CasillasController extends MasterController{
+public class CasillasController extends MasterController {
 
 	@Autowired
 	private ICasillasService casillaService;
-	
+
+	@Autowired
+	private ServletContext servletContext;
+
 	@PostMapping("/envioActas")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	public Long guardarActas(HttpServletResponse response, HttpServletRequest request, @RequestBody EnvioActasDTO actas) throws IOException {
+	public Long guardarActas(HttpServletResponse response, HttpServletRequest request, @RequestBody EnvioActasDTO actas)
+			throws IOException {
 		long perfil = getPerfil(request);
 		long usuario = getUsuario(request);
 
@@ -50,17 +60,18 @@ public class CasillasController extends MasterController{
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
 			return null;
-		} catch (Exception e ) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 			return null;
 		}
 	}
-	
+
 	@GetMapping("/{idCasilla}/envioActas")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	public List<VotacionesDTO> getActas(HttpServletResponse response, HttpServletRequest request, @PathVariable("idCasilla") Long idCasilla) throws IOException {
-		
+	public List<VotacionesDTO> getActas(HttpServletResponse response, HttpServletRequest request,
+			@PathVariable("idCasilla") Long idCasilla) throws IOException {
+
 //		long perfil = getPerfil(request);
 //		long usuario = getUsuario(request);
 
@@ -70,17 +81,18 @@ public class CasillasController extends MasterController{
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
 			return null;
-		} catch (Exception e ) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 			return null;
 		}
 	}
-	
+
 	@GetMapping("/{idCasilla}/partidos")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	public List<PartidosXAmbitoDTO> getPartidos(HttpServletResponse response, HttpServletRequest request, @PathVariable("idCasilla") Long idCasilla) throws IOException {
-		
+	public List<PartidosXAmbitoDTO> getPartidos(HttpServletResponse response, HttpServletRequest request,
+			@PathVariable("idCasilla") Long idCasilla) throws IOException {
+
 //		long perfil = getPerfil(request);
 //		long usuario = getUsuario(request);
 
@@ -90,17 +102,17 @@ public class CasillasController extends MasterController{
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
 			return null;
-		} catch (Exception e ) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 			return null;
 		}
 	}
-	
-	
+
 	@PostMapping("/resultados")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	public ResultadoOkDTO saveResultados(HttpServletResponse response, HttpServletRequest request, @RequestBody ResultadoVotacionDTO actas) throws IOException {
+	public ResultadoOkDTO saveResultados(HttpServletResponse response, HttpServletRequest request,
+			@RequestBody ResultadoVotacionDTO actas) throws IOException {
 		long perfil = getPerfil(request);
 		long usuario = getUsuario(request);
 
@@ -110,50 +122,51 @@ public class CasillasController extends MasterController{
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
 			return null;
-		} catch (Exception e ) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 			return null;
 		}
 	}
-	
+
 	@GetMapping("/{idCasilla}/formulario")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	public PreguntasCasillaDTO getFormulario(HttpServletResponse response, HttpServletRequest request, 
-			@PathVariable("idCasilla") Long idCasilla , @RequestParam(value = "ambito", required = true ) Long ambito) throws IOException {
-		
+	public PreguntasCasillaDTO getFormulario(HttpServletResponse response, HttpServletRequest request,
+			@PathVariable("idCasilla") Long idCasilla, @RequestParam(value = "ambito", required = true) Long ambito)
+			throws IOException {
+
 //		long perfil = getPerfil(request);
 //		long usuario = getUsuario(request);
 
 		try {
-			return casillaService.getFormulario(idCasilla,ambito);
+			return casillaService.getFormulario(idCasilla, ambito);
 		} catch (CotException e) {
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
 			return null;
-		} catch (Exception e ) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 			return null;
 		}
 	}
-	
+
 	/* ICJ - Servicio para consultar actas por tipo de acta */
-	
+
 	@GetMapping("/consultaActas")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	public List<EnvioActasDTO> getActasByTipo(HttpServletResponse response, HttpServletRequest request, 
+	public List<EnvioActasDTO> getActasByTipo(HttpServletResponse response, HttpServletRequest request,
 			@RequestParam(value = "idTipoActa", required = true) Long idTipoActa) throws IOException {
-			
+
 		long perfil = getPerfil(request);
-		
+
 		try {
 			return casillaService.getActasByTipo(idTipoActa, perfil);
 		} catch (CotException e) {
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
 			return null;
-		} catch (Exception e ) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 			return null;
@@ -168,27 +181,76 @@ public class CasillasController extends MasterController{
 	 * @return
 	 * @throws IOException
 	 * 
-	 * Actualizacion de ubicacion de la casilla
+	 *                     Actualizacion de ubicacion de la casilla
 	 */
 	@PutMapping("/{idCasilla}")
 	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
-	public String updateDatosCasilla(HttpServletResponse response, HttpServletRequest request, @PathVariable ("idCasilla") Long idCasilla
-			, @RequestBody UbicacionCasillaDTO dto) throws IOException {
+	public String updateDatosCasilla(HttpServletResponse response, HttpServletRequest request,
+			@PathVariable("idCasilla") Long idCasilla, @RequestBody UbicacionCasillaDTO dto) throws IOException {
 		long perfil = getPerfil(request);
 //		long usuario = getUsuario(request);
 //		long idCasilla = 0L;
- 
+
 		try {
 			return casillaService.updateDatosCasilla(perfil, idCasilla, dto);
 		} catch (CotException e) {
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
 			return null;
-		} catch (Exception e ) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 			return null;
 		}
 	}
-	
+
+	/* ICJ - Servicio encargado de hacer la descarga de las actas (pdf o jpeg) */
+
+	@GetMapping("/consultaActas/download")
+	@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+	private ResponseEntity<InputStreamResource> getReporte(HttpServletResponse response, HttpServletRequest request,
+			@QueryParam("idActa") Long idActa, @QueryParam("TipoMime") String typeMime) throws IOException {
+		long perfil = getPerfil(request);
+		String extension = "";
+
+		try {
+
+			// Valida la extension de acuerdo al tipo de mime
+			if (typeMime.equalsIgnoreCase("image/jpeg")) {
+				extension = "jpg";
+			} else if (typeMime.equalsIgnoreCase("application/pdf")) {
+				extension = "pdf";
+			} else {
+				extension = null;
+			}
+
+			// Comienza la descarga del archivo
+			String fileName = casillaService.getActaFile(perfil, response, idActa, extension);
+			org.springframework.http.MediaType mediaType = MediaTypeUtils.getMediaTypeForFileName(this.servletContext,
+					fileName);
+			System.out.println("fileName: " + fileName);
+			System.out.println("mediaType: " + mediaType);
+
+			File file = new File(fileName);
+			InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+
+			return ResponseEntity.ok()
+					// Content-Disposition
+					.header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + file.getName())
+					// Content-Type
+					.contentType(mediaType)
+					// Contet-Length
+					.contentLength(file.length()) //
+					.body(resource);
+
+		} catch (CotException e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+		}
+		return null;
+
+	}
 }
