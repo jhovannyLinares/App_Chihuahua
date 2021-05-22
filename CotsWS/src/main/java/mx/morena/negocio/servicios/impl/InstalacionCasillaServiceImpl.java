@@ -763,24 +763,13 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 				}
 			} else {
 				
-				throw new CotException("La casilla no fue intalada", 401);
-//				
-//				AfluenciaVotos ev = new AfluenciaVotos();
-//				
-//				ev.setHrs12(dto.getHrs12());
-//				ev.setHrs16(dto.getHrs16());
-//				ev.setHrs18(dto.getHrs18());
-//				ev.setIdCasilla(dto.getIdCasilla());
-//
-//				if (reporteRepository.insertAfluenciaVotacion(ev) == 0) {
-//					throw new CotException("No se guardo la afluenncia de la casilla", 409);
-//				}
+				throw new CotException("La casilla no fue instalada", 404);
 			}
 
 		} else {
 			throw new CotException("No cuenta con los permisos suficientes para realizar la operacion.", 401);
 		}
-		return "Se guardo es estado de la casilla " + dto.getIdCasilla();
+		return "Se guardo el estado de la casilla " + dto.getIdCasilla();
 
 	}
 
@@ -788,7 +777,6 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 	public ResultadoOkDTO saveAfluencia(List<AfluenciaVotosDTO> dtos, Long perfil, Long usuario)
 			throws CotException, IOException {
 		for (AfluenciaVotosDTO afluenciaDTO : dtos) {
-			//Long idCasilla = estadoVotacionDTO.getIdCasilla();
 			
 			saveAfluenciaVotos(afluenciaDTO, perfil, usuario);
 			
@@ -818,20 +806,7 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 				}
 			} else {
 				
-				throw new CotException("La casilla no fue instalada", 401);
-				
-//				ActasVotos ev = new ActasVotos();
-//				
-//				ev.setGobernador(dto.getGobernador());
-//				ev.setDiputadoFedaral(dto.getDiputadoFedaral());
-//				ev.setDiputadoLocal(dto.getDiputadoLocal());
-//				ev.setPresidenteMunicipal(dto.getPresidenteMunicipal());
-//				ev.setSindico(dto.getSindico());
-//				ev.setIdCasilla(dto.getIdCasilla());
-//
-//				if (reporteRepository.insertActasVotacion(ev) == 0) {
-//					throw new CotException("No se guardo el estado de la casilla", 409);
-//				}
+				throw new CotException("La casilla no fue instalada", 404);
 			}
 
 		} else {
@@ -846,7 +821,6 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 			throws CotException, IOException {
 		
 		for (ActasVotacionDTO actasDTO : dtos) {
-			//Long idCasilla = estadoVotacionDTO.getIdCasilla();
 			
 			saveActasVotos(actasDTO, perfil, usuario);
 			
