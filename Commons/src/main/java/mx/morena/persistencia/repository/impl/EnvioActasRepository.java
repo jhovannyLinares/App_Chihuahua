@@ -57,7 +57,7 @@ public class EnvioActasRepository implements IEnvioActasRepository {
 
 	@Override
 	public List<EnvioActas> getCasilla(Long idCasilla) {
-		String sql = "SELECT id_acta,tipo_votacion,ruta_acta,id_casilla,registro_acta FROM app_envio_actas where id_casilla = ?";
+		String sql = "SELECT id_acta, tipo_votacion,tipo_acta, ruta_acta, id_casilla, registro_acta FROM app_envio_actas where id_casilla = ?";
 		try {
 			return template.queryForObject(sql, new Object[] { idCasilla }, new int[] { Types.NUMERIC },
 					new ActasRowMapper());
@@ -68,11 +68,11 @@ public class EnvioActasRepository implements IEnvioActasRepository {
 	}
 
 	@Override
-	public Long validaDuplicidadActa(Long tipo, Long casilla) {
+	public Long validaDuplicidadActa(Long tipo, Long casilla,Long tipoActa) {
 		String sql = "select count(*) from app_envio_actas ac "
-				+ "where ac.tipo_votacion = ? and ac.id_casilla = ? ";
+				+ "where ac.tipo_votacion = ? and ac.id_casilla = ? and ac.tipo_acta = ? ";
 		try {
-			return template.queryForObject(sql, new Object[] { tipo, casilla }, new int[] { Types.NUMERIC, Types.NUMERIC },
+			return template.queryForObject(sql, new Object[] { tipo, casilla, tipoActa }, new int[] { Types.NUMERIC, Types.NUMERIC , Types.NUMERIC },
 					new LongRowMapper());
 		} catch (EmptyResultDataAccessException e) {
 			return null;

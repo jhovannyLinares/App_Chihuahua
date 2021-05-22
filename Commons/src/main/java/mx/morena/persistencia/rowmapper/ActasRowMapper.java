@@ -26,6 +26,7 @@ public class ActasRowMapper implements RowMapper<List<EnvioActas>> {
 			acta.setRegistroActa(rs.getTimestamp("registro_acta"));
 			acta.setRutaActa(rs.getString("ruta_acta"));
 			acta.setTipoVotacion(rs.getLong("tipo_votacion"));
+			acta.setTipoActa(rs.getLong("tipo_acta"));
 
 			actas.add(acta);
 

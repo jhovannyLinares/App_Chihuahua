@@ -8,6 +8,10 @@ public class VotacionesDTO {
 
 	private Boolean capturada = false;
 
+	private Long tipoActa;
+
+	private String descripcionTipo;
+
 	public Long getId() {
 		return id;
 	}
@@ -32,6 +36,20 @@ public class VotacionesDTO {
 		this.capturada = capturada;
 	}
 
+	public Long getTipoActa() {
+		return tipoActa;
+	}
 
+	public void setTipoActa(Long tipoActa) {
+		this.tipoActa = tipoActa;
+	}
+
+	public String getDescripcionTipo() {
+		return descripcionTipo;
+	}
+
+	public void setDescripcionTipo(String descripcionTipo) {
+		this.descripcionTipo = descripcionTipo;
+	}
 
 }

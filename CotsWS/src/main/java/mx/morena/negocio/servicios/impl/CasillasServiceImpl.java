@@ -36,8 +36,10 @@ import mx.morena.persistencia.entidad.Casilla;
 import mx.morena.persistencia.entidad.EnvioActas;
 import mx.morena.persistencia.entidad.Partido;
 import mx.morena.persistencia.entidad.Preguntas;
+import mx.morena.persistencia.entidad.TipoActas;
 import mx.morena.persistencia.entidad.Votacion;
 import mx.morena.persistencia.repository.ICasillaRepository;
+import mx.morena.persistencia.repository.IEleccionRepository;
 import mx.morena.persistencia.repository.IEnvioActasRepository;
 import mx.morena.persistencia.repository.IPartidosRepository;
 import mx.morena.persistencia.repository.IResultadoVotacionRepository;
@@ -57,6 +59,9 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 
 	@Autowired
 	private IResultadoVotacionRepository resultadoVotacionRepository;
+	
+	@Autowired
+	private IEleccionRepository eleccionRepository;
 
 	@Autowired
 	private IPartidosRepository partidosRepository;
@@ -111,11 +116,12 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 			} else {
 				throw new CotException("El campo Tipo Acta es Requerido", 400);
 			}
-			if (actas.getTipoVotacion() != null && actas.getTipoVotacion() > 0 && actas.getRutaActa() != null
-					&& actas.getRutaActa() != " " && actas.getIdCasilla() > 0 && actas.getIdCasilla() != null) {
+			//Ya esta validado, es codigo muerto
+//			if (actas.getTipoVotacion() != null && actas.getTipoVotacion() > 0 && actas.getRutaActa() != null
+//					&& actas.getRutaActa() != " " && actas.getIdCasilla() > 0 && actas.getIdCasilla() != null) {
 
 				Long duplicate = envioActasRepository.validaDuplicidadActa(actas.getTipoVotacion(),
-						actas.getIdCasilla());
+						actas.getIdCasilla(),actas.getTipoActa());
 				if (duplicate < 1) {
 					envioActasRepository.save(actas);
 
@@ -124,10 +130,10 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 					throw new CotException("No se puede duplicar en acta", 401);
 				}
 
-			}
+//			}
 		}
 //
-		return null;
+//		return null;
 	}
 
 	@Override
@@ -266,24 +272,41 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 
 	@Override
 	public List<VotacionesDTO> getActas(Long idCasilla) throws CotException {
+		
+		List<VotacionesDTO> respuestaDto = new ArrayList<VotacionesDTO>();
 
 		List<EnvioActas> actas = envioActasRepository.getCasilla(idCasilla);
 
 		List<VotacionesDTO> votacionesDTOs = instalacionCasillaService.getVotaciones(idCasilla);
+		
+		List<TipoActas> tipoActas = eleccionRepository.findAllActas();
 
 		for (VotacionesDTO votacionesDTO : votacionesDTOs) {
+			
 			for (EnvioActas acta : actas) {
-
-				if (votacionesDTO.getId() == acta.getTipoVotacion()) {
-
-					votacionesDTO.setCapturada(true);
+				
+				for (TipoActas tipoActa : tipoActas) {
+					
+					VotacionesDTO votacion = new VotacionesDTO();
+					
+					MapperUtil.map(votacionesDTO, votacion);
+					
+					if (votacionesDTO.getId().longValue() == acta.getTipoVotacion().longValue() && tipoActa.getId() == acta.getTipoActa().longValue()) {
+						votacion.setCapturada(true);
+					}
+					
+					votacion.setTipoActa(tipoActa.getId());
+					votacion.setDescripcionTipo(tipoActa.getDescripcion());
+					
+					respuestaDto.add(votacion);
+					
 				}
 
 			}
 
 		}
 
-		return votacionesDTOs;
+		return respuestaDto;
 	}
 
 	@Override
