@@ -15,17 +15,20 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import mx.morena.negocio.dto.EnvioActasDTO;
 import mx.morena.negocio.dto.PartidoDTO;
 import mx.morena.negocio.dto.PartidosXAmbitoDTO;
 import mx.morena.negocio.dto.ResultadoOkDTO;
 import mx.morena.negocio.dto.ResultadoVotacionDTO;
-import mx.morena.negocio.dto.VotacionDTO;
 import mx.morena.negocio.dto.UbicacionCasillaDTO;
+import mx.morena.negocio.dto.VotacionDTO;
 import mx.morena.negocio.dto.VotacionesDTO;
 import mx.morena.negocio.dto.VotosPartidoDTO;
 import mx.morena.negocio.exception.CotException;
@@ -77,11 +80,11 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 	@Override
 	public Long save(EnvioActasDTO actaDto, long perfil, long idUsuario) throws CotException {
 
-		if (perfil != PERFIL_RC) {
-
-			throw new CotException("No cuenta con los servicios suficientes", 401);
-
-		} else {
+//		if (perfil != PERFIL_RC) {
+//
+//			throw new CotException("No cuenta con los permisos suficientes", 401);
+//
+//		} else {
 
 			EnvioActas actas = new EnvioActas();
 
@@ -131,7 +134,7 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 				}
 
 //			}
-		}
+//		}
 //
 //		return null;
 	}
@@ -272,41 +275,52 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 
 	@Override
 	public List<VotacionesDTO> getActas(Long idCasilla) throws CotException {
-		
-		List<VotacionesDTO> respuestaDto = new ArrayList<VotacionesDTO>();
 
 		List<EnvioActas> actas = envioActasRepository.getCasilla(idCasilla);
 
 		List<VotacionesDTO> votacionesDTOs = instalacionCasillaService.getVotaciones(idCasilla);
-		
+
 		List<TipoActas> tipoActas = eleccionRepository.findAllActas();
 
+		List<VotacionesDTO> respuestaDto = getActas(votacionesDTOs, actas, tipoActas);
+
+		return respuestaDto;
+	}
+
+	private List<VotacionesDTO> getActas(List<VotacionesDTO> votacionesDTOs, List<EnvioActas> actas, List<TipoActas> tipoActas) {
+
+		List<VotacionesDTO> respuestaDto = new ArrayList<VotacionesDTO>();
+
 		for (VotacionesDTO votacionesDTO : votacionesDTOs) {
-			
-			for (EnvioActas acta : actas) {
-				
-				for (TipoActas tipoActa : tipoActas) {
-					
-					VotacionesDTO votacion = new VotacionesDTO();
-					
-					MapperUtil.map(votacionesDTO, votacion);
-					
-					if (votacionesDTO.getId().longValue() == acta.getTipoVotacion().longValue() && tipoActa.getId() == acta.getTipoActa().longValue()) {
+
+			for (TipoActas tipoActa : tipoActas) {
+
+				VotacionesDTO votacion = new VotacionesDTO();
+
+				MapperUtil.map(votacionesDTO, votacion);
+
+				for (EnvioActas acta : actas) {
+
+					if (votacionesDTO.getId().longValue() == acta.getTipoVotacion().longValue()
+							&& tipoActa.getId() == acta.getTipoActa().longValue()) {
 						votacion.setCapturada(true);
 					}
-					
+
 					votacion.setTipoActa(tipoActa.getId());
 					votacion.setDescripcionTipo(tipoActa.getDescripcion());
-					
-					respuestaDto.add(votacion);
-					
+
 				}
+
+				votacion.setTipoActa(tipoActa.getId());
+				votacion.setDescripcionTipo(tipoActa.getDescripcion());
+
+				respuestaDto.add(votacion);
 
 			}
 
 		}
-
 		return respuestaDto;
+
 	}
 
 	@Override
