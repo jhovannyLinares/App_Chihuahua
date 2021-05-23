@@ -185,7 +185,7 @@ public class ReporteCasillaRepository implements IReporteCasillasRepository {
 		String sql = "update app_instalacion_casilla set actas_gobernador = ?, actas_federal = ?, actas_local = ?, actas_municipal = ?, actas_sindico = ?  where id_casilla = ? ";
 
 		try {
-			template.update(sql, new Object[] { ev.getGobernador(), ev.getDiputadoLocal(), ev.getDiputadoFedaral(), ev.getPresidenteMunicipal(), ev.getSindico(), ev.getIdCasilla() },
+			template.update(sql, new Object[] { ev.getGobernador(), ev.getDiputadoFedaral(), ev.getDiputadoLocal(), ev.getPresidenteMunicipal(), ev.getSindico(), ev.getIdCasilla() },
 					new int[] { Types.BOOLEAN, Types.BOOLEAN, Types.BOOLEAN, Types.BOOLEAN, Types.BOOLEAN, Types.NUMERIC });
 			return 1;
 		} catch (Exception e) {
