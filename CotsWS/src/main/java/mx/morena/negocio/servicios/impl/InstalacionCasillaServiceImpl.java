@@ -709,17 +709,7 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 					throw new CotException("No se guardo el estado de la casilla", 409);
 				}
 			} else {
-				
-				EstadoVotacion ev = new EstadoVotacion();
-				
-				ev.setSeInstalo(dto.getSeInicio());
-				ev.setLlegoRc(dto.getLlegoRc());
-				ev.setComenzoVotacion(dto.getComenzoVotacion());
-				ev.setIdCasilla(dto.getIdCasilla());
-
-				if (reporteRepository.insertEstadoVotacion(ev) == 0) {
-					throw new CotException("No se guardo el estado de la casilla", 409);
-				}
+				throw new CotException("La casilla no fue instalada", 404);
 			}
 
 		} else {
