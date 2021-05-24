@@ -1,11 +1,12 @@
 package mx.morena.negocio.dto;
 
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.List;
 
 public class InstalacionCasillasResponseDTO {
 	
-	private Timestamp horaInstalacion;
+	private Time horaInstalacion;
 
 	private String llegaronFuncionarios;
 
@@ -17,7 +18,7 @@ public class InstalacionCasillasResponseDTO {
 
 	private String desayuno;
 
-	private Timestamp inicioVotacion;
+	private Time inicioVotacion;
 
 	private String llegoRc;
 
@@ -77,14 +78,6 @@ public class InstalacionCasillasResponseDTO {
 	
 	private List<IncidenciasResponseDTO> incidencia;
 
-	public Timestamp getHoraInstalacion() {
-		return horaInstalacion;
-	}
-
-	public void setHoraInstalacion(Timestamp horaInstalacion) {
-		this.horaInstalacion = horaInstalacion;
-	}
-
 	public String getLlegaronFuncionarios() {
 		return llegaronFuncionarios;
 	}
@@ -123,14 +116,6 @@ public class InstalacionCasillasResponseDTO {
 
 	public void setDesayuno(String desayuno) {
 		this.desayuno = desayuno;
-	}
-
-	public Timestamp getInicioVotacion() {
-		return inicioVotacion;
-	}
-
-	public void setInicioVotacion(Timestamp inicioVotacion) {
-		this.inicioVotacion = inicioVotacion;
 	}
 
 	public String getLlegoRc() {
@@ -355,6 +340,22 @@ public class InstalacionCasillasResponseDTO {
 
 	public void setIncidencia(List<IncidenciasResponseDTO> incidencia) {
 		this.incidencia = incidencia;
+	}
+
+	public Time getHoraInstalacion() {
+		return horaInstalacion;
+	}
+
+	public void setHoraInstalacion(Time horaInstalacion) {
+		this.horaInstalacion = horaInstalacion;
+	}
+
+	public Time getInicioVotacion() {
+		return inicioVotacion;
+	}
+
+	public void setInicioVotacion(Time inicioVotacion) {
+		this.inicioVotacion = inicioVotacion;
 	}
 
 }
