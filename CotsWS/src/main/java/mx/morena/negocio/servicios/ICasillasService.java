@@ -5,9 +5,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.ResponseEntity;
-
 import mx.morena.negocio.dto.EnvioActasDTO;
 import mx.morena.negocio.dto.PartidosXAmbitoDTO;
 import mx.morena.negocio.dto.ResultadoOkDTO;

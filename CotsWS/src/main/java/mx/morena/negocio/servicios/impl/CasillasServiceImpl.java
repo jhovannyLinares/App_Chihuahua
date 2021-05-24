@@ -16,7 +16,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,8 +67,6 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 
 	@Autowired
 	private IPartidosRepository partidosRepository;
-	@Autowired
-	private ServletContext servletContext;
 
 	private List<Partido> gobernador;
 	private List<Partido> municipal;
@@ -130,7 +127,7 @@ public class CasillasServiceImpl extends MasterService implements ICasillasServi
 
 					return envioActasRepository.getIdMax();
 				} else {
-					throw new CotException("No se puede duplicar en acta", 401);
+					throw new CotException("No se puede duplicar el acta", 401);
 				}
 
 //			}
