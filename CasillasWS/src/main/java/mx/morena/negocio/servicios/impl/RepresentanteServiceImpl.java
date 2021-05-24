@@ -4,7 +4,6 @@ import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -115,22 +114,29 @@ public class RepresentanteServiceImpl extends MasterService implements IRepresen
 					representante.setEstado(representanteDTO.getIdEstado());
 					representante.setMunicipio(representanteDTO.getIdMunicipio());
 					representante.setSeccionElectoral(representanteDTO.getIdSeccionElectoral());
+					
+					
+					
+					representante.setRutaIneLado1(representanteDTO.getIneLado1());
+					representante.setRutaIneLado2(representanteDTO.getIneLado2());
+					representante.setRutaInePdf(representanteDTO.getInePdf());
+					
 
-					if (!representanteDTO.getIneLado1().equals("")) {
-
-						representante.setRutaIneLado1(
-								RUTA_INE + "/" + representante.getClaveElector() + UUID.randomUUID().toString());
-					}
-					if (!representanteDTO.getIneLado2().equals("")) {
-
-						representante.setRutaIneLado2(
-								RUTA_INE + "/" + representante.getClaveElector() + UUID.randomUUID().toString());
-					}
-					if (!representanteDTO.getInePdf().equals("")) {
-
-						representante.setRutaInePdf(
-								RUTA_INE + "/" + representante.getClaveElector() + UUID.randomUUID().toString());
-					}
+//					if (!representanteDTO.getIneLado1().equals("")) {
+//
+//						representante.setRutaIneLado1(
+//								RUTA_INE + "/" + representante.getClaveElector() + UUID.randomUUID().toString());
+//					}
+//					if (!representanteDTO.getIneLado2().equals("")) {
+//
+//						representante.setRutaIneLado2(
+//								RUTA_INE + "/" + representante.getClaveElector() + UUID.randomUUID().toString());
+//					}
+//					if (!representanteDTO.getInePdf().equals("")) {
+//
+//						representante.setRutaInePdf(
+//								RUTA_INE + "/" + representante.getClaveElector() + UUID.randomUUID().toString());
+//					}
 
 					representanteRepository.save(representante);
 

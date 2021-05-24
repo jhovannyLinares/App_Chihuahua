@@ -1,7 +1,6 @@
 package mx.morena.negocio.dto;
 
 import java.sql.Time;
-import java.sql.Timestamp;
 import java.util.List;
 
 public class InstalacionCasillasResponseDTO {
