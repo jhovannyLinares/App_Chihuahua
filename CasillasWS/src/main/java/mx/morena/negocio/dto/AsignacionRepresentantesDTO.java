@@ -7,7 +7,7 @@ public class AsignacionRepresentantesDTO {
 	private int cargo;
 	
 	private Long distritoFederalId;
-	
+	   
 	private Long distritoLocalId;
 	 
 	private Long municipioId;
