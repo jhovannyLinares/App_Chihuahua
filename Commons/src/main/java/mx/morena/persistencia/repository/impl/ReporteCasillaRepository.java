@@ -15,6 +15,7 @@ import mx.morena.persistencia.entidad.ActasVotos;
 import mx.morena.persistencia.entidad.AfluenciaVotos;
 import mx.morena.persistencia.entidad.EstadoVotacion;
 import mx.morena.persistencia.entidad.ReporteCasilla;
+import mx.morena.persistencia.entidad.VotacionPorHora;
 import mx.morena.persistencia.repository.IReporteCasillasRepository;
 import mx.morena.persistencia.rowmapper.ActasVotosRowMapper;
 import mx.morena.persistencia.rowmapper.AfluenciaVotoRowMapper;
@@ -22,6 +23,7 @@ import mx.morena.persistencia.rowmapper.EstadoVotacionRowMapper;
 import mx.morena.persistencia.rowmapper.LongRowMapper;
 import mx.morena.persistencia.rowmapper.ReporteCasillaResponseRowMapper;
 import mx.morena.persistencia.rowmapper.ReporteCasillaRowMapper;
+import mx.morena.persistencia.rowmapper.VotacionPorHoraRowMapper;
 
 @Repository
 public class ReporteCasillaRepository implements IReporteCasillasRepository {
@@ -76,16 +78,30 @@ public class ReporteCasillaRepository implements IReporteCasillasRepository {
 	}
 
 	@Override
-	public Long getCountByDistritoAndTipoVotacion(Long idfederal, Long idReporte, String hora) {
-		String sql = "select count(*) from app_reporte_casillas arc "
-				+ "inner join app_casilla ac "
-				+ "on ac.id = arc.id_casilla "
-				+ "where  ac.federal_id = ? and arc.tipo_votacion = ? and arc.hora_reporte = ?";
+	public VotacionPorHora getCountByDistritoAndTipoVotacion(Long idfederal, Long idReporte, String hora) {
+//		String sql = "select count(*) from app_reporte_casillas arc "
+//				+ "inner join app_casilla ac "
+//				+ "on ac.id = arc.id_casilla "
+//				+ "where  ac.federal_id = ? and arc.tipo_votacion = ? and arc.hora_reporte = ?";
+		
+		String sql = "SELECT COUNT(CASE WHEN arc.hora_reporte  = '11:00:00' THEN 1 "  
+				+ "                  ELSE NULL " 
+				+ "             END) AS once " 
+				+ "       ,COUNT(CASE WHEN arc.hora_reporte = '15:00:00' THEN 1 " 
+				+ "                   ELSE NULL " 
+				+ "              END) AS tres " 
+				+ "       ,COUNT(CASE WHEN arc.hora_reporte = '18:00:00' THEN 1 " 
+				+ "                   ELSE NULL " 
+				+ "              END) AS seis " 
+				+ "    FROM app_reporte_casillas arc " 
+				+ "   inner join app_casilla ac " 
+				+ "on ac.id = arc.id_casilla " 
+				+ "where  ac.federal_id = ? and arc.tipo_votacion = ?";
 		try {
-			return template.queryForObject(sql, new Object[] { idfederal, idReporte, hora },
-					new int[] {Types.NUMERIC, Types.NUMERIC, Types.TIME}, new LongRowMapper());
+			return template.queryForObject(sql, new Object[] { idfederal, idReporte },
+					new int[] {Types.NUMERIC, Types.NUMERIC}, new VotacionPorHoraRowMapper());
 		} catch (EmptyResultDataAccessException e) {
-			return 0L;
+			return null;
 		}
 	}
 

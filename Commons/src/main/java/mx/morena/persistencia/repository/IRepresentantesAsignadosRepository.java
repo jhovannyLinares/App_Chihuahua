@@ -14,7 +14,7 @@ public interface IRepresentantesAsignadosRepository {
 
 	Long getRutaIdByRepresentante(Long usuario);
 
-	DatosRc getRepresentanteById(long representanteId);
+	DatosRc getRepresentanteById(long usuario);
 
 	List<RepresentanteCargo> getNombreRepresentanteByCasilla(Long idCasilla);
 }

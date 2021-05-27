@@ -664,9 +664,9 @@ public class InstalacionCasillaServiceImpl extends MasterService implements IIns
 	@Override
 	public DatosRcDTO getDatosRc(long perfil, long usuario) throws CotException {
 
-		Usuario usr = usuarioRepository.findById(usuario);
+//		Usuario usr = usuarioRepository.findById(usuario);
 
-		DatosRc representante = representanteAsignadoRepository.getRepresentanteById(usr.getRepresentante());
+		DatosRc representante = representanteAsignadoRepository.getRepresentanteById(usuario);
 
 		if (representante != null) {
 

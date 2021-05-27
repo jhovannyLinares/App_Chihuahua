@@ -63,18 +63,22 @@ public class RepresentantesAsignadosRepository implements IRepresentantesAsignad
 	}
 
 	@Override
-	public DatosRc getRepresentanteById(long representanteId) {
+	public DatosRc getRepresentanteById(long usuario) {
 
 		String sql = "select se.entidad, se.federal, se.local, ara.seccion_electoral_id, ara.casilla_id, ac.casilla, ac.calle , ac.numero, ac.colonia, ac.ubicacion, ac.tipo_casilla "  
 				+ "from app_representantes_asignados ara " 
 				+ "inner join app_secciones se "  
 				+ "on ara.seccion_electoral_id = se.id "  
 				+ "inner join app_casilla ac "  
-				+ "on ara.casilla_id = ac.id "  
-				+ "where representante_id = ? " ;
+				+ "on ara.casilla_id = ac.id " 
+				// se agrega inner
+				+ "inner join app_usuario au " 
+				+ "on au.id_representante = ara.representante_id "
+				+ "where au.id = ?";
+//				+ "where representante_id = ? " ;
 
 		try {
-			return template.queryForObject(sql, new Object[] { representanteId }, new int[] { Types.NUMERIC },
+			return template.queryForObject(sql, new Object[] { usuario }, new int[] { Types.NUMERIC },
 					new DatosRcRowMapper());
 		} catch (EmptyResultDataAccessException e) {
 			return null;

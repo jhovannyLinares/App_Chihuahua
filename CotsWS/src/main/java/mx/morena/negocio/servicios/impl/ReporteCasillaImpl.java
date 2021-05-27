@@ -31,6 +31,7 @@ import mx.morena.persistencia.entidad.Metas;
 import mx.morena.persistencia.entidad.Municipio;
 import mx.morena.persistencia.entidad.Partido;
 import mx.morena.persistencia.entidad.Usuario;
+import mx.morena.persistencia.entidad.VotacionPorHora;
 import mx.morena.persistencia.repository.IAsignacionCasillasRepository;
 import mx.morena.persistencia.repository.ICasillaRepository;
 import mx.morena.persistencia.repository.IDistritoFederalRepository;
@@ -126,28 +127,25 @@ public class ReporteCasillaImpl extends MasterService implements IReporteCasilla
 
 //				Long listaNominal = 0L;
 
-					Long votos11 = reporteCasillaRepository.getCountByDistritoAndTipoVotacion(se.getId(), idReporte,
+					VotacionPorHora hora = reporteCasillaRepository.getCountByDistritoAndTipoVotacion(se.getId(), idReporte,
 							once);
-					Long votos15 = reporteCasillaRepository.getCountByDistritoAndTipoVotacion(se.getId(), idReporte,
-							quince);
-					Long votos18 = reporteCasillaRepository.getCountByDistritoAndTipoVotacion(se.getId(), idReporte,
-							dieciocho);
+					
 					metas = metaRepository.getMetasByFederal(se.getId());
 
 					dto.setIdFederal(se.getId());
 					dto.setListaNominal(metas.getListaNominal());
 
-					dto.setVotacion11hrs(votos11);
+					dto.setVotacion11hrs(hora.getOnce());
 					double porcentaje11 = dosDecimales((dto.getVotacion11hrs() * 100.0) / dto.getListaNominal())
 							.doubleValue();
 					dto.setPorcentajeVotacion11hrs(porcentaje11);
 
-					dto.setVotacion15hrs(votos15);
+					dto.setVotacion15hrs(hora.getTres());
 					double porcentaje15 = dosDecimales((dto.getVotacion15hrs() * 100.0) / dto.getListaNominal())
 							.doubleValue();
 					dto.setPorcentajeVotacion15hrs(porcentaje15);
 
-					dto.setVotacion18hrs(votos18);
+					dto.setVotacion18hrs(hora.getSeis());
 					double porcentaje18 = dosDecimales((dto.getVotacion18hrs() * 100.0) / dto.getListaNominal())
 							.doubleValue();
 					dto.setPorcentajeVotacion18hrs(porcentaje18);

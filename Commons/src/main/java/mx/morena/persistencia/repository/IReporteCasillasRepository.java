@@ -6,6 +6,7 @@ import mx.morena.persistencia.entidad.ActasVotos;
 import mx.morena.persistencia.entidad.AfluenciaVotos;
 import mx.morena.persistencia.entidad.EstadoVotacion;
 import mx.morena.persistencia.entidad.ReporteCasilla;
+import mx.morena.persistencia.entidad.VotacionPorHora;
 
 public interface IReporteCasillasRepository {
 
@@ -15,7 +16,7 @@ public interface IReporteCasillasRepository {
 
 	List<ReporteCasilla> getReporteByIdCasilla(Long idCasilla);
 
-	Long getCountByDistritoAndTipoVotacion(Long idFederal, Long idReporte, String once);
+	VotacionPorHora getCountByDistritoAndTipoVotacion(Long idFederal, Long idReporte, String once);
 	
 	List<EstadoVotacion> getEstadoByIdCasilla(Long idCasilla);
 	
